@@ -33,7 +33,7 @@ export default function MainContent({
           <div>
             <main>
               <div className="px-2">
-                <div className="w-full min-h-[90vh] bg-white rounded-2xl p-4 transition-all duration-300 ease-in-out shadow-lg">
+                <div className="w-full min-h-[90vh] bg-white rounded-2xl p-4 transition-all duration-300 ease-in-out">
                   <Outlet />
                 </div>
               </div>

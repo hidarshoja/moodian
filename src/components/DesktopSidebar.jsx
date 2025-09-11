@@ -37,13 +37,12 @@ export default function DesktopSidebar({
             </button>
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul className="flex flex-1 flex-col gap-y-4 mt-4">
+            <ul className="flex flex-1 flex-col gap-y-2 mt-4">
               {navigation?.map((item) => (
                <li key={item.name} className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg">
                <Link
                  to={item.href}
-                 className=" flex items-center justify-start w-full  px-3 py-1 text-base font-bold"
-                 style={{ color: "white" }}
+                 className=" flex items-center justify-start w-full  px-3 py-1 text-sm text-white"
                >
                  <span className="sidebar-shutter-content">
                    {item.icon}

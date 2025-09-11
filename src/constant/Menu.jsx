@@ -8,6 +8,13 @@ import {
   ExclamationCircleIcon,
   CreditCardIcon,
 } from "@heroicons/react/24/outline";
+import { VscReport } from "react-icons/vsc";
+import { PiChartScatter } from "react-icons/pi";
+import { BiGitCompare } from "react-icons/bi";
+import { CiShoppingCart } from "react-icons/ci";
+import { MdOutlineRateReview } from "react-icons/md";
+import { RiBillLine } from "react-icons/ri";
+import { ImConnection } from "react-icons/im";
 
 export const navigation = [
   {
@@ -36,28 +43,44 @@ export const navigation = [
     href: "/invoices",
   },
   {
+    name: "گزارش ",
+    icon: <VscReport className="w-5 h-5 ml-2" />,
+    href: "/reports",
+  },
+  {
+    name: "نمودارهای تحلیلی ",
+    icon: <PiChartScatter className="w-5 h-5 ml-2" />,
+    href: "/AnalyticalReports",
+  },
+  {
+    name: "مغایرت گیری",
+    icon: <BiGitCompare className="w-5 h-5 ml-2" />,
+    href: "/contradiction",
+  },
+  {
     name: "قراردادهای پیمانکاری",
     icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
     href: "/contracts",
   },
   {
-    name: "گزارش مرور تجربه",
-    icon: <ChartBarIcon className="w-5 h-5 ml-2" />,
-    href: "/reports",
+    name: "خریدهای داخلی",
+    icon: <CiShoppingCart className="w-5 h-5 ml-2" />,
+    href: "/shopping",
   },
   {
-    name: "مغایرت گیری",
-    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
-    href: "/reconciliation",
+    name: "بررسی 169",
+    icon: <MdOutlineRateReview className="w-5 h-5 ml-2" />,
+    href: "/review",
+  },
+
+  {
+    name: "صورتحساب بانکی",
+    icon: <RiBillLine className="w-5 h-5 ml-2" />,
+    href: "/billBank",
   },
   {
-    name: "پشتیبانی و مشاوره مالیاتی",
-    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
-    href: "/support",
-  },
-  {
-    name: "پرداخت آنلاین",
-    icon: <CreditCardIcon className="w-5 h-5 ml-2" />,
-    href: "/payment",
+    name: "اتصالات بانکی ",
+    icon: <ImConnection className="w-5 h-5 ml-2" />,
+    href: "/connections",
   },
 ];
