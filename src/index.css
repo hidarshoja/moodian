@@ -103,3 +103,7 @@ body {
 .animate-fadeInStagger {
   animation: fadeInStagger 0.7s forwards;
 }
+
+.sidebar-shutter-active {
+  background-color: #56a39e !important;
+}

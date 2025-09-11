@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
 import { navigation } from "../constant/Menu";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 
 
@@ -10,7 +10,7 @@ export default function DesktopSidebar({
   desktopSidebarOpen,
   setDesktopSidebarOpen,
 }) {
- 
+  const location = useLocation();
   return (
     <Transition.Root show={desktopSidebarOpen} as={Fragment}>
       <Transition.Child
@@ -38,8 +38,15 @@ export default function DesktopSidebar({
           </div>
           <nav className="flex flex-1 flex-col">
             <ul className="flex flex-1 flex-col gap-y-2 mt-4">
-              {navigation?.map((item) => (
-               <li key={item.name} className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg">
+              {navigation?.map((item) => {
+              const isActive = location.pathname === item.href;
+               return (
+               <li key={item.name} 
+              //  className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg"
+              className={` w-full border-2 border-gray-700 rounded-lg ${
+                isActive ? "sidebar-shutter-active" : "sidebar-shutter"
+              }`}
+               >
                <Link
                  to={item.href}
                  className=" flex items-center justify-start w-full  px-3 py-1 text-sm text-white"
@@ -50,7 +57,8 @@ export default function DesktopSidebar({
                  </span>
                </Link>
              </li>
-              ))}
+               );
+              })}
             </ul>
           </nav>
         </div>
