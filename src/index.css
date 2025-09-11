@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  direction: rtl;
+  font-family: "IRANSansWeb", "Shabnam", "Vazirmatn", Tahoma, Arial, sans-serif;
+  background: #23234a;
+}
+
+/* مخفی کردن اسکرول بار */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Webkit */
+}
+
+/* حذف استایل‌های dark mode و theme */
+@layer base {
+  html {
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  body {
+    transition: background-color 0.3s ease-in-out;
+  }
+}
+
+@layer components {
+  .theme-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .crypto-glow {
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+  }
+
+  .crypto-glow:hover {
+    box-shadow: 0 0 30px rgba(0, 212, 170, 0.5);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #00d4aa, #00b894);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
