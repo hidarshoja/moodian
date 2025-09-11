@@ -32,8 +32,8 @@ export default function MainContent({
           )}
           <div>
             <main>
-              <div className="px-2">
-                <div className="w-full min-h-[90vh] bg-white rounded-2xl p-4 transition-all duration-300 ease-in-out">
+              <div>
+                <div className="w-full min-h-[100vh] p-2 md:p-3 lg:p-5 bg-[#1f1f47]   transition-all duration-300 ease-in-out">
                   <Outlet />
                 </div>
               </div>

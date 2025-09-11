@@ -1,12 +1,9 @@
 import {
   HomeIcon,
   UserIcon,
-  ShoppingBagIcon,
   UsersIcon,
   DocumentTextIcon,
-  ChartBarIcon,
-  ExclamationCircleIcon,
-  CreditCardIcon,
+ 
 } from "@heroicons/react/24/outline";
 import { VscReport } from "react-icons/vsc";
 import { PiChartScatter } from "react-icons/pi";
@@ -15,6 +12,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import { MdOutlineRateReview } from "react-icons/md";
 import { RiBillLine } from "react-icons/ri";
 import { ImConnection } from "react-icons/im";
+import { SiAmazonsimpleemailservice } from "react-icons/si";
 
 export const navigation = [
   {
@@ -29,8 +27,8 @@ export const navigation = [
   },
   {
     name: "کالا/خدمات",
-    icon: <ShoppingBagIcon className="w-5 h-5 ml-2" />,
-    href: "/products",
+    icon: <SiAmazonsimpleemailservice className="w-5 h-5 ml-2" />,
+    href: "/services",
   },
   {
     name: "مشتری",
@@ -50,7 +48,7 @@ export const navigation = [
   {
     name: "نمودارهای تحلیلی ",
     icon: <PiChartScatter className="w-5 h-5 ml-2" />,
-    href: "/AnalyticalReports",
+    href: "/analyticalReports",
   },
   {
     name: "مغایرت گیری",
