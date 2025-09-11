@@ -21,7 +21,7 @@ export default function Header({
     { label: "ابطال", path: "/cancel" , icon :<MdOutlineFreeCancellation className="w-4 h-4" /> },
     { label: "تغییر وضعیت", path: "/change-status" , icon :<TbStatusChange className="w-4 h-4 "/>},
     { label: "تغییر رمز", path: "/change-password" , icon:<RiLockPasswordFill className="w-4 h-4 "/> },
-    { label: "خروج", path: "/logout" , icon :<BiLogOutCircle className="w-4 h-4 " />},
+    { label: "خروج", path: "/auth/login" , icon :<BiLogOutCircle className="w-4 h-4 " />},
   ];
 
   return (

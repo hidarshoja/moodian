@@ -14,6 +14,7 @@ import { RiBillLine } from "react-icons/ri";
 import { ImConnection } from "react-icons/im";
 import { SiAmazonsimpleemailservice } from "react-icons/si";
 
+
 export const navigation = [
   {
     name: "داشبورد",
@@ -81,4 +82,5 @@ export const navigation = [
     icon: <ImConnection className="w-5 h-5 ml-2" />,
     href: "/connections",
   },
+  
 ];

@@ -11,6 +11,15 @@ import InvoicesPage from "./pages/InvoicesPage";
 import ReportsPage from "./pages/ReportsPage";
 import AnalyticalReportsPage from "./pages/AnalyticalReportsPage";
 import ContradictionPage from "./pages/ContradictionPage";
+import ContractsPage from "./pages/ContractsPage";
+import ShoppingPage from "./pages/ShoppingPage";
+import ReviewPage from "./pages/ReviewPage";
+import BillPage from "./pages/BillPage";
+import ConnectionsPage from "./pages/ConnectionsPage";
+import CancelPage from "./pages/CancelPage";
+import ChangeStatus from "./pages/ChangeStatus";
+import PasswordPage from "./pages/PasswordPage";
+
 export const route = createBrowserRouter([
     {
         path: '/',
@@ -48,8 +57,41 @@ export const route = createBrowserRouter([
                 path: '/contradiction',
                 element: <ContradictionPage />
             },
+            {
+                path: '/contracts',
+                element: <ContractsPage />
+            },
+            {
+                path: '/shopping',
+                element: <ShoppingPage />
+            },
+            {
+                path: '/review',
+                element: <ReviewPage />
+            },
+            {
+                path: '/billBank',
+                element: <BillPage />
+            },
+            {
+                path: '/connections',
+                element: <ConnectionsPage />
+            },
+            {
+                path: '/cancel',
+                element: <CancelPage />
+            },
+            {
+                path: '/change-status',
+                element: <ChangeStatus />
+            },
+            {
+                path: '/change-password',
+                element: <PasswordPage />
+            },
         ]
     },
+    // ConnectionsPage
     {
         path: '/auth',
         element: <AuthLayout />,
