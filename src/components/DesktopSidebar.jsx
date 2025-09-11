@@ -99,17 +99,18 @@ export default function DesktopSidebar({
           <nav className="flex flex-1 flex-col">
             <ul className="flex flex-1 flex-col gap-y-4 mt-4">
               {menuItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.href}
-                    className={`flex items-center justify-start w-full rounded-lg px-4 py-3 text-base font-bold transition-all duration-200 hover:bg-[#ffffff22] text-white ${
-                      location.pathname === item.href ? "bg-[#ffffff33]" : ""
-                    }`}
-                  >
-                    {item.icon}
-                    <span>{item.name}</span>
-                  </Link>
-                </li>
+               <li key={item.name} className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg">
+               <Link
+                 to={item.href}
+                 className=" flex items-center justify-start w-full  px-3 py-1 text-base font-bold"
+                 style={{ color: "white" }}
+               >
+                 <span className="sidebar-shutter-content">
+                   {item.icon}
+                   <span>{item.name}</span>
+                 </span>
+               </Link>
+             </li>
               ))}
             </ul>
           </nav>
