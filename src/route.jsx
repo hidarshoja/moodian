@@ -1,17 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
+import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 import Password from "./pages/Password";
 import AuthLayout from "./layout/AuthLayout";
 import Login from "./pages/login/page";
 import Register from "./pages/Rigester/Register";
-import ConditionPage from "./pages/ConditionPage";
-import VolumePage from "./pages/VolumePage";
-import DataPage from "./pages/DataPage";
-import ChartPage from "./pages/ChartPage";
-import NewBoxPage from "./pages/NewBoxPage";
-import AddressPage from "./pages/AddressPage";
-import CreatePage from "./pages/CreatePage";
-
 
 export const route = createBrowserRouter([
     {
@@ -20,34 +14,13 @@ export const route = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <ConditionPage />
+                element: <DashboardPage />
             },
             {
-                path: '/volume',
-                element: <VolumePage />
+                path: '/profile',
+                element: <ProfilePage />
             },
-            {
-                path: '/data',
-                element: <DataPage />
-            },
-            {
-                path: '/chart',
-                element: <ChartPage />
-            },
-            {
-                path: '/new-box',
-                element: <NewBoxPage />
-            },
-            {
-                path: '/address',
-                element: <AddressPage />
-            },
-            {
-                path: '/create',
-                element: <CreatePage />
-            },
-         
-           
+          
             {
                 path: '/password',
                 element: <Password />

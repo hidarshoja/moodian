@@ -1,76 +1,16 @@
 import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
-import {
-  XMarkIcon,
-  HomeIcon,
-  UserIcon,
-  ShoppingBagIcon,
-  UsersIcon,
-  DocumentTextIcon,
-  ChartBarIcon,
-  ExclamationCircleIcon,
-  CreditCardIcon,
-} from "@heroicons/react/24/outline";
-import { Link, useLocation } from "react-router-dom";
+import { navigation } from "../constant/Menu";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
-const menuItems = [
-  {
-    name: "داشبورد",
-    icon: <HomeIcon className="w-5 h-5 ml-2" />,
-    href: "/dashboard",
-  },
-  {
-    name: "پروفایل",
-    icon: <UserIcon className="w-5 h-5 ml-2" />,
-    href: "/profile",
-  },
-  {
-    name: "کالا/خدمات",
-    icon: <ShoppingBagIcon className="w-5 h-5 ml-2" />,
-    href: "/products",
-  },
-  {
-    name: "مشتری",
-    icon: <UsersIcon className="w-5 h-5 ml-2" />,
-    href: "/customers",
-  },
-  {
-    name: "فاکتور فروش",
-    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
-    href: "/invoices",
-  },
-  {
-    name: "قراردادهای پیمانکاری",
-    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
-    href: "/contracts",
-  },
-  {
-    name: "گزارش مرور تجربه",
-    icon: <ChartBarIcon className="w-5 h-5 ml-2" />,
-    href: "/reports",
-  },
-  {
-    name: "مغایرت گیری",
-    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
-    href: "/reconciliation",
-  },
-  {
-    name: "پشتیبانی و مشاوره مالیاتی",
-    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
-    href: "/support",
-  },
-  {
-    name: "پرداخت آنلاین",
-    icon: <CreditCardIcon className="w-5 h-5 ml-2" />,
-    href: "/payment",
-  },
-];
+
 
 export default function DesktopSidebar({
   desktopSidebarOpen,
   setDesktopSidebarOpen,
 }) {
-  const location = useLocation();
+ 
   return (
     <Transition.Root show={desktopSidebarOpen} as={Fragment}>
       <Transition.Child
@@ -98,7 +38,7 @@ export default function DesktopSidebar({
           </div>
           <nav className="flex flex-1 flex-col">
             <ul className="flex flex-1 flex-col gap-y-4 mt-4">
-              {menuItems.map((item) => (
+              {navigation?.map((item) => (
                <li key={item.name} className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg">
                <Link
                  to={item.href}

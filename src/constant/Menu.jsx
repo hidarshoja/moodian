@@ -1,14 +1,63 @@
-import { TbAirConditioning } from "react-icons/tb";
-import { MdOutlineContentPaste } from "react-icons/md";
-import { FaVolumeUp, FaDatabase, FaChartLine, FaBox, FaMapMarkerAlt, FaPlus, FaKey } from "react-icons/fa";
+import {
+  HomeIcon,
+  UserIcon,
+  ShoppingBagIcon,
+  UsersIcon,
+  DocumentTextIcon,
+  ChartBarIcon,
+  ExclamationCircleIcon,
+  CreditCardIcon,
+} from "@heroicons/react/24/outline";
 
 export const navigation = [
-  { name: "شرط ها", href: "/", current: false, src: <TbAirConditioning /> },
-  { name: "حجم ها", href: "/volume", current: false, src: <MdOutlineContentPaste /> },
-  { name: "داده ها", href: "/data", current: false, src: <FaDatabase /> },
-  { name: "نمودار ها", href: "/chart", current: false, src: <FaChartLine /> },
-  { name: "ساخت باکس جدید", href: "/new-box", current: false, src: <FaBox /> },
-  { name: "آدرس", href: "/address", current: false, src: <FaMapMarkerAlt /> },
-  { name: "ایجاد", href: "/create", current: false, src: <FaPlus /> },
-  { name: "رمز عبور", href: "/password", current: false, src: <FaKey /> },
+  {
+    name: "داشبورد",
+    icon: <HomeIcon className="w-5 h-5 ml-2" />,
+    href: "/",
+  },
+  {
+    name: "پروفایل",
+    icon: <UserIcon className="w-5 h-5 ml-2" />,
+    href: "/profile",
+  },
+  {
+    name: "کالا/خدمات",
+    icon: <ShoppingBagIcon className="w-5 h-5 ml-2" />,
+    href: "/products",
+  },
+  {
+    name: "مشتری",
+    icon: <UsersIcon className="w-5 h-5 ml-2" />,
+    href: "/customers",
+  },
+  {
+    name: "فاکتور فروش",
+    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
+    href: "/invoices",
+  },
+  {
+    name: "قراردادهای پیمانکاری",
+    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
+    href: "/contracts",
+  },
+  {
+    name: "گزارش مرور تجربه",
+    icon: <ChartBarIcon className="w-5 h-5 ml-2" />,
+    href: "/reports",
+  },
+  {
+    name: "مغایرت گیری",
+    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
+    href: "/reconciliation",
+  },
+  {
+    name: "پشتیبانی و مشاوره مالیاتی",
+    icon: <ExclamationCircleIcon className="w-5 h-5 ml-2" />,
+    href: "/support",
+  },
+  {
+    name: "پرداخت آنلاین",
+    icon: <CreditCardIcon className="w-5 h-5 ml-2" />,
+    href: "/payment",
+  },
 ];

@@ -56,7 +56,7 @@ body {
 .sidebar-shutter {
   position: relative;
   overflow: hidden;
-  background-image: linear-gradient( 315deg , #1f1f47 0% , #89d8d3 74%);
+  background-image: linear-gradient(115deg, #89d8d3 0%, #1f1f47 30%);
   transition: background 0.3s;
 }
 
@@ -86,5 +86,5 @@ body {
   color: #fff;
 }
 .header-panel{
-  background-image: linear-gradient(315deg, #89d8d3 0%, #1f1f47 50%);
+  background-image: linear-gradient(315deg, #89d8d3 0%, #1f1f47 35% , #07071c 65%);
 }
