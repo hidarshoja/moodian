@@ -88,3 +88,18 @@ body {
 .header-panel{
   background-image: linear-gradient(315deg, #89d8d3 0%, #1f1f47 35% , #07071c 65%);
 }
+/* fبرای هدر قسمت کلیک روی یوزر */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes fadeInStagger {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.animate-slideIn {
+  animation: slideIn 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+.animate-fadeInStagger {
+  animation: fadeInStagger 0.7s forwards;
+}
