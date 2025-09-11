@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { changeId } from "../../features/user/userSlice";
@@ -7,9 +7,11 @@ import { changeId } from "../../features/user/userSlice";
 export default function Login() {
   const user_id = useSelector((state) => state.user.id);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLoginAndChangeId = () => {
     dispatch(changeId(20));
+    console.log(`user_id`, user_id);
     handleLogin();
   };
 
@@ -35,6 +37,15 @@ export default function Login() {
       );
 
       console.log("Response from server:", response.data);
+
+      // Save response to localStorage
+      localStorage.setItem("loginResponse", JSON.stringify(response.data));
+      localStorage.setItem("loginTimestamp", new Date().toISOString());
+
+      console.log("Response saved to localStorage");
+
+      // Navigate to home page after successful login
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
     }
