@@ -82,8 +82,8 @@ export default function DesktopSidebar({
         leaveFrom="translate-x-0"
         leaveTo="translate-x-full"
       >
-        <div className="hidden lg:w-1/5 lg:flex lg:flex-col bg-gradient-to-tr from-[#3b466c] to-[#6bb7b7] lg:overflow-y-auto lg:px-4 lg:pb-4 lg:h-screen border-l-2 border-gray-200 shadow-lg text-right font-sans scrollbar-hide">
-          <div className="flex items-center justify-between mt-6 mb-8">
+        <div className="header-panel hidden lg:w-1/5 lg:flex lg:flex-col  lg:overflow-y-auto lg:px-4 lg:pb-4 lg:h-screen border-l-2 border-gray-200 shadow-lg text-right font-sans scrollbar-hide">
+          <div className="flex items-center justify-between mt-4 mb-4">
             <div className="flex h-16 items-center">
               <img src="/img/ice-logo.svg" alt="logo" className="w-24" />
             </div>

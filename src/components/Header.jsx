@@ -9,7 +9,7 @@ export default function Header({
   setDesktopSidebarOpen,
 }) {
   return (
-    <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-tr from-[#3b466c] to-[#6bb7b7] border-b-2 border-[#3b466c] px-4 sm:gap-x-6 sm:px-6 lg:px-8 shadow-sm text-right font-sans">
+    <div className="header-panel sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4  border-b-2 border-[#3b466c] px-4 sm:gap-x-6 sm:px-6 lg:px-8 shadow-sm text-right font-sans">
       <button
         type="button"
         className="-m-2.5 p-2.5 text-white lg:hidden hover:text-[#fdcb44] transition-colors duration-200"
