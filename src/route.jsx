@@ -4,7 +4,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthLayout from "./layout/AuthLayout";
 import Login from "./pages/login/page";
-import Register from "./pages/Rigester/Register";
+import Register from "./pages/Rigester/RegisterPage";
 import ServicesPage from "./pages/ServicesPage";
 import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";

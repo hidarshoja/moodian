@@ -27,7 +27,6 @@ export default function MobileSidebar({ sidebarOpen, setSidebarOpen }) {
         >
           <div className="fixed inset-0 bg-gray-900/80" />
         </Transition.Child>
-
         <div className="fixed inset-0 flex">
           <Transition.Child
             as={Fragment}
@@ -56,18 +55,18 @@ export default function MobileSidebar({ sidebarOpen, setSidebarOpen }) {
                   >
                     <span className="sr-only">Close sidebar</span>
                     <XMarkIcon
-                      className="h-6 w-6 text-gray-800"
+                      className="h-6 w-6 text-gray-100"
                       aria-hidden="true"
                     />
                   </button>
                 </div>
               </Transition.Child>
 
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-yellow-50 px-6 pb-4">
+              <div className="header-panel flex grow flex-col gap-y-5 overflow-y-auto  px-6 pb-4">
                 <div className="flex h-16 shrink-0 items-center">
                   <img
                     className="h-12 w-auto"
-                    src="/img/Vector.png"
+                    src="/img/ice-logo.svg"
                     alt="Your Company"
                   />
                 </div>
@@ -80,9 +79,9 @@ export default function MobileSidebar({ sidebarOpen, setSidebarOpen }) {
                             key={item.name}
                             className={classNames(
                               location.pathname === item.href
-                                ? "bg-green-200"
+                                ? "bg-green-700"
                                 : "hover:bg-yellow-200",
-                              "flex items-start gap-3 py-2 border-2 border-gray-700 rounded-md"
+                              "flex  items-start gap-3 py-2 border-2 border-gray-100 rounded-md"
                             )}
                            
                           >
@@ -95,10 +94,13 @@ export default function MobileSidebar({ sidebarOpen, setSidebarOpen }) {
                                   item.current
                                     ? ""
                                     : " hover:text-gray-700",
-                                  "block rounded-md pr-2 pl-10 text-sm leading-6 font-semibold text-gray-700"
+                                  "block rounded-md pr-2 pl-10 text-sm leading-6  text-gray-100"
                                 )}
                               >
-                                {item.name}
+                                 <span className="sidebar-shutter-content">
+                   {item.icon}
+                   <span>{item.name}</span>
+                 </span>
                               </Link>
                             ) : (
                               <Disclosure as="div" dir="ltr">
