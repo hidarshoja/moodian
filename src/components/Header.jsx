@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import { Menu } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -19,6 +20,14 @@ export default function Header({
   const [userData, setUserData] = React.useState(null);
   const navigate = useNavigate();
 
+  const handleLogout = useCallback(() => {
+    // Clear localStorage and redirect to login
+    localStorage.removeItem("loginResponse");
+    localStorage.removeItem("loginTimestamp");
+    setUserData(null);
+    navigate("/auth/login");
+  }, [navigate]);
+
   // Check localStorage on component mount
   useEffect(() => {
     const loginResponse = localStorage.getItem("loginResponse");
@@ -26,25 +35,52 @@ export default function Header({
       try {
         const parsedData = JSON.parse(loginResponse);
         setUserData(parsedData);
+        // Ensure there is a timestamp to base the session timeout on
+        const ts = localStorage.getItem("loginTimestamp");
+        if (!ts) {
+          localStorage.setItem("loginTimestamp", String(Date.now()));
+        }
       } catch (error) {
         console.error("Error parsing login response:", error);
         // If parsing fails, clear localStorage and redirect to login
-        localStorage.removeItem("loginResponse");
-        localStorage.removeItem("loginTimestamp");
-        navigate("/auth/login");
+        handleLogout();
       }
     } else {
       // If no login data, redirect to login page
-      navigate("/auth/login");
+      handleLogout();
     }
-  }, [navigate]);
+  }, [navigate, handleLogout]);
 
-  const handleLogout = () => {
-    // Clear localStorage and redirect to login
-    localStorage.removeItem("loginResponse");
-    localStorage.removeItem("loginTimestamp");
-    setUserData(null);
-    navigate("/auth/login");
+  // Auto-logout after 20 minutes based on saved loginTimestamp
+  useEffect(() => {
+    const SESSION_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
+    const timestampString = localStorage.getItem("loginTimestamp");
+    const timestamp = timestampString ? Number(timestampString) : null;
+
+    if (!timestamp) {
+      return;
+    }
+
+    const now = Date.now();
+    const elapsed = now - timestamp;
+
+    if (elapsed >= SESSION_TIMEOUT_MS) {
+      handleLogout();
+      return;
+    }
+
+    const remaining = SESSION_TIMEOUT_MS - elapsed;
+    const timerId = setTimeout(() => {
+      handleLogout();
+    }, remaining);
+
+    return () => clearTimeout(timerId);
+  }, [userData, handleLogout]);
+
+  Header.propTypes = {
+    setSidebarOpen: PropTypes.func.isRequired,
+    desktopSidebarOpen: PropTypes.bool.isRequired,
+    setDesktopSidebarOpen: PropTypes.func.isRequired,
   };
 
   const menuItems = [
