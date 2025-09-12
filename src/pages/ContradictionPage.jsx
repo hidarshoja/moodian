@@ -2,12 +2,16 @@ import React from 'react'
 
 export default function ContradictionPage() {
  return (
+  <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
   <div>
-    <div>
-      <div className='w-[160px]  border-b-2 border-white  p-4'>
-      <h1 className='text-white text-xl font-bold'>مغایرت گیری </h1>
-      </div>
+    <div className="w-full border-b border-white/10 p-6">
+      <h1 className="text-white text-2xl font-bold">مغایرت گیری</h1>
+      <p className="text-white/60 text-sm mt-1">نمای کلی مغایرت گیری کاربران</p>
     </div>
   </div>
+  <div className="users">
+   
+  </div>
+</div>
 )
 }

@@ -2,13 +2,16 @@ import React from 'react'
 
 export default function BillPage() {
   return (
-   <div>
-   <div>
-     <div className='w-[180px]  border-b-2 border-white  p-4'>
-     <h1 className='text-white text-xl font-bold'>صورتحساب بانکی</h1>
-     </div>
-   </div>
-  
- </div>
-  )
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+      <div>
+        <div className="w-full border-b border-white/10 p-6">
+          <h1 className="text-white text-2xl font-bold">صورت حساب بانکی</h1>
+          <p className="text-white/60 text-sm mt-1">نمای کلی صورتحساب کاربران</p>
+        </div>
+      </div>
+      <div className="users">
+       
+      </div>
+    </div>
+  );
 }
