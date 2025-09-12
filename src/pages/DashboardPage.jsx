@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 export default function DashboardPage() {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -49,6 +52,59 @@ export default function DashboardPage() {
       isMounted = false;
     };
   }, []);
+
+  const openActivityModal = (user, activity) => {
+    setSelectedUser(user);
+    setSelectedActivity(activity);
+    setIsActivityModalOpen(true);
+  };
+
+  const closeActivityModal = () => {
+    setIsActivityModalOpen(false);
+    setSelectedActivity(null);
+    setSelectedUser(null);
+  };
+
+  const formatJalaliDateTime = (date = new Date()) => {
+    try {
+      const dateStr = new Intl.DateTimeFormat("fa-IR", {
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+      }).format(date);
+      const timeStr = new Intl.DateTimeFormat("fa-IR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date);
+      return `${dateStr} - ${timeStr}`;
+    } catch (_) {
+      return date.toLocaleString("fa-IR");
+    }
+  };
+
+  const buildActivityDetails = (user, activity) => {
+    const fullName =
+      `${user?.name ?? ""} ${user?.lastName ?? ""}`.trim() || "کاربر";
+    const dateStr = formatJalaliDateTime();
+    const base = activity?.name || "فعالیت";
+    const items = [];
+    if (/خرید\s*طلا/.test(base)) {
+      items.push(`${fullName} در تاریخ ${dateStr} مقدار 10 گرم طلا خرید.`);
+      items.push(`روش پرداخت: کارت بانکی`);
+      items.push(`کد پیگیری: ۱۲۳۴۵۶۷۸۹`);
+    } else if (/فروش\s*طلا/.test(base)) {
+      items.push(`${fullName} در تاریخ ${dateStr} مقدار 8 گرم طلا فروخت.`);
+      items.push(`واریز به حساب انجام شد`);
+      items.push(`کد پیگیری: ۹۸۷۶۵۴۳۲۱`);
+    } else {
+      items.push(
+        `${fullName} در تاریخ ${dateStr} عملیات «${base}» را انجام داد.`
+      );
+      items.push(`وضعیت: موفق`);
+      items.push(`مرجع: سیستم`);
+    }
+    return items;
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -126,9 +182,13 @@ export default function DashboardPage() {
                             {act.name}
                           </span>
                         </div>
-                        <span className="text-[10px] text-white/50">
+                        <button
+                          type="button"
+                          onClick={() => openActivityModal(u, act)}
+                          className="text-[10px] text-white/70 hover:text-white bg-white/10 px-2 py-1 rounded-lg border border-white/10"
+                        >
                           جزئیات
-                        </span>
+                        </button>
                       </li>
                     ))}
                     {(!u?.Activities || u.Activities.length === 0) && (
@@ -143,6 +203,39 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {isActivityModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+          <div className="w-full max-w-xl rounded-2xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden">
+            <div className="bg-[#1f1e37] text-white px-6 py-4 flex items-center justify-between">
+              <h3 className="font-semibold">جزئیات فعالیت</h3>
+              <button
+                onClick={closeActivityModal}
+                className="text-white/80 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="px-6 py-6">
+              <ul className="space-y-2 list-disc pr-6 text-white/90 text-sm">
+                {buildActivityDetails(selectedUser, selectedActivity).map(
+                  (t, idx) => (
+                    <li key={idx}>{t}</li>
+                  )
+                )}
+              </ul>
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={closeActivityModal}
+                  className="px-4 py-2 rounded-xl bg-purple-700/90 text-white hover:bg-purple-700"
+                >
+                  بستن
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
