@@ -18,7 +18,7 @@ export default function MainContent({
       {location.pathname !== "/Login" && (
         <div
           className={classNames(
-            "lg:flex-1 lg:relative lg:overflow-hidden",
+            "flex-1 relative h-screen overflow-y-auto scrollbar-hide lg:h-screen lg:overflow-y-auto",
             desktopSidebarOpen ? "lg:w-4/5" : "lg:w-full"
           )}
         >

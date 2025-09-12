@@ -3,6 +3,7 @@ import ProfileRecordsTable from "../components/ProfileRecordsTable";
 import ProfileListUsers from "../components/ProfileListUsers";
 import ProfileFormModal from "../components/ProfileFormModal";
 import KeySettingsModal from "../components/KeySettingsModal";
+import UserFormModal from "../components/UserFormModal";
 
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,8 +27,15 @@ export default function ProfilePage() {
     phone: "",
   });
   const [users, setUsers] = useState([
-    {id: 1, name :"حیدر شجاع" , name2:"09376228320" , side:"مدیر" }
+    { id: 1, name: "حیدر شجاع", name2: "09376228320", side: "مدیر" },
   ]);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [editingUserIndex, setEditingUserIndex] = useState(null);
+  const [userForm, setUserForm] = useState({
+    username: "",
+    fullName: "",
+    role: "",
+  });
   const isEditing = useMemo(() => editingIndex !== null, [editingIndex]);
 
   const openForCreate = () => {
@@ -91,6 +99,62 @@ export default function ProfilePage() {
   const closeKeySettings = () => {
     setIsKeyModalOpen(false);
     setKeyModalIndex(null);
+  };
+
+  // Users list actions
+  const openCreateUser = () => {
+    setEditingUserIndex(null);
+    setUserForm({ username: "", fullName: "", role: "" });
+    setIsUserModalOpen(true);
+  };
+
+  const openEditUser = (index) => {
+    const u = users[index];
+    setEditingUserIndex(index);
+    setUserForm({
+      username: u?.name2 || "",
+      fullName: u?.name || "",
+      role: u?.side || "",
+    });
+    setIsUserModalOpen(true);
+  };
+
+  const deleteUser = (index) => {
+    setUsers((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUserChange = (e) => {
+    const { name, value } = e.target;
+    setUserForm((p) => ({ ...p, [name]: value }));
+  };
+
+  const handleSubmitUser = (e) => {
+    e.preventDefault();
+    if (editingUserIndex !== null) {
+      setUsers((prev) =>
+        prev.map((u, i) =>
+          i === editingUserIndex
+            ? {
+                id: u.id,
+                name: userForm.fullName,
+                name2: userForm.username,
+                side: userForm.role,
+              }
+            : u
+        )
+      );
+    } else {
+      setUsers((prev) => [
+        {
+          id: Date.now(),
+          name: userForm.fullName,
+          name2: userForm.username,
+          side: userForm.role,
+        },
+        ...prev,
+      ]);
+    }
+    setIsUserModalOpen(false);
   };
 
   const handleKeyModalTextChange = (e) => {
@@ -184,7 +248,7 @@ export default function ProfilePage() {
               </p>
             </div>
             <button
-              onClick={openForCreate}
+            onClick={openForCreate}
               className="inline-flex items-center gap-2 rounded-xl bg-white/10 text-white border border-white/10 px-4 py-2 hover:bg-white/15 transition-colors"
             >
               <span className="text-sm">جدید +</span>
@@ -200,7 +264,7 @@ export default function ProfilePage() {
           onOpenKeySettings={openKeySettings}
         />
       </div>
-    
+
       <div>
         <div className="w-full border-b border-white/10 p-6">
           <div className="flex items-center justify-between">
@@ -211,7 +275,8 @@ export default function ProfilePage() {
               </p>
             </div>
             <button
-              onClick={openForCreate}
+              
+              onClick={openCreateUser}
               className="inline-flex items-center gap-2 rounded-xl bg-white/10 text-white border border-white/10 px-4 py-2 hover:bg-white/15 transition-colors"
             >
               <span className="text-sm">جدید +</span>
@@ -222,9 +287,9 @@ export default function ProfilePage() {
       <div className="max-w-6xl mx-auto p-6">
         <ProfileListUsers
           users={users}
-          onDelete={deleteRecord}
-          onEdit={openForEdit}
-          onOpenKeySettings={openKeySettings}
+          onDelete={deleteUser}
+          onEdit={openEditUser}
+          onOpenKeySettings={openEditUser}
         />
       </div>
 
@@ -244,6 +309,19 @@ export default function ProfilePage() {
         onChangeFile={handlePrivateKeyFileChange}
         onSave={handleSaveKeySettings}
         onClose={closeKeySettings}
+      />
+
+      <UserFormModal
+        isOpen={isUserModalOpen}
+        isEditing={editingUserIndex !== null}
+        form={{
+          username: userForm.username,
+          fullName: userForm.fullName,
+          role: userForm.role,
+        }}
+        onChange={handleUserChange}
+        onSubmit={handleSubmitUser}
+        onClose={() => setIsUserModalOpen(false)}
       />
     </div>
   );
