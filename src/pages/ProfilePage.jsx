@@ -1,9 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { GoKey } from "react-icons/go";
 
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [records, setRecords] = useState([]);
+  // modal for tax system sending settings (key icon)
+  const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
+  const [keyModalIndex, setKeyModalIndex] = useState(null);
+  const [keyModalData, setKeyModalData] = useState({
+    taxMemoryUniqueId: "",
+    newEconomicCode: "",
+    privateKeyFile: null,
+  });
   const [form, setForm] = useState({
     taxpayerName: "",
     taxMemoryName: "",
@@ -64,13 +73,41 @@ export default function ProfilePage() {
     setRecords((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const copyPrivateKey = async (index) => {
-    try {
-      await navigator.clipboard.writeText(records[index]?.privateKey || "");
-      // Optional: toast could be added later
-    } catch (_) {
-      // ignore
-    }
+  const openKeySettings = (index) => {
+    const row = records[index];
+    setKeyModalIndex(index);
+    setKeyModalData({
+      taxMemoryUniqueId: row?.taxMemoryCode || "",
+      newEconomicCode: row?.taxpayerEconomicCode || "",
+      privateKeyFile: null,
+    });
+    setIsKeyModalOpen(true);
+  };
+
+  const closeKeySettings = () => {
+    setIsKeyModalOpen(false);
+    setKeyModalIndex(null);
+  };
+
+  const handleKeyModalTextChange = (e) => {
+    const { name, value } = e.target;
+    setKeyModalData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePrivateKeyFileChange = (e) => {
+    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+    setKeyModalData((prev) => ({ ...prev, privateKeyFile: file }));
+  };
+
+  const handleSaveKeySettings = () => {
+    const payload = {
+      rowIndex: keyModalIndex,
+      taxMemoryUniqueId: keyModalData.taxMemoryUniqueId,
+      newEconomicCode: keyModalData.newEconomicCode,
+      privateKeyFileName: keyModalData.privateKeyFile?.name || null,
+    };
+    console.log("Tax system settings payload:", payload);
+    setIsKeyModalOpen(false);
   };
 
   useEffect(() => {
@@ -252,18 +289,11 @@ export default function ProfilePage() {
                         </svg>
                       </button>
                       <button
-                        onClick={() => copyPrivateKey(i)}
+                        onClick={() => openKeySettings(i)}
                         title="کلید"
                         className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/15"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path d="M14.5 4a5.5 5.5 0 1 0 3.81 9.48l3.56 3.56a1 1 0 0 0 .71.3H24v-2h-1.09l-3.2-3.2A5.5 5.5 0 0 0 14.5 4Zm-3 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z" />
-                        </svg>
+                        <GoKey className="w-5 h-5" />
                       </button>
                     </div>
                   </td>
@@ -390,6 +420,90 @@ export default function ProfilePage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {isKeyModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+          <div className="w-full max-w-3xl rounded-2xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden">
+            {/* header */}
+            <div className="bg-[#1f1e37] text-white px-6 py-4 flex items-center justify-between">
+              <h3 className="font-semibold">
+                تنظیمات جهت ارسال دیتا به سامانه مودیان
+              </h3>
+              <button
+                onClick={closeKeySettings}
+                className="text-white/80 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            {/* body */}
+            <div className="px-6 pt-6 pb-2">
+              <div className="grid grid-cols-1  gap-4 items-end">
+                {/* private key file */}
+                <div>
+                  <label className="block mb-2 text-white text-sm">
+                    فایل کلید خصوصی :
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="file"
+                      accept=".key,.pem,.txt"
+                      onChange={handlePrivateKeyFileChange}
+                      className="flex-1 rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-3 py-2 lg:py-2 lg:text-sm file:mr-2 file:rounded-lg file:border-0 file:bg-white/10 file:text-white"
+                    />
+                    <button
+                      type="button"
+                      className="px-3 py-2 rounded-lg bg-white/10 text-white border border-white/10"
+                    >
+                      ...
+                    </button>
+                  </div>
+                </div>
+                {/* new economic code */}
+                <div>
+                  <label className="block mb-2 text-white text-sm">
+                    کد اقتصادی جدید :
+                  </label>
+                  <input
+                    name="newEconomicCode"
+                    value={keyModalData.newEconomicCode}
+                    onChange={handleKeyModalTextChange}
+                    className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 lg:py-2 lg:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+                  />
+                </div>
+                {/* tax memory unique id */}
+                <div>
+                  <label className="block mb-2 text-white text-sm">
+                    شناسه یکتای حافظه مالیاتی :
+                  </label>
+                  <input
+                    name="taxMemoryUniqueId"
+                    value={keyModalData.taxMemoryUniqueId}
+                    onChange={handleKeyModalTextChange}
+                    placeholder="0/6"
+                    className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 lg:py-2 lg:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* footer */}
+            <div className="px-6 pb-6 pt-4 flex items-center justify-between gap-4">
+              <button
+                onClick={closeKeySettings}
+                className="flex-1 rounded-xl bg-purple-700/90 text-white py-3 hover:bg-purple-700"
+              >
+                انصراف
+              </button>
+              <button
+                onClick={handleSaveKeySettings}
+                className="flex-1 rounded-xl bg-pink-400/70 text-white py-3 hover:bg-pink-400"
+              >
+                ذخیره
+              </button>
+            </div>
           </div>
         </div>
       )}
