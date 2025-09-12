@@ -118,7 +118,7 @@ export default function DashboardPage() {
           <div className="p-8 text-white text-center">در حال بارگذاری...</div>
         )}
         {!isLoading && (
-          <div className="max-w-6xl mx-auto p-6 space-y-6">
+          <div className="mx-auto p-6 space-y-6">
             {users.map((u) => (
               <div
                 key={u.id}

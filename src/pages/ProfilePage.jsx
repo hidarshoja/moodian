@@ -256,7 +256,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="mx-auto p-6">
         <ProfileRecordsTable
           records={records}
           onDelete={deleteRecord}
@@ -284,7 +284,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="mx-auto p-6">
         <ProfileListUsers
           users={users}
           onDelete={deleteUser}
