@@ -2,13 +2,19 @@ import ServicesTable from "../components/ServicesTable";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { GrDocumentExcel } from "react-icons/gr";
 import AddServiceModal from "../components/AddServiceModal";
+import ImportExcelModal from "../components/ImportExcelModal";
 import { useState } from "react";
 
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [excelModalOpen, setExcelModalOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ImportExcelModal
+        isOpen={excelModalOpen}
+        onClose={() => setExcelModalOpen(false)}
+      />
       <div>
         <div className="w-full border-b border-white/10 p-6">
           <h1 className="text-white text-2xl font-bold">کالا و خدمات</h1>
@@ -23,7 +29,10 @@ export default function ServicesPage() {
                 </span>
               </button>
               {/* از اکسل */}
-              <button className="btn-custom">
+              <button
+                className="btn-custom"
+                onClick={() => setExcelModalOpen(true)}
+              >
                 از اکسل
                 <span className="inline-block">
                   <GrDocumentExcel className="w-5 h-5" />
