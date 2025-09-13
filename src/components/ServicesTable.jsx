@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
+import axios from "axios";
 
 const units = [
   "انتخاب ...",
@@ -13,7 +14,31 @@ const units = [
 ];
 
 export default function ServicesTable() {
-  const [filters, setFilters] = useState({
+  const [dataTable, setDataTable] = useState([
+    {
+      code: "1234",
+      name: "saeeid",
+      unit: 3,
+      valueAdded: "5555",
+      otherTax: "6666",
+      legalValue: "77777",
+      legalRate: "8888",
+      customCode: "9999",
+    },
+    {
+      code: "4321",
+      name: "Ali",
+      unit: 5,
+      valueAdded: "Ali123",
+      otherTax: "ali666",
+      legalValue: "ali77777",
+      legalRate: "ali8888",
+      customCode: "ali9999",
+    },
+  ]);
+
+  // state برای مقدار فعلی inputها
+  const [row, setRow] = useState({
     code: "",
     name: "",
     unit: "انتخاب ...",
@@ -24,8 +49,68 @@ export default function ServicesTable() {
     customCode: "",
   });
 
-  // داده‌های نمونه (خالی)
-  const data = [];
+  // sync کردن inputها با dataTable هنگام وارد کردن کد
+  const handleCodeChange = (e) => {
+    const code = e.target.value;
+    setRow((prev) => ({ ...prev, code }));
+    const found = dataTable.find((item) => item.code === code);
+    if (found) {
+      setRow({ ...found });
+    } else {
+      setRow((prev) => ({
+        ...prev,
+        name: "",
+        unit: "انتخاب ...",
+        valueAdded: "",
+        otherTax: "",
+        legalValue: "",
+        legalRate: "",
+        customCode: "",
+      }));
+    }
+  };
+
+  // ویرایش مقدار هر فیلد
+  const handleFieldChange = (field, value) => {
+    setRow((prev) => ({ ...prev, [field]: value }));
+    // اگر کد وجود داشت، مقدار را در dataTable هم آپدیت کن
+    setDataTable((prev) =>
+      prev.map((item) =>
+        item.code === row.code ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  // حذف ردیف با کد فعلی
+  const handleDelete = () => {
+    setDataTable((prev) => prev.filter((item) => item.code !== row.code));
+    setRow({
+      code: "",
+      name: "",
+      unit: "انتخاب ...",
+      valueAdded: "",
+      otherTax: "",
+      legalValue: "",
+      legalRate: "",
+      customCode: "",
+    });
+  };
+
+  // ارسال داده به API تستی هنگام ویرایش
+  const handleEdit = async () => {
+    try {
+      console.log("ارسال داده ویرایش:", row);
+      const response = await axios.post(
+        "https://jsonplaceholder.typicode.com/posts",
+        row
+      );
+      alert("داده با موفقیت ارسال شد! (پاسخ تستی)");
+      console.log("پاسخ سرور:", response.data);
+    } catch (error) {
+      alert("خطا در ارسال داده!");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 mt-8">
@@ -43,121 +128,111 @@ export default function ServicesTable() {
             <th className="px-2 py-2">کد کالا در سامانه مشتری</th>
             <th className="px-2 py-2">عملیات</th>
           </tr>
+        </thead>
+        <tbody>
           <tr className="bg-white/10">
-            <th className="px-2 py-1">
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.code}
-                onChange={(e) =>
-                  setFilters((f) => ({ ...f, code: e.target.value }))
-                }
+                value={row.code}
+                onChange={handleCodeChange}
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.name}
-                onChange={(e) =>
-                  setFilters((f) => ({ ...f, name: e.target.value }))
-                }
+                value={row.name}
+                onChange={(e) => handleFieldChange("name", e.target.value)}
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <select
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.unit}
-                onChange={(e) =>
-                  setFilters((f) => ({ ...f, unit: e.target.value }))
-                }
+                value={row.unit}
+                onChange={(e) => handleFieldChange("unit", e.target.value)}
               >
-                {units.map((u) => (
+                {units.map((u, idx) => (
                   <option
                     key={u}
-                    value={u}
+                    value={idx}
                     className={u === "انتخاب ..." ? "text-red-500" : ""}
                   >
                     {u}
                   </option>
                 ))}
               </select>
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.valueAdded}
+                value={row.valueAdded}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, valueAdded: e.target.value }))
+                  handleFieldChange("valueAdded", e.target.value)
                 }
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.otherTax}
-                onChange={(e) =>
-                  setFilters((f) => ({ ...f, otherTax: e.target.value }))
-                }
+                value={row.otherTax}
+                onChange={(e) => handleFieldChange("otherTax", e.target.value)}
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.legalValue}
+                value={row.legalValue}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, legalValue: e.target.value }))
+                  handleFieldChange("legalValue", e.target.value)
                 }
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.legalRate}
-                onChange={(e) =>
-                  setFilters((f) => ({ ...f, legalRate: e.target.value }))
-                }
+                value={row.legalRate}
+                onChange={(e) => handleFieldChange("legalRate", e.target.value)}
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.customCode}
+                value={row.customCode}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, customCode: e.target.value }))
+                  handleFieldChange("customCode", e.target.value)
                 }
               />
-            </th>
-            <th className="px-2 py-1">
+            </td>
+            <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={filters.customCode}
+                value={row.customCode}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, customCode: e.target.value }))
+                  handleFieldChange("customCode", e.target.value)
                 }
               />
-            </th>
-            <th className="px-2 py-1 text-center">
+            </td>
+            <td className="px-2 py-1 text-center">
               <div className="flex items-center justify-center gap-2">
-                <button className="p-1 rounded hover:bg-red-500/20 text-red-500">
+                <button
+                  className="p-1 rounded hover:bg-red-500/20 text-red-500"
+                  onClick={handleDelete}
+                  disabled={
+                    !row.code ||
+                    !dataTable.find((item) => item.code === row.code)
+                  }
+                >
                   <FiTrash2 className="w-4 h-4" />
                 </button>
-                <button className="p-1 rounded hover:bg-blue-500/20 text-blue-500">
+                <button
+                  className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                  onClick={handleEdit}
+                >
                   <FiEdit2 className="w-4 h-4" />
                 </button>
               </div>
-            </th>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 && (
-            <tr>
-              <td
-                colSpan={10}
-                className="text-center text-xs text-white/70 py-6"
-              >
-                (موردی وجود ندارد)
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
     </div>
