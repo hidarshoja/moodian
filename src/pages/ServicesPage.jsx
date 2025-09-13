@@ -1,4 +1,6 @@
 import ServicesTable from "../components/ServicesTable";
+import { HiOutlinePlusSm } from "react-icons/hi";
+import { GrDocumentExcel } from "react-icons/gr";
 
 export default function ServicesPage() {
   return (
@@ -13,72 +15,21 @@ export default function ServicesPage() {
               <button className="btn-custom">
                 جدید
                 <span className="inline-block">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="4"
-                      fill="#e0f2f1"
-                    />
-                    <path
-                      d="M12 8v8M8 12h8"
-                      stroke="#26a69a"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                 <HiOutlinePlusSm className="w-5 h-5"/>
                 </span>
               </button>
               {/* از اکسل */}
               <button className="btn-custom">
                 از اکسل
                 <span className="inline-block">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="4"
-                      fill="#e0f2f1"
-                    />
-                    <text
-                      x="7"
-                      y="17"
-                      fontSize="10"
-                      fontWeight="bold"
-                      fill="#26a69a"
-                    >
-                      X
-                    </text>
-                  </svg>
+                 <GrDocumentExcel className="w-5 h-5"/>
                 </span>
               </button>
               {/* به اکسل */}
               <button className="btn-custom">
                 به اکسل
                 <span className="inline-block">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="4"
-                      fill="#e0f2f1"
-                    />
-                    <text
-                      x="7"
-                      y="17"
-                      fontSize="10"
-                      fontWeight="bold"
-                      fill="#26a69a"
-                    >
-                      X
-                    </text>
-                  </svg>
+                <GrDocumentExcel className="w-5 h-5"/>
                 </span>
               </button>
             </div>
