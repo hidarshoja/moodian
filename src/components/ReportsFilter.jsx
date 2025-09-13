@@ -30,10 +30,10 @@ export default function ReportsFilter({
   onClearAll,
 }) {
   return (
-    <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1">
+    <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
       <div className="border rounded-md border-white w-full lg:w-1/2 p-1 flex gap-1">
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-2">تاریخ شروع </span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-2">تاریخ شروع </span>
           <DatePicker
             calendar={persian}
             locale={persian_fa}
@@ -43,8 +43,8 @@ export default function ReportsFilter({
             inputClass="custom-input"
           />
         </div>
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-2">تاریخ پایان </span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-2">تاریخ پایان </span>
           <DatePicker
             calendar={persian}
             locale={persian_fa}
@@ -54,8 +54,8 @@ export default function ReportsFilter({
             inputClass="custom-input"
           />
         </div>
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-2"> سال</span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-2"> سال</span>
           <DatePicker
             calendar={persian}
             locale={persian_fa}
@@ -66,8 +66,8 @@ export default function ReportsFilter({
             onlyYearPicker={true}
           />
         </div>
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-2">از ماه</span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-2">از ماه</span>
           <DatePicker
             calendar={persian}
             locale={persian_fa}
@@ -78,8 +78,8 @@ export default function ReportsFilter({
             onlyMonthPicker={true}
           />
         </div>
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-2">تا ماه</span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-2">تا ماه</span>
           <DatePicker
             calendar={persian}
             locale={persian_fa}
@@ -90,8 +90,8 @@ export default function ReportsFilter({
             onlyMonthPicker={true}
           />
         </div>
-        <div className="input_date w-full md:w-1/6">
-          <span className="block text-gray-100 text-sm mb-1">فصل</span>
+        <div className="input_date w-full md:w-1/7">
+          <span className="block text-gray-100 text-[10px] mb-1">فصل</span>
           <select
             value={season}
             onChange={onSeasonChange}
@@ -115,10 +115,10 @@ export default function ReportsFilter({
           </select>
         </div>
       </div>
-      <div className="border rounded-md border-white w-full lg:w-1/2 p-4 flex flex-wrap gap-4 items-center justify-start">
+      <div className="border rounded-md border-white w-full lg:w-1/2 p-4 flex flex-wrap gap-9 items-center justify-start">
         {/* خطا */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-100">خطا</span>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] text-gray-100">خطا</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -131,8 +131,8 @@ export default function ReportsFilter({
         </div>
 
         {/* در انتظار */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-100">در انتظار</span>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] text-gray-100">در انتظار</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -145,8 +145,8 @@ export default function ReportsFilter({
         </div>
 
         {/* ارسال نشده */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-100">ارسال نشده</span>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] text-gray-100">ارسال نشده</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -159,8 +159,8 @@ export default function ReportsFilter({
         </div>
 
         {/* ارسال شده */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-100">ارسال شده</span>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] text-gray-100">ارسال شده</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -173,8 +173,8 @@ export default function ReportsFilter({
         </div>
 
         {/* ارسال موفق */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-100">ارسال موفق</span>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[10px] text-gray-100">ارسال موفق</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -189,9 +189,9 @@ export default function ReportsFilter({
         <div className="flex items-center gap-2">
           <button
             onClick={onClearAll}
-            className="text-sm text-gray-100 hover:text-white transition-colors"
+            className="btn-custom"
           >
-            پاک کردن
+            پاک کردن فیلترها
           </button>
         </div>
       </div>
