@@ -10,7 +10,7 @@ export default function UserFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
       <div className="w-full max-w-md rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] rounded-t-2xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <h3 className="text-white font-semibold">
             {isEditing ? "ویرایش کاربر" : "افزودن کاربر"}
           </h3>

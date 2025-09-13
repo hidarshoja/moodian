@@ -48,7 +48,7 @@ export default function AddServiceModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] rounded-t-2xl">
+        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <span className="text-white text-lg font-bold">کالا/خدمت جدید</span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
