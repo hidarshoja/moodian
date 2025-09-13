@@ -86,7 +86,8 @@ body {
 .sidebar-shutter {
   position: relative;
   overflow: hidden;
-  background-image: linear-gradient(115deg, #1f1f47 30%);
+  background-image: linear-gradient(to bottom, #111827, #1f2937);
+
   transition: background 0.3s;
 }
 
@@ -118,7 +119,7 @@ body {
 .header-panel {
   background-image: linear-gradient(
     315deg,
-    #1f1f47 35%,
+   
     #07071c 65%
   );
 }
