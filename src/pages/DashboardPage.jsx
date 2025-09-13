@@ -185,7 +185,7 @@ export default function DashboardPage() {
                         <button
                           type="button"
                           onClick={() => openActivityModal(u, act)}
-                         className="btn-custom"
+                          className="btn-custom"
                         >
                           جزئیات
                         </button>
@@ -205,9 +205,9 @@ export default function DashboardPage() {
       </div>
 
       {isActivityModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-          <div className="w-full max-w-xl rounded-2xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden">
-            <div className="bg-[#1f1e37] text-white px-6 py-4 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
+          <div className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl overflow-hidden relative animate-slideIn">
+            <div className="bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
               <h3 className="font-semibold">جزئیات فعالیت</h3>
               <button
                 onClick={closeActivityModal}
@@ -227,7 +227,7 @@ export default function DashboardPage() {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={closeActivityModal}
-                  className="px-4 py-2 rounded-xl bg-purple-700/90 text-white hover:bg-purple-700"
+                  className="px-4 py-2 rounded-xl bg-purple-700/90 text-white hover:bg-purple-800 transition-all"
                 >
                   بستن
                 </button>

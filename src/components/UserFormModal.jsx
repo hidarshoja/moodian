@@ -8,9 +8,9 @@ export default function UserFormModal({
 }) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div className="w-full max-w-md rounded-2xl bg-gray-900 border border-white/10 shadow-2xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
+      <div className="w-full max-w-md rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] rounded-t-2xl">
           <h3 className="text-white font-semibold">
             {isEditing ? "ویرایش کاربر" : "افزودن کاربر"}
           </h3>
@@ -52,13 +52,13 @@ export default function UserFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-white/10 text-white/80 hover:bg-white/10"
+              className="px-4 py-2 rounded-xl border border-white/10 text-white/80 bg-purple-700 hover:bg-purple-800 transition-all"
             >
               انصراف
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-500"
+              className="px-4 py-2 rounded-xl bg-pink-300 text-[#23234a] font-bold hover:bg-pink-400 transition-all"
             >
               {isEditing ? "بروزرسانی" : "افزودن"}
             </button>

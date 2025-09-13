@@ -8,9 +8,9 @@ export default function KeySettingsModal({
 }) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div className="w-full max-w-3xl rounded-2xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden">
-        <div className="bg-[#1f1e37] text-white px-6 py-4 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
+      <div className="w-full max-w-3xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl overflow-hidden relative animate-slideIn">
+        <div className="bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <h3 className="font-semibold">
             تنظیمات جهت ارسال دیتا به سامانه مودیان
           </h3>
@@ -67,13 +67,13 @@ export default function KeySettingsModal({
         <div className="px-6 pb-6 pt-4 flex items-center justify-between gap-4">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-purple-700/90 text-white py-3 hover:bg-purple-700"
+            className="flex-1 rounded-xl bg-purple-700/90 text-white py-3 hover:bg-purple-800 transition-all"
           >
             انصراف
           </button>
           <button
             onClick={onSave}
-            className="flex-1 rounded-xl bg-pink-400/70 text-white py-3 hover:bg-pink-400"
+            className="flex-1 rounded-xl bg-pink-400/70 text-[#23234a] font-bold py-3 hover:bg-pink-400 transition-all"
           >
             ذخیره
           </button>
