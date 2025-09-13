@@ -34,7 +34,7 @@ export default function SearchFilterBar() {
   return (
     <div className="w-full mb-4">
       {/* Search Bar */}
-      <div className="w-full bg-gradient-to-r from-gray-200 to-gray-100 rounded-lg p-4 mb-4">
+      <div className="w-full bg-gradient-to-b from-gray-900 to-gray- border border-gray-300 rounded-lg p-4 mb-4">
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <input
@@ -47,14 +47,14 @@ export default function SearchFilterBar() {
           </div>
           <button
             onClick={handleSearch}
-            className="px-6 py-2 bg-white text-gray-600 rounded-md hover:bg-gray-50 transition-colors"
+            className="btn-custom"
           >
             جستجو
           </button>
           {activeFilter && (
             <button
               onClick={handleClearFilter}
-              className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              className="btn-custom"
             >
               {activeFilter} X
             </button>
@@ -62,32 +62,33 @@ export default function SearchFilterBar() {
         </div>
       </div>
 
-      {/* Filter Buttons */}
-      <div className="flex flex-wrap gap-2">
-        {/* Display Filter Buttons (first 4) */}
-        {displayFilterButtons.map((filter, index) => (
+     
+      <div className="flex flex-wrap gap-2 w-full bg-gradient-to-b from-gray-900 to-gray- border border-gray-300 rounded-lg p-4 mb-4">
+       
+      <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-3">
+      <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-start gap-2">
+       {displayFilterButtons.map((filter, index) => (
           <button
             key={index}
             onClick={() => handleFilterClick(filter)}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeFilter === filter
-                ? "bg-gray-600 text-white"
-                : "bg-white text-black border border-red-500 hover:bg-gray-50"
-            }`}
+            className={`btn-custom`}
           >
             {filter}
           </button>
         ))}
+       </div>
 
-        {/* Action Buttons (last 3) */}
+       <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end gap-2">
         {actionButtons.map((filter, index) => (
           <button
             key={index + 4}
-            className="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white text-black border border-red-500 hover:bg-gray-50"
+            className="btn-custom"
           >
             {filter}
           </button>
         ))}
+       </div>
+      </div>
       </div>
     </div>
   );
