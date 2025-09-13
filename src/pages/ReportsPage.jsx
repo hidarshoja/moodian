@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
 
 export default function ReportsPage() {
@@ -71,6 +72,9 @@ export default function ReportsPage() {
           <p className="text-white/60 text-sm mt-1">نمای کلی گزارش کاربران</p>
         </div>
       </div>
+
+      <SearchFilterBar />
+
       <ReportsFilter
         startDate={startDate}
         endDate={endDate}
