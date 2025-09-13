@@ -1,10 +1,14 @@
 import ServicesTable from "../components/ServicesTable";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { GrDocumentExcel } from "react-icons/gr";
+import AddServiceModal from "../components/AddServiceModal";
+import { useState } from "react";
 
 export default function ServicesPage() {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+      <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       <div>
         <div className="w-full border-b border-white/10 p-6">
           <h1 className="text-white text-2xl font-bold">کالا و خدمات</h1>
@@ -12,24 +16,24 @@ export default function ServicesPage() {
             <p className="text-white/60 text-sm">نمای کلی کالا و خدمات </p>
             <div className="flex gap-3">
               {/* جدید */}
-              <button className="btn-custom">
+              <button className="btn-custom" onClick={() => setModalOpen(true)}>
                 جدید
                 <span className="inline-block">
-                 <HiOutlinePlusSm className="w-5 h-5"/>
+                  <HiOutlinePlusSm className="w-5 h-5" />
                 </span>
               </button>
               {/* از اکسل */}
               <button className="btn-custom">
                 از اکسل
                 <span className="inline-block">
-                 <GrDocumentExcel className="w-5 h-5"/>
+                  <GrDocumentExcel className="w-5 h-5" />
                 </span>
               </button>
               {/* به اکسل */}
               <button className="btn-custom">
                 به اکسل
                 <span className="inline-block">
-                <GrDocumentExcel className="w-5 h-5"/>
+                  <GrDocumentExcel className="w-5 h-5" />
                 </span>
               </button>
             </div>
