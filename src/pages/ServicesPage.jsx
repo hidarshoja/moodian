@@ -33,7 +33,6 @@ export default function ServicesPage() {
   ]);
 
 
-  // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
       exportServicesToExcel(dataTable);
   };

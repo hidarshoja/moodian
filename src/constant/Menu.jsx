@@ -42,6 +42,11 @@ export const navigation = [
     href: "/invoices",
   },
   {
+    name: "قراردادهای پیمانکاری",
+    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
+    href: "/contracts",
+  },
+  {
     name: "گزارش ",
     icon: <VscReport className="w-5 h-5 ml-2" />,
     href: "/reports",
@@ -56,11 +61,7 @@ export const navigation = [
     icon: <BiGitCompare className="w-5 h-5 ml-2" />,
     href: "/contradiction",
   },
-  {
-    name: "قراردادهای پیمانکاری",
-    icon: <DocumentTextIcon className="w-5 h-5 ml-2" />,
-    href: "/contracts",
-  },
+ 
   {
     name: "خریدهای داخلی",
     icon: <CiShoppingCart className="w-5 h-5 ml-2" />,
