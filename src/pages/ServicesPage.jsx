@@ -3,11 +3,40 @@ import { HiOutlinePlusSm } from "react-icons/hi";
 import { GrDocumentExcel } from "react-icons/gr";
 import AddServiceModal from "../components/AddServiceModal";
 import ImportExcelModal from "../components/ImportExcelModal";
+import { exportServicesToExcel } from "../components/exportServicesToExcel";
 import { useState } from "react";
 
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
+  const [dataTable, setDataTable] = useState([
+    {
+      code: "1234",
+      name: "saeeid",
+      unit: 3,
+      valueAdded: "5555",
+      otherTax: "6666",
+      legalValue: "77777",
+      legalRate: "8888",
+      customCode: "9999",
+    },
+    {
+      code: "4321",
+      name: "Ali",
+      unit: 5,
+      valueAdded: "Ali123",
+      otherTax: "ali666",
+      legalValue: "ali77777",
+      legalRate: "ali8888",
+      customCode: "ali9999",
+    },
+  ]);
+
+
+  // تابع برای گرفتن داده از کامپوننت فرزند
+  const handleExportExcel = () => {
+      exportServicesToExcel(dataTable);
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
@@ -39,7 +68,9 @@ export default function ServicesPage() {
                 </span>
               </button>
               {/* به اکسل */}
-              <button className="btn-custom">
+              <button
+              onClick={handleExportExcel}
+              className="btn-custom">
                 به اکسل
                 <span className="inline-block">
                   <GrDocumentExcel className="w-5 h-5" />
@@ -50,7 +81,10 @@ export default function ServicesPage() {
         </div>
       </div>
       <div className="mx-auto p-6">
-        <ServicesTable />
+        <ServicesTable 
+        setDataTable={setDataTable}
+        dataTable ={dataTable}
+        />
       </div>
     </div>
   );

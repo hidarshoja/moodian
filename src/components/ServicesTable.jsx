@@ -18,31 +18,10 @@ const units = [
   "کارتن",
 ];
 
-export default function ServicesTable() {
-  const [dataTable, setDataTable] = useState([
-    {
-      code: "1234",
-      name: "saeeid",
-      unit: 3,
-      valueAdded: "5555",
-      otherTax: "6666",
-      legalValue: "77777",
-      legalRate: "8888",
-      customCode: "9999",
-    },
-    {
-      code: "4321",
-      name: "Ali",
-      unit: 5,
-      valueAdded: "Ali123",
-      otherTax: "ali666",
-      legalValue: "ali77777",
-      legalRate: "ali8888",
-      customCode: "ali9999",
-    },
-  ]);
+export default function ServicesTable({dataTable ,setDataTable}) {
+ 
 
-  // state برای مقدار فعلی inputها
+ 
   const [row, setRow] = useState({
     code: "",
     name: "",
