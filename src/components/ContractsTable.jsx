@@ -9,13 +9,9 @@ import {
 
 const units = [
   "انتخاب ...",
-  "عدد",
-  "متر",
-  "کیلوگرم",
-  "گرم",
-  "جعبه",
-  "دست",
-  "کارتن",
+  "حقیقی",
+  "حقوقی",
+  "اتباع"
 ];
 
 export default function ContractsTable({dataTable ,setDataTable}) {
@@ -26,10 +22,7 @@ export default function ContractsTable({dataTable ,setDataTable}) {
     contractNumber: "",
     title: "",
     customer: "انتخاب ...",
-    valueAdded: "",
-    otherTax: "",
-    legalValue: "",
-    legalRate: "",
+   
     customCode: "",
   });
 
@@ -45,10 +38,7 @@ export default function ContractsTable({dataTable ,setDataTable}) {
         ...prev,
         title: "",
         customer: "انتخاب ...",
-        valueAdded: "",
-        otherTax: "",
-        legalValue: "",
-        legalRate: "",
+       
         customCode: "",
       }));
     }

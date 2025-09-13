@@ -1,6 +1,6 @@
 import ContractsTable from "../components/ContractsTable";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import AddServiceModal from "../components/AddServiceModal";
+import AddContractsModal from "../components/AddContractsModal";
 import { useState } from "react";
 
 export default function ContractsPage() {
@@ -15,7 +15,7 @@ export default function ContractsPage() {
     {
       contractNumber: "4321",
       title: "sell",
-      customer: 5,
+      customer: 1,
       
     },
   ]);
@@ -25,7 +25,7 @@ export default function ContractsPage() {
   return (
     
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddContractsModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       
       <div>
         <div className="w-full border-b border-white/10 p-6">
