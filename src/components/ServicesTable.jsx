@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const units = [
   "انتخاب ...",
@@ -104,16 +106,30 @@ export default function ServicesTable() {
         "https://jsonplaceholder.typicode.com/posts",
         row
       );
-      alert("داده با موفقیت ارسال شد! (پاسخ تستی)");
+      toast.success("ویرایش با موفقیت انجام شد!", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.log("پاسخ سرور:", response.data);
     } catch (error) {
-      alert("خطا در ارسال داده!");
+      toast.error("خطا در ارسال داده!", {
+        position: "top-left",
+        autoClose: 5000,
+        theme: "colored",
+      });
       console.error(error);
     }
   };
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 mt-8">
+      <ToastContainer />
       <table className="min-w-full">
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
