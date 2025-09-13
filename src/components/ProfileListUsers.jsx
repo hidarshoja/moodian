@@ -11,7 +11,7 @@ export default function ProfileListUsers({
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
       <table className="min-w-full">
         <thead>
-          <tr className="text-white/80 text-sm bg-white/10">
+          <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نام کاربری
             </th>

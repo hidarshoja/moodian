@@ -125,11 +125,11 @@ export default function DashboardPage() {
                 className="w-full rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all hover:shadow-[0_10px_40px_rgba(0,0,0,0.4)] hover:-translate-y-[1px]"
               >
                 {error && (
-                  <div className="px-6 pt-6 text-xs text-amber-300">
+                  <div className="px-6 pt-6  text-xs text-amber-300">
                     {error}
                   </div>
                 )}
-                <div className="px-6 pt-6">
+                <div className="px-6 pt-6 pb-2 rounded-t-2xl bg-[#181f3a]">
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-white font-bold text-xl">

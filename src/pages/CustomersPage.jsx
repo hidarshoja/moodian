@@ -1,9 +1,9 @@
 import CustomersTable from "../components/CustomersTable";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { GrDocumentExcel } from "react-icons/gr";
-import AddServiceModal from "../components/AddServiceModal";
-import ImportExcelModal from "../components/ImportExcelModal";
-import { exportServicesToExcel } from "../components/exportServicesToExcel";
+import AddCustomersModal from "../components/AddCustomersModal";
+import ImportExcelModalUser from "../components/ImportExcelModalUser";
+import { exportCustomersToExcel } from "../components/exportServicesToExcel";
 import { useState } from "react";
 
 export default function CustomersPage() {
@@ -14,7 +14,7 @@ export default function CustomersPage() {
     {
       name: "سعید",
       code: "1234",
-      unit: 3,
+      typeCustomer: 3,
       nationalCode: "5555",
       postCode: "6666",
       phone: "09376228320",
@@ -23,7 +23,7 @@ export default function CustomersPage() {
     {
       name: "سیاوش",
       code: "1357",
-      unit: 5,
+      typeCustomer: 5,
       nationalCode: "Ali123",
       postCode: "ali666",
       phone: "09232996418",
@@ -34,13 +34,13 @@ export default function CustomersPage() {
 
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
-      exportServicesToExcel(dataTable);
+    exportCustomersToExcel(dataTable);
   };
 
   return (
    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-      <ImportExcelModal
+      <AddCustomersModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ImportExcelModalUser
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
       />
