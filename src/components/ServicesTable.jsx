@@ -118,21 +118,21 @@ export default function ServicesTable() {
   };
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 mt-8">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
       <CustomToastContainer />
-      <table className="min-w-full">
+      <table className="min-w-full text-white">
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
-            <th className="px-2 py-2">شناسه</th>
-            <th className="px-2 py-2">نام</th>
-            <th className="px-2 py-2">واحد</th>
-            <th className="px-2 py-2">نرخ ارزش افزوده</th>
-            <th className="px-2 py-2">مالیات و عوارض</th>
-            <th className="px-2 py-2">نرخ سایر عوارض و مالیات</th>
-            <th className="px-2 py-2">مقدار وجوه قانونی</th>
-            <th className="px-2 py-2">نرخ سایر وجوه قانونی</th>
-            <th className="px-2 py-2">کد کالا در سامانه مشتری</th>
-            <th className="px-2 py-2">عملیات</th>
+            <th className="p-2">شناسه</th>
+            <th className="p-2">نام</th>
+            <th className="p-2">واحد</th>
+            <th className="p-2">نرخ ارزش افزوده</th>
+            <th className="p-2">مالیات و عوارض</th>
+            <th className="p-2">نرخ سایر عوارض و مالیات</th>
+            <th className="p-2">مقدار وجوه قانونی</th>
+            <th className="p-2">نرخ سایر وجوه قانونی</th>
+            <th className="p-2">کد کالا در سامانه مشتری</th>
+            <th className="p-2">عملیات</th>
           </tr>
         </thead>
         <tbody>
