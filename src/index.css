@@ -179,3 +179,10 @@ body {
 .btn-custom:focus {
   outline: none; /* focus:outline-none */
 }
+
+.input_date .rmdp-container {
+  width: 100% !important;
+}  
+.input_date .rmdp-container .custom-input{
+  width: 100% !important;
+}

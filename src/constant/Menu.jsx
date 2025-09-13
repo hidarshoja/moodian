@@ -85,7 +85,7 @@ export const navigation = [
     href: "/connections",
   },
   {
-    name: "پشتبانی",
+    name: "پشتیبانی",
     icon: <MdOutlineSupportAgent className="w-5 h-5 ml-2" />,
     href: "/support",
   },
