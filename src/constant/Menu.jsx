@@ -13,6 +13,7 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { RiBillLine } from "react-icons/ri";
 import { ImConnection } from "react-icons/im";
 import { SiAmazonsimpleemailservice } from "react-icons/si";
+import { MdOutlineSupportAgent } from "react-icons/md";
 
 
 export const navigation = [
@@ -83,5 +84,9 @@ export const navigation = [
     icon: <ImConnection className="w-5 h-5 ml-2" />,
     href: "/connections",
   },
-  
+  {
+    name: "پشتبانی",
+    icon: <MdOutlineSupportAgent className="w-5 h-5 ml-2" />,
+    href: "/support",
+  },
 ];

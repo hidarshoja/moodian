@@ -19,6 +19,7 @@ import ConnectionsPage from "./pages/ConnectionsPage";
 import CancelPage from "./pages/CancelPage";
 import ChangeStatus from "./pages/ChangeStatus";
 import PasswordPage from "./pages/PasswordPage";
+import SupportPage from "./pages/SupportPage";
 
 export const route = createBrowserRouter([
     {
@@ -88,6 +89,10 @@ export const route = createBrowserRouter([
             {
                 path: '/change-password',
                 element: <PasswordPage />
+            },
+            {
+                path: '/support',
+                element: <SupportPage />
             },
         ]
     },
