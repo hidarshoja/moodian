@@ -136,6 +136,7 @@ export default function ServicesTable() {
           </tr>
         </thead>
         <tbody>
+          {/* ردیف افزودن/ویرایش */}
           <tr className="bg-white/10">
             <td className="px-2 py-1">
               <input
@@ -239,6 +240,23 @@ export default function ServicesTable() {
               </div>
             </td>
           </tr>
+          {/* نمایش همه داده‌های جدول */}
+          {dataTable.map((item, idx) => (
+            <tr key={item.code} className="bg-white/5">
+              <td className="px-2 py-1">{item.code}</td>
+              <td className="px-2 py-1">{item.name}</td>
+              <td className="px-2 py-1">{units[item.unit]}</td>
+              <td className="px-2 py-1">{item.valueAdded}</td>
+              <td className="px-2 py-1">{item.otherTax}</td>
+              <td className="px-2 py-1">{item.legalValue}</td>
+              <td className="px-2 py-1">{item.legalRate}</td>
+              <td className="px-2 py-1">{item.customCode}</td>
+              <td className="px-2 py-1">{item.customCode}</td>
+              <td className="px-2 py-1 text-center">
+                {/* دکمه‌های حذف و ویرایش برای هر ردیف (در صورت نیاز می‌توانید اضافه کنید) */}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
