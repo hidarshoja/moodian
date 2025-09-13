@@ -1,4 +1,4 @@
-import ServicesTable from "../components/ServicesTable";
+import CustomersTable from "../components/CustomersTable";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { GrDocumentExcel } from "react-icons/gr";
 import AddServiceModal from "../components/AddServiceModal";
@@ -12,24 +12,22 @@ export default function CustomersPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([
     {
+      name: "سعید",
       code: "1234",
-      name: "saeeid",
       unit: 3,
-      valueAdded: "5555",
-      otherTax: "6666",
-      legalValue: "77777",
-      legalRate: "8888",
-      customCode: "9999",
+      nationalCode: "5555",
+      postCode: "6666",
+      phone: "09376228320",
+      userCode: "8888",
     },
     {
-      code: "4321",
-      name: "Ali",
+      name: "سیاوش",
+      code: "1357",
       unit: 5,
-      valueAdded: "Ali123",
-      otherTax: "ali666",
-      legalValue: "ali77777",
-      legalRate: "ali8888",
-      customCode: "ali9999",
+      nationalCode: "Ali123",
+      postCode: "ali666",
+      phone: "09232996418",
+      userCode: "ali8888",
     },
   ]);
 
@@ -83,7 +81,7 @@ export default function CustomersPage() {
         </div>
       </div>
       <div className="mx-auto p-6">
-        <ServicesTable 
+        <CustomersTable 
         setDataTable={setDataTable}
         dataTable ={dataTable}
         />
