@@ -185,7 +185,7 @@ export default function DashboardPage() {
                         <button
                           type="button"
                           onClick={() => openActivityModal(u, act)}
-                          className="text-[10px] text-white/70 hover:text-white bg-white/10 px-2 py-1 rounded-lg border border-white/10"
+                         className="btn-custom"
                         >
                           جزئیات
                         </button>

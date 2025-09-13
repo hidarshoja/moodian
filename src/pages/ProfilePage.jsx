@@ -249,7 +249,7 @@ export default function ProfilePage() {
             </div>
             <button
             onClick={openForCreate}
-              className="inline-flex items-center gap-2 rounded-xl bg-white/10 text-white border border-white/10 px-4 py-2 hover:bg-white/15 transition-colors"
+              className="btn-custom"
             >
               <span className="text-sm">جدید +</span>
             </button>
@@ -277,7 +277,7 @@ export default function ProfilePage() {
             <button
               
               onClick={openCreateUser}
-              className="inline-flex items-center gap-2 rounded-xl bg-white/10 text-white border border-white/10 px-4 py-2 hover:bg-white/15 transition-colors"
+              className="btn-custom"
             >
               <span className="text-sm">جدید +</span>
             </button>
