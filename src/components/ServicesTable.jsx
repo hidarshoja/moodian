@@ -133,7 +133,7 @@ export default function ServicesTable({dataTable ,setDataTable}) {
             </td>
             <td className="px-2 py-1">
               <select
-                className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
+                className="w-[90px] rounded bg-gray-500 text-xs text-right px-2 py-1 outline-none"
                 value={row.unit}
                 onChange={(e) => handleFieldChange("unit", e.target.value)}
               >
