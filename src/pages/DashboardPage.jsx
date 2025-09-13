@@ -207,11 +207,11 @@ export default function DashboardPage() {
       {isActivityModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
           <div className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl overflow-hidden relative animate-slideIn">
-            <div className="bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
+            <div className="bg-[#0a0a22] text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
               <h3 className="font-semibold">جزئیات فعالیت</h3>
               <button
                 onClick={closeActivityModal}
-                className="text-white/80 hover:text-white"
+                className="text-white/80 hover:text-white "
               >
                 ✕
               </button>
@@ -227,7 +227,7 @@ export default function DashboardPage() {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={closeActivityModal}
-                  className="px-4 py-2 rounded-xl bg-purple-700/90 text-white hover:bg-purple-800 transition-all"
+                  className="px-4 py-2 rounded-xl bg-[#0a0a22] text-white hover:bg-[#080819] transition-all"
                 >
                   بستن
                 </button>
