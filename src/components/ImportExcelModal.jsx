@@ -33,14 +33,14 @@ export default function ImportExcelModal({ isOpen, onClose }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-lg w-full max-w-4xl p-6 relative shadow-lg">
+      <div className="w-full max-w-5xl p-2 rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn">
         <button
           className="absolute left-4 top-4 text-gray-700 text-2xl"
           onClick={onClose}
         >
           ×
         </button>
-        <h2 className="text-xl font-bold mb-4 text-right">
+        <h2 className="text-xl font-bold text-white mb-4 text-right">
           دریافت لیست کالا/خدمات از اکسل
         </h2>
         <div className="flex items-center gap-4 mb-6">
@@ -61,7 +61,10 @@ export default function ImportExcelModal({ isOpen, onClose }) {
             <span className="text-sm text-gray-600">{fileName}</span>
           )}
         </div>
-        <div className="overflow-x-auto border rounded-lg bg-gray-50">
+        <div
+          className="overflow-x-auto rounded-lg bg-gray-50"
+          style={{ maxHeight: 200, overflowY: "auto" }}
+        >
           <table className="min-w-full text-sm text-center">
             <thead className="bg-indigo-900 text-white">
               <tr>
