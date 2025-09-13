@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
+import RecordsTable from "../components/RecordsTable";
 
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
@@ -15,7 +16,26 @@ export default function ReportsPage() {
   const [notSentStatus, setNotSentStatus] = useState(false);
   const [sentStatus, setSentStatus] = useState(false);
   const [successfulStatus, setSuccessfulStatus] = useState(true);
-
+  const [records, setRecords] = useState([
+    {
+      name: "شرکت الف",
+      factorMain: "13477767",
+      factorCorrective : "TM-17003",
+      factorReturn: "EC-478866",
+      factorCancellation: "CC1111",
+      pure: "11115",
+      
+    },
+    {
+      name: "شرکت ج",
+      factorMain: "134567",
+      factorCorrective : "TM-1003",
+      factorReturn: "EC-445566",
+      factorCancellation: "CCC333",
+      pure: "123455",
+    
+    },
+  ]);
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
   };
@@ -102,6 +122,11 @@ export default function ReportsPage() {
         onSuccessfulToggle={handleSuccessfulToggle}
         onClearAll={handleClearAll}
       />
+      <div className="mt-6">
+       <RecordsTable
+          records={records}
+        />
+      </div>
     </div>
   );
 }
