@@ -107,7 +107,7 @@ export default function ContradictionFilter({
         </div>
       </div>
       <div className="border rounded-md border-white w-full  p-1 flex items-center justify-between gap-1">
-          <div className="w-1/2 flex items-center gap-2">
+          <div className="w-1/2 flex items-center justify-start gap-2">
           <div className="input_date w-1/3">
           <span className="block text-gray-100 text-[10px] mb-2"> سال</span>
           <DatePicker
@@ -144,10 +144,10 @@ export default function ContradictionFilter({
             </option>
           </select>
         </div>
-        <div className="w-1/3"></div>
+        
           </div>
           <div className="w-1/2 flex items-center justify-end gap-2">
-          <div className="w-1/3"></div>
+          
           <div className="input_date">
           <button
              // onClick={handleExportExcel}
