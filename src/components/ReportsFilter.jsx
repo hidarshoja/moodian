@@ -194,6 +194,14 @@ export default function ReportsFilter({
             پاک کردن فیلترها
           </button>
         </div>
+        <div className="flex items-center gap-2">
+          <button
+           
+            className="btn-custom"
+          >
+             اعمال فیلترها
+          </button>
+        </div>
       </div>
     </div>
   );

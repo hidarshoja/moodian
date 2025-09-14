@@ -185,4 +185,5 @@ body {
 }  
 .input_date .rmdp-container .custom-input{
   width: 100% !important;
+  background-color: rgb(170, 170, 170);
 }
