@@ -11,7 +11,7 @@ import {
 export default function PasswordHistoryTable({
   records,
   onView,
-  
+
   onDelete,
 }) {
   const getStatusColor = (status) => {
@@ -131,7 +131,7 @@ export default function PasswordHistoryTable({
                   >
                     <FaEye className="w-4 h-4" />
                   </button>
-                
+
                   <button
                     onClick={() => onDelete && onDelete(record)}
                     className="p-1 text-red-400 hover:text-red-300 transition-colors"

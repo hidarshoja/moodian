@@ -135,7 +135,7 @@ export default function PasswordPage() {
 
         {/* Tab Content */}
         {activeTab === "change" && (
-          <div className="max-w-2xl mx-auto">
+          <div className="w-full mx-auto">
             <PasswordForm
               onSubmit={handlePasswordChange}
               onCancel={() => setActiveTab("history")}
