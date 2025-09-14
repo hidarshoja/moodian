@@ -65,10 +65,7 @@ export default function PasswordPage() {
     setViewModalOpen(true);
   };
 
-  const handleEdit = (record) => {
-    console.log("Edit record:", record);
-    // Implement edit functionality
-  };
+
 
   const handleDelete = (record) => {
     console.log("Delete record:", record);
