@@ -20,25 +20,42 @@ export default function ReportsPage() {
   const [notSentStatus, setNotSentStatus] = useState(false);
   const [sentStatus, setSentStatus] = useState(false);
   const [successfulStatus, setSuccessfulStatus] = useState(true);
-  const [filterTable , setFilterTable] = useState("");
-  const [records, setRecords] = useState([
+  const [filterTable, setFilterTable] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [records] = useState([
     {
       name: "شرکت الف",
       factorMain: "13477767",
-      factorCorrective : "TM-17003",
+      factorCorrective: "TM-17003",
       factorReturn: "EC-478866",
       factorCancellation: "CC1111",
       pure: "11115",
-      
     },
     {
       name: "شرکت ج",
       factorMain: "134567",
-      factorCorrective : "TM-1003",
+      factorCorrective: "TM-1003",
       factorReturn: "EC-445566",
       factorCancellation: "CCC333",
       pure: "123455",
-    
+    },
+  ]);
+  const [records2] = useState([
+    {
+      name: "بجنورد",
+      factorMain: "13477767",
+      factorCorrective: "TM-17003",
+      factorReturn: "EC-478866",
+      factorCancellation: "CC1111",
+      pure: "11115",
+    },
+    {
+      name: "تهران",
+      factorMain: "134567",
+      factorCorrective: "TM-1003",
+      factorReturn: "EC-445566",
+      factorCancellation: "CCC333",
+      pure: "123455",
     },
   ]);
   const handleStartDateChange = (selectedDate) => {
@@ -89,7 +106,20 @@ export default function ReportsPage() {
     setSentStatus(false);
     setSuccessfulStatus(false);
   };
-console.log(`filterTable`, filterTable);
+
+  const handleSearchTermChange = (term) => {
+    setSearchTerm(term);
+  };
+
+  // Filter records based on search term
+  const filteredRecords = records.filter((record) =>
+    record.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredRecords2 = records2.filter((record) =>
+    record.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  console.log(`filterTable`, filterTable);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
@@ -98,8 +128,6 @@ console.log(`filterTable`, filterTable);
           <p className="text-white/60 text-sm mt-1">نمای کلی گزارش کاربران</p>
         </div>
       </div>
-
-     
 
       <ReportsFilter
         startDate={startDate}
@@ -129,14 +157,26 @@ console.log(`filterTable`, filterTable);
         onClearAll={handleClearAll}
       />
       <div className="mt-3">
-       <SearchFilterBar setFilterTable={setFilterTable}/>
+        <SearchFilterBar
+          setFilterTable={setFilterTable}
+          searchTerm={searchTerm}
+          onSearchTermChange={handleSearchTermChange}
+        />
       </div>
       <div className="mt-6">
-      {filterTable === "" && <RecordsTable records={records}/>}
-      {filterTable === "مشتری" && <CustomersRecordsTable records={records}/>}
-      {filterTable === "کالا/خدمات" && <ServicesRecordsTable records={records}/>}
-      {filterTable === "روش تسویه" && <SettlementRecordsTable records={records}/>}
-      {filterTable === "وضعیت ارسال" && <SendRecordsTable records={records}/>}
+        {filterTable === "" && <RecordsTable records={filteredRecords} />}
+        {filterTable === "مشتری" && (
+          <CustomersRecordsTable records={filteredRecords2} />
+        )}
+        {filterTable === "کالا/خدمات" && (
+          <ServicesRecordsTable records={filteredRecords} />
+        )}
+        {filterTable === "روش تسویه" && (
+          <SettlementRecordsTable records={filteredRecords2} />
+        )}
+        {filterTable === "وضعیت ارسال" && (
+          <SendRecordsTable records={filteredRecords} />
+        )}
       </div>
     </div>
   );
