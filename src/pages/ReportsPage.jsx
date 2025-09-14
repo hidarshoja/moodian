@@ -119,7 +119,7 @@ export default function ReportsPage() {
   const filteredRecords2 = records2.filter((record) =>
     record.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log(`filterTable`, filterTable);
+ 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
