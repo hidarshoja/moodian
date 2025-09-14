@@ -2,6 +2,10 @@ import { useState } from "react";
 import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
 import RecordsTable from "../components/RecordsTable";
+import CustomersRecordsTable from "../components/CustomersRecordsTable";
+import ServicesRecordsTable from "../components/ServicesRecordsTable";
+import SettlementRecordsTable from "../components/SettlementRecordsTable";
+import SendRecordsTable from "../components/SendRecordsTable";
 
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
@@ -16,6 +20,7 @@ export default function ReportsPage() {
   const [notSentStatus, setNotSentStatus] = useState(false);
   const [sentStatus, setSentStatus] = useState(false);
   const [successfulStatus, setSuccessfulStatus] = useState(true);
+  const [filterTable , setFilterTable] = useState("");
   const [records, setRecords] = useState([
     {
       name: "شرکت الف",
@@ -84,6 +89,7 @@ export default function ReportsPage() {
     setSentStatus(false);
     setSuccessfulStatus(false);
   };
+console.log(`filterTable`, filterTable);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
@@ -93,7 +99,7 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <SearchFilterBar />
+     
 
       <ReportsFilter
         startDate={startDate}
@@ -122,10 +128,15 @@ export default function ReportsPage() {
         onSuccessfulToggle={handleSuccessfulToggle}
         onClearAll={handleClearAll}
       />
+      <div className="mt-3">
+       <SearchFilterBar setFilterTable={setFilterTable}/>
+      </div>
       <div className="mt-6">
-       <RecordsTable
-          records={records}
-        />
+      {filterTable === "" && <RecordsTable records={records}/>}
+      {filterTable === "مشتری" && <CustomersRecordsTable records={records}/>}
+      {filterTable === "کالا/خدمات" && <ServicesRecordsTable records={records}/>}
+      {filterTable === "روش تسویه" && <SettlementRecordsTable records={records}/>}
+      {filterTable === "وضعیت ارسال" && <SendRecordsTable records={records}/>}
       </div>
     </div>
   );

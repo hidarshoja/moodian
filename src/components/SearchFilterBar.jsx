@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SearchFilterBar() {
+export default function SearchFilterBar({setFilterTable}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("");
 
@@ -14,20 +14,21 @@ export default function SearchFilterBar() {
     "به اکسل",
   ];
 
-  // Only the first 4 buttons should change the search bar display
+ 
   const displayFilterButtons = filterButtons.slice(0, 4);
   const actionButtons = filterButtons.slice(4);
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
+    setFilterTable(filter);
   };
 
   const handleClearFilter = () => {
-    setActiveFilter(""); // Clear the active filter
+    setActiveFilter(""); 
+    setFilterTable("");
   };
 
   const handleSearch = () => {
-    // Handle search functionality
     console.log("Searching for:", searchTerm);
   };
 
