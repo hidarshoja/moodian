@@ -161,6 +161,7 @@ export default function Header({
                       <button
                         key={item.label}
                         onClick={() => {
+                          setUserMenuOpen(false)
                           if (item.action) {
                             item.action();
                           } else if (item.path) {
