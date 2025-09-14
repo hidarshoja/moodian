@@ -49,7 +49,7 @@ export default function ConnectionsPage() {
             onClick={() => setActiveTab("economic")}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-all ${
               activeTab === "economic"
-                ? "bg-teal-500 text-white"
+                ? "btn-custom2"
                 : "text-gray-300 hover:text-white hover:bg-gray-700"
             }`}
           >
@@ -60,7 +60,7 @@ export default function ConnectionsPage() {
             onClick={() => setActiveTab("buy")}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-all ${
               activeTab === "buy"
-                ? "bg-teal-500 text-white"
+                ? "btn-custom2"
                 : "text-gray-300 hover:text-white hover:bg-gray-700"
             }`}
           >
@@ -233,7 +233,7 @@ export default function ConnectionsPage() {
                     onClick={() =>
                       setTaxMemoryCount(Math.max(1, taxMemoryCount - 1))
                     }
-                    className="p-2 bg-gray-700 border border-gray-600 rounded-l-md hover:bg-gray-600 text-white"
+                    className="p-2 bg-gray-700 border border-gray-600 rounded-r-md hover:bg-gray-600 text-white"
                   >
                     <svg
                       className="w-4 h-4"
@@ -257,7 +257,7 @@ export default function ConnectionsPage() {
                   />
                   <button
                     onClick={() => setTaxMemoryCount(taxMemoryCount + 1)}
-                    className="p-2 bg-gray-700 border border-gray-600 rounded-r-md hover:bg-gray-600 text-white"
+                    className="p-2 bg-gray-700 border border-gray-600 rounded-l-md hover:bg-gray-600 text-white"
                   >
                     <svg
                       className="w-4 h-4"
@@ -284,7 +284,7 @@ export default function ConnectionsPage() {
                 <div className="flex items-center">
                   <button
                     onClick={() => setUserCount(Math.max(1, userCount - 1))}
-                    className="p-2 bg-gray-700 border border-gray-600 rounded-l-md hover:bg-gray-600 text-white"
+                    className="p-2 bg-gray-700 border border-gray-600 rounded-r-md hover:bg-gray-600 text-white"
                   >
                     <svg
                       className="w-4 h-4"
@@ -308,7 +308,7 @@ export default function ConnectionsPage() {
                   />
                   <button
                     onClick={() => setUserCount(userCount + 1)}
-                    className="p-2 bg-gray-700 border border-gray-600 rounded-r-md hover:bg-gray-600 text-white"
+                    className="p-2 bg-gray-700 border border-gray-600 rounded-l-md hover:bg-gray-600 text-white"
                   >
                     <svg
                       className="w-4 h-4"
