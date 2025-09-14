@@ -1,34 +1,15 @@
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import { GrDocumentExcel } from "react-icons/gr";
+import { FaBalanceScaleRight } from "react-icons/fa";
 import { useState } from "react";
 
 export default function ContradictionFilter({
-  startDate,
-  endDate,
   fromYear,
-  toYear,
-  fromMonth,
-  toMonth,
   season,
-  errorStatus,
-  pendingStatus,
-  notSentStatus,
-  sentStatus,
-  successfulStatus,
-  onStartDateChange,
-  onEndDateChange,
   onFromYearChange,
-  onToYearChange,
-  onFromMonthChange,
-  onToMonthChange,
   onSeasonChange,
-  onErrorToggle,
-  onPendingToggle,
-  onNotSentToggle,
-  onSentToggle,
-  onSuccessfulToggle,
-  onClearAll,
 }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -125,34 +106,9 @@ export default function ContradictionFilter({
           </div>
         </div>
       </div>
-      <div className="border rounded-md border-white w-full  p-1 flex gap-1">
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">
-            تاریخ شروع{" "}
-          </span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={startDate}
-            onChange={onStartDateChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">
-            تاریخ پایان{" "}
-          </span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={endDate}
-            onChange={onEndDateChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
+      <div className="border rounded-md border-white w-full  p-1 flex items-center justify-between gap-1">
+          <div className="w-1/2 flex items-center gap-2">
+          <div className="input_date w-1/3">
           <span className="block text-gray-100 text-[10px] mb-2"> سال</span>
           <DatePicker
             calendar={persian}
@@ -164,31 +120,7 @@ export default function ContradictionFilter({
             onlyYearPicker={true}
           />
         </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">از ماه</span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={fromMonth}
-            onChange={onFromMonthChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-            onlyMonthPicker={true}
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">تا ماه</span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={toMonth}
-            onChange={onToMonthChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-            onlyMonthPicker={true}
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
+        <div className="input_date w-1/3">
           <span className="block text-gray-100 text-[10px] mb-1">فصل</span>
           <select
             value={season}
@@ -212,6 +144,33 @@ export default function ContradictionFilter({
             </option>
           </select>
         </div>
+        <div className="w-1/3"></div>
+          </div>
+          <div className="w-1/2 flex items-center justify-end gap-2">
+          <div className="w-1/3"></div>
+          <div className="input_date">
+          <button
+             // onClick={handleExportExcel}
+              className="btn-custom">
+                به اکسل
+                <span className="inline-block">
+                  <GrDocumentExcel className="w-5 h-5" />
+                </span>
+              </button>
+        </div>
+        <div className="input_date">
+        <button
+             // onClick={handleExportExcel}
+              className="btn-custom">
+                 مغایرت
+                <span className="inline-block">
+                  <FaBalanceScaleRight className="w-5 h-5" />
+                </span>
+              </button>
+         
+        </div>
+        
+          </div>
       </div>
     </div>
   );
