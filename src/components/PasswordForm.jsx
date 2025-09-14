@@ -83,8 +83,9 @@ export default function PasswordForm({ onSubmit, onCancel }) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Current Password */}
-        <div>
+        <div className="flex flex-col lg:flex-row gap-2">
+          {/* Current Password */}
+        <div className="w-full lg:w-1/2">
           <label className="block mb-2 text-white text-sm font-medium">
             رمز عبور فعلی
           </label>
@@ -119,7 +120,7 @@ export default function PasswordForm({ onSubmit, onCancel }) {
         </div>
 
         {/* New Password */}
-        <div>
+        <div className="w-full lg:w-1/2">
           <label className="block mb-2 text-white text-sm font-medium">
             رمز عبور جدید
           </label>
@@ -150,9 +151,10 @@ export default function PasswordForm({ onSubmit, onCancel }) {
             <p className="text-red-400 text-xs mt-1">{errors.newPassword}</p>
           )}
         </div>
-
+        </div>
+        <div className="flex flex-col lg:flex-row gap-2">
         {/* Confirm Password */}
-        <div>
+        <div className="w-full lg:w-1/2">
           <label className="block mb-2 text-white text-sm font-medium">
             تکرار رمز عبور جدید
           </label>
@@ -187,7 +189,7 @@ export default function PasswordForm({ onSubmit, onCancel }) {
         </div>
 
         {/* Reason */}
-        <div>
+        <div className="w-full lg:w-1/2">
           <label className="block mb-2 text-white text-sm font-medium">
             دلیل تغییر رمز عبور
           </label>
@@ -215,6 +217,8 @@ export default function PasswordForm({ onSubmit, onCancel }) {
           {errors.reason && (
             <p className="text-red-400 text-xs mt-1">{errors.reason}</p>
           )}
+        </div>
+
         </div>
 
         {/* Password Requirements */}
