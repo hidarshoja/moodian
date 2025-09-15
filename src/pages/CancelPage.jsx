@@ -157,12 +157,7 @@ export default function CancelPage() {
                   <HiOutlinePlusSm className="w-5 h-5" />
                 </span>
               </button>
-              <button className="btn-custom" onClick={handleExportExcel}>
-                به اکسل
-                <span className="inline-block">
-                  <GrDocumentExcel className="w-5 h-5" />
-                </span>
-              </button>
+            
             </div>
           </div>
         </div>

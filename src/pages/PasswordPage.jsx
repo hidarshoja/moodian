@@ -91,14 +91,7 @@ export default function PasswordPage() {
             <p className="text-white/60 text-sm">
               مدیریت رمز عبور و تاریخچه تغییرات
             </p>
-            <div className="flex gap-3">
-              <button className="btn-custom" onClick={handleExportExcel}>
-                به اکسل
-                <span className="inline-block">
-                  <GrDocumentExcel className="w-5 h-5" />
-                </span>
-              </button>
-            </div>
+            
           </div>
         </div>
       </div>

@@ -97,12 +97,7 @@ export default function CancelFilter({
         </div>
 
         <div className="flex gap-2">
-          <button className="btn-custom">
-            به اکسل
-            <span className="inline-block">
-              <GrDocumentExcel className="w-5 h-5" />
-            </span>
-          </button>
+        
           <button onClick={onClearAll} className="btn-custom">
             پاک کردن همه
             <span className="inline-block">
