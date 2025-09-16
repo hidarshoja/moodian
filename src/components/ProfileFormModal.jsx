@@ -25,8 +25,8 @@ export default function ProfileFormModal({
           <div>
             <label className="block mb-1 text-white text-sm">نام مودی</label>
             <input
-              name="taxpayerName"
-              value={form.taxpayerName}
+              name="name"
+              value={form.name}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -36,8 +36,8 @@ export default function ProfileFormModal({
               نام حافظه مالیاتی
             </label>
             <input
-              name="taxMemoryName"
-              value={form.taxMemoryName}
+              name="last_name"
+              value={form.last_name}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -47,8 +47,8 @@ export default function ProfileFormModal({
               کد حافظه مالیاتی
             </label>
             <input
-              name="taxMemoryCode"
-              value={form.taxMemoryCode}
+              name="modian_username"
+              value={form.modian_username}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -58,8 +58,8 @@ export default function ProfileFormModal({
               کد اقتصادی مودی
             </label>
             <input
-              name="taxpayerEconomicCode"
-              value={form.taxpayerEconomicCode}
+              name="tins"
+              value={form.tins}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -67,8 +67,8 @@ export default function ProfileFormModal({
           <div className="md:col-span-2">
             <label className="block mb-1 text-white text-sm">کلید خصوصی</label>
             <input
-              name="privateKey"
-              value={form.privateKey}
+              name="modian_privete"
+              value={form.modian_privete}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -85,8 +85,8 @@ export default function ProfileFormModal({
           <div>
             <label className="block mb-1 text-white text-sm">کد پستی</label>
             <input
-              name="postalCode"
-              value={form.postalCode}
+              name="postal_code"
+              value={form.postal_code}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -94,8 +94,8 @@ export default function ProfileFormModal({
           <div>
             <label className="block mb-1 text-white text-sm">تلفن</label>
             <input
-              name="phone"
-              value={form.phone}
+              name="mobile"
+              value={form.mobile}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />

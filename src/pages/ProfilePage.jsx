@@ -17,14 +17,14 @@ export default function ProfilePage() {
     privateKeyFile: null,
   });
   const [form, setForm] = useState({
-    taxpayerName: "",
-    taxMemoryName: "",
-    taxMemoryCode: "",
-    taxpayerEconomicCode: "",
-    privateKey: "",
+    name: "",
+    last_name: "",
+    modian_username: "",
+    tins: "",
+    modian_privete: "",
     address: "",
-    postalCode: "",
-    phone: "",
+    postal_code: "",
+    mobile: "",
   });
   const [users, setUsers] = useState([
     { id: 1, name: "حیدر شجاع", name2: "09376228320", side: "مدیر" },
@@ -41,14 +41,14 @@ export default function ProfilePage() {
   const openForCreate = () => {
     setEditingIndex(null);
     setForm({
-      taxpayerName: "",
-      taxMemoryName: "",
-      taxMemoryCode: "",
-      taxpayerEconomicCode: "",
-      privateKey: "",
+      name: "",
+      last_name: "",
+      modian_username: "",
+      tins: "",
+      modian_privete: "",
       address: "",
-      postalCode: "",
-      phone: "",
+      postal_code: "",
+      mobile: "",
     });
     setIsOpen(true);
   };
@@ -72,9 +72,9 @@ export default function ProfilePage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditing) {
-      setRecords((prev) =>
-        prev.map((r, i) => (i === editingIndex ? { ...form } : r))
-      );
+      const original = records[editingIndex];
+      const updated = { ...original, ...form };
+      console.log("Update record payload:", updated);
     } else {
       setRecords((prev) => [{ ...form }, ...prev]);
     }
@@ -130,30 +130,15 @@ export default function ProfilePage() {
 
   const handleSubmitUser = (e) => {
     e.preventDefault();
-    if (editingUserIndex !== null) {
-      setUsers((prev) =>
-        prev.map((u, i) =>
-          i === editingUserIndex
-            ? {
-                id: u.id,
-                name: userForm.fullName,
-                name2: userForm.username,
-                side: userForm.role,
-              }
-            : u
-        )
-      );
-    } else {
-      setUsers((prev) => [
-        {
-          id: Date.now(),
-          name: userForm.fullName,
-          name2: userForm.username,
-          side: userForm.role,
-        },
-        ...prev,
-      ]);
-    }
+  console.log(`form`, form);
+  axiosClient
+  .put(`/admin/users/${form.id} `, {form})
+  .then((response) => {
+    console.log(response.data.data);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
     setIsUserModalOpen(false);
   };
 
@@ -190,8 +175,6 @@ export default function ProfilePage() {
       });
   }, []);
 
-
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -203,10 +186,7 @@ export default function ProfilePage() {
                 نمای کلی اطلاعات کاربر
               </p>
             </div>
-            <button
-            onClick={openForCreate}
-              className="btn-custom"
-            >
+            <button onClick={openForCreate} className="btn-custom">
               <span className="text-sm">جدید +</span>
             </button>
           </div>
@@ -230,11 +210,7 @@ export default function ProfilePage() {
                 نمای کلی لیست کاربران
               </p>
             </div>
-            <button
-              
-              onClick={openCreateUser}
-              className="btn-custom"
-            >
+            <button onClick={openCreateUser} className="btn-custom">
               <span className="text-sm">جدید +</span>
             </button>
           </div>

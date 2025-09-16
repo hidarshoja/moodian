@@ -1,4 +1,5 @@
 import { GoKey } from "react-icons/go";
+import PropTypes from "prop-types";
 
 export default function ProfileRecordsTable({
   records,
@@ -53,7 +54,7 @@ export default function ProfileRecordsTable({
                 {r?.last_name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-              {r?.modian_username ? r?.modian_username : "-"}
+                {r?.modian_username ? r?.modian_username : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.tins}
@@ -65,7 +66,7 @@ export default function ProfileRecordsTable({
                 {r?.address ? r?.address : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.postal_code ? r?.postal_code : "-" }
+                {r?.postal_code ? r?.postal_code : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.mobile}
@@ -116,3 +117,10 @@ export default function ProfileRecordsTable({
     </div>
   );
 }
+
+ProfileRecordsTable.propTypes = {
+  records: PropTypes.arrayOf(PropTypes.object),
+  onDelete: PropTypes.func,
+  onEdit: PropTypes.func,
+  onOpenKeySettings: PropTypes.func,
+};
