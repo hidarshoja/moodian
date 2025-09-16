@@ -71,13 +71,39 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       if (isEditing) {
         const original = records[editingIndex];
-        const updated = { ...original, ...form ,   };
-  
-        const { data } = await axiosClient.put(`/admin/users/${form.id}`, updated);
+        const merged = { ...original, ...form };
+
+        // Normalize roles to an array of numeric IDs if present
+        let updated = { ...merged };
+        if (Array.isArray(merged?.roles)) {
+          const roleIds = merged.roles
+            .map((r) => {
+              if (typeof r === "number") return r;
+              if (typeof r === "string") return Number(r);
+              if (r && typeof r === "object") {
+                const maybeId = r.id ?? r.value ?? r.role_id ?? r.roleId;
+                return maybeId !== undefined ? Number(maybeId) : NaN;
+              }
+              return NaN;
+            })
+            .filter((n) => Number.isFinite(n));
+
+          if (roleIds.length > 0) {
+            updated.roles = roleIds;
+          } else {
+            // If we can't determine valid role ids, avoid sending roles at all
+            delete updated.roles;
+          }
+        }
+
+        const { data } = await axiosClient.put(
+          `/admin/users/${form.id}`,
+          updated
+        );
         console.log("User updated:", data?.data);
         setRecords((prev) =>
           prev.map((record, index) =>
@@ -93,7 +119,6 @@ export default function ProfilePage() {
       setIsOpen(false);
     }
   };
-  
 
   const deleteRecord = (index) => {
     console.log(`records[index]`, records[index]);
@@ -115,7 +140,6 @@ export default function ProfilePage() {
     setKeyModalIndex(null);
   };
 
- 
   const openCreateUser = () => {
     setEditingUserIndex(null);
     setUserForm({ username: "", fullName: "", role: "" });
@@ -144,15 +168,21 @@ export default function ProfilePage() {
 
   const handleSubmitUser = (e) => {
     e.preventDefault();
-  console.log(`form`, form);
-  // axiosClient
-  // .put(`/admin/users/${form.id} `, {form})
-  // .then((response) => {
-  //   console.log(response.data.data);
-  // })
-  // .catch((error) => {
-  //   console.error("Error fetching data:", error);
-  // });
+    const newUser = {
+      id: users[editingUserIndex]?.id ?? Date.now(),
+      name: userForm.fullName,
+      name2: userForm.username,
+      side: userForm.role,
+    };
+
+    if (editingUserIndex !== null) {
+      setUsers((prev) =>
+        prev.map((u, i) => (i === editingUserIndex ? newUser : u))
+      );
+    } else {
+      setUsers((prev) => [newUser, ...prev]);
+    }
+
     setIsUserModalOpen(false);
   };
 
