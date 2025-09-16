@@ -262,6 +262,7 @@ export default function ProfilePage() {
           headers ? { headers } : undefined
         );
         console.log("User updated:", data?.data);
+        successMessage("کاربر با موفقیت ویرایش شد");
         setRecords((prev) =>
           prev.map((record, index) =>
             index === editingIndex ? merged : record
@@ -298,13 +299,13 @@ export default function ProfilePage() {
             headers: { "Content-Type": "multipart/form-data" },
           });
           console.log(`res`, res);
-          // Refetch users after successful create
+          successMessage("کاربر با موفقیت ثبت شد");
           fetchUsers();
         } else {
           console.log("Submitting (JSON):", preprocessed);
           const res = await axiosClient.post(`/admin/users`, preprocessed);
           console.log(`res`, res);
-          // Refetch users after successful create
+          successMessage("کاربر با موفقیت ثبت شد");
           fetchUsers();
         }
       }
