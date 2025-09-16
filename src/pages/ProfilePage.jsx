@@ -42,13 +42,18 @@ export default function ProfilePage() {
     setEditingIndex(null);
     setForm({
       name: "",
-      last_name: "",
-      modian_username: "",
       tins: "",
-      modian_privete: "",
+      last_name: "",
+      mobile: "",
+      email : "",
+      password :"",
+      status : 100,
+      sstids :[],
+      roles:[],
+      moadian_private_key : null,
+      moadian_certificate : null,
       address: "",
       postal_code: "",
-      mobile: "",
     });
     setIsOpen(true);
   };
