@@ -1,58 +1,17 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axiosClient from "../axios-client";
+import { convertToPersianDate , extractTimeFromDate } from '../utils/change-date';
 
 export default function DashboardPage() {
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error] = useState(null);
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const user = useSelector((state) => state.user.value);
+  const [activityUser , setActivityUser] = useState();
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchUsers = async () => {
-      try {
-        // نمونه درخواست به یک API (آدرس دلخواه/جایگزین)
-        const response = await fetch("/api/users", {
-          headers: { Accept: "application/json" },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-        const data = await response.json();
-        if (!isMounted) return;
-        setUsers(Array.isArray(data) ? data : []);
-      } catch (err) {
-        // در صورت خطا، با داده‌های نمونه ادامه می‌دهیم
-        if (!isMounted) return;
-
-        setUsers([
-          {
-            id: 1,
-            name: "حیدر",
-            lastName: "شجاع",
-            phone: "09376228320",
-            side: "کاربر",
-            Activities: [
-              { id: 1, name: "خرید طلا" },
-              { id: 2, name: "فروش طلا" },
-              { id: 3, name: "خرید رمز ارز" },
-              { id: 4, name: "طلای آب شده" },
-            ],
-          },
-        ]);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    fetchUsers();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
+console.log(`user`, user);
   const openActivityModal = (user, activity) => {
     setSelectedUser(user);
     setSelectedActivity(activity);
@@ -65,46 +24,42 @@ export default function DashboardPage() {
     setSelectedUser(null);
   };
 
-  const formatJalaliDateTime = (date = new Date()) => {
-    try {
-      const dateStr = new Intl.DateTimeFormat("fa-IR", {
-        year: "numeric",
-        month: "long",
-        day: "2-digit",
-      }).format(date);
-      const timeStr = new Intl.DateTimeFormat("fa-IR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(date);
-      return `${dateStr} - ${timeStr}`;
-    } catch (_) {
-      return date.toLocaleString("fa-IR");
-    }
-  };
+  
 
   const buildActivityDetails = (user, activity) => {
+    console.log(`activity`, activity);
+    console.log(`user`, user);
+    let date = convertToPersianDate(activity.created_at);
+    let time = extractTimeFromDate(activity.created_at);
+    console.log(`date`, date);
     const fullName =
-      `${user?.name ?? ""} ${user?.lastName ?? ""}`.trim() || "کاربر";
-    const dateStr = formatJalaliDateTime();
-    const base = activity?.name || "فعالیت";
+      `${user?.name ?? ""} ${user?.last_name ?? ""}`.trim() || "کاربر";
+    const base = activity?.inp_label  || "فعالیت";
+    
     const items = [];
-    if (/خرید\s*طلا/.test(base)) {
-      items.push(`${fullName} در تاریخ ${dateStr} مقدار 10 گرم طلا خرید.`);
-      items.push(`روش پرداخت: کارت بانکی`);
-      items.push(`کد پیگیری: ۱۲۳۴۵۶۷۸۹`);
-    } else if (/فروش\s*طلا/.test(base)) {
-      items.push(`${fullName} در تاریخ ${dateStr} مقدار 8 گرم طلا فروخت.`);
-      items.push(`واریز به حساب انجام شد`);
-      items.push(`کد پیگیری: ۹۸۷۶۵۴۳۲۱`);
-    } else {
+   if(activity) {
       items.push(
-        `${fullName} در تاریخ ${dateStr} عملیات «${base}» را انجام داد.`
+        `${fullName} در تاریخ ${date} ساعت ${time} عملیات «${base}» را انجام داد.`
       );
       items.push(`وضعیت: موفق`);
-      items.push(`مرجع: سیستم`);
+      items.push(`مرجع: ${activity?.inty_label}`);
     }
     return items;
   };
+
+  useEffect(() => {
+    axiosClient
+      .get("/invoices")
+      .then((response) => {
+        const data = response.data;
+        setActivityUser(response.data.data)
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -114,14 +69,13 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="users">
-        {isLoading && (
+        {user === null && (
           <div className="p-8 text-white text-center">در حال بارگذاری...</div>
         )}
-        {!isLoading && (
+        {user && (
           <div className="mx-auto p-6 space-y-6">
-            {users.map((u) => (
+         
               <div
-                key={u.id}
                 className="w-full rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all hover:shadow-[0_10px_40px_rgba(0,0,0,0.4)] hover:-translate-y-[1px]"
               >
                 {error && (
@@ -133,10 +87,10 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-white font-bold text-xl">
-                        کاربر #{u.id}
+                        کاربر #{user.id}
                       </h2>
                       <p className="text-white/60 text-sm mt-1">
-                        شماره تماس: {u.phone || "-"}
+                        شماره تماس: {user.mobile || "-"}
                       </p>
                     </div>
                     <div className="text-xs text-white/50 bg-white/10 rounded-full px-3 py-1 border border-white/10">
@@ -152,24 +106,24 @@ export default function DashboardPage() {
                     <input
                       type="text"
                       disabled
-                      value={`${u?.name ?? ""} ${u?.lastName ?? ""}`.trim()}
+                      value={`${user?.name ?? ""} ${user?.last_name ?? ""}`.trim()}
                       className="w-full rounded-xl bg-gray-800/70 text-white/90 placeholder-white/40 border border-white/10 px-4 py-3 disabled:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/20 shadow-inner"
                     />
                   </div>
                   <div>
                     <label className="block mb-2 text-white text-sm">سمت</label>
                     <input
-                      type="text"
-                      disabled
-                      value={u?.side ?? ""}
-                      className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 disabled:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/20 shadow-inner"
-                    />
+                   type="text"
+                   disabled
+                value={user?.roles?.map(role => role.name).join(' - ') || ""}
+                 className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 disabled:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/20 shadow-inner"
+                 />
                   </div>
                 </div>
                 <div className="mt-6 px-6 pb-6">
                   <div className="text-white font-semibold mb-3">فعالیت‌ها</div>
                   <ul className="space-y-2">
-                    {(u?.Activities || []).map((act) => (
+                    {activityUser?.length > 0 && [...activityUser].reverse().map((act) => (
                       <li
                         key={act.id}
                         className="flex items-center justify-between rounded-xl bg-gray-800/60 border border-white/10 px-4 py-3"
@@ -179,19 +133,19 @@ export default function DashboardPage() {
                             {act.id}
                           </span>
                           <span className="text-white/90 text-sm">
-                            {act.name}
+                            {act?.inp_label}
                           </span>
                         </div>
                         <button
                           type="button"
-                          onClick={() => openActivityModal(u, act)}
+                          onClick={() => openActivityModal(user, act)}
                           className="btn-custom"
                         >
                           جزئیات
                         </button>
                       </li>
                     ))}
-                    {(!u?.Activities || u.Activities.length === 0) && (
+                    { activityUser?.length === 0 && (
                       <li className="text-white/60 text-sm">
                         فعالیتی ثبت نشده است.
                       </li>
@@ -199,7 +153,7 @@ export default function DashboardPage() {
                   </ul>
                 </div>
               </div>
-            ))}
+           
           </div>
         )}
       </div>

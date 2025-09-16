@@ -31,7 +31,7 @@ export default function ProfileRecordsTable({
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 && (
+          {records?.length === 0 && (
             <tr>
               <td
                 colSpan={9}
@@ -41,34 +41,34 @@ export default function ProfileRecordsTable({
               </td>
             </tr>
           )}
-          {records.map((r, i) => (
+          {records?.map((r, i) => (
             <tr
               key={i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.taxpayerName}
+                {r?.name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.taxMemoryName}
+                {r?.last_name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.taxMemoryCode}
+              {r?.modian_username ? r?.modian_username : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.taxpayerEconomicCode}
+                {r?.tins}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {r.privateKey}
+                {r?.modian_privete ? r?.modian_privete : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
-                {r.address}
+                {r?.address ? r?.address : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.postalCode}
+                {r?.postal_code ? r?.postal_code : "-" }
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.phone}
+                {r?.mobile}
               </td>
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">

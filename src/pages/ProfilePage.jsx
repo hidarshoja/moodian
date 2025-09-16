@@ -4,7 +4,7 @@ import ProfileListUsers from "../components/ProfileListUsers";
 import ProfileFormModal from "../components/ProfileFormModal";
 import KeySettingsModal from "../components/KeySettingsModal";
 import UserFormModal from "../components/UserFormModal";
-
+import axiosClient from "../axios-client";
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -179,62 +179,18 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    let isMounted = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/profile-records", {
-          headers: { Accept: "application/json" },
-        });
-        if (!res.ok) throw new Error("failed");
-        // const data = await res.json();
-      } catch (_) {
-        // ignore: فقط برای پیش‌نمایش UI از داده نمونه استفاده می‌کنیم
-      }
-      if (!isMounted) return;
-      // سه درج پیاپی برای پیش‌نمایش جدول
-      setRecords([
-        {
-          taxpayerName: "شرکت الف",
-          taxMemoryName: "حافظه ۱",
-          taxMemoryCode: "TM-1001",
-          taxpayerEconomicCode: "EC-778899",
-          privateKey: "-----BEGIN KEY-----AAA111...-----END KEY-----",
-          address: "تهران، خیابان مثال، پلاک ۱۰",
-          postalCode: "1234567890",
-          phone: "021-12345678",
-        },
-      ]);
-      setRecords((prev) => [
-        ...prev,
-        {
-          taxpayerName: "شرکت ب",
-          taxMemoryName: "حافظه ۲",
-          taxMemoryCode: "TM-1002",
-          taxpayerEconomicCode: "EC-112233",
-          privateKey: "-----BEGIN KEY-----BBB222...-----END KEY-----",
-          address: "مشهد، بلوار نمونه، کوچه ۵",
-          postalCode: "9876543210",
-          phone: "051-23456789",
-        },
-      ]);
-      setRecords((prev) => [
-        ...prev,
-        {
-          taxpayerName: "شرکت ج",
-          taxMemoryName: "حافظه ۳",
-          taxMemoryCode: "TM-1003",
-          taxpayerEconomicCode: "EC-445566",
-          privateKey: "-----BEGIN KEY-----CCC333...-----END KEY-----",
-          address: "اصفهان، میدان نقش جهان، واحد ۱۲",
-          postalCode: "4455667788",
-          phone: "031-34567890",
-        },
-      ]);
-    })();
-    return () => {
-      isMounted = false;
-    };
+    axiosClient
+      .get("/admin/users")
+      .then((response) => {
+        setRecords(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">

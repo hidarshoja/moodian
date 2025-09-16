@@ -1,9 +1,11 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Menu } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "../features/user/userSlice";
 import { MdOutlineFreeCancellation } from "react-icons/md";
 import { TbStatusChange } from "react-icons/tb";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -17,65 +19,20 @@ export default function Header({
   setDesktopSidebarOpen,
 }) {
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
-  const [userData, setUserData] = React.useState(null);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
   const handleLogout = useCallback(() => {
-    // Clear localStorage and redirect to login
+    // Clear token and redux user, then redirect to login
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("USER");
     localStorage.removeItem("loginResponse");
     localStorage.removeItem("loginTimestamp");
-    setUserData(null);
+    dispatch(addUser(null));
     navigate("/auth/login");
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
-  // Check localStorage on component mount
-  useEffect(() => {
-    const loginResponse = localStorage.getItem("loginResponse");
-    if (loginResponse) {
-      try {
-        const parsedData = JSON.parse(loginResponse);
-        setUserData(parsedData);
-        // Ensure there is a timestamp to base the session timeout on
-        const ts = localStorage.getItem("loginTimestamp");
-        if (!ts) {
-          localStorage.setItem("loginTimestamp", String(Date.now()));
-        }
-      } catch (error) {
-        console.error("Error parsing login response:", error);
-        // If parsing fails, clear localStorage and redirect to login
-        handleLogout();
-      }
-    } else {
-      // If no login data, redirect to login page
-      handleLogout();
-    }
-  }, [navigate, handleLogout]);
 
-  // Auto-logout after 20 minutes based on saved loginTimestamp
-  useEffect(() => {
-    const SESSION_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
-    const timestampString = localStorage.getItem("loginTimestamp");
-    const timestamp = timestampString ? Number(timestampString) : null;
-
-    if (!timestamp) {
-      return;
-    }
-
-    const now = Date.now();
-    const elapsed = now - timestamp;
-
-    if (elapsed >= SESSION_TIMEOUT_MS) {
-      handleLogout();
-      return;
-    }
-
-    const remaining = SESSION_TIMEOUT_MS - elapsed;
-    const timerId = setTimeout(() => {
-      handleLogout();
-    }, remaining);
-
-    return () => clearTimeout(timerId);
-  }, [userData, handleLogout]);
 
   Header.propTypes = {
     setSidebarOpen: PropTypes.func.isRequired,
@@ -148,12 +105,20 @@ export default function Header({
                       <div className="flex flex-col">
                         <div className="flex items-center justify-start gap-1">
                           <CiUser />
-                          <span>حیدر شجاع</span>
+                          <span>
+                            {user
+                              ? `${user.name ?? ""} ${
+                                  user.last_name ?? ""
+                                }`.trim()
+                              : "کاربر"}
+                          </span>
                         </div>
 
                         <div className="flex items-center justify-start gap-1">
                           <TiPhoneOutline />
-                          <span>{userData?.email || "شماره تماس"}</span>
+                          <span>
+                            {user?.mobile || user?.mobile || "شماره تماس"}
+                          </span>
                         </div>
                       </div>
                     </span>
@@ -161,7 +126,7 @@ export default function Header({
                       <button
                         key={item.label}
                         onClick={() => {
-                          setUserMenuOpen(false)
+                          setUserMenuOpen(false);
                           if (item.action) {
                             item.action();
                           } else if (item.path) {
