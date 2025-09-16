@@ -20,6 +20,7 @@ import CancelPage from "./pages/CancelPage";
 import ChangeStatus from "./pages/ChangeStatus";
 import PasswordPage from "./pages/PasswordPage";
 import SupportPage from "./pages/SupportPage";
+import OtpPage from "./pages/login/OtpPage";
 
 export const route = createBrowserRouter([
     {
@@ -108,6 +109,11 @@ export const route = createBrowserRouter([
             {
                 path: 'register',
                 element: <Register />
+            }
+            ,
+            {
+                path: 'otp',
+                Component: OtpPage
             }
         ]
     }

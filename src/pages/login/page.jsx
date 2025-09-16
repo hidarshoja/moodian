@@ -1,53 +1,93 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { changeId } from "../../features/user/userSlice";
+import  { createRef, useEffect, useState } from 'react';
+import { Link,  useNavigate } from 'react-router-dom';
+import axiosClient from '../../axios-client';
+import { errorMessage, successMessage } from '../../utils/Toastiy';
+import { ToastContainer } from 'react-toastify';
+
 
 export default function Login() {
-  const user_id = useSelector((state) => state.user.id);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
+  const phoneRef = createRef()
+  const passwordRef = createRef()
+  const rememberRef = createRef()
+  const [timer, setTimer] = useState(0);
+  const navigation = useNavigate();
 
-  const handleLoginAndChangeId = () => {
-    dispatch(changeId(20));
-    console.log(`user_id`, user_id);
-    handleLogin();
-  };
+  // useEffect(() => {
+  //   const storedTimer = localStorage.getItem("timer");
+  //   setTimer(storedTimer)
 
-  const handleLogin = async () => {
+  //   if (storedTimer !== null) {
+  //     setTimer(parseInt(storedTimer, 10));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem("timer", timer);
+  // }, [timer]);
+  useEffect(() => {
+    const storedStartTime = localStorage.getItem("startTime");
+   
+   const currentTime = Math.floor(Date.now() / 1000);
+   const elapsedTime = currentTime - parseInt(storedStartTime, 10);
+   if (elapsedTime < 120) {
+     setTimer(120 - elapsedTime);
+   }
+ }, []);
+
+ useEffect(() => {
+   if (timer > 0) {
+     const interval = setInterval(() => {
+       setTimer((prevTimer) => prevTimer - 1);
+     }, 1000);
+     return () => clearInterval(interval);
+   }
+ }, [timer]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('ACCESS_TOKEN')
+    if (token) {
+     navigation('/')
+    }
+  }, [])
+
+
+  const handleLogin = async (e) => {
+    // setTimer(120);
+    const startTime = Math.floor(Date.now() / 1000);
+    localStorage.setItem("startTime", startTime.toString());
+    setTimer(120);
+    e.preventDefault()
+    setIsLoading(true)
+
     try {
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-      const rememberMeCheckbox = document.getElementById("remember-me");
+      const payload = {
+        mobile: phoneRef.current.value,
+        password: passwordRef.current.value,
+      }
 
-      const emailValue = emailInput.value;
-      const passwordValue = passwordInput.value;
-      const rememberMeValue = rememberMeCheckbox.checked;
+      if (payload.mobile.length != 10) {
+        errorMessage('شماره موبایل ده رقمی  را وارد کنید')
+        return
+      }
+      const response = await axiosClient.post('/send-otp', {mobile : payload.mobile , password : payload.password})
+      
 
-      const postData = {
-        email: emailValue,
-        password: passwordValue,
-        rememberMe: rememberMeValue,
-      };
+      successMessage('کد 5 رقمی برای شما ارسال شد')
+     
+  
+      setTimeout(()=>{
+        setIsLoading(false)
+        navigation('/auth/otp',{state: payload})
+      },3100)
 
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        postData
-      );
-
-      console.log("Response from server:", response.data);
-
-      // Save response to localStorage
-      localStorage.setItem("loginResponse", JSON.stringify(response.data));
-      localStorage.setItem("loginTimestamp", new Date().toISOString());
-
-      console.log("Response saved to localStorage");
-
-      // Navigate to home page after successful login
-      navigate("/");
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
+      setIsLoading(false);
+      if (error.response.status === 404) {
+        errorMessage('کاربری یافت نشد')
+      }
+     
     }
   };
 
@@ -75,23 +115,20 @@ export default function Login() {
 
           <div className="mt-10">
             <div>
-              <form action="#" method="POST" className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-green-700"
-                  >
-                    ایمیل
+              <form onSubmit={handleLogin}  className="space-y-6">
+              <div>
+                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-color2">
+                    شماره موبایل (بدون صفر)
                   </label>
                   <div className="mt-2">
                     <input
                       id="email"
-                      name="email"
-                      type="email"
-                      dir="ltr"
-                      autoComplete="email"
+                      name="phone"
+                      type="number"
+                      dir='ltr'
+                      ref={phoneRef}
                       required
-                      className="block w-full rounded-lg border-0 pl-3 py-2 shadow-sm ring-1 ring-inset ring-green-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-400 sm:text-sm sm:leading-6 bg-green-50/50"
+                      className="block w-full rounded-md border-0 pl-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -104,14 +141,15 @@ export default function Login() {
                     پسورد
                   </label>
                   <div className="mt-2">
-                    <input
+                  <input
                       id="password"
                       name="password"
                       type="password"
-                      dir="ltr"
+                      dir='ltr'
                       autoComplete="current-password"
+                      ref={passwordRef}
                       required
-                      className="block w-full rounded-lg border-0 py-2 pl-3 shadow-sm ring-1 ring-inset ring-green-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-400 sm:text-sm sm:leading-6 bg-green-50/50"
+                      className="block w-full rounded-md border-0 py-1.5 pl-3 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -122,6 +160,7 @@ export default function Login() {
                       id="remember-me"
                       name="remember-me"
                       type="checkbox"
+                      ref={rememberRef}
                       className="h-4 w-4 rounded border-green-300 text-green-600 focus:ring-green-500"
                     />
                     <label
@@ -144,11 +183,13 @@ export default function Login() {
 
                 <div>
                   <button
-                    type="button"
-                    onClick={handleLoginAndChangeId}
-                    className="flex w-full justify-center rounded-lg bg-green-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-md hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-all duration-200"
+                     type="submit"
+                    className={`flex w-full justify-center rounded-lg bg-green-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-md hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-all duration-200${
+                      timer > 0 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                   >
                     ورود
+                    {timer > 0 && ` (${timer}s)`}
                   </button>
                 </div>
               </form>
@@ -179,6 +220,18 @@ export default function Login() {
           />
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
