@@ -13,25 +13,14 @@ export default function Login() {
   const [timer, setTimer] = useState(0);
   const navigation = useNavigate();
 
-  // useEffect(() => {
-  //   const storedTimer = localStorage.getItem("timer");
-  //   setTimer(storedTimer)
 
-  //   if (storedTimer !== null) {
-  //     setTimer(parseInt(storedTimer, 10));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("timer", timer);
-  // }, [timer]);
   useEffect(() => {
     const storedStartTime = localStorage.getItem("startTime");
    
    const currentTime = Math.floor(Date.now() / 1000);
    const elapsedTime = currentTime - parseInt(storedStartTime, 10);
-   if (elapsedTime < 120) {
-     setTimer(120 - elapsedTime);
+   if (elapsedTime < 60) {
+     setTimer(60 - elapsedTime);
    }
  }, []);
 
@@ -53,10 +42,10 @@ export default function Login() {
 
 
   const handleLogin = async (e) => {
-    // setTimer(120);
+    // setTimer(60);
     const startTime = Math.floor(Date.now() / 1000);
     localStorage.setItem("startTime", startTime.toString());
-    setTimer(120);
+    setTimer(60);
     e.preventDefault()
     setIsLoading(true)
 
