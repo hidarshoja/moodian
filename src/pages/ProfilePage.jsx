@@ -4,6 +4,8 @@ import ProfileListUsers from "../components/ProfileListUsers";
 import ProfileFormModal from "../components/ProfileFormModal";
 import KeySettingsModal from "../components/KeySettingsModal";
 import UserFormModal from "../components/UserFormModal";
+import { errorMessage, successMessage } from "../utils/Toastiy";
+import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -324,18 +326,29 @@ export default function ProfilePage() {
     }
   };
 
-  const deleteRecord = (index) => {
-    console.log(`records[index]`, records[index]);
+  const deleteRecord = async (index) => {
+    try {
+      const user = records[index];
+      console.log(`Deleting user:`, user);
+
+      const res = await axiosClient.delete(`/admin/users/${user.id}`);
+      console.log(`Delete response:`, res);
+
+      setRecords((prev) => prev.filter((_, i) => i !== index));
+
+      successMessage("کاربر با موفقیت حذف شد");
+    } catch (error) {
+      errorMessage("خطا در حذف کاربر");
+    }
   };
 
   const openKeySettings = (index) => {
-    const row = records[index];
     setKeyModalIndex(index);
-    setKeyModalData({
-      taxMemoryUniqueId: row?.taxMemoryCode || "",
-      newEconomicCode: row?.taxpayerEconomicCode || "",
-      privateKeyFile: null,
-    });
+    // setKeyModalData({
+    //   taxMemoryUniqueId: row?.taxMemoryCode || "",
+    //   newEconomicCode: row?.taxpayerEconomicCode || "",
+    //   privateKeyFile: null,
+    // });
     setIsKeyModalOpen(true);
   };
 
@@ -495,6 +508,18 @@ export default function ProfilePage() {
         onSubmit={handleSubmitUser}
         onClose={() => setIsUserModalOpen(false)}
       />
+       <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={true}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
     </div>
   );
 }
