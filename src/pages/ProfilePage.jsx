@@ -60,7 +60,7 @@ export default function ProfilePage() {
       email: "",
       password: "",
       status: 100,
-      sstids: [],
+      sstids: "",
       roles: [],
       moadian_private_key: null,
       moadian_certificate: null,
@@ -85,8 +85,8 @@ export default function ProfilePage() {
     const target = e.target;
     const { name, type } = target;
 
-    // Handle checkbox groups for roles and sstids
-    if (name === "roles" || name === "sstids") {
+    // Handle checkbox groups for roles only
+    if (name === "roles") {
       const valueAsNumber = Number(target.value);
       const isChecked = target.checked;
       setForm((prev) => {
@@ -156,21 +156,15 @@ export default function ProfilePage() {
         return;
       }
 
-      if (
-        Array.isArray(preprocessed.sstids) &&
-        preprocessed.sstids.length > 0
+      // Convert sstids string to array if it exists
+      if (preprocessed.sstids && String(preprocessed.sstids).length === 13) {
+        preprocessed.sstids = [preprocessed.sstids];
+      } else if (
+        preprocessed.sstids &&
+        String(preprocessed.sstids).length !== 13
       ) {
-        const allValid = preprocessed.sstids.every(
-          (v) =>
-            (typeof v === "string" || typeof v === "number") &&
-            String(v).length === 13
-        );
-        if (!allValid) {
-          alert(
-            "هر مقدار sstids باید رشته ۱۳ کاراکتری باشد. لطفاً شناسه‌های معتبر وارد کنید."
-          );
-          return;
-        }
+        alert("شناسه sstids باید ۱۳ رقم باشد");
+        return;
       }
 
       if (typeof preprocessed.tins === "string") {
@@ -181,13 +175,36 @@ export default function ProfilePage() {
         return;
       }
 
-      if (!isEditing && preprocessed.tins) {
-        const existingTins = records.find(
-          (record) => record.tins === preprocessed.tins
-        );
-        if (existingTins) {
-          alert("کد اقتصادی مودی تکراری است. لطفاً کد دیگری وارد کنید.");
-          return;
+      // Check for duplicates (only for create mode)
+      if (!isEditing) {
+        if (preprocessed.tins) {
+          const existingTins = records.find(
+            (record) => record.tins === preprocessed.tins
+          );
+          if (existingTins) {
+            alert("کد اقتصادی مودی تکراری است. لطفاً کد دیگری وارد کنید.");
+            return;
+          }
+        }
+
+        if (preprocessed.email) {
+          const existingEmail = records.find(
+            (record) => record.email === preprocessed.email
+          );
+          if (existingEmail) {
+            alert("ایمیل تکراری است. لطفاً ایمیل دیگری وارد کنید.");
+            return;
+          }
+        }
+
+        if (preprocessed.mobile) {
+          const existingMobile = records.find(
+            (record) => record.mobile === preprocessed.mobile
+          );
+          if (existingMobile) {
+            alert("شماره موبایل تکراری است. لطفاً شماره دیگری وارد کنید.");
+            return;
+          }
         }
       }
 

@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 
 export default function ProfileFormModal({
   isOpen,
@@ -8,6 +9,55 @@ export default function ProfileFormModal({
   onSubmit,
   onClose,
 }) {
+  const [errors, setErrors] = useState({});
+
+  // Validation functions
+  const validateMobile = (mobile) => {
+    if (!mobile) return "شماره موبایل الزامی است";
+    const mobileStr = String(mobile);
+    const digits = mobileStr.replace(/\D/g, "");
+    if (digits.length !== 10 || !digits.startsWith("9")) {
+      return "شماره موبایل باید ۱۰ رقم و با 9 شروع شود";
+    }
+    return "";
+  };
+
+  const validateTins = (tins) => {
+    if (!tins) return "کد اقتصادی الزامی است";
+    const tinsStr = String(tins);
+    const digits = tinsStr.replace(/\D/g, "");
+    if (digits.length !== 11) {
+      return "کد اقتصادی باید ۱۱ رقم باشد";
+    }
+    return "";
+  };
+
+  const validateSstids = (sstids) => {
+    if (!sstids) return "";
+    // Handle both string and array cases
+    const sstidsStr = Array.isArray(sstids) ? sstids[0] : String(sstids);
+    if (sstidsStr && sstidsStr.length > 0 && sstidsStr.length !== 13) {
+      return "شناسه sstids باید ۱۳ رقم باشد";
+    }
+    return "";
+  };
+
+  // Real-time validation
+  useEffect(() => {
+    const newErrors = {};
+
+    const mobileError = validateMobile(form.mobile);
+    if (mobileError) newErrors.mobile = mobileError;
+
+    const tinsError = validateTins(form.tins);
+    if (tinsError) newErrors.tins = tinsError;
+
+    const sstidsError = validateSstids(form.sstids);
+    if (sstidsError) newErrors.sstids = sstidsError;
+
+    setErrors(newErrors);
+  }, [form.mobile, form.tins, form.sstids]);
+
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
@@ -21,7 +71,16 @@ export default function ProfileFormModal({
           </button>
         </div>
         <form
-          onSubmit={onSubmit}
+          onSubmit={(e) => {
+            // Check for validation errors before submitting
+            const hasErrors = Object.keys(errors).length > 0;
+            if (hasErrors) {
+              e.preventDefault();
+              alert("لطفاً خطاهای موجود را برطرف کنید");
+              return;
+            }
+            onSubmit(e);
+          }}
           className="px-6 py-6 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto flex-1"
         >
           <div>
@@ -63,8 +122,15 @@ export default function ProfileFormModal({
               name="tins"
               value={form.tins}
               onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
+                errors.tins
+                  ? "border-red-500 focus:ring-red-500/20"
+                  : "border-white/10 focus:ring-white/20"
+              }`}
             />
+            {errors.tins && (
+              <p className="text-red-400 text-xs mt-1">{errors.tins}</p>
+            )}
           </div>
           <div>
             <label className="block mb-1 text-white text-sm">ایمیل</label>
@@ -131,7 +197,41 @@ export default function ProfileFormModal({
               </label>
             </div>
           </div>
-       
+          <div className="md:col-span-3">
+            <label className="block mb-1 text-white text-sm">
+              شناسه sstids
+            </label>
+            <input
+              name="sstids"
+              value={
+                Array.isArray(form.sstids)
+                  ? form.sstids[0] || ""
+                  : form.sstids || ""
+              }
+              onChange={(e) => {
+                // Only allow numeric input and limit to 13 characters
+                const value = e.target.value.replace(/\D/g, "").slice(0, 13);
+                onChange({
+                  target: {
+                    name: "sstids",
+                    value: value,
+                  },
+                });
+              }}
+              placeholder="13 رقم وارد کنید"
+              maxLength={13}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
+                errors.sstids
+                  ? "border-red-500 focus:ring-red-500/20"
+                  : "border-white/10 focus:ring-white/20"
+              }`}
+            />
+            {errors.sstids && (
+              <p className="text-red-400 text-xs mt-1">{errors.sstids}</p>
+            )}
+          </div>
           <div className="md:col-span-3">
             <label className="block mb-1 text-white text-sm">کلید خصوصی</label>
             <input
@@ -176,8 +276,15 @@ export default function ProfileFormModal({
               name="mobile"
               value={form.mobile}
               onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
+                errors.mobile
+                  ? "border-red-500 focus:ring-red-500/20"
+                  : "border-white/10 focus:ring-white/20"
+              }`}
             />
+            {errors.mobile && (
+              <p className="text-red-400 text-xs mt-1">{errors.mobile}</p>
+            )}
           </div>
           <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
             <button
@@ -212,7 +319,7 @@ ProfileFormModal.propTypes = {
     password: PropTypes.string,
     status: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     roles: PropTypes.arrayOf(PropTypes.number),
-    sstids: PropTypes.arrayOf(PropTypes.number),
+    sstids: PropTypes.string,
     moadian_private_key: PropTypes.any,
     moadian_certificate: PropTypes.any,
     address: PropTypes.string,
