@@ -54,7 +54,7 @@ export default function ProfileRecordsTable({
                 {r?.last_name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.modian_username ? r?.modian_username : "-"}
+                {r?.moadian_username ? r?.moadian_username : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.tins}
