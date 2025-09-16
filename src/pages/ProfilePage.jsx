@@ -38,6 +38,18 @@ export default function ProfilePage() {
   });
   const isEditing = useMemo(() => editingIndex !== null, [editingIndex]);
 
+  const fetchUsers = () => {
+    axiosClient
+      .get("/admin/users")
+      .then((response) => {
+        setRecords(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
   const openForCreate = () => {
     setEditingIndex(null);
     setForm({
@@ -45,13 +57,13 @@ export default function ProfilePage() {
       tins: "",
       last_name: "",
       mobile: "",
-      email : "",
-      password :"",
-      status : 100,
-      sstids :[],
-      roles:[],
-      moadian_private_key : null,
-      moadian_certificate : null,
+      email: "",
+      password: "",
+      status: 100,
+      sstids: [],
+      roles: [],
+      moadian_private_key: null,
+      moadian_certificate: null,
       address: "",
       postal_code: "",
     });
@@ -70,7 +82,54 @@ export default function ProfilePage() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const target = e.target;
+    const { name, type } = target;
+
+    // Handle checkbox groups for roles and sstids
+    if (name === "roles" || name === "sstids") {
+      const valueAsNumber = Number(target.value);
+      const isChecked = target.checked;
+      setForm((prev) => {
+        const currentArray = Array.isArray(prev[name]) ? prev[name] : [];
+        if (isChecked) {
+          if (currentArray.includes(valueAsNumber)) return prev;
+          return { ...prev, [name]: [...currentArray, valueAsNumber] };
+        }
+        return {
+          ...prev,
+          [name]: currentArray.filter((n) => n !== valueAsNumber),
+        };
+      });
+      return;
+    }
+
+    // Handle file inputs for moadian keys
+    if (type === "file") {
+      const file = target.files && target.files[0] ? target.files[0] : null;
+      if (!file) {
+        setForm((prev) => ({ ...prev, [name]: null }));
+        return;
+      }
+
+      const lower = file.name.toLowerCase();
+      if (
+        (name === "moadian_private_key" && !lower.endsWith(".pem")) ||
+        (name === "moadian_certificate" && !lower.endsWith(".crt"))
+      ) {
+        alert(
+          name === "moadian_private_key"
+            ? "فقط فایل با پسوند .pem مجاز است"
+            : "فقط فایل با پسوند .crt مجاز است"
+        );
+        target.value = "";
+        return;
+      }
+      setForm((prev) => ({ ...prev, [name]: file }));
+      return;
+    }
+
+    // Default: text/number inputs
+    const value = target.value;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -78,48 +137,171 @@ export default function ProfilePage() {
     e.preventDefault();
 
     try {
+      const preprocessed = { ...form };
+      if (typeof preprocessed.mobile === "string") {
+        const digits = preprocessed.mobile.replace(/\D/g, "");
+        if (digits.length === 11 && digits.startsWith("09")) {
+          preprocessed.mobile = digits.slice(1);
+        } else {
+          preprocessed.mobile = digits;
+        }
+      }
+
+      if (
+        !preprocessed.mobile ||
+        preprocessed.mobile.length !== 10 ||
+        !preprocessed.mobile.startsWith("9")
+      ) {
+        alert("شماره موبایل باید ۱۰ رقم و با 9 شروع شود (نمونه: 9123456789)");
+        return;
+      }
+
+      if (
+        Array.isArray(preprocessed.sstids) &&
+        preprocessed.sstids.length > 0
+      ) {
+        const allValid = preprocessed.sstids.every(
+          (v) =>
+            (typeof v === "string" || typeof v === "number") &&
+            String(v).length === 13
+        );
+        if (!allValid) {
+          alert(
+            "هر مقدار sstids باید رشته ۱۳ کاراکتری باشد. لطفاً شناسه‌های معتبر وارد کنید."
+          );
+          return;
+        }
+      }
+
+      if (typeof preprocessed.tins === "string") {
+        preprocessed.tins = preprocessed.tins.replace(/\D/g, "");
+      }
+      if (!preprocessed.tins || String(preprocessed.tins).length !== 11) {
+        alert("کد اقتصادی (tins) باید دقیقا ۱۱ رقم باشد.");
+        return;
+      }
+
+      if (!isEditing && preprocessed.tins) {
+        const existingTins = records.find(
+          (record) => record.tins === preprocessed.tins
+        );
+        if (existingTins) {
+          alert("کد اقتصادی مودی تکراری است. لطفاً کد دیگری وارد کنید.");
+          return;
+        }
+      }
+
       if (isEditing) {
+        console.log("Constructed user edit:", {
+          ...preprocessed,
+          moadian_private_key: preprocessed.moadian_private_key?.name || null,
+          moadian_certificate: preprocessed.moadian_certificate?.name || null,
+        });
+
         const original = records[editingIndex];
-        const merged = { ...original, ...form };
+        const merged = { ...original, ...preprocessed };
 
-        // Normalize roles to an array of numeric IDs if present
-        let updated = { ...merged };
-        if (Array.isArray(merged?.roles)) {
-          const roleIds = merged.roles
-            .map((r) => {
-              if (typeof r === "number") return r;
-              if (typeof r === "string") return Number(r);
-              if (r && typeof r === "object") {
-                const maybeId = r.id ?? r.value ?? r.role_id ?? r.roleId;
-                return maybeId !== undefined ? Number(maybeId) : NaN;
-              }
-              return NaN;
-            })
-            .filter((n) => Number.isFinite(n));
+        // If any file is present, use FormData; otherwise JSON
+        const hasFiles =
+          merged.moadian_private_key instanceof File ||
+          merged.moadian_certificate instanceof File;
 
-          if (roleIds.length > 0) {
-            updated.roles = roleIds;
-          } else {
-            // If we can't determine valid role ids, avoid sending roles at all
-            delete updated.roles;
+        let payloadToSend = merged;
+        let headers = undefined;
+
+        if (hasFiles) {
+          const fd = new FormData();
+          Object.entries(merged).forEach(([key, value]) => {
+            if (value === undefined || value === null) return;
+            if (value instanceof File) {
+              fd.append(key, value);
+              return;
+            }
+            if (Array.isArray(value)) {
+              value.forEach((v) => fd.append(`${key}[]`, String(v)));
+              return;
+            }
+            fd.append(key, String(value));
+          });
+          payloadToSend = fd;
+          headers = { "Content-Type": "multipart/form-data" };
+        } else {
+          // Normalize roles array to numeric ids
+          if (Array.isArray(payloadToSend?.roles)) {
+            payloadToSend = {
+              ...payloadToSend,
+              roles: payloadToSend.roles
+                .map((r) => (typeof r === "number" ? r : Number(r)))
+                .filter((n) => Number.isFinite(n)),
+            };
           }
         }
 
         const { data } = await axiosClient.put(
           `/admin/users/${form.id}`,
-          updated
+          payloadToSend,
+          headers ? { headers } : undefined
         );
         console.log("User updated:", data?.data);
         setRecords((prev) =>
           prev.map((record, index) =>
-            index === editingIndex ? updated : record
+            index === editingIndex ? merged : record
           )
         );
+        // Refetch users after successful update
+        fetchUsers();
       } else {
-        setRecords((prev) => [{ ...form }, ...prev]);
+        // Creating new user
+        const hasFiles =
+          preprocessed.moadian_private_key instanceof File ||
+          preprocessed.moadian_certificate instanceof File;
+
+        if (hasFiles) {
+          const fd = new FormData();
+          Object.entries(preprocessed).forEach(([key, value]) => {
+            if (value === undefined || value === null) return;
+            if (value instanceof File) {
+              fd.append(key, value);
+              return;
+            }
+            if (Array.isArray(value)) {
+              value.forEach((v) => fd.append(`${key}[]`, String(v)));
+              return;
+            }
+            fd.append(key, String(value));
+          });
+          console.log("Submitting (multipart):", {
+            ...preprocessed,
+            moadian_private_key: preprocessed.moadian_private_key?.name || null,
+            moadian_certificate: preprocessed.moadian_certificate?.name || null,
+          });
+          const res = await axiosClient.post(`/admin/users`, fd, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          console.log(`res`, res);
+          // Refetch users after successful create
+          fetchUsers();
+        } else {
+          console.log("Submitting (JSON):", preprocessed);
+          const res = await axiosClient.post(`/admin/users`, preprocessed);
+          console.log(`res`, res);
+          // Refetch users after successful create
+          fetchUsers();
+        }
       }
     } catch (error) {
       console.error("Error saving user:", error);
+      const serverMsg = error?.response?.data?.message;
+      const serverErrors = error?.response?.data?.errors;
+      if (serverMsg || serverErrors) {
+        alert(
+          `${serverMsg || "خطا در ثبت"}\n${
+            serverErrors ? JSON.stringify(serverErrors, null, 2) : ""
+          }`
+        );
+
+        return;
+      }
     } finally {
       setIsOpen(false);
     }
@@ -213,15 +395,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    axiosClient
-      .get("/admin/users")
-      .then((response) => {
-        setRecords(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    fetchUsers();
   }, []);
 
   return (
