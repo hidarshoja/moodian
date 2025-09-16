@@ -69,20 +69,34 @@ export default function ProfilePage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEditing) {
-      const original = records[editingIndex];
-      const updated = { ...original, ...form };
-      console.log("Update record payload:", updated);
-    } else {
-      setRecords((prev) => [{ ...form }, ...prev]);
+  
+    try {
+      if (isEditing) {
+        const original = records[editingIndex];
+        const updated = { ...original, ...form ,   };
+  
+        const { data } = await axiosClient.put(`/admin/users/${form.id}`, updated);
+        console.log("User updated:", data?.data);
+        setRecords((prev) =>
+          prev.map((record, index) =>
+            index === editingIndex ? updated : record
+          )
+        );
+      } else {
+        setRecords((prev) => [{ ...form }, ...prev]);
+      }
+    } catch (error) {
+      console.error("Error saving user:", error);
+    } finally {
+      setIsOpen(false);
     }
-    setIsOpen(false);
   };
+  
 
   const deleteRecord = (index) => {
-    setRecords((prev) => prev.filter((_, i) => i !== index));
+    console.log(`records[index]`, records[index]);
   };
 
   const openKeySettings = (index) => {
@@ -101,7 +115,7 @@ export default function ProfilePage() {
     setKeyModalIndex(null);
   };
 
-  // Users list actions
+ 
   const openCreateUser = () => {
     setEditingUserIndex(null);
     setUserForm({ username: "", fullName: "", role: "" });
@@ -120,7 +134,7 @@ export default function ProfilePage() {
   };
 
   const deleteUser = (index) => {
-    setUsers((prev) => prev.filter((_, i) => i !== index));
+    console.log(`records[index]`, records[index]);
   };
 
   const handleUserChange = (e) => {
@@ -131,14 +145,14 @@ export default function ProfilePage() {
   const handleSubmitUser = (e) => {
     e.preventDefault();
   console.log(`form`, form);
-  axiosClient
-  .put(`/admin/users/${form.id} `, {form})
-  .then((response) => {
-    console.log(response.data.data);
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
+  // axiosClient
+  // .put(`/admin/users/${form.id} `, {form})
+  // .then((response) => {
+  //   console.log(response.data.data);
+  // })
+  // .catch((error) => {
+  //   console.error("Error fetching data:", error);
+  // });
     setIsUserModalOpen(false);
   };
 

@@ -47,8 +47,8 @@ export default function ProfileFormModal({
               کد حافظه مالیاتی
             </label>
             <input
-              name="modian_username"
-              value={form.modian_username}
+              name="moadian_username"
+              value={form.moadian_username}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
