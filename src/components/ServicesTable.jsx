@@ -123,22 +123,7 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
    
   };
 
-  // ارسال داده به API تستی هنگام ویرایش
-  // const handleEdit = async () => {
-  //   console.log("ارسال داده ویرایش:", row);
-  //   // try {
-      
-  //   //   const response = await axios.post(
-  //   //     "https://jsonplaceholder.typicode.com/posts",
-  //   //     row
-  //   //   );
-  //   //   showSuccessToast("ویرایش با موفقیت انجام شد!");
-  //   //   console.log("پاسخ سرور:", response.data);
-  //   // } catch (error) {
-  //   //   showErrorToast("خطا در ارسال داده!");
-  //   //   console.error(error);
-  //   // }
-  // };
+
 
   const handleEdit = async () => {
     if (row.sstid) {
