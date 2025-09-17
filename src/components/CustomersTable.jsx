@@ -21,13 +21,19 @@ export default function CustomersTable({dataTable ,setDataTable}) {
 
  
   const [row, setRow] = useState({
+    address :"",
+    branch_code: "",
+    description : "",
+    economic_code : "",
+    id: "",
+    last_name: "",
     name: "",
-    code: "",
-    unit: "انتخاب ...",
-    nationalCode: "",
-    postCode: "",
-    phone: "",
-    userCode: "",
+    national_code: "",
+    passport_number:"",
+    postal_code: "",
+    tel: "",
+    type: "انتخاب ...",
+    
   });
 
   // sync کردن inputها با dataTable هنگام وارد کردن کد
@@ -35,17 +41,23 @@ export default function CustomersTable({dataTable ,setDataTable}) {
     const name = e.target.value;
     setRow((prev) => ({ ...prev, name }));
     const found = dataTable.find((item) => item.name === name);
+    console.log(`found`, found);
     if (found) {
       setRow({ ...found });
     } else {
       setRow((prev) => ({
         ...prev,
-        code: "",
-        unit: "انتخاب ...",
-        nationalCode: "",
-        postCode: "",
-        phone: "",
-        userCode: "",
+        address :"",
+    branch_code: "",
+    description : "",
+    economic_code : "",
+    id: "",
+    last_name: "",
+    national_code: "",
+    passport_number:"",
+    postal_code: "",
+    tel: "",
+    type: "انتخاب ...",
       }));
     }
   };
@@ -89,7 +101,7 @@ export default function CustomersTable({dataTable ,setDataTable}) {
       console.error(error);
     }
   };
-
+console.log(`row`, row);
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
       <CustomToastContainer />
@@ -137,40 +149,40 @@ export default function CustomersTable({dataTable ,setDataTable}) {
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.code}
-                onChange={(e) => handleFieldChange("code", e.target.value)}
+                value={row.economic_code}
+                onChange={(e) => handleFieldChange("economic_code", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.nationalCode}
+                value={row.national_code}
                 onChange={(e) =>
-                  handleFieldChange("nationalCode", e.target.value)
+                  handleFieldChange("national_code", e.target.value)
                 }
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.postCode}
-                onChange={(e) => handleFieldChange("postCode", e.target.value)}
+                value={row.postal_code}
+                onChange={(e) => handleFieldChange("postal_code", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.phone}
+                value={row.tel}
                 onChange={(e) =>
-                  handleFieldChange("phone", e.target.value)
+                  handleFieldChange("tel", e.target.value)
                 }
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.userCode}
-                onChange={(e) => handleFieldChange("userCode", e.target.value)}
+                value={row.branch_code}
+                onChange={(e) => handleFieldChange("branch_code", e.target.value)}
               />
             </td>
           
