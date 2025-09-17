@@ -6,6 +6,8 @@ import {
   showSuccessToast,
   showErrorToast,
 } from "./CustomToast";
+import axiosClient from "../axios-client";
+import Swal from 'sweetalert2';
 
 const units = [
   { id: 0, name: "انتخاب ..." },
@@ -16,9 +18,9 @@ const units = [
  
 ];
 
-export default function CustomersTable({dataTable ,setDataTable}) {
+export default function CustomersTable({dataTable ,setDataTable , setRefresh , refresh}) {
  
-
+  const [editedFields, setEditedFields] = useState({});
  
   const [row, setRow] = useState({
     address :"",
@@ -62,43 +64,147 @@ export default function CustomersTable({dataTable ,setDataTable}) {
     }
   };
 
-  // ویرایش مقدار هر فیلد
-  const handleFieldChange = (field, value) => {
+
+
+   // ویرایش مقدار هر فیلد
+   const handleFieldChange = (field, value) => {
     setRow((prev) => ({ ...prev, [field]: value }));
-    setDataTable((prev) =>
-      prev.map((item) =>
-        item.name === row.name ? { ...item, [field]: value } : item
-      )
-    );
+  
+    // مقدار اولیه را پیدا کن
+    const original = dataTable.find((item) => item.sstid === row.sstid);
+    if (original && original[field] !== value) {
+      setEditedFields((prev) => ({ ...prev, [field]: value }));
+    } else {
+      // اگر مقدار به حالت اولیه برگشت، از editedFields حذف کن
+      setEditedFields((prev) => {
+        const updated = { ...prev };
+        delete updated[field];
+        return updated;
+      });
+    }
   };
 
   // حذف ردیف با کد فعلی
-  const handleDelete = () => {
-    setDataTable((prev) => prev.filter((item) => item.name !== row.name));
-    setRow({
-      name: "",
-      code: "",
-      unit: "انتخاب ...",
-      nationalCode: "",
-      postCode: "",
-      phone: "",
-      userCode: "",
-    });
+  const handleDelete = async (row) => {
+    try {
+      const res = await axiosClient.delete(`/customers/${row.id}`);
+      console.log(`Delete response:`, res);
+
+      setRefresh(!refresh);
+      Swal.fire({
+        toast: true,
+        position: 'top-start', 
+        icon: 'success', // یا 'error'
+        title: 'کاربر با موفقیت حذف شد',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+      setRow(prev => ({
+        ...prev,
+        name :"",
+        address :"",
+    branch_code: "",
+    description : "",
+    economic_code : "",
+    id: "",
+    last_name: "",
+    national_code: "",
+    passport_number:"",
+    postal_code: "",
+    tel: "",
+    type: "انتخاب ...",
+      }));
+    
+    } catch (error) {
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'خطا در حذف کاربر',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+    }
+   
+   
   };
 
   // ارسال داده به API تستی هنگام ویرایش
   const handleEdit = async () => {
-    try {
-      console.log("ارسال داده ویرایش:", row);
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        row
+    
+    if (row.id) {
+      try {
+      const payload = { id: row.id, ...row };
+      const { data } = await axiosClient.put(
+        `/customers/${payload.id}`,
+        payload
       );
-      showSuccessToast("ویرایش با موفقیت انجام شد!");
-      console.log("پاسخ سرور:", response.data);
+      setRefresh(!refresh);
+      Swal.fire({
+        toast: true,
+        position: 'top-start', 
+        icon: 'success', // یا 'error'
+        title: 'کاربر با موفقیت ویرایش شد',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+      setRow(prev => ({
+        ...prev,
+        name :"",
+        address :"",
+        branch_code: "",
+        description : "",
+        economic_code : "",
+        id: "",
+        last_name: "",
+        national_code: "",
+        passport_number:"",
+        postal_code: "",
+        tel: "",
+        type: "انتخاب ...",
+      }));
     } catch (error) {
-      showErrorToast("خطا در ارسال داده!");
-      console.error(error);
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'خطا در ویرایش کاربر',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+    }
+    } else {
+  
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'از قسمت نام، نام کاربر را وارد کنید!',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
     }
   };
 console.log(`row`, row);
@@ -190,11 +296,8 @@ console.log(`row`, row);
               <div className="flex items-center justify-center gap-2">
                 <button
                   className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                  onClick={handleDelete}
-                  disabled={
-                    !row.name ||
-                    !dataTable.find((item) => item.name === row.name)
-                  }
+                  onClick={() => handleDelete(row)}
+                
                 >
                   <FiTrash2 className="w-4 h-4" />
                 </button>

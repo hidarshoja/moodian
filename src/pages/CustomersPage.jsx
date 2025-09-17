@@ -98,6 +98,8 @@ export default function CustomersPage() {
         <CustomersTable 
         setDataTable={setDataTable}
         dataTable ={dataTable}
+        refresh={refresh}
+         setRefresh={setRefresh}
         />
       </div>
     </div>
