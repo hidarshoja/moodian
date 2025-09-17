@@ -2,8 +2,9 @@ import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axios from "axios";
 import axiosClient from "../axios-client";
-import { errorMessage, successMessage } from "../utils/Toastiy";
-import { ToastContainer } from "react-toastify";
+import Swal from 'sweetalert2';
+
+
 import {
   CustomToastContainer,
   showSuccessToast,
@@ -80,10 +81,32 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
       console.log(`Delete response:`, res);
 
       setRefresh(!refresh);
-
-      successMessage("محصول با موفقیت حذف شد");
+      Swal.fire({
+        toast: true,
+        position: 'top-start', 
+        icon: 'success', // یا 'error'
+        title: 'محصول با موفقیت حذف شد',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
     } catch (error) {
-      errorMessage("خطا در حذف محصول");
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'خطا در حذف محصول',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
     }
    
    
@@ -221,7 +244,7 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
           </tr>
           {/* نمایش همه داده‌های جدول */}
           {dataTable.map((item, idx) => (
-            <tr key={item.sstid} className="bg-white/5">
+            <tr key={item.id} className="bg-white/5">
                <td className="px-2 py-1 text-center">
                 {item?.title ? item.title : "-"}
               </td>
@@ -255,18 +278,7 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
           ))}
         </tbody>
       </table>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={true}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+     
     </div>
   );
 }

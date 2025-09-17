@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
+import Swal from 'sweetalert2';
 const units = [
   { id: 0, name: "انتخاب ..." },
   { id: 1, name: "لنگه" },
@@ -43,6 +44,18 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
     e.preventDefault();
     console.log("مقادیر فرم:", form);
     const res = await axiosClient.post(`/products`, form);
+    Swal.fire({
+      toast: true,
+      position: 'top-start', 
+      icon: 'success', // یا 'error'
+      title: 'محصول با موفقیت اضافه شد',
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      customClass: {
+        popup: 'swal2-toast'
+      }
+    });
     console.log(`res`, res);
     setRefresh(!refresh);
     onClose();

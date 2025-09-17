@@ -5,7 +5,9 @@ import AddServiceModal from "../components/AddServiceModal";
 import ImportExcelModal from "../components/ImportExcelModal";
 import { exportServicesToExcel } from "../components/exportServicesToExcel";
 import { useState , useEffect } from "react";
-import axiosClient from "../axios-client"
+import axiosClient from "../axios-client";
+
+
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
@@ -18,9 +20,11 @@ export default function ServicesPage() {
         const data = response.data;
         setDataTable(response.data.data);
         console.log(data);
+        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        
       });
   }, [refresh]);
 
