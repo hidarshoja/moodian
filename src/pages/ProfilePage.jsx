@@ -14,9 +14,10 @@ export default function ProfilePage() {
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [keyModalIndex, setKeyModalIndex] = useState(null);
   const [keyModalData, setKeyModalData] = useState({
-    taxMemoryUniqueId: "",
-    newEconomicCode: "",
-    privateKeyFile: null,
+    moadian_username: "",
+    tins: "",
+    moadian_private_key: null,
+    moadian_certificate: null,
   });
   const [form, setForm] = useState({
     name: "",
@@ -346,7 +347,7 @@ export default function ProfilePage() {
   const openKeySettings = (index) => {
     setKeyModalIndex(index);
     // setKeyModalData({
-    //   taxMemoryUniqueId: row?.taxMemoryCode || "",
+    //   moadian_username: row?.taxMemoryCode || "",
     //   newEconomicCode: row?.taxpayerEconomicCode || "",
     //   privateKeyFile: null,
     // });
@@ -409,20 +410,30 @@ export default function ProfilePage() {
     setKeyModalData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePrivateKeyFileChange = (e) => {
-    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-    setKeyModalData((prev) => ({ ...prev, privateKeyFile: file }));
+  // تابع جدید برای ذخیره فایل با کلید صحیح
+  const handleKeyModalFileChange = (e) => {
+    const { name, files } = e.target;
+    const file = files && files[0] ? files[0] : null;
+    setKeyModalData((prev) => ({ ...prev, [name]: file }));
   };
 
   const handleSaveKeySettings = () => {
-    const payload = {
-      rowIndex: keyModalIndex,
-      taxMemoryUniqueId: keyModalData.taxMemoryUniqueId,
-      tins: keyModalData.tins,
-      moadian_private_key: keyModalData.moadian_private_key?.name || null,
-      moadian_certificate: keyModalData.moadian_certificate?.name || null,
-    };
-    console.log("Tax system settings payload:", payload);
+    // استخراج مقادیر واقعی
+    const moadian_private_key = keyModalData.moadian_private_key;
+    const moadian_certificate = keyModalData.moadian_certificate;
+    const tins = keyModalData.tins;
+    const moadian_username = keyModalData.moadian_username;
+
+    // لاگ گرفتن مقادیر واقعی
+    console.log("moadian_private_key:", moadian_private_key);
+    console.log("moadian_certificate:", moadian_certificate);
+    console.log("tins:", tins);
+    console.log("moadian_username:", moadian_username);
+
+    // اگر فقط نام فایل ها را هم خواستید:
+    // console.log("moadian_private_key name:", moadian_private_key?.name || null);
+    // console.log("moadian_certificate name:", moadian_certificate?.name || null);
+
     setIsKeyModalOpen(false);
   };
 
@@ -493,7 +504,7 @@ export default function ProfilePage() {
         isOpen={isKeyModalOpen}
         data={keyModalData}
         onChangeText={handleKeyModalTextChange}
-        onChangeFile={handlePrivateKeyFileChange}
+        onChangeFile={handleKeyModalFileChange}
         onSave={handleSaveKeySettings}
         onClose={closeKeySettings}
       />
@@ -510,18 +521,18 @@ export default function ProfilePage() {
         onSubmit={handleSubmitUser}
         onClose={() => setIsUserModalOpen(false)}
       />
-       <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={true}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }

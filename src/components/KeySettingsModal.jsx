@@ -7,6 +7,8 @@ export default function KeySettingsModal({
   onClose,
 }) {
   if (!isOpen) return null;
+ 
+  const tinsError = data.tins && data.tins.length !== 11;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
       <div className="w-full max-w-3xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl overflow-hidden relative animate-slideIn">
@@ -20,45 +22,57 @@ export default function KeySettingsModal({
         </div>
         <div className="px-6 pt-6 pb-2">
           <div className="grid grid-cols-1  gap-4 items-end">
-          
             <div className="md:col-span-3">
-            <label className="block mb-1 text-white text-sm">کلید خصوصی(فرمت فایل .pem)</label>
-            <input
-              type="file"
-              name="moadian_private_key"
-              accept=".pem"
-              onChange={onChangeFile}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div className="md:col-span-3">
-            <label className="block mb-1 text-white text-sm">گواهینامه (فرمت فایل.crt)</label>
-            <input
-              type="file"
-              name="moadian_certificate"
-              accept=".crt"
-              onChange={onChangeFile}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
+              <label className="block mb-1 text-white text-sm">
+                کلید خصوصی(فرمت فایل .pem)
+              </label>
+              <input
+                type="file"
+                name="moadian_private_key"
+                accept=".pem"
+                onChange={onChangeFile}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block mb-1 text-white text-sm">
+                گواهینامه (فرمت فایل.crt)
+              </label>
+              <input
+                type="file"
+                name="moadian_certificate"
+                accept=".crt"
+                onChange={onChangeFile}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
             <div>
               <label className="block mb-2 text-white text-sm">
                 کد اقتصادی جدید :
               </label>
               <input
-                name="newEconomicCode"
+                name="tins"
                 value={data.tins}
                 onChange={onChangeText}
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 lg:py-2 lg:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+                className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
+                  tinsError
+                    ? "border-red-500 focus:ring-red-500/20"
+                    : "border-white/10 focus:ring-white/20"
+                }`}
               />
+              {tinsError && (
+                <p className="text-red-400 text-xs mt-1">
+                  کد اقتصادی باید ۱۱ رقم باشد
+                </p>
+              )}
             </div>
             <div>
               <label className="block mb-2 text-white text-sm">
                 شناسه یکتای حافظه مالیاتی :
               </label>
               <input
-                name="taxMemoryUniqueId"
-                value={data.taxMemoryUniqueId}
+                name="moadian_username"
+                value={data.moadian_username}
                 onChange={onChangeText}
                 placeholder="0/6"
                 className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 lg:py-2 lg:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
