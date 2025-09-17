@@ -116,6 +116,7 @@ export default function ServicesPage() {
             <label className="block mb-1 text-white text-sm">نام</label>
             <input
               name="title"
+              value={filterInputs.title}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -125,6 +126,7 @@ export default function ServicesPage() {
             <label className="block mb-1 text-white text-sm">کد شناسه</label>
             <input
               name="olr"
+              value={filterInputs.olr}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               type="number"
               maxLength={10}

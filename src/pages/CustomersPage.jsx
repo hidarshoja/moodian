@@ -112,6 +112,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">نام</label>
             <input
               name="name"
+              value={filterInputs.name}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -122,6 +123,7 @@ export default function CustomersPage() {
             </label>
             <input
               name="last_name"
+              value={filterInputs.last_name}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -130,6 +132,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">کدملی/شناسه</label>
             <input
               name="national_code"
+              value={filterInputs.national_code}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               type="number"
               maxLength={10}
@@ -141,6 +144,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">شماره تماس</label>
             <input
               name="tel"
+              value={filterInputs.tel}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
