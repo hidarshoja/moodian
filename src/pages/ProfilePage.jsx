@@ -418,8 +418,9 @@ export default function ProfilePage() {
     const payload = {
       rowIndex: keyModalIndex,
       taxMemoryUniqueId: keyModalData.taxMemoryUniqueId,
-      newEconomicCode: keyModalData.newEconomicCode,
-      privateKeyFileName: keyModalData.privateKeyFile?.name || null,
+      tins: keyModalData.tins,
+      moadian_private_key: keyModalData.moadian_private_key?.name || null,
+      moadian_certificate: keyModalData.moadian_certificate?.name || null,
     };
     console.log("Tax system settings payload:", payload);
     setIsKeyModalOpen(false);

@@ -20,32 +20,34 @@ export default function KeySettingsModal({
         </div>
         <div className="px-6 pt-6 pb-2">
           <div className="grid grid-cols-1  gap-4 items-end">
-            <div>
-              <label className="block mb-2 text-white text-sm">
-                فایل کلید خصوصی :
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="file"
-                  accept=".key,.pem,.txt"
-                  onChange={onChangeFile}
-                  className="flex-1 rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-3 py-2 lg:py-2 lg:text-sm file:mr-2 file:rounded-lg file:border-0 file:bg-white/10 file:text-white"
-                />
-                <button
-                  type="button"
-                  className="px-3 py-2 rounded-lg bg-white/10 text-white border border-white/10"
-                >
-                  ...
-                </button>
-              </div>
-            </div>
+          
+            <div className="md:col-span-3">
+            <label className="block mb-1 text-white text-sm">کلید خصوصی(فرمت فایل .pem)</label>
+            <input
+              type="file"
+              name="moadian_private_key"
+              accept=".pem"
+              onChange={onChangeFile}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div className="md:col-span-3">
+            <label className="block mb-1 text-white text-sm">گواهینامه (فرمت فایل.crt)</label>
+            <input
+              type="file"
+              name="moadian_certificate"
+              accept=".crt"
+              onChange={onChangeFile}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
             <div>
               <label className="block mb-2 text-white text-sm">
                 کد اقتصادی جدید :
               </label>
               <input
                 name="newEconomicCode"
-                value={data.newEconomicCode}
+                value={data.tins}
                 onChange={onChangeText}
                 className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 lg:py-2 lg:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
               />

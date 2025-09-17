@@ -233,7 +233,7 @@ export default function ProfileFormModal({
             )}
           </div>
           <div className="md:col-span-3">
-            <label className="block mb-1 text-white text-sm">کلید خصوصی</label>
+            <label className="block mb-1 text-white text-sm">کلید خصوصی(فرمت فایل .pem)</label>
             <input
               type="file"
               name="moadian_private_key"
@@ -243,7 +243,7 @@ export default function ProfileFormModal({
             />
           </div>
           <div className="md:col-span-3">
-            <label className="block mb-1 text-white text-sm">گواهی‌نامه</label>
+            <label className="block mb-1 text-white text-sm">گواهینامه (فرمت فایل.crt)</label>
             <input
               type="file"
               name="moadian_certificate"
