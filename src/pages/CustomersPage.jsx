@@ -107,7 +107,7 @@ export default function CustomersPage() {
       <div>
       <div className="py-2 px-2 lg:px-7">
       <p className="text-white/60 text-sm mt-1"> اعمال فیلتر</p>
-        <div className="rounded-xl border border-white/10 bg-white/5 mt-8 p-3 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="rounded-xl border border-white/10 bg-white/5 mt-8 p-3 grid grid-cols-2 md:grid-cols-3 gap-4">
         
           <div>
             <label className="block mb-1 text-white text-sm">نام</label>
@@ -159,14 +159,14 @@ export default function CustomersPage() {
   ))}
 </select>
           </div>
-          <div className="flex items-center justify-end w-full">
-          <button className="btn-custom"
+         
+          <div className="flex items-end justify-end w-full gap-2">
+          <button 
+          className="btn-custom"
             onClick={() => {
-    setFilterInputs(initialFilters); // پاک کردن اینپوت‌ها
-    setActiveFilters({});           // پاک کردن فیلتر فعال و ارسال درخواست بدون فیلتر
-  }}>پاک کردین فیلترها</button>
-          </div>
-          <div className="flex items-center justify-end w-full">
+          setFilterInputs(initialFilters); 
+             setActiveFilters({});         
+         }}>پاک کردین فیلترها</button>
           <button className="btn-custom"  onClick={() => setActiveFilters({ ...filterInputs })}>ارسال فیلتر</button>
           </div>
         </div> 
