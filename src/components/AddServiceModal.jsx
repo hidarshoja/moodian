@@ -56,6 +56,19 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
         popup: 'swal2-toast'
       }
     });
+    setForm(prev => ({
+      ...prev,
+      title: "",
+      sstid: "",
+      unit_id: null,
+      vra: "",
+      odt: "",
+      odr: null,
+      olt: "",
+      olr: null,
+      sstt:"توضیحات"
+    }));
+  
     console.log(`res`, res);
     setRefresh(!refresh);
     onClose();

@@ -72,11 +72,7 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
 
   // حذف ردیف با کد فعلی
   const handleDelete = async (row) => {
-    console.log(`row`, row);
-    
     try {
-    
-
       const res = await axiosClient.delete(`/products/${row.id}`);
       console.log(`Delete response:`, res);
 
@@ -93,6 +89,18 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
           popup: 'swal2-toast'
         }
       });
+      setRow(prev => ({
+        ...prev,
+        sstid: "",
+        title: "",
+        unit_id: "انتخاب ...",
+        vra: "",
+        odt: "",
+        odr: "",
+        olt: "",
+        olr: "",
+      }));
+    
     } catch (error) {
       console.log(`error`, error);
       Swal.fire({
