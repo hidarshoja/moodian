@@ -70,21 +70,20 @@ export default function ServicesTable({ dataTable, setDataTable }) {
   // حذف ردیف با کد فعلی
   const handleDelete = async (row) => {
     console.log(`row`, row);
-    return;
+    
     try {
-      const user = records[index];
-      console.log(`Deleting user:`, user);
+    
 
-      const res = await axiosClient.delete(`/admin/users/${user.id}`);
+      const res = await axiosClient.delete(`/products/${row.id}`);
       console.log(`Delete response:`, res);
 
-      // setRecords((prev) => prev.filter((_, i) => i !== index));
+    
 
-      successMessage("کاربر با موفقیت حذف شد");
+      successMessage("محصول با موفقیت حذف شد");
     } catch (error) {
-      errorMessage("خطا در حذف کاربر");
+      errorMessage("خطا در حذف محصول");
     }
-    setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
+    setDataTable((prev) => prev.filter((item) => item.title !== row.title));
     setRow({
       sstid: "",
       title: "",
@@ -213,7 +212,7 @@ export default function ServicesTable({ dataTable, setDataTable }) {
               <div className="flex items-center justify-center gap-2">
                 <button
                   className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                  onClick={handleDelete(row)}
+                  onClick={() => handleDelete(row)}
                  
                 >
                   <FiTrash2 className="w-4 h-4" />
