@@ -3,17 +3,19 @@ import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 const units = [
   { id: 0, name: "انتخاب ..." },
-  { id: 1, name: "متر" },
+  { id: 1, name: "لنگه" },
   { id: 2, name: 'عدل' },
-  { id: 3, name: "گرم" },
-  { id: 4, name: "جعبه" },
+  { id: 3, name: "جعبه" },
+  { id: 4, name: "توپ" },
   { id: 5, name: "ست" },
-  { id: 6, name: "کارتن" },
-  { id: 7, name: "میلیمتر" },
+  { id: 6, name: "دست" },
+  { id: 7, name: "کارتن" },
   { id: 8, name: "عدد" },
+  { id: 9, name: "بسته" },
+  { id: 10, name: "پاکت" },
 ];
 
-export default function AddServiceModal({ isOpen, onClose }) {
+export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh}) {
   const [form, setForm] = useState({
     title: "",
     sstid: "",
@@ -42,6 +44,7 @@ export default function AddServiceModal({ isOpen, onClose }) {
     console.log("مقادیر فرم:", form);
     const res = await axiosClient.post(`/products`, form);
     console.log(`res`, res);
+    setRefresh(!refresh);
     onClose();
   };
 

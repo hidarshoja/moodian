@@ -10,7 +10,7 @@ export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([]);
-
+  const [refresh , setRefresh] = useState(false);
   useEffect(() => {
     axiosClient
       .get("/products")
@@ -22,7 +22,7 @@ export default function ServicesPage() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [refresh]);
 
 
   const handleExportExcel = () => {
@@ -30,7 +30,7 @@ export default function ServicesPage() {
   };
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <AddServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddServiceModal isOpen={modalOpen} refresh={refresh} setRefresh={setRefresh} onClose={() => setModalOpen(false)} />
       <ImportExcelModal
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
@@ -75,6 +75,8 @@ export default function ServicesPage() {
         <ServicesTable 
         setDataTable={setDataTable}
         dataTable ={dataTable}
+        setRefresh = {setRefresh}
+        refresh={refresh}
         />
       </div>
     </div>

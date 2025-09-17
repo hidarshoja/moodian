@@ -11,18 +11,20 @@ import {
 } from "./CustomToast";
 
 const units = [
-  "انتخاب ...",
-  "متر",
-  "کیلوگرم",
-  "گرم",
-  "جعبه",
-  "دست",
-  "کارتن",
-  "میلیمتر",
-  "عدد",
+  { id: 0, name: "انتخاب ..." },
+  { id: 1, name: "لنگه" },
+  { id: 2, name: 'عدل' },
+  { id: 3, name: "جعبه" },
+  { id: 4, name: "توپ" },
+  { id: 5, name: "ست" },
+  { id: 6, name: "دست" },
+  { id: 7, name: "کارتن" },
+  { id: 8, name: "عدد" },
+  { id: 9, name: "بسته" },
+  { id: 10, name: "پاکت" },
 ];
 
-export default function ServicesTable({ dataTable, setDataTable }) {
+export default function ServicesTable({ dataTable, setDataTable , setRefresh , refresh }) {
   console.log(`dataTable`, dataTable);
 
   const [row, setRow] = useState({
@@ -77,23 +79,14 @@ export default function ServicesTable({ dataTable, setDataTable }) {
       const res = await axiosClient.delete(`/products/${row.id}`);
       console.log(`Delete response:`, res);
 
-    
+      setRefresh(!refresh);
 
       successMessage("محصول با موفقیت حذف شد");
     } catch (error) {
       errorMessage("خطا در حذف محصول");
     }
-    setDataTable((prev) => prev.filter((item) => item.title !== row.title));
-    setRow({
-      sstid: "",
-      title: "",
-      unit_id: "انتخاب ...",
-      vra: "",
-      odt: "",
-      odr: "",
-      olt: "",
-      olr: "",
-    });
+   
+   
   };
 
   // ارسال داده به API تستی هنگام ویرایش
@@ -155,15 +148,15 @@ export default function ServicesTable({ dataTable, setDataTable }) {
                 value={row.unit_id}
                 onChange={(e) => handleFieldChange("unit_id", e.target.value)}
               >
-                {units.map((u, idx) => (
-                  <option
-                    key={u}
-                    value={idx}
-                    className={u === "انتخاب ..." ? "text-red-500" : ""}
-                  >
-                    {u}
-                  </option>
-                ))}
+                   {units.map((u) => (
+    <option
+      key={u.id}
+      value={u.id}
+      className={u.id === 0 ? "text-red-500" : ""}
+    >
+      {u.name}
+    </option>
+  ))}
               </select>
             </td>
             <td className="px-2 py-1">
