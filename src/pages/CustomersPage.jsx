@@ -22,7 +22,13 @@ export default function CustomersPage() {
     type: "",
   });
   const [activeFilters, setActiveFilters] = useState({});
-
+  const customerTypes = [
+    { id: 0, name: "انتخاب ..." },
+    { id: 1, name: "حقیقی" },
+    { id: 2, name: "حقوقی" },
+    { id: 3, name: "مشارکت مدنی" },
+    { id: 4, name: "اتباع غیر ایرانی" },
+  ];
   useEffect(() => {
     const buildFilterQuery = (filters) => {
       const params = [];
@@ -101,16 +107,7 @@ export default function CustomersPage() {
       <div className="py-2 px-2 lg:px-7">
       <p className="text-white/60 text-sm mt-1"> اعمال فیلتر</p>
         <div className="rounded-xl border border-white/10 bg-white/5 mt-8 p-3 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div>
-            <label className="block mb-1 text-white text-sm"> نوع مشتری</label>
-            <select
-              name="type"
-              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            >
-             
-            </select>
-          </div>
+        
           <div>
             <label className="block mb-1 text-white text-sm">نام</label>
             <input
@@ -148,7 +145,19 @@ export default function CustomersPage() {
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          
+          <div>
+            <label className="block mb-1 text-white text-sm"> نوع مشتری</label>
+            <select
+  name="type"
+  value={filterInputs.type}
+  onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+  className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+>
+  {customerTypes.map(type => (
+    <option key={type.id} value={type.id}>{type.name}</option>
+  ))}
+</select>
+          </div>
           <div className="flex items-center justify-end w-full">
           <button className="btn-custom">پاک کردین فیلترها</button>
           </div>
