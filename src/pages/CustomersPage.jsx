@@ -13,14 +13,15 @@ export default function CustomersPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [refresh , setRefresh] = useState(false);
   const [dataTable, setDataTable] = useState([]);
-  const [filterInputs, setFilterInputs] = useState({
+  const initialFilters = {
     name: "",
     last_name: "",
     national_code: "",
     tel: "",
     branch_code: "",
     type: "",
-  });
+  };
+  const [filterInputs, setFilterInputs] = useState(initialFilters);
   const [activeFilters, setActiveFilters] = useState({});
   const customerTypes = [
     { id: 0, name: "انتخاب ..." },
@@ -159,7 +160,11 @@ export default function CustomersPage() {
 </select>
           </div>
           <div className="flex items-center justify-end w-full">
-          <button className="btn-custom">پاک کردین فیلترها</button>
+          <button className="btn-custom"
+            onClick={() => {
+    setFilterInputs(initialFilters); // پاک کردن اینپوت‌ها
+    setActiveFilters({});           // پاک کردن فیلتر فعال و ارسال درخواست بدون فیلتر
+  }}>پاک کردین فیلترها</button>
           </div>
           <div className="flex items-center justify-end w-full">
           <button className="btn-custom"  onClick={() => setActiveFilters({ ...filterInputs })}>ارسال فیلتر</button>
