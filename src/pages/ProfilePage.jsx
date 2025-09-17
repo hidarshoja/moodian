@@ -14,6 +14,7 @@ export default function ProfilePage() {
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [keyModalIndex, setKeyModalIndex] = useState(null);
   const [keyModalData, setKeyModalData] = useState({
+    id : "",
     moadian_username: "",
     tins: "",
     moadian_private_key: null,
@@ -29,6 +30,7 @@ export default function ProfilePage() {
     postal_code: "",
     mobile: "",
   });
+
   const [users, setUsers] = useState([
     { id: 1, name: "حیدر شجاع", name2: "09376228320", side: "مدیر" },
   ]);
@@ -346,11 +348,11 @@ export default function ProfilePage() {
 
   const openKeySettings = (index) => {
     setKeyModalIndex(index);
-    // setKeyModalData({
-    //   moadian_username: row?.taxMemoryCode || "",
-    //   newEconomicCode: row?.taxpayerEconomicCode || "",
-    //   privateKeyFile: null,
-    // });
+    const user = records[index];
+    console.log(`user.id`, user.id);
+    setKeyModalData({
+      id: user.id,
+    });
     setIsKeyModalOpen(true);
   };
 
@@ -417,26 +419,39 @@ export default function ProfilePage() {
     setKeyModalData((prev) => ({ ...prev, [name]: file }));
   };
 
-  const handleSaveKeySettings = () => {
-    // استخراج مقادیر واقعی
-    const moadian_private_key = keyModalData.moadian_private_key;
-    const moadian_certificate = keyModalData.moadian_certificate;
-    const tins = keyModalData.tins;
-    const moadian_username = keyModalData.moadian_username;
-
-    // لاگ گرفتن مقادیر واقعی
-    console.log("moadian_private_key:", moadian_private_key);
-    console.log("moadian_certificate:", moadian_certificate);
-    console.log("tins:", tins);
-    console.log("moadian_username:", moadian_username);
-
-    // اگر فقط نام فایل ها را هم خواستید:
-    // console.log("moadian_private_key name:", moadian_private_key?.name || null);
-    // console.log("moadian_certificate name:", moadian_certificate?.name || null);
-
-    setIsKeyModalOpen(false);
+  
+  
+  const handleSaveKeySettings = async () => {
+    const formData = new FormData();
+    formData.append('id', keyModalData.id);
+    formData.append('tins', keyModalData.tins);
+    formData.append('moadian_username', keyModalData.moadian_username);
+  
+    // اگر فایل انتخاب شده باشد
+    if (keyModalData.moadian_private_key instanceof File) {
+      formData.append('moadian_private_key', keyModalData.moadian_private_key);
+    }
+    if (keyModalData.moadian_certificate instanceof File) {
+      formData.append('moadian_certificate', keyModalData.moadian_certificate);
+    }
+  
+    try {
+      const { data } = await axiosClient.put(
+        `/admin/users/${keyModalData.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      successMessage("کاربر با موفقیت ویرایش شد");
+      setIsKeyModalOpen(false);
+    } catch (error) {
+      errorMessage("خطا در ویرایش کاربر");
+      setIsKeyModalOpen(false);
+    }
   };
-
   useEffect(() => {
     fetchUsers();
   }, []);
