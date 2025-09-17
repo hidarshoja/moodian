@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
-import axios from "axios";
-import {
-  CustomToastContainer,
-  showSuccessToast,
-  showErrorToast,
-} from "./CustomToast";
+import { CustomToastContainer} from "./CustomToast";
 import axiosClient from "../axios-client";
 import Swal from 'sweetalert2';
 
@@ -207,8 +202,9 @@ export default function CustomersTable({dataTable ,setDataTable , setRefresh , r
       });
     }
   };
-console.log(`row`, row);
+
   return (
+    
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
       <CustomToastContainer />
       <table className="min-w-full text-white">
@@ -332,5 +328,6 @@ console.log(`row`, row);
         </tbody>
       </table>
     </div>
+   
   );
 }
