@@ -4,10 +4,10 @@ import axiosClient from "../axios-client";
 const units = [
   { id: 0, name: "انتخاب ..." },
   { id: 1, name: "متر" },
-  { id: 2, name: "کیلوگرم" },
+  { id: 2, name: 'عدل' },
   { id: 3, name: "گرم" },
   { id: 4, name: "جعبه" },
-  { id: 5, name: "دست" },
+  { id: 5, name: "ست" },
   { id: 6, name: "کارتن" },
   { id: 7, name: "میلیمتر" },
   { id: 8, name: "عدد" },
@@ -23,7 +23,7 @@ export default function AddServiceModal({ isOpen, onClose }) {
     odr: null,
     olt: "",
     olr: null,
-    sstt:""
+    sstt:"توضیحات"
   });
 
   if (!isOpen) return null;
