@@ -141,14 +141,15 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
   // };
 
   const handleEdit = async () => {
-    if (row.sstid && Object.keys(editedFields).length > 0) {
-      const payload = { id: row.id , title :row.title,sstid :row.sstid , ...editedFields };
-      console.log("مقادیر تغییر یافته:", payload);
+    if (row.sstid) {
+      const payload = { id: row.id, ...row };
+      console.log("مقادیر ارسالی:", payload);
       const { data } = await axiosClient.put(
         `/products/${payload.id}`,
-        payload);
+        payload
+      );
     } else {
-      console.log("هیچ تغییری انجام نشده است.");
+      console.log("هیچ ردیفی انتخاب نشده است.");
     }
   };
 
