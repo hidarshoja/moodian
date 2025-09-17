@@ -4,32 +4,45 @@ import { GrDocumentExcel } from "react-icons/gr";
 import AddCustomersModal from "../components/AddCustomersModal";
 import ImportExcelModalUser from "../components/ImportExcelModalUser";
 import { exportCustomersToExcel } from "../components/exportServicesToExcel";
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import axiosClient from "../axios-client"
 
 export default function CustomersPage() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([
-    {
-      name: "سعید",
-      code: "1234",
-      typeCustomer: 3,
-      nationalCode: "5555",
-      postCode: "6666",
-      phone: "09376228320",
-      userCode: "8888",
-    },
-    {
-      name: "سیاوش",
-      code: "1357",
-      typeCustomer: 5,
-      nationalCode: "Ali123",
-      postCode: "ali666",
-      phone: "09232996418",
-      userCode: "ali8888",
-    },
+    // {
+    //   name: "سعید",
+    //   code: "1234",
+    //   typeCustomer: 3,
+    //   nationalCode: "5555",
+    //   postCode: "6666",
+    //   phone: "09376228320",
+    //   userCode: "8888",
+    // },
+    // {
+    //   name: "سیاوش",
+    //   code: "1357",
+    //   typeCustomer: 5,
+    //   nationalCode: "Ali123",
+    //   postCode: "ali666",
+    //   phone: "09232996418",
+    //   userCode: "ali8888",
+    // },
   ]);
+
+  useEffect(() => {
+    axiosClient
+      .get("/customers")
+      .then((response) => {
+        setDataTable(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        
+      });
+  }, []);
 
 
   // تابع برای گرفتن داده از کامپوننت فرزند

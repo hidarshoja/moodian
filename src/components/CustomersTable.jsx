@@ -8,14 +8,12 @@ import {
 } from "./CustomToast";
 
 const units = [
-  "انتخاب ...",
-  "عدد",
-  "متر",
-  "کیلوگرم",
-  "گرم",
-  "جعبه",
-  "دست",
-  "کارتن",
+  { id: 0, name: "انتخاب ..." },
+  { id: 1, name: "حقیقی" },
+  { id: 2, name: 'حقوقی' },
+  { id: 3, name: "مشارکت مدنی" },
+  { id: 4, name: "اتباع غیر ایرانی" },
+ 
 ];
 
 export default function CustomersTable({dataTable ,setDataTable}) {
@@ -125,15 +123,15 @@ export default function CustomersTable({dataTable ,setDataTable}) {
                 value={row.unit}
                 onChange={(e) => handleFieldChange("unit", e.target.value)}
               >
-                {units.map((u, idx) => (
-                  <option
-                    key={u}
-                    value={idx}
-                    className={u === "انتخاب ..." ? "text-red-500" : ""}
-                  >
-                    {u}
-                  </option>
-                ))}
+                         {units.map((u) => (
+    <option
+      key={u.id}
+      value={u.id}
+      className={u.id === 0 ? "text-red-500" : ""}
+    >
+      {u.name}
+    </option>
+  ))}
               </select>
             </td>
             <td className="px-2 py-1">
@@ -198,21 +196,24 @@ export default function CustomersTable({dataTable ,setDataTable}) {
             </td>
           </tr>
           {/* نمایش همه داده‌های جدول */}
-          {dataTable.map((item, idx) => (
-            <tr key={item.name} className="bg-white/5">
-              <td className="px-2 py-1">{item.name}</td>
-              <td className="px-2 py-1">{units[item.unit]}</td>
-              <td className="px-2 py-1">{item.code}</td>
-              <td className="px-2 py-1">{item.nationalCode}</td>
-              <td className="px-2 py-1">{item.postCode}</td>
-              <td className="px-2 py-1">{item.phone}</td>
-              <td className="px-2 py-1">{item.userCode}</td>
-              
-              <td className="px-2 py-1 text-center">
-                {/* دکمه‌های حذف و ویرایش برای هر ردیف (در صورت نیاز می‌توانید اضافه کنید) */}
-              </td>
-            </tr>
-          ))}
+          {dataTable.map((item) => {
+          const unitName = units.find((u) => u.id === item.type)?.name || "-";
+
+  return (
+    <tr key={item.id} className="bg-white/5">
+      <td className="px-2 py-1">{item?.name} - {item?.last_name}</td>
+      <td className="px-2 py-1 text-center">{unitName}</td>
+      <td className="px-2 py-1 text-center">{item?.economic_code || "-"}</td>
+      <td className="px-2 py-1 text-center">{item?.national_code || "-"}</td>
+      <td className="px-2 py-1 text-center">{item?.postal_code || "-"}</td>
+      <td className="px-2 py-1 text-center">{item?.tell || "-"}</td>
+      <td className="px-2 py-1 text-center">{item?.branch_code || "-"}</td>
+      <td className="px-2 py-1 text-center">
+        {/* دکمه‌های حذف و ویرایش */}
+      </td>
+    </tr>
+  );
+})}
         </tbody>
       </table>
     </div>
