@@ -18,7 +18,6 @@ export default function CustomersPage() {
     last_name: "",
     national_code: "",
     tel: "",
-    branch_code: "",
     type: "",
   };
   const [filterInputs, setFilterInputs] = useState(initialFilters);
@@ -106,7 +105,7 @@ export default function CustomersPage() {
       </div>
       <div>
       <div className="py-2 px-2 lg:px-7">
-      <p className="text-white/60 text-sm mt-1"> اعمال فیلتر</p>
+      <p className="text-white text-base mt-1"> اعمال فیلتر</p>
         <div className="rounded-xl border border-white/10 bg-white/5 mt-8 p-3 grid grid-cols-2 md:grid-cols-3 gap-4">
         
           <div>
