@@ -130,22 +130,22 @@ console.log(`row`, row);
             </td>
           
             <td className="px-2 py-1">
-              <select
-                className="w-[90px] rounded bg-gray-500 text-xs text-right px-2 py-1 outline-none"
-                value={row.unit}
-                onChange={(e) => handleFieldChange("unit", e.target.value)}
-              >
-                         {units.map((u) => (
-    <option
-      key={u.id}
-      value={u.id}
-      className={u.id === 0 ? "text-red-500" : ""}
-    >
-      {u.name}
-    </option>
-  ))}
-              </select>
-            </td>
+  <select
+    className="w-[90px] rounded bg-gray-500 text-xs text-right px-2 py-1 outline-none"
+    value={row.type}
+    onChange={(e) => handleFieldChange("type", Number(e.target.value))}
+  >
+    {units.map((u) => (
+      <option
+        key={u.id}
+        value={u.id}
+        className={u.id === 0 ? "text-red-500" : ""}
+      >
+        {u.name}
+      </option>
+    ))}
+  </select>
+</td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
