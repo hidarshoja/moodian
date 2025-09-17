@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
-import axios from "axios";
 import axiosClient from "../axios-client";
 import Swal from 'sweetalert2';
 
 
-import {
-  CustomToastContainer,
-  showSuccessToast,
-  showErrorToast,
-} from "./CustomToast";
+import { CustomToastContainer} from "./CustomToast";
 
 const units = [
   { id: 0, name: "انتخاب ..." },
@@ -26,8 +21,8 @@ const units = [
 ];
 
 export default function ServicesTable({ dataTable, setDataTable , setRefresh , refresh }) {
-  console.log(`dataTable`, dataTable);
 
+  const [editedFields, setEditedFields] = useState({});
   const [row, setRow] = useState({
     sstid: "",
     title: "",
@@ -63,11 +58,19 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
   // ویرایش مقدار هر فیلد
   const handleFieldChange = (field, value) => {
     setRow((prev) => ({ ...prev, [field]: value }));
-    setDataTable((prev) =>
-      prev.map((item) =>
-        item.sstid === row.sstid ? { ...item, [field]: value } : item
-      )
-    );
+  
+    // مقدار اولیه را پیدا کن
+    const original = dataTable.find((item) => item.sstid === row.sstid);
+    if (original && original[field] !== value) {
+      setEditedFields((prev) => ({ ...prev, [field]: value }));
+    } else {
+      // اگر مقدار به حالت اولیه برگشت، از editedFields حذف کن
+      setEditedFields((prev) => {
+        const updated = { ...prev };
+        delete updated[field];
+        return updated;
+      });
+    }
   };
 
   // حذف ردیف با کد فعلی
@@ -121,18 +124,31 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
   };
 
   // ارسال داده به API تستی هنگام ویرایش
+  // const handleEdit = async () => {
+  //   console.log("ارسال داده ویرایش:", row);
+  //   // try {
+      
+  //   //   const response = await axios.post(
+  //   //     "https://jsonplaceholder.typicode.com/posts",
+  //   //     row
+  //   //   );
+  //   //   showSuccessToast("ویرایش با موفقیت انجام شد!");
+  //   //   console.log("پاسخ سرور:", response.data);
+  //   // } catch (error) {
+  //   //   showErrorToast("خطا در ارسال داده!");
+  //   //   console.error(error);
+  //   // }
+  // };
+
   const handleEdit = async () => {
-    try {
-      console.log("ارسال داده ویرایش:", row);
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        row
-      );
-      showSuccessToast("ویرایش با موفقیت انجام شد!");
-      console.log("پاسخ سرور:", response.data);
-    } catch (error) {
-      showErrorToast("خطا در ارسال داده!");
-      console.error(error);
+    if (row.sstid && Object.keys(editedFields).length > 0) {
+      const payload = { id: row.id , title :row.title,sstid :row.sstid , ...editedFields };
+      console.log("مقادیر تغییر یافته:", payload);
+      const { data } = await axiosClient.put(
+        `/products/${payload.id}`,
+        payload);
+    } else {
+      console.log("هیچ تغییری انجام نشده است.");
     }
   };
 
