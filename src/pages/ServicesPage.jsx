@@ -9,28 +9,7 @@ import axiosClient from "../axios-client"
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
-  const [dataTable, setDataTable] = useState([
-    // {
-    //   code: "1234",
-    //   name: "saeeid",
-    //   unit: 3,
-    //   vra: "5555",
-    //   odt: "6666",
-    //   odr: "77777",
-    //   olt: "8888",
-    //   olr: "9999",
-    // },
-    // {
-    //   code: "4321",
-    //   name: "Ali",
-    //   unit: 5,
-    //   vra: "Ali123",
-    //   odt: "ali666",
-    //   odr: "ali77777",
-    //   olt: "ali8888",
-    //   olr: "ali9999",
-    // },
-  ]);
+  const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
     axiosClient

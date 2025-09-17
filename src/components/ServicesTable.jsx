@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axios from "axios";
+import axiosClient from "../axios-client";
+import { errorMessage, successMessage } from "../utils/Toastiy";
+import { ToastContainer } from "react-toastify";
 import {
   CustomToastContainer,
   showSuccessToast,
@@ -67,18 +70,32 @@ console.log(`dataTable`, dataTable);
   };
 
   // حذف ردیف با کد فعلی
-  const handleDelete = () => {
-    setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
-    setRow({
-      sstid: "",
-      title: "",
-      unit_id: "انتخاب ...",
-      vra: "",
-      odt: "",
-      odr: "",
-      olt: "",
-      olr: "",
-    });
+  const handleDelete = async (row) => {
+    console.log(`row`, row);
+    // try {
+    //   const user = records[index];
+    //   console.log(`Deleting user:`, user);
+
+    //   const res = await axiosClient.delete(`/admin/users/${user.id}`);
+    //   console.log(`Delete response:`, res);
+
+    //  // setRecords((prev) => prev.filter((_, i) => i !== index));
+
+    //   successMessage("کاربر با موفقیت حذف شد");
+    // } catch (error) {
+    //   errorMessage("خطا در حذف کاربر");
+    // }
+    // setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
+    // setRow({
+    //   sstid: "",
+    //   title: "",
+    //   unit_id: "انتخاب ...",
+    //   vra: "",
+    //   odt: "",
+    //   odr: "",
+    //   olt: "",
+    //   olr: "",
+    // });
   };
 
   // ارسال داده به API تستی هنگام ویرایش
@@ -203,7 +220,7 @@ console.log(`dataTable`, dataTable);
               <div className="flex items-center justify-center gap-2">
                 <button
                   className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                  onClick={handleDelete}
+                  onClick={handleDelete(row)}
                   disabled={
                     !row.sstid ||
                     !dataTable.find((item) => item.sstid === row.sstid)
@@ -239,6 +256,18 @@ console.log(`dataTable`, dataTable);
           ))}
         </tbody>
       </table>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
