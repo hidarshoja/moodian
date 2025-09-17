@@ -1,40 +1,47 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
-
+import axiosClient from "../axios-client";
 const units = [
-  "انتخاب ...",
-  "عدد",
-  "متر",
-  "کیلوگرم",
-  "گرم",
-  "جعبه",
-  "دست",
-  "کارتن",
+  { id: 0, name: "انتخاب ..." },
+  { id: 1, name: "متر" },
+  { id: 2, name: "کیلوگرم" },
+  { id: 3, name: "گرم" },
+  { id: 4, name: "جعبه" },
+  { id: 5, name: "دست" },
+  { id: 6, name: "کارتن" },
+  { id: 7, name: "میلیمتر" },
+  { id: 8, name: "عدد" },
 ];
 
 export default function AddServiceModal({ isOpen, onClose }) {
   const [form, setForm] = useState({
-    name: "",
-    code: "",
-    customCode: "",
-    unit: "عدد",
-    valueAdded: "",
-    otherTaxSubject: "",
-    otherTaxRate: "",
-    legalSubject: "",
-    legalRate: "",
+    title: "",
+    sstid: "",
+    unit_id: null,
+    vra: "",
+    odt: "",
+    odr: null,
+    olt: "",
+    olr: null,
+    sstt:""
   });
 
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    if (["odr", "olr", "unit_id"].includes(name)) {
+      setForm((prev) => ({ ...prev, [name]: value === "" ? null : Number(value) }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     console.log("مقادیر فرم:", form);
+    const res = await axiosClient.post(`/products`, form);
+    console.log(`res`, res);
     onClose();
   };
 
@@ -64,8 +71,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               نام کالا/خدمت
             </label>
             <input
-              name="name"
-              value={form.name}
+              name="title"
+              value={form.title}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -73,13 +80,15 @@ export default function AddServiceModal({ isOpen, onClose }) {
           <div>
             <label className="block mb-1 text-white text-sm">شناسه</label>
             <input
-              name="code"
-              value={form.code}
+              name="sstid"
+              value={form.sstid}
               onChange={handleChange}
+              maxLength={13}
+              minLength={13}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block mb-1 text-white text-sm">
               کد کالا در سامانه مشتری
             </label>
@@ -89,24 +98,24 @@ export default function AddServiceModal({ isOpen, onClose }) {
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
-          </div>
+          </div> */}
           <div>
             <label className="block mb-1 text-white text-sm">واحد سنجش</label>
             <select
-              name="unit"
-              value={form.unit}
+              name="unit_id"
+              value={form.unit_id}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              {units.map((u) => (
-                <option
-                  key={u}
-                  value={u}
-                  className={u === "انتخاب ..." ? "text-red-500" : ""}
-                >
-                  {u}
-                </option>
-              ))}
+               {units.map((u) => (
+    <option
+      key={u.id}
+      value={u.id}
+      className={u.id === 0 ? "text-red-500" : ""}
+    >
+      {u.name}
+    </option>
+  ))}
             </select>
           </div>
           <div>
@@ -114,8 +123,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               نرخ ارزش افزوده
             </label>
             <input
-              name="valueAdded"
-              value={form.valueAdded}
+              name="vra"
+              value={form.vra}
               onChange={handleChange}
               type="number"
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
@@ -126,8 +135,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               موضوع سایر مالیات و عوارض
             </label>
             <input
-              name="otherTaxSubject"
-              value={form.otherTaxSubject}
+              name="odt"
+              value={form.odt}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -137,8 +146,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               نرخ سایر مالیات و عوارض
             </label>
             <input
-              name="otherTaxRate"
-              value={form.otherTaxRate}
+              name="odr"
+              value={form.odr}
               onChange={handleChange}
               type="number"
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
@@ -149,8 +158,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               موضوع سایر وجوه قانونی
             </label>
             <input
-              name="legalSubject"
-              value={form.legalSubject}
+              name="olt"
+              value={form.olt}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
@@ -160,8 +169,8 @@ export default function AddServiceModal({ isOpen, onClose }) {
               نرخ سایر وجوه قانونی
             </label>
             <input
-              name="legalRate"
-              value={form.legalRate}
+              name="olr"
+              value={form.olr}
               onChange={handleChange}
               type="number"
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
