@@ -4,33 +4,46 @@ import { GrDocumentExcel } from "react-icons/gr";
 import AddServiceModal from "../components/AddServiceModal";
 import ImportExcelModal from "../components/ImportExcelModal";
 import { exportServicesToExcel } from "../components/exportServicesToExcel";
-import { useState } from "react";
-
+import { useState , useEffect } from "react";
+import axiosClient from "../axios-client"
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([
-    {
-      code: "1234",
-      name: "saeeid",
-      unit: 3,
-      valueAdded: "5555",
-      otherTax: "6666",
-      legalValue: "77777",
-      legalRate: "8888",
-      customCode: "9999",
-    },
-    {
-      code: "4321",
-      name: "Ali",
-      unit: 5,
-      valueAdded: "Ali123",
-      otherTax: "ali666",
-      legalValue: "ali77777",
-      legalRate: "ali8888",
-      customCode: "ali9999",
-    },
+    // {
+    //   code: "1234",
+    //   name: "saeeid",
+    //   unit: 3,
+    //   vra: "5555",
+    //   odt: "6666",
+    //   odr: "77777",
+    //   olt: "8888",
+    //   olr: "9999",
+    // },
+    // {
+    //   code: "4321",
+    //   name: "Ali",
+    //   unit: 5,
+    //   vra: "Ali123",
+    //   odt: "ali666",
+    //   odr: "ali77777",
+    //   olt: "ali8888",
+    //   olr: "ali9999",
+    // },
   ]);
+
+  useEffect(() => {
+    axiosClient
+      .get("/products")
+      .then((response) => {
+        const data = response.data;
+        setDataTable(response.data.data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
 
   const handleExportExcel = () => {

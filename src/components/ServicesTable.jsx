@@ -9,47 +9,48 @@ import {
 
 const units = [
   "انتخاب ...",
-  "عدد",
   "متر",
   "کیلوگرم",
   "گرم",
   "جعبه",
   "دست",
   "کارتن",
+  "میلیمتر",
+  "عدد",
 ];
 
 export default function ServicesTable({dataTable ,setDataTable}) {
  
-
+console.log(`dataTable`, dataTable);
  
   const [row, setRow] = useState({
-    code: "",
-    name: "",
-    unit: "انتخاب ...",
-    valueAdded: "",
-    otherTax: "",
-    legalValue: "",
-    legalRate: "",
-    customCode: "",
+    sstid: "",
+    title: "",
+    unit_id: "انتخاب ...",
+    vra: "",
+    odt: "",
+    odr: "",
+    olt: "",
+    olr: "",
   });
 
   // sync کردن inputها با dataTable هنگام وارد کردن کد
   const handleCodeChange = (e) => {
-    const code = e.target.value;
-    setRow((prev) => ({ ...prev, code }));
-    const found = dataTable.find((item) => item.code === code);
+    const sstid = e.target.value;
+    setRow((prev) => ({ ...prev, sstid }));
+    const found = dataTable.find((item) => item.sstid === sstid);
     if (found) {
       setRow({ ...found });
     } else {
       setRow((prev) => ({
         ...prev,
-        name: "",
-        unit: "انتخاب ...",
-        valueAdded: "",
-        otherTax: "",
-        legalValue: "",
-        legalRate: "",
-        customCode: "",
+        title: "",
+        unit_id: "انتخاب ...",
+        vra: "",
+        odt: "",
+        odr: "",
+        olt: "",
+        olr: "",
       }));
     }
   };
@@ -60,23 +61,23 @@ export default function ServicesTable({dataTable ,setDataTable}) {
     // اگر کد وجود داشت، مقدار را در dataTable هم آپدیت کن
     setDataTable((prev) =>
       prev.map((item) =>
-        item.code === row.code ? { ...item, [field]: value } : item
+        item.sstid === row.sstid ? { ...item, [field]: value } : item
       )
     );
   };
 
   // حذف ردیف با کد فعلی
   const handleDelete = () => {
-    setDataTable((prev) => prev.filter((item) => item.code !== row.code));
+    setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
     setRow({
-      code: "",
-      name: "",
-      unit: "انتخاب ...",
-      valueAdded: "",
-      otherTax: "",
-      legalValue: "",
-      legalRate: "",
-      customCode: "",
+      sstid: "",
+      title: "",
+      unit_id: "انتخاب ...",
+      vra: "",
+      odt: "",
+      odr: "",
+      olt: "",
+      olr: "",
     });
   };
 
@@ -120,22 +121,22 @@ export default function ServicesTable({dataTable ,setDataTable}) {
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.code}
+                value={row.sstid}
                 onChange={handleCodeChange}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.name}
-                onChange={(e) => handleFieldChange("name", e.target.value)}
+                value={row.title}
+                onChange={(e) => handleFieldChange("title", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <select
                 className="w-[90px] rounded bg-gray-500 text-xs text-right px-2 py-1 outline-none"
-                value={row.unit}
-                onChange={(e) => handleFieldChange("unit", e.target.value)}
+                value={row.unit_id}
+                onChange={(e) => handleFieldChange("unit_id", e.target.value)}
               >
                 {units.map((u, idx) => (
                   <option
@@ -151,50 +152,50 @@ export default function ServicesTable({dataTable ,setDataTable}) {
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.valueAdded}
+                value={row.vra}
                 onChange={(e) =>
-                  handleFieldChange("valueAdded", e.target.value)
+                  handleFieldChange("vra", e.target.value)
                 }
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.otherTax}
-                onChange={(e) => handleFieldChange("otherTax", e.target.value)}
+                value={row.odt}
+                onChange={(e) => handleFieldChange("odt", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.legalValue}
+                value={row.odr}
                 onChange={(e) =>
-                  handleFieldChange("legalValue", e.target.value)
+                  handleFieldChange("odr", e.target.value)
                 }
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.legalRate}
-                onChange={(e) => handleFieldChange("legalRate", e.target.value)}
+                value={row.olt}
+                onChange={(e) => handleFieldChange("olt", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.customCode}
+                value={row.olr}
                 onChange={(e) =>
-                  handleFieldChange("customCode", e.target.value)
+                  handleFieldChange("olr", e.target.value)
                 }
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.customCode}
+                value={row.olr}
                 onChange={(e) =>
-                  handleFieldChange("customCode", e.target.value)
+                  handleFieldChange("olr", e.target.value)
                 }
               />
             </td>
@@ -204,8 +205,8 @@ export default function ServicesTable({dataTable ,setDataTable}) {
                   className="p-1 rounded hover:bg-red-500/20 text-red-500"
                   onClick={handleDelete}
                   disabled={
-                    !row.code ||
-                    !dataTable.find((item) => item.code === row.code)
+                    !row.sstid ||
+                    !dataTable.find((item) => item.sstid === row.sstid)
                   }
                 >
                   <FiTrash2 className="w-4 h-4" />
@@ -221,16 +222,16 @@ export default function ServicesTable({dataTable ,setDataTable}) {
           </tr>
           {/* نمایش همه داده‌های جدول */}
           {dataTable.map((item, idx) => (
-            <tr key={item.code} className="bg-white/5">
-              <td className="px-2 py-1">{item.code}</td>
-              <td className="px-2 py-1">{item.name}</td>
-              <td className="px-2 py-1">{units[item.unit]}</td>
-              <td className="px-2 py-1">{item.valueAdded}</td>
-              <td className="px-2 py-1">{item.otherTax}</td>
-              <td className="px-2 py-1">{item.legalValue}</td>
-              <td className="px-2 py-1">{item.legalRate}</td>
-              <td className="px-2 py-1">{item.customCode}</td>
-              <td className="px-2 py-1">{item.customCode}</td>
+            <tr key={item.sstid} className="bg-white/5">
+              <td className="px-2 py-1">{item?.sstid ? item.sstid :"-"}</td>
+              <td className="px-2 py-1 text-center">{item?.title ? item.title :"-"}</td>
+              <td className="px-2 py-1 text-center">{item?.unit?.title ? item.unit.title : "-"}</td>
+              <td className="px-2 py-1 text-center">{item?.vra ? item.vra : "-"}</td>
+              <td className="px-2 py-1 text-center">{item?.odt ? item.odt : "-"}</td>
+              <td className="px-2 py-1 text-center">{item?.odr ? item.odr : "-"}</td>
+              <td className="px-2 py-1 text-center">{item?.olt ? item.olt :"-"}</td>
+              <td className="px-2 py-1 text-center">{item?.olr ? item.olr : "-"}</td>
+              <td className="px-2 py-1 text-center">{item?.olr ? item.olr : "-"}</td>
               <td className="px-2 py-1 text-center">
                 {/* دکمه‌های حذف و ویرایش برای هر ردیف (در صورت نیاز می‌توانید اضافه کنید) */}
               </td>
