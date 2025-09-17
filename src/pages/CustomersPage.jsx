@@ -13,19 +13,41 @@ export default function CustomersPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [refresh , setRefresh] = useState(false);
   const [dataTable, setDataTable] = useState([]);
+  const [filterInputs, setFilterInputs] = useState({
+    name: "",
+    last_name: "",
+    national_code: "",
+    tel: "",
+    branch_code: "",
+    type: "",
+  });
+  const [activeFilters, setActiveFilters] = useState({});
 
   useEffect(() => {
+    const buildFilterQuery = (filters) => {
+      const params = [];
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+          if (key === "type") {
+            params.push(`${key}=${value}`);
+          } else {
+            params.push(`f[${key}]=${encodeURIComponent(value)}`);
+          }
+        }
+      });
+      return params.length ? "?" + params.join("&") : "";
+    };
+  
+    const query = buildFilterQuery(activeFilters);
     axiosClient
-      .get("/customers")
+      .get(`/customers${query}`)
       .then((response) => {
         setDataTable(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        
       });
-  }, [refresh]);
-
+  }, [refresh, activeFilters]);
 
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
@@ -83,7 +105,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm"> نوع مشتری</label>
             <select
               name="type"
-             
+              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
              
@@ -93,7 +115,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">نام</label>
             <input
               name="name"
-            
+              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
@@ -103,7 +125,7 @@ export default function CustomersPage() {
             </label>
             <input
               name="last_name"
-              
+              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
@@ -111,7 +133,7 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">کدملی/شناسه</label>
             <input
               name="national_code"
-             
+              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               type="number"
               maxLength={10}
               className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 }`}
@@ -122,26 +144,16 @@ export default function CustomersPage() {
             <label className="block mb-1 text-white text-sm">شماره تماس</label>
             <input
               name="tel"
-           
+              onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">کدمشتری</label>
-            <input
-              name="branch_code"
-             
-              type="number"
-              maxLength={4}
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 `}
-            />
           
-          </div>
           <div className="flex items-center justify-end w-full">
           <button className="btn-custom">پاک کردین فیلترها</button>
           </div>
           <div className="flex items-center justify-end w-full">
-          <button className="btn-custom">ارسال فیلتر</button>
+          <button className="btn-custom"  onClick={() => setActiveFilters({ ...filterInputs })}>ارسال فیلتر</button>
           </div>
         </div> 
       </div>
