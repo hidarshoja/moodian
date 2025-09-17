@@ -22,10 +22,9 @@ const units = [
   "عدد",
 ];
 
-export default function ServicesTable({dataTable ,setDataTable}) {
- 
-console.log(`dataTable`, dataTable);
- 
+export default function ServicesTable({ dataTable, setDataTable }) {
+  console.log(`dataTable`, dataTable);
+
   const [row, setRow] = useState({
     sstid: "",
     title: "",
@@ -39,15 +38,15 @@ console.log(`dataTable`, dataTable);
 
   // sync کردن inputها با dataTable هنگام وارد کردن کد
   const handleCodeChange = (e) => {
-    const sstid = e.target.value;
-    setRow((prev) => ({ ...prev, sstid }));
-    const found = dataTable.find((item) => item.sstid === sstid);
+    const title = e.target.value;
+    setRow((prev) => ({ ...prev, title }));
+    const found = dataTable.find((item) => item.title === title);
     if (found) {
       setRow({ ...found });
     } else {
       setRow((prev) => ({
         ...prev,
-        title: "",
+        sstid: "",
         unit_id: "انتخاب ...",
         vra: "",
         odt: "",
@@ -61,7 +60,6 @@ console.log(`dataTable`, dataTable);
   // ویرایش مقدار هر فیلد
   const handleFieldChange = (field, value) => {
     setRow((prev) => ({ ...prev, [field]: value }));
-    // اگر کد وجود داشت، مقدار را در dataTable هم آپدیت کن
     setDataTable((prev) =>
       prev.map((item) =>
         item.sstid === row.sstid ? { ...item, [field]: value } : item
@@ -72,30 +70,31 @@ console.log(`dataTable`, dataTable);
   // حذف ردیف با کد فعلی
   const handleDelete = async (row) => {
     console.log(`row`, row);
-    // try {
-    //   const user = records[index];
-    //   console.log(`Deleting user:`, user);
+    return;
+    try {
+      const user = records[index];
+      console.log(`Deleting user:`, user);
 
-    //   const res = await axiosClient.delete(`/admin/users/${user.id}`);
-    //   console.log(`Delete response:`, res);
+      const res = await axiosClient.delete(`/admin/users/${user.id}`);
+      console.log(`Delete response:`, res);
 
-    //  // setRecords((prev) => prev.filter((_, i) => i !== index));
+      // setRecords((prev) => prev.filter((_, i) => i !== index));
 
-    //   successMessage("کاربر با موفقیت حذف شد");
-    // } catch (error) {
-    //   errorMessage("خطا در حذف کاربر");
-    // }
-    // setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
-    // setRow({
-    //   sstid: "",
-    //   title: "",
-    //   unit_id: "انتخاب ...",
-    //   vra: "",
-    //   odt: "",
-    //   odr: "",
-    //   olt: "",
-    //   olr: "",
-    // });
+      successMessage("کاربر با موفقیت حذف شد");
+    } catch (error) {
+      errorMessage("خطا در حذف کاربر");
+    }
+    setDataTable((prev) => prev.filter((item) => item.sstid !== row.sstid));
+    setRow({
+      sstid: "",
+      title: "",
+      unit_id: "انتخاب ...",
+      vra: "",
+      odt: "",
+      odr: "",
+      olt: "",
+      olr: "",
+    });
   };
 
   // ارسال داده به API تستی هنگام ویرایش
@@ -120,8 +119,8 @@ console.log(`dataTable`, dataTable);
       <table className="min-w-full text-white">
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
-            <th className="p-2">شناسه</th>
             <th className="p-2">نام</th>
+            <th className="p-2">شناسه</th>
             <th className="p-2">واحد</th>
             <th className="p-2">نرخ ارزش افزوده</th>
             <th className="p-2">مالیات و عوارض</th>
@@ -135,20 +134,22 @@ console.log(`dataTable`, dataTable);
         <tbody>
           {/* ردیف افزودن/ویرایش */}
           <tr className="bg-white/10">
+          <td className="px-2 py-1">
+              <input
+                className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
+                value={row.title}
+                onChange={handleCodeChange}
+                
+              />
+            </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.sstid}
-                onChange={handleCodeChange}
-              />
-            </td>
-            <td className="px-2 py-1">
-              <input
-                className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
-                value={row.title}
                 onChange={(e) => handleFieldChange("title", e.target.value)}
               />
             </td>
+          
             <td className="px-2 py-1">
               <select
                 className="w-[90px] rounded bg-gray-500 text-xs text-right px-2 py-1 outline-none"
@@ -170,9 +171,7 @@ console.log(`dataTable`, dataTable);
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.vra}
-                onChange={(e) =>
-                  handleFieldChange("vra", e.target.value)
-                }
+                onChange={(e) => handleFieldChange("vra", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
@@ -186,9 +185,7 @@ console.log(`dataTable`, dataTable);
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.odr}
-                onChange={(e) =>
-                  handleFieldChange("odr", e.target.value)
-                }
+                onChange={(e) => handleFieldChange("odr", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
@@ -202,18 +199,14 @@ console.log(`dataTable`, dataTable);
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.olr}
-                onChange={(e) =>
-                  handleFieldChange("olr", e.target.value)
-                }
+                onChange={(e) => handleFieldChange("olr", e.target.value)}
               />
             </td>
             <td className="px-2 py-1">
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.olr}
-                onChange={(e) =>
-                  handleFieldChange("olr", e.target.value)
-                }
+                onChange={(e) => handleFieldChange("olr", e.target.value)}
               />
             </td>
             <td className="px-2 py-1 text-center">
@@ -221,10 +214,7 @@ console.log(`dataTable`, dataTable);
                 <button
                   className="p-1 rounded hover:bg-red-500/20 text-red-500"
                   onClick={handleDelete(row)}
-                  disabled={
-                    !row.sstid ||
-                    !dataTable.find((item) => item.sstid === row.sstid)
-                  }
+                 
                 >
                   <FiTrash2 className="w-4 h-4" />
                 </button>
@@ -240,15 +230,32 @@ console.log(`dataTable`, dataTable);
           {/* نمایش همه داده‌های جدول */}
           {dataTable.map((item, idx) => (
             <tr key={item.sstid} className="bg-white/5">
-              <td className="px-2 py-1">{item?.sstid ? item.sstid :"-"}</td>
-              <td className="px-2 py-1 text-center">{item?.title ? item.title :"-"}</td>
-              <td className="px-2 py-1 text-center">{item?.unit?.title ? item.unit.title : "-"}</td>
-              <td className="px-2 py-1 text-center">{item?.vra ? item.vra : "-"}</td>
-              <td className="px-2 py-1 text-center">{item?.odt ? item.odt : "-"}</td>
-              <td className="px-2 py-1 text-center">{item?.odr ? item.odr : "-"}</td>
-              <td className="px-2 py-1 text-center">{item?.olt ? item.olt :"-"}</td>
-              <td className="px-2 py-1 text-center">{item?.olr ? item.olr : "-"}</td>
-              <td className="px-2 py-1 text-center">{item?.olr ? item.olr : "-"}</td>
+               <td className="px-2 py-1 text-center">
+                {item?.title ? item.title : "-"}
+              </td>
+              <td className="px-2 py-1">{item?.sstid ? item.sstid : "-"}</td>
+             
+              <td className="px-2 py-1 text-center">
+                {item?.unit?.title ? item.unit.title : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.vra ? item.vra : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.odt ? item.odt : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.odr ? item.odr : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.olt ? item.olt : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.olr ? item.olr : "-"}
+              </td>
+              <td className="px-2 py-1 text-center">
+                {item?.olr ? item.olr : "-"}
+              </td>
               <td className="px-2 py-1 text-center">
                 {/* دکمه‌های حذف و ویرایش برای هر ردیف (در صورت نیاز می‌توانید اضافه کنید) */}
               </td>
