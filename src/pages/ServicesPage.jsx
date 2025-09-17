@@ -17,10 +17,7 @@ export default function ServicesPage() {
     axiosClient
       .get("/products")
       .then((response) => {
-        const data = response.data;
         setDataTable(response.data.data);
-        console.log(data);
-        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

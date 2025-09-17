@@ -142,14 +142,65 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
 
   const handleEdit = async () => {
     if (row.sstid) {
+      try {
       const payload = { id: row.id, ...row };
-      console.log("مقادیر ارسالی:", payload);
       const { data } = await axiosClient.put(
         `/products/${payload.id}`,
         payload
       );
+      setRefresh(!refresh);
+      Swal.fire({
+        toast: true,
+        position: 'top-start', 
+        icon: 'success', // یا 'error'
+        title: 'محصول با موفقیت ویرایش شد',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+      setRow(prev => ({
+        ...prev,
+        sstid: "",
+        title: "",
+        unit_id: "انتخاب ...",
+        vra: "",
+        odt: "",
+        odr: "",
+        olt: "",
+        olr: "",
+      }));
+    } catch (error) {
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'خطا در ویرایش محصول',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
+    }
     } else {
-      console.log("هیچ ردیفی انتخاب نشده است.");
+  
+      Swal.fire({
+        toast: true,
+        position: 'top-start',
+        icon: 'error',
+        title: 'از قسمت نام، نام محصول را وارد کنید!',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: 'swal2-toast'
+        }
+      });
     }
   };
 
@@ -186,6 +237,7 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
               <input
                 className="w-full rounded bg-white/20 text-xs text-right px-2 py-1 outline-none"
                 value={row.sstid}
+                disabled={true}
                 onChange={(e) => handleFieldChange("title", e.target.value)}
               />
             </td>
