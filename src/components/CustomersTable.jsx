@@ -206,7 +206,7 @@ export default function CustomersTable({dataTable ,setDataTable}) {
       <td className="px-2 py-1 text-center">{item?.economic_code || "-"}</td>
       <td className="px-2 py-1 text-center">{item?.national_code || "-"}</td>
       <td className="px-2 py-1 text-center">{item?.postal_code || "-"}</td>
-      <td className="px-2 py-1 text-center">{item?.tell || "-"}</td>
+      <td className="px-2 py-1 text-center">{item?.tel || "-"}</td>
       <td className="px-2 py-1 text-center">{item?.branch_code || "-"}</td>
       <td className="px-2 py-1 text-center">
         {/* دکمه‌های حذف و ویرایش */}
