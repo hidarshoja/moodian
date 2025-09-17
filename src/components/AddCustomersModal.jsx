@@ -1,37 +1,120 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
 const units = [
-  "انتخاب ...",
-  "حقیقی",
-  "حقوقی",
-  "مشارکت مدنی",
-  "اتباع"
+  { id: 0, name: "انتخاب ..." },
+  { id: 1, name: "حقیقی" },
+  { id: 2, name: "حقوقی" },
+  { id: 3, name: "مشارکت مدنی" },
+  { id: 4, name: "اتباع غیر ایرانی" },
 ];
 
-export default function AddCustomersModal({ isOpen, onClose }) {
+export default function AddCustomersModal({
+  isOpen,
+  onClose,
+  setRefresh,
+  refresh,
+}) {
   const [form, setForm] = useState({
     name: "",
-    code: "",
-    postCode: "",
-    typeCustomer: "عدد",
-    nationalCode: "",
-    phone: "",
-    userCode: "",
-    legalSubject: "",
+    economic_code: "14011728696",
+    postal_code: "",
+    type: null,
+    national_code: "",
+    tel: "",
+    branch_code: "",
     address: "",
+    description: "",
+    passport_number: "",
+    last_name: "",
   });
+  const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    let newValue = value;
+    let newErrors = { ...errors };
+
+    if (name === "national_code") {
+      if (newValue.length > 10) newValue = newValue.slice(0, 10);
+      if (newValue.length > 0 && newValue.length < 10) {
+        newErrors.national_code = "کد ملی باید ۱۰ رقم باشد";
+      } else {
+        delete newErrors.national_code;
+      }
+    }
+    if (name === "branch_code") {
+      if (newValue.length > 4) newValue = newValue.slice(0, 4);
+      if (newValue.length > 0 && newValue.length < 4) {
+        newErrors.branch_code = "کد مشتری باید ۴ رقم باشد";
+      } else {
+        delete newErrors.branch_code;
+      }
+    }
+    if (name === "passport_number") {
+      if (newValue.length > 9) newValue = newValue.slice(0, 9);
+      if (newValue.length > 0 && newValue.length < 9) {
+        newErrors.passport_number = "شماره پاسپورت باید ۹ رقم باشد";
+      } else {
+        delete newErrors.passport_number;
+      }
+    }
+    if (name === "postal_code") {
+      if (newValue.length > 10) newValue = newValue.slice(0, 10);
+      if (newValue.length > 0 && newValue.length < 10) {
+        newErrors.postal_code = "کدپستی باید ۱۰ رقم باشد";
+      } else {
+        delete newErrors.postal_code;
+      }
+    }
+    if (["type"].includes(name)) {
+      setForm((prev) => ({
+        ...prev,
+        [name]: newValue === "" ? null : Number(newValue),
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: newValue }));
+    }
+    setErrors(newErrors);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     console.log("مقادیر فرم:", form);
+    const res = await axiosClient.post(`/customers`, form);
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success", // یا 'error'
+      title: "مشتری با موفقیت اضافه شد",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
+    setForm((prev) => ({
+      ...prev,
+      name: "",
+    economic_code: "14011728696",
+    postal_code: "",
+    type: null,
+    national_code: "",
+    tel: "",
+    branch_code: "",
+    address: "",
+    description: "",
+    passport_number: "",
+    last_name: "",
+    }));
+
+    console.log(`res`, res);
+    setRefresh(!refresh);
     onClose();
   };
 
@@ -56,29 +139,27 @@ export default function AddCustomersModal({ isOpen, onClose }) {
           className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4"
           onSubmit={handleSave}
         >
-             <div>
+          <div>
             <label className="block mb-1 text-white text-sm"> نوع مشتری</label>
             <select
-              name="typeCustomer"
-              value={form.typeCustomer}
+              name="type"
+              value={form.type}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
               {units.map((u) => (
                 <option
-                  key={u}
-                  value={u}
-                  className={u === "انتخاب ..." ? "text-red-500" : ""}
+                  key={u.id}
+                  value={u.id}
+                  className={u.id === 0 ? "text-red-500" : ""}
                 >
-                  {u}
+                  {u.name}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block mb-1 text-white text-sm">
-       نام مشتری
-            </label>
+            <label className="block mb-1 text-white text-sm">نام</label>
             <input
               name="name"
               value={form.name}
@@ -87,75 +168,108 @@ export default function AddCustomersModal({ isOpen, onClose }) {
             />
           </div>
           <div>
-            <label className="block mb-1 text-white text-sm">شناسه</label>
+            <label className="block mb-1 text-white text-sm">
+              نام خانوادگی
+            </label>
             <input
-              name="code"
-              value={form.code}
+              name="last_name"
+              value={form.last_name}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              کدپستی
-            </label>
+          {/* <div>
+            <label className="block mb-1 text-white text-sm">کد اقتصادی</label>
             <input
-              name="postCode"
-              value={form.postCode}
+              name="economic_code"
+              value={form.economic_code}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
+          </div> */}
+          <div>
+            <label className="block mb-1 text-white text-sm">کدپستی</label>
+            <input
+              name="postal_code"
+              value={form.postal_code}
+              onChange={handleChange}
+              maxLength={10}
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 ${
+                errors.postal_code ? "border-red-500" : ""
+              }`}
+            />
+            {errors.postal_code && (
+              <span className="text-xs text-red-500 mt-1 block">
+                {errors.postal_code}
+              </span>
+            )}
           </div>
-       
           <div>
             <label className="block mb-1 text-white text-sm">
-             کدملی/شناسه
+              شماره پاسپورت
             </label>
             <input
-              name="nationalCode"
-              value={form.nationalCode}
+              name="passport_number"
+              value={form.passport_number}
+              onChange={handleChange}
+              maxLength={9}
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 ${
+                errors.passport_number ? "border-red-500" : ""
+              }`}
+            />
+            {errors.passport_number && (
+              <span className="text-xs text-red-500 mt-1 block">
+                {errors.passport_number}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">کدملی/شناسه</label>
+            <input
+              name="national_code"
+              value={form.national_code}
               onChange={handleChange}
               type="number"
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              maxLength={10}
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 ${
+                errors.national_code ? "border-red-500" : ""
+              }`}
             />
+            {errors.national_code && (
+              <span className="text-xs text-red-500 mt-1 block">
+                {errors.national_code}
+              </span>
+            )}
           </div>
           <div>
-            <label className="block mb-1 text-white text-sm">
-              شماره تماس
-            </label>
+            <label className="block mb-1 text-white text-sm">شماره تماس</label>
             <input
-              name="phone"
-              value={form.phone}
+              name="tel"
+              value={form.tel}
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
           <div>
-            <label className="block mb-1 text-white text-sm">
-             کدمشتری
-            </label>
+            <label className="block mb-1 text-white text-sm">کدمشتری</label>
             <input
-              name="userCode"
-              value={form.userCode}
+              name="branch_code"
+              value={form.branch_code}
               onChange={handleChange}
               type="number"
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              maxLength={4}
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 ${
+                errors.branch_code ? "border-red-500" : ""
+              }`}
             />
+            {errors.branch_code && (
+              <span className="text-xs text-red-500 mt-1 block">
+                {errors.branch_code}
+              </span>
+            )}
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-            کد اقتصادی
-            </label>
-            <input
-              name="legalSubject"
-              value={form.legalSubject}
-              onChange={handleChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-            <span className="block  text-white text-sm">
-            آدرس
-            </span>
+
+          <span className="block  text-white text-sm">آدرس</span>
           <div className="md:col-span-2 flex items-center justify-end gap-2">
             <input
               name="address"

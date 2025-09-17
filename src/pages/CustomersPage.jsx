@@ -11,11 +11,12 @@ export default function CustomersPage() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
+  const [refresh , setRefresh] = useState(false);
   const [dataTable, setDataTable] = useState([
     // {
     //   name: "سعید",
     //   code: "1234",
-    //   typeCustomer: 3,
+    //   type: 3,
     //   nationalCode: "5555",
     //   postCode: "6666",
     //   phone: "09376228320",
@@ -24,7 +25,7 @@ export default function CustomersPage() {
     // {
     //   name: "سیاوش",
     //   code: "1357",
-    //   typeCustomer: 5,
+    //   type: 5,
     //   nationalCode: "Ali123",
     //   postCode: "ali666",
     //   phone: "09232996418",
@@ -42,7 +43,7 @@ export default function CustomersPage() {
         console.error("Error fetching data:", error);
         
       });
-  }, []);
+  }, [refresh]);
 
 
   // تابع برای گرفتن داده از کامپوننت فرزند
@@ -52,7 +53,7 @@ export default function CustomersPage() {
 
   return (
    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <AddCustomersModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddCustomersModal isOpen={modalOpen} onClose={() => setModalOpen(false)} refresh={refresh} setRefresh={setRefresh}/>
       <ImportExcelModalUser
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
