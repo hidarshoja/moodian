@@ -15,6 +15,7 @@ export default function ReportsFilter({
   onClearAll,
   status,
   setStatus,
+  onSendAll
 }) {
   const [activeTab, setActiveTab] = useState("day");
   const statusOptions = [
@@ -133,7 +134,7 @@ export default function ReportsFilter({
               </button>
             </div>
             <div className="flex items-center gap-2 w-1/3 justify-end">
-              <button className="btn-custom">اعمال فیلترها</button>
+              <button onClick={onSendAll} className="btn-custom">اعمال فیلترها</button>
             </div>
           </div>
         </div>

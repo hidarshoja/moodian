@@ -76,6 +76,13 @@ export default function ReportsPage() {
     setFromMonth(null);
     setToMonth(null);
   };
+  const handleSendAll = () => {
+    console.log(`status`, status);
+    console.log(`startDate`, startDate);
+    console.log(`endDate`, endDate);
+    console.log(`fromMonth`, fromMonth);
+    console.log(`toMonth`, toMonth);
+  }
 
   const handleSearchTermChange = (term) => {
     setSearchTerm(term);
@@ -111,6 +118,7 @@ export default function ReportsPage() {
         onClearAll={handleClearAll}
         setStatus={setStatus}
         status={status}
+        onSendAll ={handleSendAll}
       />
       <div className="mt-3">
         <SearchFilterBar
