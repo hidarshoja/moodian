@@ -318,7 +318,7 @@ export default function CustomersTable({dataTable ,setDataTable , setRefresh , r
   return (
     <tr key={item.id}
      onDoubleClick={() => handleRowDoubleClick(item)}
-      className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 
+      className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 select-none cursor-pointer 
               ${selectedRowId === item.id ? 'activeTr' : ''}`}
     >
       <td className="p-2 ">{item?.name}&nbsp;&nbsp;{item?.last_name}</td>
