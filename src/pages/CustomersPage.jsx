@@ -5,10 +5,13 @@ import AddCustomersModal from "../components/AddCustomersModal";
 import ImportExcelModalUser from "../components/ImportExcelModalUser";
 import { exportCustomersToExcel } from "../components/exportServicesToExcel";
 import { useState , useEffect } from "react";
-import axiosClient from "../axios-client"
+import axiosClient from "../axios-client";
+import Pagination from "../components/Pagination";
 
 export default function CustomersPage() {
-
+const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [refresh , setRefresh] = useState(false);
@@ -41,19 +44,20 @@ export default function CustomersPage() {
           }
         }
       });
-      return params.length ? "?" + params.join("&") : "";
+      return params.length ? "&" + params.join("&") : "";
     };
   
     const query = buildFilterQuery(activeFilters);
     axiosClient
-      .get(`/customers${query}`)
+      .get(`/customers?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data);
+        setMeta(response.data.meta);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [refresh, activeFilters]);
+  }, [refresh, activeFilters , pageCount]);
 
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
@@ -183,6 +187,12 @@ export default function CustomersPage() {
          setRefresh={setRefresh}
         />
       </div>
+        <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
     </div>
   )
 }
