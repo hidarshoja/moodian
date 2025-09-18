@@ -22,6 +22,7 @@ const units = [
 
 export default function ServicesTable({ dataTable, setDataTable , setRefresh , refresh }) {
 
+   const [selectedRowId, setSelectedRowId] = useState(null);
   const [editedFields, setEditedFields] = useState({});
   const [row, setRow] = useState({
     sstid: "",
@@ -189,6 +190,11 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
     }
   };
 
+    const handleRowDoubleClick = (item) => {
+  setRow({ ...item });
+  setSelectedRowId(item.id);
+};
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
       <CustomToastContainer />
@@ -306,34 +312,38 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
           </tr>
           {/* نمایش همه داده‌های جدول */}
           {dataTable.map((item, idx) => (
-            <tr key={item.id} className="bg-white/5">
-               <td className="px-2 py-1 text-center">
+               <tr key={item.id}
+            onDoubleClick={() => handleRowDoubleClick(item)}
+            className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 select-none cursor-pointer 
+              ${selectedRowId === item.id ? 'activeTr' : ''}`}
+           >
+               <td className="p-2 text-center">
                 {item?.title ? item.title : "-"}
               </td>
-              <td className="px-2 py-1">{item?.sstid ? item.sstid : "-"}</td>
+              <td className="p-2">{item?.sstid ? item.sstid : "-"}</td>
              
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.unit?.title ? item.unit.title : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.vra ? item.vra : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.odt ? item.odt : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.odr ? item.odr : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.olt ? item.olt : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.olr ? item.olr : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {item?.olr ? item.olr : "-"}
               </td>
-              <td className="px-2 py-1 text-center">
+              <td className="p-2 text-center">
                 {/* دکمه‌های حذف و ویرایش برای هر ردیف (در صورت نیاز می‌توانید اضافه کنید) */}
               </td>
             </tr>
