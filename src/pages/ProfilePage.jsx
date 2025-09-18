@@ -18,6 +18,12 @@ export default function ProfilePage() {
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
+  const initialFilters = {
+    name: "",
+    last_name: "",
+  };
+  const [filterInputs, setFilterInputs] = useState(initialFilters);
+  const [activeFilters, setActiveFilters] = useState({});
   const [keyModalData, setKeyModalData] = useState({
     id : "",
     moadian_username: "",
@@ -41,6 +47,20 @@ export default function ProfilePage() {
   ]);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [editingUserIndex, setEditingUserIndex] = useState(null);
+  const buildFilterQuery = (filters) => {
+    const params = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (key === "type") {
+          params.push(`${key}=${value}`);
+        } else {
+          params.push(`f[${key}]=${encodeURIComponent(value)}`);
+        }
+      }
+    });
+    return params.length ? "&" + params.join("&") : "";
+  };
+  const query = buildFilterQuery(activeFilters);
   const [userForm, setUserForm] = useState({
     username: "",
     fullName: "",
@@ -51,7 +71,7 @@ export default function ProfilePage() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axiosClient.get(`/admin/users?page=${pageCount}`);
+      const response = await axiosClient.get(`/admin/users?page=${pageCount}${query}`);
       setRecords(response.data.data);
       setMeta(response.data.meta);
     } catch (error) {
@@ -461,7 +481,7 @@ export default function ProfilePage() {
   };
   useEffect(() => {
     fetchUsers();
-  }, [pageCount]);
+  }, [pageCount , activeFilters]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
@@ -480,6 +500,62 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      <div className="py-2 px-2 lg:px-7">
+          <p className="text-white text-base mt-1"> اعمال فیلتر</p>
+          <div className="rounded-xl border border-white/10 bg-white/5 mt-8 p-3 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block mb-1 text-white text-sm">نام مودی</label>
+              <input
+                name="name"
+                value={filterInputs.name}
+                onChange={(e) =>
+                  setFilterInputs((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                نام حافظه مالیاتی
+              </label>
+              <input
+                name="last_name"
+                value={filterInputs.last_name}
+                onChange={(e) =>
+                  setFilterInputs((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+           
+          
+          
+
+            <div className="flex items-end justify-end w-full gap-2">
+              <button
+                className="btn-custom"
+                onClick={() => {
+                  setFilterInputs(initialFilters);
+                  setActiveFilters({});
+                }}
+              >
+                پاک کردین فیلترها
+              </button>
+              <button
+                className="btn-custom"
+                onClick={() => setActiveFilters({ ...filterInputs })}
+              >
+                ارسال فیلتر
+              </button>
+            </div>
+          </div>
+        </div>
       <div className="mx-auto p-6">
         <ProfileRecordsTable
           records={records}
