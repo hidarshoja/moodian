@@ -2,8 +2,6 @@ import { useState } from "react";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axiosClient from "../axios-client";
 import Swal from 'sweetalert2';
-
-
 import { CustomToastContainer} from "./CustomToast";
 
 const units = [
@@ -20,7 +18,15 @@ const units = [
   { id: 10, name: "پاکت" },
 ];
 
-export default function ServicesTable({ dataTable, setDataTable , setRefresh , refresh }) {
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
+export default function ServicesTable({ dataTable, setDataTable , setRefresh , refresh , loading  }) {
 
    const [selectedRowId, setSelectedRowId] = useState(null);
   const [editedFields, setEditedFields] = useState({});
@@ -196,9 +202,16 @@ export default function ServicesTable({ dataTable, setDataTable , setRefresh , r
 };
 
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
       <CustomToastContainer />
-      <table className="min-w-full text-white">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+          <Spinner />
+        </div>
+      )}
+      <table   className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}>
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
             <th className="p-2">نام</th>

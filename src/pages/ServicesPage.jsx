@@ -42,6 +42,7 @@ export default function ServicesPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const query = buildFilterQuery(activeFilters);
     axiosClient
       .get(`/products?page=${pageCount}${query}`)
@@ -51,7 +52,8 @@ export default function ServicesPage() {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [refresh, activeFilters , pageCount]);
 
 
@@ -162,6 +164,7 @@ export default function ServicesPage() {
         dataTable ={dataTable}
         setRefresh = {setRefresh}
         refresh={refresh}
+        loading={loading}
         />
       </div>
         <Pagination
