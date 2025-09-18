@@ -7,12 +7,17 @@ import UserFormModal from "../components/UserFormModal";
 import { errorMessage, successMessage } from "../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
+import Pagination
+ from "../components/Pagination";
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [records, setRecords] = useState([]);
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [keyModalIndex, setKeyModalIndex] = useState(null);
+  const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [keyModalData, setKeyModalData] = useState({
     id : "",
     moadian_username: "",
@@ -43,17 +48,19 @@ export default function ProfilePage() {
   });
   const isEditing = useMemo(() => editingIndex !== null, [editingIndex]);
 
-  const fetchUsers = () => {
-    axiosClient
-      .get("/admin/users")
-      .then((response) => {
-        setRecords(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(`/admin/users`);
+      setRecords(response.data.data);
+      setMeta(response.data.meta);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   const openForCreate = () => {
     setEditingIndex(null);
@@ -264,7 +271,7 @@ export default function ProfilePage() {
           payloadToSend,
           headers ? { headers } : undefined
         );
-        console.log("User updated:", data?.data);
+       
         successMessage("کاربر با موفقیت ویرایش شد");
         setRecords((prev) =>
           prev.map((record, index) =>
@@ -454,7 +461,7 @@ export default function ProfilePage() {
   };
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [pageCount]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
@@ -479,7 +486,14 @@ export default function ProfilePage() {
           onDelete={deleteRecord}
           onEdit={openForEdit}
           onOpenKeySettings={openKeySettings}
+         
         />
+        <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
       </div>
 
       <div>
