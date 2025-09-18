@@ -6,14 +6,14 @@ import ImportExcelModal from "../components/ImportExcelModal";
 import { exportServicesToExcel } from "../components/exportServicesToExcel";
 import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
-
+import { useNavigate } from "react-router-dom";
 
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([]);
   const [refresh , setRefresh] = useState(false);
- 
+ const navigate = useNavigate();
   const initialFilters = {
     title: "",
     last_name: "",
@@ -58,6 +58,9 @@ export default function ServicesPage() {
         .get(`/products${query}${separator}export=1`)
         .then((response) => {
           console.log(response.data.data);
+          setTimeout(() => {
+            navigate("/downloadExcel");
+          }, 1000);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);

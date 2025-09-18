@@ -21,6 +21,7 @@ import ChangeStatus from "./pages/ChangeStatus";
 import PasswordPage from "./pages/PasswordPage";
 import SupportPage from "./pages/SupportPage";
 import OtpPage from "./pages/login/OtpPage";
+import DownloadExcel from "./pages/DownloadExcel";
 
 export const route = createBrowserRouter([
     {
@@ -94,6 +95,10 @@ export const route = createBrowserRouter([
             {
                 path: '/support',
                 element: <SupportPage />
+            },
+            {
+                path: '/downloadExcel',
+                element: <DownloadExcel />
             },
         ]
     },

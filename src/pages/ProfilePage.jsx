@@ -8,6 +8,7 @@ import { errorMessage, successMessage } from "../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
