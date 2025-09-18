@@ -10,6 +10,7 @@ const [dataTable, setDataTable] = useState([]);
 const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [refresh , setRefresh] = useState(false);
   useEffect(() => {
      setLoading(true);
 
@@ -23,7 +24,7 @@ const [meta, setMeta] = useState({});
       .catch((error) => {
         console.error("Error fetching data:", error);
       }).finally(() => setLoading(false));
-  }, [pageCount]);
+  }, [pageCount , refresh]);
   return (
    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
        
@@ -42,6 +43,8 @@ const [meta, setMeta] = useState({});
            <TableExeel 
            records={dataTable}
            loading ={loading }
+           setRefresh = {setRefresh}
+           refresh ={refresh}
            />
            </div> 
           <Pagination

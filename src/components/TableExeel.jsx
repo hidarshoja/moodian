@@ -3,6 +3,8 @@ import { GoKey } from "react-icons/go";
 import { convertToPersianDate } from "../utils/change-date";
 import { GrDocumentExcel } from "react-icons/gr";
 import axiosClient from "../axios-client";
+import { MdDeleteOutline } from "react-icons/md";
+import Swal from "sweetalert2";
 
 function Spinner() {
   return (
@@ -12,7 +14,7 @@ function Spinner() {
   );
 }
 
-export default function TableExeel({ records , loading }) {
+export default function TableExeel({ records , loading , setRefresh  , refresh }) {
 
 const handleDownload = async (number) => {
   try {
@@ -35,6 +37,44 @@ const handleDownload = async (number) => {
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error("Error downloading file:", error);
+  }
+};
+
+
+
+const handleDelete = async (row) => {
+  try {
+    const res = await axiosClient.delete(`/import-exports/${row}`);
+    console.log(`Delete response:`, res);
+
+    setRefresh(!refresh);
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success", // یا 'error'
+      title: "فایل اکسل با موفقیت حذف شد",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
+  
+  } catch (error) {
+    console.log(`error`, error);
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "error",
+      title: "خطا در حذف اکسل",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
   }
 };
 
@@ -100,13 +140,21 @@ const handleDownload = async (number) => {
                  </td>
                 
                  <td className="px-2 py-2">
-                   <div className="flex items-center justify-start">
+                   <div className="flex items-center justify-start gap-2">
                      <button
                        onClick={() => handleDownload(r.id)}
                        title="دانلود"
                        className="p-2 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/15"
                      >
                        <GrDocumentExcel width={20} height={20} />
+                     </button>
+
+                     <button
+                       onClick={() => handleDelete(r.id)}
+                       title="حذف"
+                       className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                     >
+                       <MdDeleteOutline width={20} height={20} />
                      </button>
                    
                    </div>
