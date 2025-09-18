@@ -32,6 +32,7 @@ export default function ReportsFilter({
   return (
     <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
       <div className="border rounded-md border-white w-full lg:w-1/2 p-1 flex gap-1">
+      {/* فیلتر براساس روز */}
         <div className="input_date w-full md:w-1/7">
           <span className="block text-gray-100 text-[10px] mb-2">تاریخ شروع </span>
           <DatePicker
@@ -54,18 +55,8 @@ export default function ReportsFilter({
             inputClass="custom-input"
           />
         </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2"> سال</span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={fromYear}
-            onChange={onFromYearChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-            onlyYearPicker={true}
-          />
-        </div>
+      
+        {/* فیلتر براساس ماه */}
         <div className="input_date w-full md:w-1/7">
           <span className="block text-gray-100 text-[10px] mb-2">از ماه</span>
           <DatePicker
@@ -90,30 +81,7 @@ export default function ReportsFilter({
             onlyMonthPicker={true}
           />
         </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-1">فصل</span>
-          <select
-            value={season}
-            onChange={onSeasonChange}
-            className="w-full text-sm bg-white/10 border border-white rounded-md text-white placeholder-gray-400 focus:outline-none"
-          >
-            <option value="" className="bg-gray-800 text-white">
-              انتخاب فصل
-            </option>
-            <option value="spring" className="bg-gray-800 text-white">
-              بهار
-            </option>
-            <option value="summer" className="bg-gray-800 text-white">
-              تابستان
-            </option>
-            <option value="autumn" className="bg-gray-800 text-white">
-              پاییز
-            </option>
-            <option value="winter" className="bg-gray-800 text-white">
-              زمستان
-            </option>
-          </select>
-        </div>
+       
       </div>
       <div className="border rounded-md border-white w-full lg:w-1/2 p-4 flex flex-wrap gap-9 items-center justify-start">
         {/* خطا */}
