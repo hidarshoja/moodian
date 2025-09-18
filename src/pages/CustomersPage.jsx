@@ -81,9 +81,10 @@ export default function CustomersPage() {
   const handleExportExcel = () => {
     // exportServicesToExcel(dataTable);
     const query = buildFilterQuery(activeFilters);
-    const separator = query ? "&" : "?";
+    console.log(`query`, query);
+    const separator = "?";
     axiosClient
-      .get(`/customers${query}${separator}export=1`)
+      .get(`/customers${separator}export=1${query}`)
       .then((response) => {
         console.log(response.data.data);
         setTimeout(() => {
