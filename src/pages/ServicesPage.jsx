@@ -7,9 +7,13 @@ import { exportServicesToExcel } from "../components/exportServicesToExcel";
 import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../components/Pagination";
 
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([]);
   const [refresh , setRefresh] = useState(false);
@@ -34,20 +38,21 @@ export default function ServicesPage() {
         }
       }
     });
-    return params.length ? "?" + params.join("&") : "";
+  return params.length ? "&" + params.join("&") : "";
   };
 
   useEffect(() => {
     const query = buildFilterQuery(activeFilters);
     axiosClient
-      .get(`/products${query}`)
+      .get(`/products?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data);
+           setMeta(response.data.meta);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [refresh, activeFilters]);
+  }, [refresh, activeFilters , pageCount]);
 
 
   const handleExportExcel = () => {
@@ -159,6 +164,12 @@ export default function ServicesPage() {
         refresh={refresh}
         />
       </div>
+        <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
     </div>
   );
 }
