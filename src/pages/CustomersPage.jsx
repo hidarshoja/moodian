@@ -7,6 +7,7 @@ import { exportCustomersToExcel } from "../components/exportServicesToExcel";
 import { useState, useEffect } from "react";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomersPage() {
   const [meta, setMeta] = useState({});
@@ -16,6 +17,7 @@ export default function CustomersPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [dataTable, setDataTable] = useState([]);
+  const navigate = useNavigate();
   const initialFilters = {
     name: "",
     last_name: "",
@@ -61,10 +63,37 @@ export default function CustomersPage() {
       .finally(() => setLoading(false));
   }, [refresh, activeFilters, pageCount]);
 
+  const buildFilterQuery = (filters) => {
+    const params = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (key === "type") {
+          params.push(`${key}=${value}`);
+        } else {
+          params.push(`f[${key}]=${encodeURIComponent(value)}`);
+        }
+      }
+    });
+  return params.length ? "&" + params.join("&") : "";
+  };
+
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
-    exportCustomersToExcel(dataTable);
-  };
+    // exportServicesToExcel(dataTable);
+    const query = buildFilterQuery(activeFilters);
+    const separator = query ? "&" : "?";
+    axiosClient
+      .get(`/customers${query}${separator}export=1`)
+      .then((response) => {
+        console.log(response.data.data);
+        setTimeout(() => {
+          navigate("/downloadExcel");
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
