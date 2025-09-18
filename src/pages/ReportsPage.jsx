@@ -18,12 +18,7 @@ export default function ReportsPage() {
   const [refresh, setRefresh] = useState(false);
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
-  const initialFilters = {
-    created_at: "",
-    created_max: "",
-    status: "",
-  };
-  const [filterInputs, setFilterInputs] = useState(initialFilters);
+  
   const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,7 +72,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-  console.log(`activeFilters`, activeFilters);
+  
   useEffect(() => {
     setLoading(true);
     const query = buildFilterQuery(activeFilters);
@@ -125,17 +120,20 @@ export default function ReportsPage() {
   const handleSendAll = () => {
     const start = toEnglishDigits(startDate?.format?.("YYYY/MM/DD") || "");
     const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
+    const startMonth = toEnglishDigits(fromMonth?.format?.("YYYY/MM/DD") || "");
+    const endMonth = toEnglishDigits(toMonth?.format?.("YYYY/MM/DD") || "");
+  
     let created_at = start;
     if (start && end) {
       created_at = `${start},${end}`;
-    } else if (!start && end) {
-      created_at = end;
+    } else if (startMonth && endMonth) {
+      created_at = `${startMonth},${endMonth}`;
     }
     const newFilters = {
       created_at,
       status: status || "",
     };
-    setFilterInputs(newFilters);
+  
     setActiveFilters(newFilters);
   };
 
@@ -174,6 +172,10 @@ export default function ReportsPage() {
         setStatus={setStatus}
         status={status}
         onSendAll={handleSendAll}
+        setStartDate = {setStartDate}
+        setEndDate= {setEndDate}
+        setFromMonth={setFromMonth}
+        setToMonth={setToMonth}
       />
       <div className="mt-3">
         <SearchFilterBar

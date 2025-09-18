@@ -15,7 +15,11 @@ export default function ReportsFilter({
   onClearAll,
   status,
   setStatus,
-  onSendAll
+  onSendAll,
+  setStartDate,
+  setEndDate,
+  setFromMonth,
+  setToMonth
 }) {
   const [activeTab, setActiveTab] = useState("day");
   const statusOptions = [
@@ -35,7 +39,11 @@ export default function ReportsFilter({
             className={`btn-custom3 ${
               activeTab === "day" ? "btn-custom3Active" : ""
             }`}
-            onClick={() => setActiveTab("day")}
+            onClick={() => {
+              setActiveTab("day");
+              setToMonth(null);
+              setFromMonth(null);
+            }}
           >
             فیلتر براساس روز
           </button>
@@ -43,7 +51,12 @@ export default function ReportsFilter({
             className={`btn-custom3 ${
               activeTab === "month" ? "btn-custom3Active" : ""
             }`}
-            onClick={() => setActiveTab("month")}
+            onClick={() => {
+              setActiveTab("month");
+              setStartDate(null);
+              setEndDate(null);
+              
+            }}
           >
             فیلتر براساس ماه
           </button>
