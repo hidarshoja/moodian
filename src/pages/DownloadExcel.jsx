@@ -1,23 +1,27 @@
 import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import TableExeel from "../components/TableExeel";
-
+import Pagination from "../components/Pagination";
 
 export default function DownloadExcel() {
 const [dataTable, setDataTable] = useState([]);
+const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
 
    useEffect(() => {
 
     axiosClient
-      .get(`/import-exports`)
+      .get(`/import-exports?page=${pageCount}`)
       .then((response) => {
         setDataTable(response.data.data);
+        setMeta(response.data.meta);
         console.log(`response.data.data`, response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [pageCount]);
   return (
    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
        
@@ -32,10 +36,15 @@ const [dataTable, setDataTable] = useState([]);
          </div>
          <div className="py-2 px-2 lg:px-7">
        
-           <div className="rounded-xl border border-white/10 bg-white/5 mt-8 ">
+           <div>
            <TableExeel records={dataTable} />
-         
            </div> 
+          <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
          </div>
          
        </div>
