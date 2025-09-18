@@ -6,195 +6,136 @@ import { useState } from "react";
 export default function ReportsFilter({
   startDate,
   endDate,
-  fromYear,
-  toYear,
   fromMonth,
   toMonth,
-  season,
-  errorStatus,
-  pendingStatus,
-  notSentStatus,
-  sentStatus,
-  successfulStatus,
   onStartDateChange,
   onEndDateChange,
-  onFromYearChange,
-  onToYearChange,
   onFromMonthChange,
   onToMonthChange,
-  onSeasonChange,
-  onErrorToggle,
-  onPendingToggle,
-  onNotSentToggle,
-  onSentToggle,
-  onSuccessfulToggle,
   onClearAll,
+  status,
+  setStatus,
 }) {
   const [activeTab, setActiveTab] = useState("day");
+  const statusOptions = [
+    { label: "یافت نشد", value: -90 },
+    { label: "ناموفق توسط مالیات", value: -80 },
+    { label: "ناموفق ارسال به مالیات", value: -10 },
+    { label: "جدید", value: 0 },
+    { label: "در انتظار ارسال به مالیات", value: 10 },
+    { label: "در انتظار مالیات", value: 20 },
+    { label: "تایید شده", value: 100 },
+  ];
   return (
     <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
-      <div className="border  rounded-md border-white w-full lg:w-1/2 p-1 flex flex-col gap-1">
-      
-
-<div className="flex gap-2 my-2 items-center justify-center">
-  <button
-     className={`btn-custom3 ${activeTab === "day" ? "btn-custom3Active" : ""}`}
-    onClick={() => setActiveTab("day")}
-  >
-    فیلتر براساس روز
-  </button>
-  <button
-      className={`btn-custom3 ${activeTab === "month" ? "btn-custom3Active" : ""}`}
-    onClick={() => setActiveTab("month")}
-  >
-    فیلتر براساس ماه
-  </button>
-</div>
-     <div>
-       {/* فیلتر براساس روز */}
-       {activeTab === "day" && (
-        <div className="flex gap-2">
-       <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">تاریخ شروع </span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={startDate}
-            onChange={onStartDateChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">تاریخ پایان </span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={endDate}
-            onChange={onEndDateChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-          />
-        </div>
-        </div> 
-      )}
-  {activeTab === "month" && (
-    <div className="flex gap-2">
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">از ماه</span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={fromMonth}
-            onChange={onFromMonthChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-            onlyMonthPicker={true}
-          />
-        </div>
-        <div className="input_date w-full md:w-1/7">
-          <span className="block text-gray-100 text-[10px] mb-2">تا ماه</span>
-          <DatePicker
-            calendar={persian}
-            locale={persian_fa}
-            value={toMonth}
-            onChange={onToMonthChange}
-            calendarPosition="bottom-right"
-            inputClass="custom-input"
-            onlyMonthPicker={true}
-          />
-        </div>
-    </div>
-   )}
- </div>
-       
-      </div>
-      <div className="border rounded-md border-white w-full lg:w-1/2 p-4 flex flex-wrap gap-9 items-center justify-start">
-        {/* خطا */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-gray-100">خطا</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={errorStatus}
-              onChange={onErrorToggle}
-            />
-            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-
-        {/* در انتظار */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-gray-100">در انتظار</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={pendingStatus}
-              onChange={onPendingToggle}
-            />
-            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-
-        {/* ارسال نشده */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-gray-100">ارسال نشده</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={notSentStatus}
-              onChange={onNotSentToggle}
-            />
-            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-
-        {/* ارسال شده */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-gray-100">ارسال شده</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={sentStatus}
-              onChange={onSentToggle}
-            />
-            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-
-        {/* ارسال موفق */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-gray-100">ارسال موفق</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={successfulStatus}
-              onChange={onSuccessfulToggle}
-            />
-            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-        {/* پاک کردن */}
-        <div className="flex items-center gap-2">
+      <div className="border  rounded-md border-white w-full  p-1 flex flex-col gap-1">
+        <div className="flex gap-2 my-2 items-center justify-center">
           <button
-            onClick={onClearAll}
-            className="btn-custom"
+            className={`btn-custom3 ${
+              activeTab === "day" ? "btn-custom3Active" : ""
+            }`}
+            onClick={() => setActiveTab("day")}
           >
-            پاک کردن فیلترها
+            فیلتر براساس روز
+          </button>
+          <button
+            className={`btn-custom3 ${
+              activeTab === "month" ? "btn-custom3Active" : ""
+            }`}
+            onClick={() => setActiveTab("month")}
+          >
+            فیلتر براساس ماه
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-           
-            className="btn-custom"
-          >
-             اعمال فیلترها
-          </button>
+        <div className="flex flex-col md:flex-row gap-2 w-full">
+          {/* فیلتر براساس روز */}
+          {activeTab === "day" && (
+            <div className="flex gap-2 w-full md:w-1/2">
+              <div className="input_date w-full md:w-1/2">
+                <span className="block text-gray-100 text-[10px] mb-2">
+                  تاریخ شروع{" "}
+                </span>
+                <DatePicker
+                  calendar={persian}
+                  locale={persian_fa}
+                  value={startDate}
+                  onChange={onStartDateChange}
+                  calendarPosition="bottom-right"
+                  inputClass="custom-input"
+                />
+              </div>
+              <div className="input_date w-full md:w-1/2">
+                <span className="block text-gray-100 text-[10px] mb-2">
+                  تاریخ پایان{" "}
+                </span>
+                <DatePicker
+                  calendar={persian}
+                  locale={persian_fa}
+                  value={endDate}
+                  onChange={onEndDateChange}
+                  calendarPosition="bottom-right"
+                  inputClass="custom-input"
+                />
+              </div>
+            </div>
+          )}
+          {activeTab === "month" && (
+            <div className="flex gap-2 w-full md:w-1/2">
+              <div className="input_date w-full md:w-w-1/2">
+                <span className="block text-gray-100 text-[10px] mb-2">
+                  از ماه
+                </span>
+                <DatePicker
+                  calendar={persian}
+                  locale={persian_fa}
+                  value={fromMonth}
+                  onChange={onFromMonthChange}
+                  calendarPosition="bottom-right"
+                  inputClass="custom-input"
+                  onlyMonthPicker={true}
+                />
+              </div>
+              <div className="input_date w-full md:w-w-1/2">
+                <span className="block text-gray-100 text-[10px] mb-2">
+                  تا ماه
+                </span>
+                <DatePicker
+                  calendar={persian}
+                  locale={persian_fa}
+                  value={toMonth}
+                  onChange={onToMonthChange}
+                  calendarPosition="bottom-right"
+                  inputClass="custom-input"
+                  onlyMonthPicker={true}
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex gap-2 w-full md:w-1/2">
+            <div className="flex flex-col  gap-2 w-1/3">
+              <span className="text-[10px] text-gray-100">وضعیت</span>
+              <select
+                className="border rounded px-2 py-[2px] text-[10px]"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="">همه وضعیت‌ها</option>
+                {statusOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center gap-2 w-1/3 justify-end">
+              <button onClick={onClearAll} className="btn-custom">
+                پاک کردن فیلترها
+              </button>
+            </div>
+            <div className="flex items-center gap-2 w-1/3 justify-end">
+              <button className="btn-custom">اعمال فیلترها</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

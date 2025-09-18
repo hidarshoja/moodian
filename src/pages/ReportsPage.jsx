@@ -10,18 +10,13 @@ import SendRecordsTable from "../components/SendRecordsTable";
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [fromYear, setFromYear] = useState(null);
-  const [toYear, setToYear] = useState(null);
+
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
-  const [season, setSeason] = useState("");
-  const [errorStatus, setErrorStatus] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState(false);
-  const [notSentStatus, setNotSentStatus] = useState(false);
-  const [sentStatus, setSentStatus] = useState(false);
-  const [successfulStatus, setSuccessfulStatus] = useState(true);
+
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState("");
   const [records] = useState([
     {
       name: "شرکت الف",
@@ -66,14 +61,6 @@ export default function ReportsPage() {
     setEndDate(selectedDate);
   };
 
-  const handleFromYearChange = (selectedDate) => {
-    setFromYear(selectedDate);
-  };
-
-  const handleToYearChange = (selectedDate) => {
-    setToYear(selectedDate);
-  };
-
   const handleFromMonthChange = (selectedDate) => {
     setFromMonth(selectedDate);
   };
@@ -82,29 +69,12 @@ export default function ReportsPage() {
     setToMonth(selectedDate);
   };
 
-  const handleSeasonChange = (e) => {
-    setSeason(e.target.value);
-  };
-
-  const handleErrorToggle = () => setErrorStatus(!errorStatus);
-  const handlePendingToggle = () => setPendingStatus(!pendingStatus);
-  const handleNotSentToggle = () => setNotSentStatus(!notSentStatus);
-  const handleSentToggle = () => setSentStatus(!sentStatus);
-  const handleSuccessfulToggle = () => setSuccessfulStatus(!successfulStatus);
-
   const handleClearAll = () => {
     setStartDate(null);
     setEndDate(null);
-    setFromYear(null);
-    setToYear(null);
+
     setFromMonth(null);
     setToMonth(null);
-    setSeason("");
-    setErrorStatus(false);
-    setPendingStatus(false);
-    setNotSentStatus(false);
-    setSentStatus(false);
-    setSuccessfulStatus(false);
   };
 
   const handleSearchTermChange = (term) => {
@@ -119,7 +89,7 @@ export default function ReportsPage() {
   const filteredRecords2 = records2.filter((record) =>
     record.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
- 
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
@@ -132,29 +102,15 @@ export default function ReportsPage() {
       <ReportsFilter
         startDate={startDate}
         endDate={endDate}
-        fromYear={fromYear}
-        toYear={toYear}
         fromMonth={fromMonth}
         toMonth={toMonth}
-        season={season}
-        errorStatus={errorStatus}
-        pendingStatus={pendingStatus}
-        notSentStatus={notSentStatus}
-        sentStatus={sentStatus}
-        successfulStatus={successfulStatus}
         onStartDateChange={handleStartDateChange}
         onEndDateChange={handleEndDateChange}
-        onFromYearChange={handleFromYearChange}
-        onToYearChange={handleToYearChange}
         onFromMonthChange={handleFromMonthChange}
         onToMonthChange={handleToMonthChange}
-        onSeasonChange={handleSeasonChange}
-        onErrorToggle={handleErrorToggle}
-        onPendingToggle={handlePendingToggle}
-        onNotSentToggle={handleNotSentToggle}
-        onSentToggle={handleSentToggle}
-        onSuccessfulToggle={handleSuccessfulToggle}
         onClearAll={handleClearAll}
+        setStatus={setStatus}
+        status={status}
       />
       <div className="mt-3">
         <SearchFilterBar
