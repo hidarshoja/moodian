@@ -311,15 +311,15 @@ export default function CustomersTable({dataTable ,setDataTable , setRefresh , r
           const unitName = units.find((u) => u.id === item.type)?.name || "-";
 
   return (
-    <tr key={item.id} className="bg-white/5">
-      <td className="px-2 py-1">{item?.name} - {item?.last_name}</td>
-      <td className="px-2 py-1 text-center">{unitName}</td>
-      <td className="px-2 py-1 text-center">{item?.economic_code || "-"}</td>
-      <td className="px-2 py-1 text-center">{item?.national_code || "-"}</td>
-      <td className="px-2 py-1 text-center">{item?.postal_code || "-"}</td>
-      <td className="px-2 py-1 text-center">{item?.tel || "-"}</td>
-      <td className="px-2 py-1 text-center">{item?.branch_code || "-"}</td>
-      <td className="px-2 py-1 text-center">
+    <tr key={item.id} className="odd:bg-white/5 even:bg-white/10 border-t border-white/5">
+      <td className="p-2 ">{item?.name}&nbsp;&nbsp;{item?.last_name}</td>
+      <td className="p-2  text-center">{unitName}</td>
+      <td className="p-2  text-center">{item?.economic_code || "-"}</td>
+      <td className="p-2  text-center">{item?.national_code || "-"}</td>
+      <td className="p-2  text-center">{item?.postal_code || "-"}</td>
+      <td className="p-2  text-center">{item?.tel || "-"}</td>
+      <td className="p-2  text-center">{item?.branch_code || "-"}</td>
+      <td className="p-2  text-center">
         {/* دکمه‌های حذف و ویرایش */}
       </td>
     </tr>
