@@ -486,6 +486,7 @@ export default function ProfilePage() {
           onDelete={deleteRecord}
           onEdit={openForEdit}
           onOpenKeySettings={openKeySettings}
+          loading={loading}
          
         />
         <Pagination

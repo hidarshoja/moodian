@@ -1,15 +1,33 @@
 import { GoKey } from "react-icons/go";
 import PropTypes from "prop-types";
 
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
 export default function ProfileRecordsTable({
   records,
   onDelete,
   onEdit,
   onOpenKeySettings,
+  loading = false,
 }) {
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
-      <table className="min-w-full">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+          <Spinner />
+        </div>
+      )}
+      <table
+        className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}
+      >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap">نام مودی</th>
@@ -123,4 +141,5 @@ ProfileRecordsTable.propTypes = {
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
   onOpenKeySettings: PropTypes.func,
+  loading: PropTypes.bool,
 };
