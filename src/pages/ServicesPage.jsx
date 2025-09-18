@@ -23,33 +23,21 @@ export default function ServicesPage() {
   };
   const [filterInputs, setFilterInputs] = useState(initialFilters);
   const [activeFilters, setActiveFilters] = useState({});
-  // useEffect(() => {
-  //   axiosClient
-  //     .get("/products")
-  //     .then((response) => {
-  //       setDataTable(response.data.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-        
-  //     });
-  // }, [refresh]);
+  const buildFilterQuery = (filters) => {
+    const params = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (key === "type") {
+          params.push(`${key}=${value}`);
+        } else {
+          params.push(`f[${key}]=${encodeURIComponent(value)}`);
+        }
+      }
+    });
+    return params.length ? "?" + params.join("&") : "";
+  };
 
   useEffect(() => {
-    const buildFilterQuery = (filters) => {
-      const params = [];
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          if (key === "type") {
-            params.push(`${key}=${value}`);
-          } else {
-            params.push(`f[${key}]=${encodeURIComponent(value)}`);
-          }
-        }
-      });
-      return params.length ? "?" + params.join("&") : "";
-    };
-  
     const query = buildFilterQuery(activeFilters);
     axiosClient
       .get(`/products${query}`)
@@ -63,8 +51,19 @@ export default function ServicesPage() {
 
 
   const handleExportExcel = () => {
-      exportServicesToExcel(dataTable);
+      // exportServicesToExcel(dataTable);
+      const query = buildFilterQuery(activeFilters);
+      const separator = query ? "&" : "?";
+      axiosClient
+        .get(`/products${query}${separator}export=1`)
+        .then((response) => {
+          console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <AddServiceModal isOpen={modalOpen} refresh={refresh} setRefresh={setRefresh} onClose={() => setModalOpen(false)} />
@@ -88,7 +87,8 @@ export default function ServicesPage() {
               {/* از اکسل */}
               <button
                 className="btn-custom"
-                onClick={() => setExcelModalOpen(true)}
+                 onClick={() => setExcelModalOpen(true)}
+              
               >
                 از اکسل
                 <span className="inline-block">
