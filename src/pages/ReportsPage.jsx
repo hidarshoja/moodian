@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
 import RecordsTable from "../components/RecordsTable";
@@ -6,14 +6,25 @@ import CustomersRecordsTable from "../components/CustomersRecordsTable";
 import ServicesRecordsTable from "../components/ServicesRecordsTable";
 import SettlementRecordsTable from "../components/SettlementRecordsTable";
 import SendRecordsTable from "../components/SendRecordsTable";
+import axiosClient from "../axios-client";
 
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
+  const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [dataTable, setDataTable] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
-
+  const initialFilters = {
+    created_at: "",
+    created_max: "",
+    status: "",
+  };
+  const [filterInputs, setFilterInputs] = useState(initialFilters);
+  const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
@@ -53,6 +64,35 @@ export default function ReportsPage() {
       pure: "123455",
     },
   ]);
+  const buildFilterQuery = (filters) => {
+    const params = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (key === "type") {
+          params.push(`${key}=${value}`);
+        } else {
+          params.push(`f[${key}]=${encodeURIComponent(value)}`);
+        }
+      }
+    });
+    return params.length ? "&" + params.join("&") : "";
+  };
+  console.log(`activeFilters`, activeFilters);
+  useEffect(() => {
+    setLoading(true);
+    const query = buildFilterQuery(activeFilters);
+    axiosClient
+      .get(`/invoices?page=${pageCount}${query}`)
+      .then((response) => {
+        setDataTable(response.data.data);
+        setMeta(response.data.meta);
+        console.log(`response.data.data`, response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => setLoading(false));
+  }, [refresh, activeFilters, pageCount]);
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
   };
@@ -76,13 +116,28 @@ export default function ReportsPage() {
     setFromMonth(null);
     setToMonth(null);
   };
-  const handleSendAll = () => {
-    console.log(`status`, status);
-    console.log(`startDate`, startDate ? startDate.format?.("YYYY/MM/DD") : "");
-  console.log(`endDate`, endDate ? endDate.format?.("YYYY/MM/DD") : "");
-  console.log(`fromMonth`, fromMonth ? fromMonth.format?.("YYYY/MM") : "");
-  console.log(`toMonth`, toMonth ? toMonth.format?.("YYYY/MM") : "");
+
+  function toEnglishDigits(str) {
+    if (!str) return "";
+    return str.replace(/[۰-۹]/g, (d) => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
   }
+
+  const handleSendAll = () => {
+    const start = toEnglishDigits(startDate?.format?.("YYYY/MM/DD") || "");
+    const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
+    let created_at = start;
+    if (start && end) {
+      created_at = `${start},${end}`;
+    } else if (!start && end) {
+      created_at = end;
+    }
+    const newFilters = {
+      created_at,
+      status: status || "",
+    };
+    setFilterInputs(newFilters);
+    setActiveFilters(newFilters);
+  };
 
   const handleSearchTermChange = (term) => {
     setSearchTerm(term);
@@ -118,7 +173,7 @@ export default function ReportsPage() {
         onClearAll={handleClearAll}
         setStatus={setStatus}
         status={status}
-        onSendAll ={handleSendAll}
+        onSendAll={handleSendAll}
       />
       <div className="mt-3">
         <SearchFilterBar
