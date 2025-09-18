@@ -78,10 +78,10 @@ export default function ReportsPage() {
   };
   const handleSendAll = () => {
     console.log(`status`, status);
-    console.log(`startDate`, startDate);
-    console.log(`endDate`, endDate);
-    console.log(`fromMonth`, fromMonth);
-    console.log(`toMonth`, toMonth);
+    console.log(`startDate`, startDate ? startDate.format?.("YYYY/MM/DD") : "");
+  console.log(`endDate`, endDate ? endDate.format?.("YYYY/MM/DD") : "");
+  console.log(`fromMonth`, fromMonth ? fromMonth.format?.("YYYY/MM") : "");
+  console.log(`toMonth`, toMonth ? toMonth.format?.("YYYY/MM") : "");
   }
 
   const handleSearchTermChange = (term) => {
