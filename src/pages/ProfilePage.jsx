@@ -7,8 +7,7 @@ import UserFormModal from "../components/UserFormModal";
 import { errorMessage, successMessage } from "../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
-import Pagination
- from "../components/Pagination";
+import Pagination from "../components/Pagination";
 export default function ProfilePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -51,7 +50,7 @@ export default function ProfilePage() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axiosClient.get(`/admin/users`);
+      const response = await axiosClient.get(`/admin/users?page=${pageCount}`);
       setRecords(response.data.data);
       setMeta(response.data.meta);
     } catch (error) {
