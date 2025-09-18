@@ -16,7 +16,7 @@ const units = [
 export default function CustomersTable({dataTable ,setDataTable , setRefresh , refresh}) {
  
   const [editedFields, setEditedFields] = useState({});
- 
+ const [selectedRowId, setSelectedRowId] = useState(null);
   const [row, setRow] = useState({
     address :"",
     branch_code: "",
@@ -203,6 +203,11 @@ export default function CustomersTable({dataTable ,setDataTable , setRefresh , r
     }
   };
 
+  const handleRowDoubleClick = (item) => {
+  setRow({ ...item });
+  setSelectedRowId(item.id);
+};
+
   return (
     
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8">
@@ -311,7 +316,11 @@ export default function CustomersTable({dataTable ,setDataTable , setRefresh , r
           const unitName = units.find((u) => u.id === item.type)?.name || "-";
 
   return (
-    <tr key={item.id} className="odd:bg-white/5 even:bg-white/10 border-t border-white/5">
+    <tr key={item.id}
+     onDoubleClick={() => handleRowDoubleClick(item)}
+      className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 
+              ${selectedRowId === item.id ? 'activeTr' : ''}`}
+    >
       <td className="p-2 ">{item?.name}&nbsp;&nbsp;{item?.last_name}</td>
       <td className="p-2  text-center">{unitName}</td>
       <td className="p-2  text-center">{item?.economic_code || "-"}</td>

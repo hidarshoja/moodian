@@ -203,3 +203,7 @@ body {
   width: 100% !important;
   background-color: rgb(170, 170, 170);
 }
+
+.activeTr {
+  background-color: #181f3a !important;
+  color: #fff !important;}
