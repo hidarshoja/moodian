@@ -1,6 +1,7 @@
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import { useState } from "react";
 
 export default function ReportsFilter({
   startDate,
@@ -29,11 +30,31 @@ export default function ReportsFilter({
   onSuccessfulToggle,
   onClearAll,
 }) {
+  const [activeTab, setActiveTab] = useState("day");
   return (
     <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
-      <div className="border rounded-md border-white w-full lg:w-1/2 p-1 flex gap-1">
-      {/* فیلتر براساس روز */}
-        <div className="input_date w-full md:w-1/7">
+      <div className="border  rounded-md border-white w-full lg:w-1/2 p-1 flex flex-col gap-1">
+      
+
+<div className="flex gap-2 my-2 items-center justify-center">
+  <button
+     className={`btn-custom3 ${activeTab === "day" ? "btn-custom3Active" : ""}`}
+    onClick={() => setActiveTab("day")}
+  >
+    فیلتر براساس روز
+  </button>
+  <button
+      className={`btn-custom3 ${activeTab === "month" ? "btn-custom3Active" : ""}`}
+    onClick={() => setActiveTab("month")}
+  >
+    فیلتر براساس ماه
+  </button>
+</div>
+     <div>
+       {/* فیلتر براساس روز */}
+       {activeTab === "day" && (
+        <div className="flex gap-2">
+       <div className="input_date w-full md:w-1/7">
           <span className="block text-gray-100 text-[10px] mb-2">تاریخ شروع </span>
           <DatePicker
             calendar={persian}
@@ -55,8 +76,10 @@ export default function ReportsFilter({
             inputClass="custom-input"
           />
         </div>
-      
-        {/* فیلتر براساس ماه */}
+        </div> 
+      )}
+  {activeTab === "month" && (
+    <div className="flex gap-2">
         <div className="input_date w-full md:w-1/7">
           <span className="block text-gray-100 text-[10px] mb-2">از ماه</span>
           <DatePicker
@@ -81,6 +104,9 @@ export default function ReportsFilter({
             onlyMonthPicker={true}
           />
         </div>
+    </div>
+   )}
+ </div>
        
       </div>
       <div className="border rounded-md border-white w-full lg:w-1/2 p-4 flex flex-wrap gap-9 items-center justify-start">

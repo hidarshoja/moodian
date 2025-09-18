@@ -207,3 +207,29 @@ body {
 .activeTr {
   background-color: #181f3a !important;
   color: #fff !important;}
+
+  .btn-custom3 {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem; /* gap-1 */
+    font-size: 0.875rem; /* text-sm */
+    background-image: linear-gradient(to top right, #23234a, #2e3a5c, #6ec6ca);
+    border: 1px solid #6ec6ca;
+    color: #e0f2f1;
+    padding: 0.5rem; /* p-2 */
+    border-radius: 0.75rem; /* rounded-xl */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    filter: drop-shadow(0 0 8px #00d4aa55);
+    transition: all 0.3s ease-out;
+    outline: none;
+  }
+  .btn-custom3:hover {
+    border-color: #00d4aa;
+    background-image: linear-gradient(to top left, #23234a, #2e3a5c, #6ec6ca);
+  }
+
+  .btn-custom3Active{
+    background-image: linear-gradient(to top left, #0e0e1c, #242b3f, #202627) !important;
+    color: #00b894;
+  }
