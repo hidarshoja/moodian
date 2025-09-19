@@ -194,7 +194,10 @@ export default function ReportsPage() {
           <ServicesRecordsTable records={filteredRecords} />
         )}
         {filterTable === "روش تسویه" && (
-          <SettlementRecordsTable records={filteredRecords2} />
+          <SettlementRecordsTable
+           records={dataTable}
+          loading={loading}
+           />
         )}
         {filterTable === "وضعیت ارسال" && (
           <SendRecordsTable 

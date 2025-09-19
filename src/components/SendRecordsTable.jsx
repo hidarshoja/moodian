@@ -11,7 +11,9 @@ export default function SendRecordsTable({
           <Spinner />
         </div>
       )}
-      <table className="min-w-full">
+      <table  className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}>
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap"> وضعیت ارسال </th>
