@@ -186,12 +186,20 @@ export default function ReportsPage() {
         />
       </div>
       <div className="mt-6">
-        {filterTable === "" && <RecordsTable records={filteredRecords} />}
+        {filterTable === "" && <RecordsTable
+          records={dataTable}
+          loading={loading}
+         />}
         {filterTable === "مشتری" && (
-          <CustomersRecordsTable records={filteredRecords2} />
+          <CustomersRecordsTable
+           records={dataTable}
+          loading={loading} />
         )}
         {filterTable === "کالا/خدمات" && (
-          <ServicesRecordsTable records={filteredRecords} />
+          <ServicesRecordsTable
+           records={dataTable}
+          loading={loading}
+            />
         )}
         {filterTable === "روش تسویه" && (
           <SettlementRecordsTable
