@@ -127,9 +127,9 @@ export default function ReportsFilter({
           )}
           <div className="flex gap-2 w-full md:w-1/2">
             <div className="flex flex-col  gap-2 w-1/3">
-              <span className="text-[10px] text-gray-100">وضعیت</span>
+              <span className="text-[10px]  text-gray-100">وضعیت</span>
               <select
-                className="border rounded px-2 py-[2px] text-[10px]"
+                className="border rounded px-2 py-[2px] text-[10px] bg-gray-400"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >

@@ -8,10 +8,10 @@ export default function DashboardPage() {
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserR, setSelectedUserR] = useState(null);
   const user = useSelector((state) => state.user.value);
   const [activityUser , setActivityUser] = useState();
 
-console.log(`user`, user);
   const openActivityModal = (user, activity) => {
     setSelectedUser(user);
     setSelectedActivity(activity);
@@ -27,11 +27,10 @@ console.log(`user`, user);
   
 
   const buildActivityDetails = (user, activity) => {
-    console.log(`activity`, activity);
-    console.log(`user`, user);
+   
     let date = convertToPersianDate(activity.created_at);
     let time = extractTimeFromDate(activity.created_at);
-    console.log(`date`, date);
+   
     const fullName =
       `${user?.name ?? ""} ${user?.last_name ?? ""}`.trim() || "کاربر";
     const base = activity?.inp_label  || "فعالیت";
@@ -49,11 +48,20 @@ console.log(`user`, user);
 
   useEffect(() => {
     axiosClient
+      .get("/profile")
+      .then((response) => {
+        setSelectedUserR(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axiosClient
       .get("/invoices")
       .then((response) => {
-        const data = response.data;
-        setActivityUser(response.data.data)
-        console.log(data);
+        setActivityUser(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
