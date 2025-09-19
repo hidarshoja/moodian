@@ -39,22 +39,22 @@ export default function SendRecordsTable({
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.name}
+                {r?.status_label }
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.factorMain}
+                {r.inp === 1 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.factorCorrective }
+              {r.inp === 2 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.factorReturn}
+              {r.inp === 3 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {r.factorCancellation}
+              {r.inp === 4 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
-                {r.pure}
+                {r.asn}
               </td>
               
             

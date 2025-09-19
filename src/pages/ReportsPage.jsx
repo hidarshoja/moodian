@@ -196,7 +196,7 @@ export default function ReportsPage() {
           <SettlementRecordsTable records={filteredRecords2} />
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable records={filteredRecords} />
+          <SendRecordsTable records={dataTable} />
         )}
       </div>
     </div>
