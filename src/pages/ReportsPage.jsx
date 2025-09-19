@@ -7,6 +7,7 @@ import ServicesRecordsTable from "../components/ServicesRecordsTable";
 import SettlementRecordsTable from "../components/SettlementRecordsTable";
 import SendRecordsTable from "../components/SendRecordsTable";
 import axiosClient from "../axios-client";
+import Pagination from "../components/Pagination";
 
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
@@ -198,6 +199,12 @@ export default function ReportsPage() {
         {filterTable === "وضعیت ارسال" && (
           <SendRecordsTable records={dataTable} />
         )}
+          <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
       </div>
     </div>
   );
