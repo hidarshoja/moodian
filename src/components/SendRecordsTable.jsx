@@ -1,8 +1,16 @@
+import Spinner from "../utils/Spinner";
+
 export default function SendRecordsTable({
-  records
+  records,
+  loading
 }) {
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+       {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+          <Spinner />
+        </div>
+      )}
       <table className="min-w-full">
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">

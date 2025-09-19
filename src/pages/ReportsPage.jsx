@@ -197,7 +197,10 @@ export default function ReportsPage() {
           <SettlementRecordsTable records={filteredRecords2} />
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable records={dataTable} />
+          <SendRecordsTable 
+          records={dataTable}
+          loading={loading}
+          />
         )}
           <Pagination
         meta={meta}
