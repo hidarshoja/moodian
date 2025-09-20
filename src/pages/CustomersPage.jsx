@@ -34,14 +34,13 @@ export default function CustomersPage() {
     { id: 3, name: "مشارکت مدنی" },
     { id: 4, name: "اتباع غیر ایرانی" },
   ];
-  useEffect(() => {
-    setLoading(true);
-    const buildFilterQuery = (filters) => {
+
+   const buildFilterQuery = (filters) => {
       const params = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (value) {
           if (key === "type") {
-            params.push(`${key}=${value}`);
+            params.push(`f[${key}]=${value}`);
           } else {
             params.push(`f[${key}]=${encodeURIComponent(value)}`);
           }
@@ -50,6 +49,9 @@ export default function CustomersPage() {
       return params.length ? "&" + params.join("&") : "";
     };
 
+
+  useEffect(() => {
+    setLoading(true);
     const query = buildFilterQuery(activeFilters);
     axiosClient
       .get(`/customers?page=${pageCount}${query}`)
@@ -63,28 +65,16 @@ export default function CustomersPage() {
       .finally(() => setLoading(false));
   }, [refresh, activeFilters, pageCount]);
 
-  const buildFilterQuery = (filters) => {
-    const params = [];
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        if (key === "type") {
-          params.push(`${key}=${value}`);
-        } else {
-          params.push(`f[${key}]=${encodeURIComponent(value)}`);
-        }
-      }
-    });
-  return params.length ? "&" + params.join("&") : "";
-  };
+
 
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
     // exportServicesToExcel(dataTable);
     const query = buildFilterQuery(activeFilters);
     console.log(`query`, query);
-    const separator = "?";
+    const separator = "&";
     axiosClient
-      .get(`/customers${separator}export=1${query}`)
+      .get(`/customers?page=${pageCount}${separator}export=1${query}`)
       .then((response) => {
         console.log(response.data.data);
         setTimeout(() => {

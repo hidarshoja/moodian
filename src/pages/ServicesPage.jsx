@@ -60,9 +60,9 @@ export default function ServicesPage() {
   const handleExportExcel = () => {
       // exportServicesToExcel(dataTable);
       const query = buildFilterQuery(activeFilters);
-      const separator = query ? "&" : "?";
+      const separator = query ? "&" : "&";
       axiosClient
-        .get(`/products${query}${separator}export=1`)
+        .get(`/products?page=${pageCount}${query}${separator}export=1`)
         .then((response) => {
           console.log(response.data.data);
           setTimeout(() => {
