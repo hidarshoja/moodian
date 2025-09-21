@@ -6,12 +6,11 @@ import Swal from "sweetalert2";
 import EditInvoiceModal from "./EditInvoiceModal";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { convertJalaliDatetimeToGregorian } from "../utils/change-date"
+import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [form, setForm] = useState({
-    
     id: "",
     status: "",
     tax_number: "",
@@ -23,25 +22,12 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     ins: "",
     indatim: "",
     indati2m: "",
-    items: [ {
-      "product_id":1,
-      "am": 1,
-      "nw": null,
-      "fee": 900000,
-      "cfee": 1,
-      "cut": null,
-      "exr": 2,
-      "ssrv": null,
-      "sscv": null,
-      "dis": 0,
-      "consfee": null,
-      "spro": null,
-      "bros": null,
-      "bsrn": null,
-      "cui": null,
-      "cpr": null,
-      "sovat": null
-      }],
+    product_id: "",
+    am: "",
+    fee: "",
+    cfee: "",
+    exr: "",
+    dis: "",
   });
 
   const handleDelete = async (row) => {
@@ -80,15 +66,11 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
   };
 
   const handleEdit = (row) => {
-    // Convert items array to JSON string for display
-    let itemsString = "";
-    if (row.items) {
-      if (Array.isArray(row.items)) {
-        itemsString = JSON.stringify(row.items, null, 2);
-      } else if (typeof row.items === "string") {
-        itemsString = row.items;
-      }
-    }
+    // Extract item values from first item if exists
+    const firstItem =
+      row.items && Array.isArray(row.items) && row.items.length > 0
+        ? row.items[0]
+        : {};
 
     setForm({
       id: row.id || "",
@@ -102,7 +84,12 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
       ins: row.ins || "",
       indatim: row.indatim || "",
       indati2m: row.indati2m || "",
-      items: itemsString,
+      product_id: firstItem.product_id || "",
+      am: firstItem.am || "",
+      fee: firstItem.fee || "",
+      cfee: firstItem.cfee || "",
+      exr: firstItem.exr || "",
+      dis: firstItem.dis || "",
     });
     setIsEditModalOpen(true);
   };
@@ -119,7 +106,6 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     e.preventDefault();
 
     try {
-     
       const insValue =
         form.ins && String(form.ins).trim() !== "" ? form.ins : 1;
 
@@ -135,25 +121,27 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
         ins: insValue,
         indatim: convertJalaliDatetimeToGregorian(form.indatim),
         indati2m: convertJalaliDatetimeToGregorian(form.indati2m),
-        items: [ {
-          "product_id":1,
-          "am": 1,
-          "nw": null,
-          "fee": 900000,
-          "cfee": 1,
-          "cut": null,
-          "exr": 2,
-          "ssrv": null,
-          "sscv": null,
-          "dis": 0,
-          "consfee": null,
-          "spro": null,
-          "bros": null,
-          "bsrn": null,
-          "cui": null,
-          "cpr": null,
-          "sovat": null
-          }],
+        items: [
+          {
+            product_id: form.product_id ? Number(form.product_id) : 1,
+            am: form.am ? Number(form.am) : 1,
+            nw: null,
+            fee: form.fee ? Number(form.fee) : 900000,
+            cfee: form.cfee ? Number(form.cfee) : 1,
+            cut: null,
+            exr: form.exr ? Number(form.exr) : 2,
+            ssrv: null,
+            sscv: null,
+            dis: form.dis ? Number(form.dis) : 0,
+            consfee: null,
+            spro: null,
+            bros: null,
+            bsrn: null,
+            cui: null,
+            cpr: null,
+            sovat: null,
+          },
+        ],
       };
 
       await axiosClient.put(`/invoices/${form.id}`, payload);
@@ -208,7 +196,12 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
       ins: "",
       indatim: "",
       indati2m: "",
-      items: "",
+      product_id: "",
+      am: "",
+      fee: "",
+      cfee: "",
+      exr: "",
+      dis: "",
     });
   };
 

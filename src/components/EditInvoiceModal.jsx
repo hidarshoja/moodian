@@ -63,19 +63,6 @@ export default function EditInvoiceModal({
     return "";
   };
 
-  const validateItems = (items) => {
-    if (!items) return "آیتم‌ها الزامی است";
-    try {
-      const parsed = JSON.parse(items);
-      if (!Array.isArray(parsed)) {
-        return "آیتم‌ها باید آرایه باشد";
-      }
-    } catch (e) {
-      return "فرمت آیتم‌ها نامعتبر است";
-    }
-    return "";
-  };
-
   // Real-time validation
   useEffect(() => {
     const newErrors = {};
@@ -96,14 +83,7 @@ export default function EditInvoiceModal({
     if (insError) newErrors.ins = insError;
 
     setErrors(newErrors);
-  }, [
-    form.customer_id,
-    form.tax_number,
-    form.inty,
-    form.inp,
-    form.ins,
-    form.items,
-  ]);
+  }, [form.customer_id, form.tax_number, form.inty, form.inp, form.ins]);
 
   if (!isOpen) return null;
 
@@ -382,26 +362,74 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.ins}</p>
             )}
           </div>
-          {/* <div className="md:col-span-2">
+          <div>
             <label className="block mb-1 text-white text-sm">
-              آیتم‌ها (items)
+              شناسه محصول (product_id)
             </label>
-            <textarea
-              name="items"
-              value={form.items || ""}
+            <input
+              type="number"
+              name="product_id"
+              value={form.product_id || ""}
               onChange={onChange}
-              rows={3}
-              placeholder='آیتم‌های فاکتور    '
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 resize-none ${
-                errors.items
-                  ? "border-red-500 focus:ring-red-500/20"
-                  : "border-white/10 focus:ring-white/20"
-              }`}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
-            {errors.items && (
-              <p className="text-red-400 text-xs mt-1">{errors.items}</p>
-            )}
-          </div> */}
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">تعداد (am)</label>
+            <input
+              type="number"
+              name="am"
+              value={form.am || ""}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              قیمت واحد (fee)
+            </label>
+            <input
+              type="number"
+              name="fee"
+              value={form.fee || ""}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              ضریب قیمت (cfee)
+            </label>
+            <input
+              type="number"
+              name="cfee"
+              value={form.cfee || ""}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              نرخ ارز (exr)
+            </label>
+            <input
+              type="number"
+              name="exr"
+              value={form.exr || ""}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">تخفیف (dis)</label>
+            <input
+              type="number"
+              name="dis"
+              value={form.dis || ""}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
           <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
@@ -438,7 +466,12 @@ EditInvoiceModal.propTypes = {
     ins: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     indatim: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     indati2m: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    items: PropTypes.string,
+    product_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    am: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    fee: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cfee: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    exr: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    dis: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
