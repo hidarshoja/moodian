@@ -252,7 +252,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                 {r?.status_label}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.inp === 1 ? r.ins_label : "-"}
+                {r.taxid  ? r.taxid : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.customer?.name} {r?.customer?.last_name}
@@ -261,10 +261,10 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                 {formatDateToYMD(r.created_at)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {r.inp === 4 ? r.ins_label : "-"}
+                {r.tadis  ? r.tadis : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
-                {r.asn}
+                {r.inty_label}
               </td>
 
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
