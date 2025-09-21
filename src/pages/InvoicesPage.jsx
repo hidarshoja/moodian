@@ -4,16 +4,14 @@ import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 
 export default function InvoicesPage() {
-
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const [dataTable, setDataTable] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [activeFilters, setActiveFilters] = useState({});
- 
+  const [activeFilters] = useState({});
 
-    const buildFilterQuery = (filters) => {
+  const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
@@ -26,7 +24,7 @@ export default function InvoicesPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-  
+
   useEffect(() => {
     setLoading(true);
     const query = buildFilterQuery(activeFilters);
@@ -47,21 +45,24 @@ export default function InvoicesPage() {
       <div>
         <div className="w-full border-b border-white/10 p-6">
           <h1 className="text-white text-2xl font-bold">فاکتور فروش</h1>
-          <p className="text-white/60 text-sm mt-1">نمای کلی فاکتور فروش کاربران</p>
+          <p className="text-white/60 text-sm mt-1">
+            نمای کلی فاکتور فروش کاربران
+          </p>
         </div>
       </div>
       <div className="p-6">
-        <SendInvoicesTable 
-                 records={dataTable}
-                 loading={loading}
-                 />
+        <SendInvoicesTable
+          records={dataTable}
+          loading={loading}
+          onRefresh={() => setRefresh(!refresh)}
+        />
       </div>
-        <Pagination
+      <Pagination
         meta={meta}
         pageCount={pageCount}
         setPageCount={setPageCount}
         setLoading={setLoading}
       />
     </div>
-  )
+  );
 }
