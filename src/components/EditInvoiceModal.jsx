@@ -95,8 +95,6 @@ export default function EditInvoiceModal({
     const insError = validateIns(form.ins);
     if (insError) newErrors.ins = insError;
 
-   
-
     setErrors(newErrors);
   }, [
     form.customer_id,
@@ -148,7 +146,6 @@ export default function EditInvoiceModal({
               <option value="4">برگشت خورده</option>
             </select>
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               شماره منحصر به فرد مالیاتی
@@ -180,7 +177,6 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.tax_number}</p>
             )}
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">نام مشتری</label>
             <input
@@ -190,7 +186,6 @@ export default function EditInvoiceModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               نام خانوادگی مشتری
@@ -202,7 +197,6 @@ export default function EditInvoiceModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ صدور (indatim)
@@ -226,7 +220,6 @@ export default function EditInvoiceModal({
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ تحویل (indati2m)
@@ -249,7 +242,8 @@ export default function EditInvoiceModal({
               calendarPosition="bottom-right"
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
-          </div>  <div>
+          </div>{" "}
+          <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ صدور (indatim)
             </label>
@@ -272,7 +266,6 @@ export default function EditInvoiceModal({
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ تحویل (indati2m)
@@ -296,7 +289,6 @@ export default function EditInvoiceModal({
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">شناسه مشتری</label>
             <input
@@ -314,7 +306,6 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.customer_id}</p>
             )}
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               نوع فاکتور (inty)
@@ -344,7 +335,6 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.inty}</p>
             )}
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               نوع پرداخت (inp)
@@ -369,13 +359,11 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.inp}</p>
             )}
           </div>
-
           <div>
             <label className="block mb-1 text-white text-sm">
               شماره سریال (ins)
             </label>
-            <input
-              type="number"
+            <select
               name="ins"
               value={form.ins || ""}
               onChange={onChange}
@@ -384,14 +372,16 @@ export default function EditInvoiceModal({
                   ? "border-red-500 focus:ring-red-500/20"
                   : "border-white/10 focus:ring-white/20"
               }`}
-            />
+            >
+              <option value="">انتخاب شماره سریال</option>
+              <option value="1">اصلی</option>
+              <option value="2">اصلاحی</option>
+              <option value="3">ابطالی</option>
+            </select>
             {errors.ins && (
               <p className="text-red-400 text-xs mt-1">{errors.ins}</p>
             )}
           </div>
-
-        
-
           {/* <div className="md:col-span-2">
             <label className="block mb-1 text-white text-sm">
               آیتم‌ها (items)
@@ -412,7 +402,6 @@ export default function EditInvoiceModal({
               <p className="text-red-400 text-xs mt-1">{errors.items}</p>
             )}
           </div> */}
-
           <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
