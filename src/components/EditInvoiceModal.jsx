@@ -44,24 +44,8 @@ export default function EditInvoiceModal({
     return "";
   };
 
-  const validateInp = (inp) => {
-    if (!inp) return "نوع پرداخت الزامی است";
-    const validInpValues = [1, 2, 3, 4]; // Valid inp values
-    const inpNum = Number(inp);
-    if (isNaN(inpNum) || !validInpValues.includes(inpNum)) {
-      return "نوع پرداخت نامعتبر است";
-    }
-    return "";
-  };
+  
 
-  const validateIns = (ins) => {
-    if (!ins) return "شماره سریال الزامی است";
-    const insNum = Number(ins);
-    if (isNaN(insNum) || insNum <= 0) {
-      return "شماره سریال باید عدد مثبت باشد";
-    }
-    return "";
-  };
 
   // Real-time validation
   useEffect(() => {
@@ -76,14 +60,9 @@ export default function EditInvoiceModal({
     const intyError = validateInty(form.inty);
     if (intyError) newErrors.inty = intyError;
 
-    const inpError = validateInp(form.inp);
-    if (inpError) newErrors.inp = inpError;
-
-    const insError = validateIns(form.ins);
-    if (insError) newErrors.ins = insError;
 
     setErrors(newErrors);
-  }, [form.customer_id, form.tax_number, form.inty, form.inp, form.ins]);
+  }, [form.customer_id, form.tax_number, form.inty]);
 
   if (!isOpen) return null;
 
@@ -301,15 +280,9 @@ export default function EditInvoiceModal({
               }`}
             >
               <option value="">انتخاب نوع فاکتور</option>
-              <option value="1">فروش کالا</option>
-              <option value="2">ارائه خدمات</option>
-              <option value="3">فروش کالا و خدمات</option>
-              <option value="4">پیش‌فاکتور</option>
-              <option value="5">برگشت از فروش</option>
-              <option value="6">تخفیف</option>
-              <option value="7">اضافه‌کاری</option>
-              <option value="8">سایر</option>
-              <option value="9">پیش‌پرداخت</option>
+              <option value="1">صورتحساب الکترونیکی نوع اول</option>
+              <option value="2">صورتحساب الکترونیکی نوع دوم</option>
+              <option value="3">صورتحساب الکترونیکی نوع سوم</option>
             </select>
             {errors.inty && (
               <p className="text-red-400 text-xs mt-1">{errors.inty}</p>
@@ -317,7 +290,7 @@ export default function EditInvoiceModal({
           </div>
           <div>
             <label className="block mb-1 text-white text-sm">
-              نوع پرداخت (inp)
+               الگوی صورتحساب (inp)
             </label>
             <select
               name="inp"
@@ -329,11 +302,17 @@ export default function EditInvoiceModal({
                   : "border-white/10 focus:ring-white/20"
               }`}
             >
-              <option value="">انتخاب نوع پرداخت</option>
-              <option value="1">نقدی</option>
-              <option value="2">نسیه</option>
-              <option value="3">چک</option>
-              <option value="4">کارت</option>
+              <option value="">انتخاب الگوی صورتحساب</option>
+              <option value="1">الگوی اول (فروش)</option>
+              <option value="2">الگوی دوم (فروش ارزی)</option>
+              <option value="3">الگوی سوم (صورتحساب طلا، جواهر و پلاتین)  </option>
+              <option value="4">الگوی چهارم (قرارداد پیمانکاری) </option>
+              <option value="5">الگوی پنجم (قبوض خدماتی)</option>
+              <option value="6">الگوی ششم (بلیط هواپیما)</option>
+              <option value="7">الگوی هفتم (صادرات)</option>
+              <option value="8">الگوی هشتم (بارنامه)</option>
+              <option value="11">الگوی یازدهم (بورس اوراق بهادار  مبتنی بر کالا)  </option>
+              <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
             </select>
             {errors.inp && (
               <p className="text-red-400 text-xs mt-1">{errors.inp}</p>
@@ -341,7 +320,7 @@ export default function EditInvoiceModal({
           </div>
           <div>
             <label className="block mb-1 text-white text-sm">
-              شماره سریال (ins)
+               موضوع صورتحساب (ins)
             </label>
             <select
               name="ins"
@@ -353,10 +332,11 @@ export default function EditInvoiceModal({
                   : "border-white/10 focus:ring-white/20"
               }`}
             >
-              <option value="">انتخاب شماره سریال</option>
+              <option value="">انتخاب موضوع صورتحساب</option>
               <option value="1">اصلی</option>
               <option value="2">اصلاحی</option>
               <option value="3">ابطالی</option>
+              <option value="4">برگشت از فروش</option>
             </select>
             {errors.ins && (
               <p className="text-red-400 text-xs mt-1">{errors.ins}</p>
