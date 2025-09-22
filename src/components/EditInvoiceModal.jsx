@@ -24,15 +24,7 @@ export default function EditInvoiceModal({
     return "";
   };
 
-  const validateTaxNumber = (taxNumber) => {
-    if (!taxNumber) return "";
-    const taxStr = String(taxNumber);
-    const digits = taxStr.replace(/\D/g, "");
-    if (digits.length > 0 && digits.length !== 13) {
-      return "شماره منحصر به فرد مالیاتی باید ۱۳ رقم باشد";
-    }
-    return "";
-  };
+
 
   const validateInty = (inty) => {
     if (!inty) return "نوع فاکتور الزامی است";
@@ -54,8 +46,7 @@ export default function EditInvoiceModal({
     const customerIdError = validateCustomerId(form.customer_id);
     if (customerIdError) newErrors.customer_id = customerIdError;
 
-    const taxNumberError = validateTaxNumber(form.tax_number);
-    if (taxNumberError) newErrors.tax_number = taxNumberError;
+   
 
     const intyError = validateInty(form.inty);
     if (intyError) newErrors.inty = intyError;
@@ -90,72 +81,9 @@ export default function EditInvoiceModal({
           }}
           className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto flex-1"
         >
-          <div>
-            <label className="block mb-1 text-white text-sm">وضعیت</label>
-            <select
-              name="status"
-              value={form.status || ""}
-              onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            >
-              <option value="">انتخاب وضعیت</option>
-              <option value="1">تأیید شده</option>
-              <option value="2">در انتظار تأیید</option>
-              <option value="3">رد شده</option>
-              <option value="4">برگشت خورده</option>
-            </select>
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              شماره منحصر به فرد مالیاتی
-            </label>
-            <input
-              name="tax_number"
-              value={form.tax_number || ""}
-              onChange={(e) => {
-                // Only allow numeric input and limit to 13 characters
-                const value = e.target.value.replace(/\D/g, "").slice(0, 13);
-                onChange({
-                  target: {
-                    name: "tax_number",
-                    value: value,
-                  },
-                });
-              }}
-              placeholder="13 رقم وارد کنید"
-              maxLength={13}
-              inputMode="numeric"
-              pattern="[0-9]*"
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
-                errors.tax_number
-                  ? "border-red-500 focus:ring-red-500/20"
-                  : "border-white/10 focus:ring-white/20"
-              }`}
-            />
-            {errors.tax_number && (
-              <p className="text-red-400 text-xs mt-1">{errors.tax_number}</p>
-            )}
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">نام مشتری</label>
-            <input
-              name="customer_name"
-              value={form.customer_name || ""}
-              onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              نام خانوادگی مشتری
-            </label>
-            <input
-              name="customer_last_name"
-              value={form.customer_last_name || ""}
-              onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
+       
+          
+        
           <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ صدور (indatim)
@@ -202,52 +130,7 @@ export default function EditInvoiceModal({
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>{" "}
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              تاریخ صدور (indatim)
-            </label>
-            <DatePicker
-              calendar={persian}
-              locale={persian_fa}
-              value={form.indatim}
-              onChange={(date) => {
-                const formattedDate = date
-                  ? date.format("YYYY-MM-DD HH:mm:ss")
-                  : "";
-                onChange({
-                  target: {
-                    name: "indatim",
-                    value: formattedDate,
-                  },
-                });
-              }}
-              calendarPosition="bottom-right"
-              inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              تاریخ تحویل (indati2m)
-            </label>
-            <DatePicker
-              calendar={persian}
-              locale={persian_fa}
-              value={form.indati2m}
-              onChange={(date) => {
-                const formattedDate = date
-                  ? date.format("YYYY-MM-DD HH:mm:ss")
-                  : "";
-                onChange({
-                  target: {
-                    name: "indati2m",
-                    value: formattedDate,
-                  },
-                });
-              }}
-              calendarPosition="bottom-right"
-              inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
+          
           <div>
             <label className="block mb-1 text-white text-sm">شناسه مشتری</label>
             <input

@@ -111,10 +111,8 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
 
       const payload = {
         id: form.id,
-        status: form.status,
-        tax_number: form.tax_number,
-        customer_name: form.customer_name,
-        customer_last_name: form.customer_last_name,
+       
+        
         customer_id: form.customer_id,
         inty: form.inty,
         inp: form.inp,
