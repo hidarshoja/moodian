@@ -33,7 +33,6 @@ export default function InvoicesPage() {
       .then((response) => {
         setDataTable(response.data.data);
         setMeta(response.data.meta);
-        console.log(`response.data.data`, response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

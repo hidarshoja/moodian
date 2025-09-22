@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import axiosClient from "../axios-client";
 
 export default function EditInvoiceModal({
   isOpen,
@@ -13,7 +14,7 @@ export default function EditInvoiceModal({
   onClose,
 }) {
   const [errors, setErrors] = useState({});
-
+  const [dataCustomers, setDataCustomers] = useState([]);
   // Validation functions
   const validateCustomerId = (customerId) => {
     if (!customerId) return "شناسه مشتری الزامی است";
@@ -23,8 +24,6 @@ export default function EditInvoiceModal({
     }
     return "";
   };
-
-
 
   const validateInty = (inty) => {
     if (!inty) return "نوع فاکتور الزامی است";
@@ -36,8 +35,16 @@ export default function EditInvoiceModal({
     return "";
   };
 
-  
-
+  useEffect(() => {
+    axiosClient
+      .get(`/customers`)
+      .then((response) => {
+        setDataCustomers(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   // Real-time validation
   useEffect(() => {
@@ -46,11 +53,8 @@ export default function EditInvoiceModal({
     const customerIdError = validateCustomerId(form.customer_id);
     if (customerIdError) newErrors.customer_id = customerIdError;
 
-   
-
     const intyError = validateInty(form.inty);
     if (intyError) newErrors.inty = intyError;
-
 
     setErrors(newErrors);
   }, [form.customer_id, form.tax_number, form.inty]);
@@ -81,9 +85,6 @@ export default function EditInvoiceModal({
           }}
           className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto flex-1"
         >
-       
-          
-        
           <div>
             <label className="block mb-1 text-white text-sm">
               تاریخ صدور (indatim)
@@ -130,11 +131,9 @@ export default function EditInvoiceModal({
               inputClass="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>{" "}
-          
           <div>
             <label className="block mb-1 text-white text-sm">شناسه مشتری</label>
-            <input
-              type="number"
+            <select
               name="customer_id"
               value={form.customer_id || ""}
               onChange={onChange}
@@ -143,7 +142,14 @@ export default function EditInvoiceModal({
                   ? "border-red-500 focus:ring-red-500/20"
                   : "border-white/10 focus:ring-white/20"
               }`}
-            />
+            >
+              <option value="">انتخاب مشتری</option>
+              {dataCustomers.map((customer) => (
+                <option key={customer.id} value={String(customer.id)}>
+                  {`${customer.name || ""} ${customer.last_name || ""}`.trim()}
+                </option>
+              ))}
+            </select>
             {errors.customer_id && (
               <p className="text-red-400 text-xs mt-1">{errors.customer_id}</p>
             )}
@@ -173,7 +179,7 @@ export default function EditInvoiceModal({
           </div>
           <div>
             <label className="block mb-1 text-white text-sm">
-               الگوی صورتحساب (inp)
+              الگوی صورتحساب (inp)
             </label>
             <select
               name="inp"
@@ -188,13 +194,17 @@ export default function EditInvoiceModal({
               <option value="">انتخاب الگوی صورتحساب</option>
               <option value="1">الگوی اول (فروش)</option>
               <option value="2">الگوی دوم (فروش ارزی)</option>
-              <option value="3">الگوی سوم (صورتحساب طلا، جواهر و پلاتین)  </option>
+              <option value="3">
+                الگوی سوم (صورتحساب طلا، جواهر و پلاتین){" "}
+              </option>
               <option value="4">الگوی چهارم (قرارداد پیمانکاری) </option>
               <option value="5">الگوی پنجم (قبوض خدماتی)</option>
               <option value="6">الگوی ششم (بلیط هواپیما)</option>
               <option value="7">الگوی هفتم (صادرات)</option>
               <option value="8">الگوی هشتم (بارنامه)</option>
-              <option value="11">الگوی یازدهم (بورس اوراق بهادار  مبتنی بر کالا)  </option>
+              <option value="11">
+                الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا){" "}
+              </option>
               <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
             </select>
             {errors.inp && (
@@ -203,7 +213,7 @@ export default function EditInvoiceModal({
           </div>
           <div>
             <label className="block mb-1 text-white text-sm">
-               موضوع صورتحساب (ins)
+              موضوع صورتحساب (ins)
             </label>
             <select
               name="ins"
