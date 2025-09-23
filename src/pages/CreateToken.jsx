@@ -12,7 +12,7 @@ export default function CreateToken() {
     try {
       setLoading(true);
       const res = await axiosClient.post(`/auth/tokens/create`);
-      const successMessage = res?.data?.message || "توکن با موفقیت ساخته شد";
+      const successMessage = "  لطفا توکن را ذخیره کنید توکن با موفقیت ساخته شد";
       const newToken = res?.data?.data?.token || "";
       setMessage(successMessage);
       setToken(newToken);
