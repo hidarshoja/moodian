@@ -22,6 +22,7 @@ import PasswordPage from "./pages/PasswordPage";
 import SupportPage from "./pages/SupportPage";
 import OtpPage from "./pages/login/OtpPage";
 import DownloadExcel from "./pages/DownloadExcel";
+import CreateToken from "./pages/CreateToken";
 
 export const route = createBrowserRouter([
     {
@@ -99,6 +100,10 @@ export const route = createBrowserRouter([
             {
                 path: '/downloadExcel',
                 element: <DownloadExcel />
+            },
+            {
+                path: '/create-token',
+                element: <CreateToken />
             },
         ]
     },

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axiosClient from "../axios-client";
 import { convertToPersianDate , extractTimeFromDate } from '../utils/change-date';
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardPage() {
   const [error] = useState(null);
@@ -11,7 +12,7 @@ export default function DashboardPage() {
   const [selectedUserR, setSelectedUserR] = useState(null);
   const user = useSelector((state) => state.user.value);
   const [activityUser , setActivityUser] = useState();
-
+ const navigate = useNavigate();
   const openActivityModal = (user, activity) => {
     setSelectedUser(user);
     setSelectedActivity(activity);
@@ -71,10 +72,19 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
-        <div className="w-full border-b border-white/10 p-6">
+        <div className="w-full border-b border-white/10 p-6 flex items-center justify-between">
+          <div>
           <h1 className="text-white text-2xl font-bold">داشبورد</h1>
           <p className="text-white/60 text-sm mt-1">نمای کلی اطلاعات کاربران</p>
+          </div>
+
+          <div>
+          <button
+          onClick={() => navigate("/create-token")}
+          className="btn-custom">ایجاد توکن</button>
         </div>
+        </div>
+       
       </div>
       <div className="users">
         {user === null && (
