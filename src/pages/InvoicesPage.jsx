@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import SendInvoicesTable from "../components/SendInvoicesTable";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+import { GrDocumentExcel } from "react-icons/gr";
+import ImportExcelModalInvoices from "../components/ImportExcelModalInvoices";
 
 export default function InvoicesPage() {
   const [meta, setMeta] = useState({});
@@ -10,7 +12,7 @@ export default function InvoicesPage() {
   const [dataTable, setDataTable] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [activeFilters] = useState({});
-
+  const [excelModalOpen, setExcelModalOpen] = useState(false);
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -42,11 +44,22 @@ export default function InvoicesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
-        <div className="w-full border-b border-white/10 p-6">
+        <div className="w-full border-b border-white/10 p-6 flex  items-center justify-between">
+        <div>
           <h1 className="text-white text-2xl font-bold">فاکتور فروش</h1>
           <p className="text-white/60 text-sm mt-1">
             نمای کلی فاکتور فروش کاربران
           </p>
+        </div>
+         <button
+                        className="btn-custom"
+                        onClick={() => setExcelModalOpen(true)}
+                      >
+                        از اکسل
+                        <span className="inline-block">
+                          <GrDocumentExcel className="w-5 h-5" />
+                        </span>
+                      </button>
         </div>
       </div>
       <div className="p-6">
@@ -56,6 +69,10 @@ export default function InvoicesPage() {
           onRefresh={() => setRefresh(!refresh)}
         />
       </div>
+       <ImportExcelModalInvoices
+              isOpen={excelModalOpen}
+              onClose={() => setExcelModalOpen(false)}
+            />
       <Pagination
         meta={meta}
         pageCount={pageCount}
