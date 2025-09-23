@@ -1,17 +1,41 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 export default function ImportExcelModalUser({ isOpen, onClose }) {
   const fileInputRef = useRef();
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   if (!isOpen) return null;
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Only allow .xlsx
+    const isXlsx = file.name.toLowerCase().endsWith(".xlsx");
+    if (!isXlsx) {
+      setFileName("");
+      setSelectedFile(null);
+      Swal.fire({
+        icon: "error",
+        title: "پسوند فایل نامعتبر است",
+        text: "لطفاً فقط فایل با پسوند .xlsx انتخاب کنید.",
+        background: "#0a0a22",
+        color: "#e5e7eb",
+        confirmButtonColor: "#1f2937",
+      });
+      // reset input value so same file can be re-selected
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
     setFileName(file.name);
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = (evt) => {
       const bstr = evt.target.result;
@@ -28,6 +52,57 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
     if (e.target === e.currentTarget) onClose();
   };
 
+  const handleImport = async (e) => {
+    e.preventDefault();
+    if (!selectedFile) {
+      Swal.fire({
+        icon: "warning",
+        title: "ابتدا فایل را انتخاب کنید",
+        background: "#0a0a22",
+        color: "#e5e7eb",
+        confirmButtonColor: "#1f2937",
+      });
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("excel", selectedFile);
+
+      await axiosClient.post(`/customers/import`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "فایل با موفقیت بارگذاری شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" },
+        background: "#111827",
+        color: "#e5e7eb",
+      });
+      onClose();
+      // reset state after successful upload
+      setSelectedFile(null);
+      setFileName("");
+      setExcelData([]);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "خطا در بارگذاری فایل",
+        text: error?.response?.data?.message || "دوباره تلاش کنید",
+        background: "#0a0a22",
+        color: "#e5e7eb",
+        confirmButtonColor: "#1f2937",
+      });
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-black/40"
@@ -42,7 +117,7 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
           ×
         </button>
         <h2 className="text-2xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
-        دریافت لیست مشتری از اکسل
+          دریافت لیست مشتری از اکسل
         </h2>
         <div className="flex items-center mb-3 justify-between">
           <div className="flex items-center gap-4  pr-2">
@@ -54,7 +129,7 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
             </button>
             <input
               type="file"
-              accept=".xlsx,.xls"
+              accept=".xlsx"
               ref={fileInputRef}
               className="hidden"
               onChange={handleFileChange}
@@ -66,7 +141,9 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
             )}
           </div>
           <div className="flex flex-col md:flex-row gap-2 my-1">
-            <button className="btn-custom">بارگذاری</button>
+            <button className="btn-custom" onClick={handleImport}>
+              بارگذاری
+            </button>
             <button className="btn-custom">فایل نمونه</button>
           </div>
         </div>
@@ -126,3 +203,8 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
     </div>
   );
 }
+
+ImportExcelModalUser.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

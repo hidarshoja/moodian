@@ -170,6 +170,24 @@ body {
   transition: all 0.3s ease-out;
   outline: none;
 }
+
+.swal2-confirm {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important; /* gap-1 */
+  font-size: 0.875rem !important; /* text-sm */
+  background-image: linear-gradient(to top right, #23234a, #2e3a5c, #6ec6ca) !important;
+  border: 1px solid #6ec6ca !important;
+  color: #e0f2f1 !important;
+  padding: 0.5rem 2rem !important; /* p-2 */
+  border-radius: 0.75rem !important; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* shadow-lg */
+  
+  transition: all 0.3s ease-out !important;
+  outline: none !important;
+ 
+}
 .btn-custom2 {
   display: flex;
   align-items: center;
