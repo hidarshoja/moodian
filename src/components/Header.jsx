@@ -22,7 +22,7 @@ export default function Header({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  // const handleLogout = useCallback(() => {
+   const handleLogout = useCallback(() => {
   //   // Clear token and redux user, then redirect to login
   //   localStorage.removeItem("ACCESS_TOKEN");
   //   localStorage.removeItem("USER");
@@ -30,7 +30,7 @@ export default function Header({
   //   localStorage.removeItem("loginTimestamp");
   //   dispatch(addUser(null));
   //   navigate("/auth/login");
-  // }, [navigate, dispatch]);
+   }, [navigate, dispatch]);
 
 
 
