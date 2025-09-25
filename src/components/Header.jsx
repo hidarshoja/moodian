@@ -22,15 +22,15 @@ export default function Header({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  const handleLogout = useCallback(() => {
-    // Clear token and redux user, then redirect to login
-    localStorage.removeItem("ACCESS_TOKEN");
-    localStorage.removeItem("USER");
-    localStorage.removeItem("loginResponse");
-    localStorage.removeItem("loginTimestamp");
-    dispatch(addUser(null));
-    navigate("/auth/login");
-  }, [navigate, dispatch]);
+  // const handleLogout = useCallback(() => {
+  //   // Clear token and redux user, then redirect to login
+  //   localStorage.removeItem("ACCESS_TOKEN");
+  //   localStorage.removeItem("USER");
+  //   localStorage.removeItem("loginResponse");
+  //   localStorage.removeItem("loginTimestamp");
+  //   dispatch(addUser(null));
+  //   navigate("/auth/login");
+  // }, [navigate, dispatch]);
 
 
 
