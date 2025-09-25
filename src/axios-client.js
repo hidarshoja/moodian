@@ -18,12 +18,12 @@ axiosClient.interceptors.response.use((response) => {
   const {response} = error;
   if (response.status === 401) {
     localStorage.removeItem('ACCESS_TOKEN')
-    window.location.href= '/auth/login';
+   // window.location.href= '/auth/login';
   } else if (response.status === 404) {
     //Show not found
   }else if (response.status === 403) {
     localStorage.removeItem('ACCESS_TOKEN')
-    window.location.href= '/auth/login';
+  //  window.location.href= '/auth/login';
   }
 
   throw error;
