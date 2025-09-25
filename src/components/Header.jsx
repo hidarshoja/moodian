@@ -24,12 +24,12 @@ export default function Header({
   const user = useSelector((state) => state.user.value);
    const handleLogout = useCallback(() => {
   //   // Clear token and redux user, then redirect to login
-  //   localStorage.removeItem("ACCESS_TOKEN");
-  //   localStorage.removeItem("USER");
-  //   localStorage.removeItem("loginResponse");
-  //   localStorage.removeItem("loginTimestamp");
-  //   dispatch(addUser(null));
-  //   navigate("/auth/login");
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("USER");
+    localStorage.removeItem("loginResponse");
+    localStorage.removeItem("loginTimestamp");
+    dispatch(addUser(null));
+    navigate("/auth/login");
    }, [navigate, dispatch]);
 
 
@@ -60,6 +60,11 @@ export default function Header({
       label: "خروج",
       action: handleLogout,
       icon: <BiLogOutCircle className="w-4 h-4 " />,
+    },
+    {
+      label: "ورود",
+      path: "/auth/login",
+      icon: <RiLockPasswordFill className="w-4 h-4 " />,
     },
   ];
 
