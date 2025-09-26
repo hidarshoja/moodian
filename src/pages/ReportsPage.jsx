@@ -19,47 +19,13 @@ export default function ReportsPage() {
   const [refresh, setRefresh] = useState(false);
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
-  
+  const [dataTableItem, setDataTableItem] = useState([]);
+  const [metaItem, setMetaItem] = useState({});
   const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
-  const [records] = useState([
-    {
-      name: "شرکت الف",
-      factorMain: "13477767",
-      factorCorrective: "TM-17003",
-      factorReturn: "EC-478866",
-      factorCancellation: "CC1111",
-      pure: "11115",
-    },
-    {
-      name: "شرکت ج",
-      factorMain: "134567",
-      factorCorrective: "TM-1003",
-      factorReturn: "EC-445566",
-      factorCancellation: "CCC333",
-      pure: "123455",
-    },
-  ]);
-  const [records2] = useState([
-    {
-      name: "بجنورد",
-      factorMain: "13477767",
-      factorCorrective: "TM-17003",
-      factorReturn: "EC-478866",
-      factorCancellation: "CC1111",
-      pure: "11115",
-    },
-    {
-      name: "تهران",
-      factorMain: "134567",
-      factorCorrective: "TM-1003",
-      factorReturn: "EC-445566",
-      factorCancellation: "CCC333",
-      pure: "123455",
-    },
-  ]);
+ 
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -82,13 +48,31 @@ export default function ReportsPage() {
       .then((response) => {
         setDataTable(response.data.data);
         setMeta(response.data.meta);
-        console.log(`response.data.data`, response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
   }, [refresh, activeFilters, pageCount]);
+
+
+  
+  useEffect(() => {
+    setLoading(true);
+    const query = buildFilterQuery(activeFilters);
+    axiosClient
+      .get(`/invoices/items?page=${pageCount}${query}`)
+      .then((response) => {
+        setDataTableItem(response.data.data);
+        console.log(`response.data.data`, response.data.data);
+        setMetaItem(response.data.meta);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
   };
@@ -142,14 +126,7 @@ export default function ReportsPage() {
     setSearchTerm(term);
   };
 
-  // Filter records based on search term
-  const filteredRecords = records.filter((record) =>
-    record.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredRecords2 = records2.filter((record) =>
-    record.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+ 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
@@ -197,7 +174,7 @@ export default function ReportsPage() {
         )}
         {filterTable === "کالا/خدمات" && (
           <ServicesRecordsTable
-           records={dataTable}
+           records={dataTableItem}
           loading={loading}
             />
         )}
