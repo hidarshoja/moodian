@@ -61,7 +61,7 @@ export default function ReportsPage() {
     setLoading(true);
     const query = buildFilterQuery(activeFilters);
     axiosClient
-      .get(`/invoices/items?page=${pageCount}${query}`)
+      .get(`/invoice/items?page=${pageCount}${query}`)
       .then((response) => {
         setDataTableItem(response.data.data);
         console.log(`response.data.data`, response.data.data);

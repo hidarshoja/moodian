@@ -49,7 +49,7 @@ export default function ServicesRecordsTable({
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.setm_label}
+                {r?.product?.title}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r.inp === 1 ? r.ins_label : "-"}
