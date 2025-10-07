@@ -1,4 +1,5 @@
 import { GrClose } from "react-icons/gr";
+import { convertToPersianDate } from "../utils/change-date";
 import {
   FaEye,
   FaFileInvoice,
@@ -10,20 +11,10 @@ import {
 } from "react-icons/fa";
 
 export default function ViewCancelModal({ isOpen, onClose, record }) {
+  console.log(`record`, record);
   if (!isOpen || !record) return null;
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "تایید شده":
-        return "text-green-400 bg-green-500/20";
-      case "رد شده":
-        return "text-red-400 bg-red-500/20";
-      case "در انتظار تایید":
-        return "text-yellow-400 bg-yellow-500/20";
-      default:
-        return "text-gray-400 bg-gray-500/20";
-    }
-  };
+
 
   return (
     <div
@@ -55,9 +46,7 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
           {/* Status Badge */}
           <div className="mb-6 flex justify-center">
             <span
-              className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(
-                record.status
-              )}`}
+              className={`px-4 py-2 rounded-full text-sm font-medium`}
             >
               {record.status}
             </span>
@@ -76,14 +65,14 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <span className="text-white/70 text-sm">نام مشتری:</span>
                   <span className="text-white font-medium">
-                    {record.customerName}
+                    {record?.customer?.name}{" "}    {record?.customer?.last_name}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                  <span className="text-white/70 text-sm">کد فاکتور:</span>
+                  <span className="text-white/70 text-sm"> نوع صورتحساب</span>
                   <span className="text-white font-medium font-mono">
-                    {record.invoiceCode}
+                     {record?.inty_label}
                   </span>
                 </div>
               </div>
@@ -136,7 +125,7 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
                     تاریخ درخواست:
                   </span>
                   <span className="text-white font-medium">
-                    {record.requestDate}
+                     {convertToPersianDate(record.indati2m)}
                   </span>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import EditCancelModal from "../components/EditCancelModal";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+import Swal from "sweetalert2";
 
 export default function CancelPage() {
   const [startDate, setStartDate] = useState(null);
@@ -24,9 +25,9 @@ export default function CancelPage() {
 
   useEffect(() => {
     setLoading(true);
-  
+  // &f[ins]=3
     axiosClient
-      .get(`/invoices?page=${pageCount}&f[ins]=3`)
+      .get(`/invoices?page=${pageCount}`)
       .then((response) => {
         setCancelRecords(response.data.data);
         setMeta(response.data.meta);
@@ -65,6 +66,43 @@ export default function CancelPage() {
     setSearchTerm("");
   };
 
+  const handleDelete = async (row) => {
+    console.log(`row.id`, row.id);
+    try {
+      const res = await axiosClient.delete(`/invoices/${row.id}`);
+      console.log(`Delete response:`, res);
+
+      //  setRefresh(!refresh);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success", // یا 'error'
+        title: "فاکتور با موفقیت حذف شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setRefresh(!refresh);
+    } catch (error) {
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در ابطال ",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
+  };
+
   const handleView = (record) => {
     setSelectedRecord(record);
     setViewModalOpen(true);
@@ -75,10 +113,7 @@ export default function CancelPage() {
     setEditModalOpen(true);
   };
 
-  const handleDelete = (record) => {
-    console.log("Delete record:", record);
-    setCancelRecords((prev) => prev.filter((r) => r.id !== record.id));
-  };
+  
 
   const handleApprove = (record) => {
     console.log("Approve record:", record);
@@ -125,7 +160,7 @@ export default function CancelPage() {
         <div className="w-full border-b border-white/10 p-6">
           <h1 className="text-white text-2xl font-bold">ابطال</h1>
           <div className="flex items-center justify-between mt-1">
-            <p className="text-white/60 text-sm">نمای کلی ابطال کاربران</p>
+            <p className="text-white/60 text-sm">نمای کلی ابطال فاکتورها</p>
            
           </div>
         </div>

@@ -117,13 +117,13 @@ export default function CancelTable({
                       </button>
                     </>
                   )}
-                  <button
+                  {/* <button
                     onClick={() => onEdit && onEdit(record)}
                     className="p-1 text-yellow-400 hover:text-yellow-300 transition-colors"
                     title="ویرایش"
                   >
                     <FaEdit className="w-4 h-4" />
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => onDelete && onDelete(record)}
                     className="p-1 text-red-400 hover:text-red-300 transition-colors"
