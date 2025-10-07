@@ -61,11 +61,7 @@ export default function Header({
       action: handleLogout,
       icon: <BiLogOutCircle className="w-4 h-4 " />,
     },
-    {
-      label: "ورود",
-      path: "/auth/login",
-      icon: <RiLockPasswordFill className="w-4 h-4 " />,
-    },
+   
   ];
 
   return (
