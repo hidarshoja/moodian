@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { setNavigate } from "./utils/navigation";
 import MobileSidebar from "./components/MobileSidbar";
 import DesktopSidebar from "./components/DesktopSidebar";
 import MainContent from "./components/MainContent";
@@ -8,6 +10,11 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
   const isAuthPage = location.pathname.startsWith("/auth");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setNavigate(navigate);
+  }, [navigate]);
 
   return (
     <>
