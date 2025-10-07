@@ -377,7 +377,7 @@ export default function RegisterPage() {
         <div className="w-[70%] flex items-center justify-center h-full">
           <img
             className="absolute left-1/4 inset-0 h-full w-[100%] object-cover rounded-l-2xl shadow-xl"
-            src="/register.jpg"
+            src="/img/register.jpg"
             alt="صفحه ثبت نام"
           />
         </div>
