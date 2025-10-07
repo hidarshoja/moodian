@@ -194,9 +194,7 @@ function convertJalaliDatetimeToGregorian(input) {
   return `${dateStr} ${timeStr}`;
 }
 
-// مثال:
-console.log(convertJalaliDatetimeToGregorian('۱۴۰۴-۰۶-۰۱ ۱۳:۳۰:۴۱'));
-// خروجی: "2024-08-23 13:30:41"
+
 
 
 

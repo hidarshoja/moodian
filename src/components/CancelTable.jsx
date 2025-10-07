@@ -1,4 +1,6 @@
 import { FaEye, FaEdit, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
+import { convertToPersianDate } from "../utils/change-date";
+import Spinner from "../utils/Spinner";
 
 export default function CancelTable({
   records,
@@ -7,10 +9,18 @@ export default function CancelTable({
   onDelete,
   onApprove,
   onReject,
+  loading
 }) {
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
-      <table className="min-w-full">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+        {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+                <Spinner />
+              </div>
+            )}
+      <table  className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}>
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap">ردیف</th>
@@ -18,16 +28,16 @@ export default function CancelTable({
               نام مشتری
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
-              کد فاکتور
+            نوع صورتحساب
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
-              تاریخ فاکتور
+              موضوع صورتحساب
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
-              مبلغ فاکتور
+              الگوی صورتحساب
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
-              دلیل ابطال
+             روش تسویه
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">وضعیت</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
@@ -56,35 +66,29 @@ export default function CancelTable({
                 {index + 1}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {record.customerName}
+                {record?.customer?.name}{" "}    {record?.customer?.last_name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {record.invoiceCode}
+                {record?.inty_label}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {record.invoiceDate}
+                {record?.ins_label}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {record.amount?.toLocaleString()} ریال
+                {record?.inp_label} 
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {record.cancelReason}
+                {record?.setm_label}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    record.status === "تایید شده"
-                      ? "bg-green-500/20 text-green-400"
-                      : record.status === "رد شده"
-                      ? "bg-red-500/20 text-red-400"
-                      : "bg-yellow-500/20 text-yellow-400"
-                  }`}
+                  className="px-4 py-3 text-white/90 text-sm whitespace-nowrap"
                 >
-                  {record.status}
+                  {record.status_label }
                 </span>
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {record.requestDate}
+                {convertToPersianDate(record.indati2m)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 <div className="flex items-center gap-2">
