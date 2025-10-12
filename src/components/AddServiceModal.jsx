@@ -3,6 +3,8 @@ import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import { CiSearch } from "react-icons/ci";
+import SearchPublicIdentifiersModal from "./SearchPublicIdentifiersModal";
+import PropTypes from "prop-types";
 
 const units = [
   { id: 0, name: "انتخاب ..." },
@@ -35,6 +37,8 @@ export default function AddServiceModal({
     olr: null,
     sstt: "توضیحات",
   });
+
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -121,6 +125,16 @@ export default function AddServiceModal({
     }
   };
 
+  const handleSelectFromPublicIdentifiers = (item) => {
+    // Populate form with selected item data
+    setForm((prev) => ({
+      ...prev,
+      title: item.name || "",
+      sstid: item.identifier || "",
+      vra: item.vatRate || "",
+    }));
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
@@ -133,17 +147,16 @@ export default function AddServiceModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <span className="text-white text-lg font-bold">کالا/خدمت جدید</span>
-          <span className="btn-custom3 cursor-pointer">
+          <span
+            className="btn-custom3 cursor-pointer"
+            onClick={() => setSearchModalOpen(true)}
+          >
             <span>
               <CiSearch />
             </span>
-            <span>
-              درج از شناسه های عمومی
-            </span>
+            <span>درج از شناسه های عمومی</span>
           </span>
-          <span className="btn-custom3 cursor-pointer">
-          StuffId 
-          </span>
+          <span className="btn-custom3 cursor-pointer">StuffId</span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
           </button>
@@ -280,6 +293,20 @@ export default function AddServiceModal({
           </div>
         </form>
       </div>
+
+      {/* Search Public Identifiers Modal */}
+      <SearchPublicIdentifiersModal
+        isOpen={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+        onSelectItem={handleSelectFromPublicIdentifiers}
+      />
     </div>
   );
 }
+
+AddServiceModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  setRefresh: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
+};
