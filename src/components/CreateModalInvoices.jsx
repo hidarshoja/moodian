@@ -1,235 +1,598 @@
-import { useRef, useState } from "react";
-import * as XLSX from "xlsx";
-import axiosClient from "../axios-client";
-import Swal from "sweetalert2";
+import { useState } from "react";
+import { HiOutlinePlusSm } from "react-icons/hi";
+import { MdMinimize, MdClose, MdFullscreen } from "react-icons/md";
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 import PropTypes from "prop-types";
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
-  const fileInputRef = useRef();
-  const [excelData, setExcelData] = useState([]);
-  const [fileName, setFileName] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [inpData , setInpData] = useState(null);
+  const [invoiceData, setInvoiceData] = useState({
+    type: "",
+    pattern: "",
+    issueDate: new Date(),
+    creationDate: new Date(),
+    description: "",
+    customer: "",
+    buyerBranchCode: "",
+    settlementMethod: "نقدی",
+    customerSystemId: "",
+    sellerBranchCode: "",
+  });
+
+  const [lineItems, setLineItems] = useState([]);
+  const [totals, setTotals] = useState({
+    totalBeforeDiscount: 0,
+    totalDiscounts: 0,
+    totalAfterDiscount: 0,
+    totalCashPaid: 0,
+    totalCredit: 0,
+    totalVAT: 0,
+    totalOtherTaxes: 0,
+    totalAmount: 0,
+  });
+
   if (!isOpen2) return null;
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleInputChange = (field, value) => {
+    setInvoiceData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
-    // Only allow .xlsx
-    const isXlsx = file.name.toLowerCase().endsWith(".xlsx");
-    if (!isXlsx) {
-      setFileName("");
-      setSelectedFile(null);
-      Swal.fire({
-        icon: "error",
-        title: "پسوند فایل نامعتبر است",
-        text: "لطفاً فقط فایل با پسوند .xlsx انتخاب کنید.",
-        background: "#0a0a22",
-        color: "#e5e7eb",
-        confirmButtonColor: "#1f2937",
-      });
-      // reset input value so same file can be re-selected
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
-
-    setFileName(file.name);
-    setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const bstr = evt.target.result;
-      const wb = XLSX.read(bstr, { type: "binary" });
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      setExcelData(data);
+  const handleAddLineItem = () => {
+    const newItem = {
+      id: Date.now(),
+      serviceId: "",
+      serviceName: "",
+      quantity: 0,
+      unitPrice: 0,
+      exchangeRate: 0,
+      currencyAmount: 0,
+      discountAmount: 0,
+      amountAfterDiscount: 0,
     };
-    reader.readAsBinaryString(file);
+    setLineItems((prev) => [...prev, newItem]);
   };
 
-  const  handelInpChange = (e) => {
-    setInpData(e.target.value);
-  }
-
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) onClose2();
+  const handleLineItemChange = (id, field, value) => {
+    setLineItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+    );
+    calculateTotals();
   };
 
-  const handleImport = async (e) => {
-    e.preventDefault();
-    if (!selectedFile) {
-      Swal.fire({
-        icon: "warning",
-        title: "ابتدا فایل را انتخاب کنید",
-        background: "#0a0a22",
-        color: "#e5e7eb",
-        confirmButtonColor: "#1f2937",
-      });
-      return;
-    }
+  const calculateTotals = () => {
+    // Calculate totals based on line items
+    const calculatedTotals = lineItems.reduce(
+      (acc, item) => {
+        acc.totalBeforeDiscount += item.quantity * item.unitPrice || 0;
+        acc.totalDiscounts += item.discountAmount || 0;
+        acc.totalAfterDiscount += item.amountAfterDiscount || 0;
+        return acc;
+      },
+      {
+        totalBeforeDiscount: 0,
+        totalDiscounts: 0,
+        totalAfterDiscount: 0,
+        totalCashPaid: 0,
+        totalCredit: 0,
+        totalVAT: 0,
+        totalOtherTaxes: 0,
+        totalAmount: 0,
+      }
+    );
 
-    try {
-      const formData = new FormData();
-      formData.append("excel", selectedFile);
-      formData.append("inp", inpData);
-      await axiosClient.post(`/invoices/import`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+    calculatedTotals.totalAmount =
+      calculatedTotals.totalAfterDiscount +
+      calculatedTotals.totalVAT +
+      calculatedTotals.totalOtherTaxes;
 
-      Swal.fire({
-        toast: true,
-        position: "top-start",
-        icon: "success",
-        title: "فایل با موفقیت بارگذاری شد",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: { popup: "swal2-toast" },
-        background: "#111827",
-        color: "#e5e7eb",
-      });
-      onClose2();
-      // reset state after successful upload
-      setSelectedFile(null);
-      setFileName("");
-      setExcelData([]);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "خطا در بارگذاری فایل",
-        text: error?.response?.data?.message || "دوباره تلاش کنید",
-        background: "#0a0a22",
-        color: "#e5e7eb",
-        confirmButtonColor: "#1f2937",
-      });
-    }
+    setTotals(calculatedTotals);
+  };
+
+  const handleSave = () => {
+    console.log("Saving invoice:", { invoiceData, lineItems, totals });
+    // TODO: Implement save functionality
+  };
+
+  const handleSaveAndSend = () => {
+    console.log("Saving and sending invoice:", {
+      invoiceData,
+      lineItems,
+      totals,
+    });
+    // TODO: Implement save and send functionality
+  };
+
+  const handleCancel = () => {
+    onClose2();
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-black/40"
-      style={{ WebkitBackdropFilter: "blur(8px)" }}
-      onClick={handleBackdropClick}
-    >
-      <div className="w-full max-w-5xl p-4 rounded-2xl bg-[#0a0a22] border border-white/10 shadow-2xl relative animate-slideIn">
-        <button
-          className="absolute left-4 top-4 text-white text-2xl hover:bg-white/10 transition rounded-full w-10 h-10 flex items-center justify-center"
-          onClick={onClose2}
-        >
-          ×
-        </button>
-        <h2 className="text-2xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
-          ایجاد فاکتور
-        </h2>
-        <div className="flex items-center mb-3 justify-between">
-         <div className="flex items-start md:items-center gap-4 flex-col md:flex-row">
-           <div className="flex items-center gap-4  pr-2">
-            <button
-              className="btn-custom"
-              onClick={() => fileInputRef.current.click()}
-            >
-              انتخاب فایل
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+      <div className="w-[95%] h-[95%] max-w-7xl bg-white rounded-lg shadow-2xl relative flex flex-col">
+        {/* Header */}
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button className="text-white/80 hover:text-white p-1">
+              <MdClose className="w-4 h-4" />
             </button>
-            <input
-              type="file"
-              accept=".xlsx"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileChange}
-            />
-            {fileName && (
-              <span className="text-sm text-indigo-200 font-medium">
-                {fileName}
-              </span>
+            <button className="text-white/80 hover:text-white p-1">
+              <MdMinimize className="w-4 h-4" />
+            </button>
+            <button className="text-white/80 hover:text-white p-1">
+              <MdFullscreen className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
+          <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
+        </div>
+
+        {/* Invoice Details Section */}
+        <div className="p-6 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {/* نوع (Type) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                نوع
+              </label>
+              <div className="relative">
+                <select
+                  value={invoiceData.type}
+                  onChange={(e) => handleInputChange("type", e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                >
+                  <option value="">نوع اول</option>
+                  <option value="type1">نوع اول</option>
+                  <option value="type2">نوع دوم</option>
+                </select>
+                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* الگوی (Pattern) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                الگوی
+              </label>
+              <div className="relative">
+                <select
+                  value={invoiceData.pattern}
+                  onChange={(e) => handleInputChange("pattern", e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                >
+                  <option value="">الگوی اول (فروش)</option>
+                  <option value="pattern1">الگوی اول (فروش)</option>
+                  <option value="pattern2">الگوی دوم (فروش ارزی)</option>
+                </select>
+                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* تاریخ صدور (Issue Date) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                تاریخ صدور
+              </label>
+              <DatePicker
+                calendar={persian}
+                locale={persian_fa}
+                value={invoiceData.issueDate}
+                onChange={(date) => handleInputChange("issueDate", date)}
+                calendarPosition="bottom-right"
+                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                format="YYYY/MM/DD HH:mm:ss"
+                editable={false}
+              />
+            </div>
+
+            {/* تاریخ ایجاد (Creation Date) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                تاریخ ایجاد
+              </label>
+              <DatePicker
+                calendar={persian}
+                locale={persian_fa}
+                value={invoiceData.creationDate}
+                onChange={(date) => handleInputChange("creationDate", date)}
+                calendarPosition="bottom-right"
+                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                format="YYYY/MM/DD HH:mm:ss"
+                editable={false}
+              />
+            </div>
+
+            {/* توضیحات (Description) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                توضیحات
+              </label>
+              <input
+                type="text"
+                value={invoiceData.description}
+                onChange={(e) =>
+                  handleInputChange("description", e.target.value)
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                dir="rtl"
+              />
+            </div>
+
+            {/* مشتری جدید (New Customer) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                مشتری جدید
+              </label>
+              <input
+                type="text"
+                value={invoiceData.customer}
+                onChange={(e) => handleInputChange("customer", e.target.value)}
+                placeholder="انتخاب کنید"
+                className="w-full px-4 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                dir="rtl"
+              />
+            </div>
+
+            {/* کد شعبه خریدار (Buyer Branch Code) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                کد شعبه خریدار
+              </label>
+              <select
+                value={invoiceData.buyerBranchCode}
+                onChange={(e) =>
+                  handleInputChange("buyerBranchCode", e.target.value)
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">انتخاب کنید</option>
+                <option value="branch1">شعبه 1</option>
+                <option value="branch2">شعبه 2</option>
+              </select>
+            </div>
+
+            {/* روش تسویه (Settlement Method) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                روش تسویه
+              </label>
+              <select
+                value={invoiceData.settlementMethod}
+                onChange={(e) =>
+                  handleInputChange("settlementMethod", e.target.value)
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="نقدی">نقدی</option>
+                <option value="اعتباری">اعتباری</option>
+                <option value="چکی">چکی</option>
+              </select>
+            </div>
+
+            {/* ش ف در سامانه مشتری (Customer System ID) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                ش ف در سامانه مشتری
+              </label>
+              <input
+                type="text"
+                value={invoiceData.customerSystemId}
+                onChange={(e) =>
+                  handleInputChange("customerSystemId", e.target.value)
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                dir="rtl"
+              />
+            </div>
+
+            {/* کد شعبه فروشنده (Seller Branch Code) */}
+            <div>
+              <label className="block mb-2 text-gray-700 text-sm font-medium">
+                کد شعبه فروشنده
+              </label>
+              <select
+                value={invoiceData.sellerBranchCode}
+                onChange={(e) =>
+                  handleInputChange("sellerBranchCode", e.target.value)
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">انتخاب کنید</option>
+                <option value="seller1">فروشنده 1</option>
+                <option value="seller2">فروشنده 2</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Line Items Section */}
+        <div className="flex-1 bg-white px-6 pb-4">
+          {/* Table Header */}
+          <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg mb-2">
+            <div className="grid grid-cols-8 gap-2 text-sm font-medium">
+              <div className="text-center">شناسه خدمت/کالا</div>
+              <div className="text-center">نام خدمت/کالا</div>
+              <div className="text-center">تعداد/مقدار</div>
+              <div className="text-center">مبلغ واحد</div>
+              <div className="text-center">نرخ برابری ارز با ریال</div>
+              <div className="text-center">میزان ارز</div>
+              <div className="text-center">مبلغ تخفیف</div>
+              <div className="text-center">مبلغ بعد از تخفیف</div>
+            </div>
+          </div>
+
+          {/* Add New Item Button */}
+          <div className="mb-4">
+            <button
+              onClick={handleAddLineItem}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-colors"
+            >
+              <HiOutlinePlusSm className="w-4 h-4" />
+              جدید
+            </button>
+          </div>
+
+          {/* Table Content */}
+          <div className="bg-gray-50 rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
+            {lineItems.length === 0 ? (
+              <div className="flex items-center justify-center h-32 text-gray-500">
+                رکوردی وجود ندارد
+              </div>
+            ) : (
+              <div className="p-4 space-y-2">
+                {lineItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-8 gap-2 bg-white p-2 rounded border"
+                  >
+                    <input
+                      type="text"
+                      value={item.serviceId}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "serviceId",
+                          e.target.value
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                      dir="rtl"
+                    />
+                    <input
+                      type="text"
+                      value={item.serviceName}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "serviceName",
+                          e.target.value
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                      dir="rtl"
+                    />
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "quantity",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={item.unitPrice}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "unitPrice",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={item.exchangeRate}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "exchangeRate",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={item.currencyAmount}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "currencyAmount",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={item.discountAmount}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "discountAmount",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={item.amountAfterDiscount}
+                      onChange={(e) =>
+                        handleLineItemChange(
+                          item.id,
+                          "amountAfterDiscount",
+                          parseFloat(e.target.value) || 0
+                        )
+                      }
+                      className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-          <div>
-            
-            <select
-              name="inp"
-              value={inpData || ""}
-              onChange={handelInpChange}
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-1 focus:outline-none focus:ring-2 `}
+        </div>
+
+        {/* Financial Summary Section */}
+        <div className="bg-white px-6 py-4 border-t border-gray-200">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م مبلغ قبل از تخفیف
+              </label>
+              <input
+                type="number"
+                value={totals.totalBeforeDiscount}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م تخفیفات
+              </label>
+              <input
+                type="number"
+                value={totals.totalDiscounts}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م مبلغ پس از کسر تخفیف
+              </label>
+              <input
+                type="number"
+                value={totals.totalAfterDiscount}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م مبلغ پرداختی نقدی
+              </label>
+              <input
+                type="number"
+                value={totals.totalCashPaid}
+                onChange={(e) =>
+                  setTotals((prev) => ({
+                    ...prev,
+                    totalCashPaid: parseFloat(e.target.value) || 0,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م مبلغ نسیه
+              </label>
+              <input
+                type="number"
+                value={totals.totalCredit}
+                onChange={(e) =>
+                  setTotals((prev) => ({
+                    ...prev,
+                    totalCredit: parseFloat(e.target.value) || 0,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م مالیات بر ارزش افزوده
+              </label>
+              <input
+                type="number"
+                value={totals.totalVAT}
+                onChange={(e) =>
+                  setTotals((prev) => ({
+                    ...prev,
+                    totalVAT: parseFloat(e.target.value) || 0,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                م سایر مالیات
+              </label>
+              <input
+                type="number"
+                value={totals.totalOtherTaxes}
+                onChange={(e) =>
+                  setTotals((prev) => ({
+                    ...prev,
+                    totalOtherTaxes: parseFloat(e.target.value) || 0,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                مبلغ کل
+              </label>
+              <input
+                type="number"
+                value={totals.totalAmount}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 font-bold"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="bg-[#8A4DAB] px-6 py-4 rounded-b-lg">
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={handleCancel}
+              className="bg-[#8A4DAB] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#7a4299] transition-colors"
             >
-              <option value="">انتخاب الگوی صورتحساب(inp)</option>
-              <option value="1">الگوی اول (فروش)</option>
-              <option value="2">الگوی دوم (فروش ارزی)</option>
-              <option value="3">
-                الگوی سوم (صورتحساب طلا، جواهر و پلاتین){" "}
-              </option>
-              <option value="4">الگوی چهارم (قرارداد پیمانکاری) </option>
-              <option value="5">الگوی پنجم (قبوض خدماتی)</option>
-              <option value="6">الگوی ششم (بلیط هواپیما)</option>
-              <option value="7">الگوی هفتم (صادرات)</option>
-              <option value="8">الگوی هشتم (بارنامه)</option>
-              <option value="11">
-                الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا){" "}
-              </option>
-              <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
-            </select>
-            
-          </div>
-         </div>
-          <div className="flex flex-col md:flex-row gap-2 my-1">
-            <button className="btn-custom" onClick={handleImport}>
-              بارگذاری
+              انصراف
             </button>
-            <button className="btn-custom">فایل نمونه</button>
+            <button
+              onClick={handleSaveAndSend}
+              className="bg-[#EC4899] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#DB2777] transition-colors"
+            >
+              ذخیره و ارسال
+            </button>
+            <button
+              onClick={handleSave}
+              className="bg-[#EC4899] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#DB2777] transition-colors"
+            >
+              ذخیره
+            </button>
           </div>
-        </div>
-        <div
-          className="overflow-x-auto rounded-xl bg-[#23234a] border border-white/10 shadow-inner nice-scrollbar"
-          style={{ maxHeight: 250, overflowY: "auto" }}
-        >
-          <table className="min-w-full text-sm text-center font-vazir text-white">
-            <thead className="bg-gradient-to-b from-gray-900 to-gray-800 text-indigo-100 sticky top-0 z-10">
-              <tr>
-                {excelData[0]?.map((col, idx) => (
-                  <th
-                    key={idx}
-                    className="py-3 px-4 border-b border-white/10 font-bold"
-                  >
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {excelData.length > 1 ? (
-                excelData.slice(1).map((row, i) => (
-                  <tr
-                    key={i}
-                    className="hover:bg-indigo-900/30 transition border-b border-white/5"
-                  >
-                    {row.map((cell, j) => (
-                      <td key={j} className="py-2 px-3 ">
-                        {cell ?? ""}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={excelData[0]?.length || 1}
-                    className="py-6 text-indigo-200 text-lg"
-                  >
-                    رکوردی وجود ندارد
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-end mt-8">
-          <button
-            className="btn-custom bg-gradient-to-l from-indigo-700 to-indigo-500 text-white shadow-md hover:scale-105 transition px-8 py-2 rounded-lg font-bold"
-            onClick={onClose2}
-          >
-            بستن
-          </button>
         </div>
       </div>
     </div>
