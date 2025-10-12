@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
+import { CiSearch } from "react-icons/ci";
 
 const units = [
   { id: 0, name: "انتخاب ..." },
@@ -130,6 +131,24 @@ export default function AddCustomersModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <span className="text-white text-lg font-bold">مشتری جدید</span>
+          <span
+            className="btn-custom3 cursor-pointer"
+           // onClick={() => setSearchModalOpen(true)}
+          >
+            <span>
+              <CiSearch />
+            </span>
+            <span className="text-[10px]"> استعلام از سازمان</span>
+          </span>
+          <span
+            className="btn-custom3 cursor-pointer"
+           // onClick={() => setSearchModalOpen(true)}
+          >
+            <span>
+              <CiSearch />
+            </span>
+            <span className="text-[10px]"> استعلام وجود یا عدم وجود پرونده مالیاتی </span>
+          </span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
           </button>
@@ -178,7 +197,7 @@ export default function AddCustomersModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          {/* <div>
+          <div>
             <label className="block mb-1 text-white text-sm">کد اقتصادی</label>
             <input
               name="economic_code"
@@ -186,7 +205,7 @@ export default function AddCustomersModal({
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
-          </div> */}
+          </div>
           <div>
             <label className="block mb-1 text-white text-sm">کدپستی</label>
             <input
@@ -204,7 +223,7 @@ export default function AddCustomersModal({
               </span>
             )}
           </div>
-          <div>
+          {/* <div>
             <label className="block mb-1 text-white text-sm">
               شماره پاسپورت
             </label>
@@ -222,7 +241,7 @@ export default function AddCustomersModal({
                 {errors.passport_number}
               </span>
             )}
-          </div>
+          </div> */}
           <div>
             <label className="block mb-1 text-white text-sm">کدملی/شناسه</label>
             <input
