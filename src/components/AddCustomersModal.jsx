@@ -155,7 +155,12 @@ export default function AddCustomersModal({
           </span>
           <span
             className="btn-custom3 cursor-pointer"
-            // onClick={() => setSearchModalOpen(true)}
+            onClick={() =>
+              window.open(
+                "https://tax.gov.ir/action/do/InquiryNationalID",
+                "_blank"
+              )
+            }
           >
             <span>
               <CiSearch />
