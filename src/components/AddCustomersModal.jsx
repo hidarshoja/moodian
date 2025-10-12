@@ -3,6 +3,8 @@ import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import { CiSearch } from "react-icons/ci";
+import OrganizationInquiryModal from "./OrganizationInquiryModal";
+import PropTypes from "prop-types";
 
 const units = [
   { id: 0, name: "انتخاب ..." },
@@ -32,6 +34,7 @@ export default function AddCustomersModal({
     last_name: "",
   });
   const [errors, setErrors] = useState({});
+  const [orgInquiryModalOpen, setOrgInquiryModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -102,21 +105,31 @@ export default function AddCustomersModal({
     setForm((prev) => ({
       ...prev,
       name: "",
-    economic_code: "14011728696",
-    postal_code: "",
-    type: null,
-    national_code: "",
-    tel: "",
-    branch_code: "",
-    address: "",
-    description: "",
-    passport_number: "",
-    last_name: "",
+      economic_code: "14011728696",
+      postal_code: "",
+      type: null,
+      national_code: "",
+      tel: "",
+      branch_code: "",
+      address: "",
+      description: "",
+      passport_number: "",
+      last_name: "",
     }));
 
     console.log(`res`, res);
     setRefresh(!refresh);
     onClose();
+  };
+
+  const handleSelectFromOrganization = (customerData) => {
+    // Populate form with selected customer data
+    setForm((prev) => ({
+      ...prev,
+      name: customerData.name || "",
+      economic_code: customerData.economic_identifier || "",
+      national_code: customerData.national_code || "",
+    }));
   };
 
   return (
@@ -133,7 +146,7 @@ export default function AddCustomersModal({
           <span className="text-white text-lg font-bold">مشتری جدید</span>
           <span
             className="btn-custom3 cursor-pointer"
-           // onClick={() => setSearchModalOpen(true)}
+            onClick={() => setOrgInquiryModalOpen(true)}
           >
             <span>
               <CiSearch />
@@ -142,12 +155,15 @@ export default function AddCustomersModal({
           </span>
           <span
             className="btn-custom3 cursor-pointer"
-           // onClick={() => setSearchModalOpen(true)}
+            // onClick={() => setSearchModalOpen(true)}
           >
             <span>
               <CiSearch />
             </span>
-            <span className="text-[10px]"> استعلام وجود یا عدم وجود پرونده مالیاتی </span>
+            <span className="text-[10px]">
+              {" "}
+              استعلام وجود یا عدم وجود پرونده مالیاتی{" "}
+            </span>
           </span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
@@ -315,6 +331,20 @@ export default function AddCustomersModal({
           </div>
         </form>
       </div>
+
+      {/* Organization Inquiry Modal */}
+      <OrganizationInquiryModal
+        isOpen={orgInquiryModalOpen}
+        onClose={() => setOrgInquiryModalOpen(false)}
+        onSelectCustomer={handleSelectFromOrganization}
+      />
     </div>
   );
 }
+
+AddCustomersModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  setRefresh: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
+};
