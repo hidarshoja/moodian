@@ -74,14 +74,16 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
         dir="rtl"
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between flex-shrink-0">
+        <div 
+        className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between flex-shrink-0">
+          
+          <h2 className="text-lg font-bold">جدید</h2>
           <button
             onClick={onClose}
             className="text-white/80 hover:text-white text-xl"
           >
             <GrClose />
           </button>
-          <h2 className="text-lg font-bold">جدید</h2>
         </div>
 
         {/* Form Body */}
@@ -308,11 +310,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
             </div>
 
             {/* ارزی (Currency) - Toggle Switch */}
-            <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+            <div className="flex flex-col items-start gap-2">
+              <label className="block  text-gray-700 text-xs font-medium">
                 ارزی
               </label>
-              <div className="flex items-center pt-2">
+              <div
+              dir="ltr"
+              className="flex items-center pt-2">
                 <button
                   type="button"
                   onClick={() => handleToggleChange("isCurrency")}
@@ -348,15 +352,16 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
 
         {/* Action Buttons */}
         <div className="px-6 py-3 border-t border-gray-200 flex justify-center gap-4 flex-shrink-0">
-          <button
-            onClick={handleCancel}
-            className="px-6 py-2 bg-[#8A4DAB] text-white rounded-lg font-medium hover:bg-[#7a4299] transition-colors text-sm"
-          >
-            انصراف
-          </button>
+        <button
+  onClick={handleCancel}
+  className="px-6 w-1/2 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors text-sm"
+>
+  انصراف
+</button>
+
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-[#EC4899] text-white rounded-lg font-medium hover:bg-[#DB2777] transition-colors text-sm"
+            className="btn-custom4"
           >
             ذخیره
           </button>

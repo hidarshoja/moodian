@@ -121,7 +121,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+    <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur">
       <div
         className="w-[95%] h-[95%] max-w-7xl bg-white rounded-lg shadow-2xl relative flex flex-col"
         dir="rtl"
@@ -132,7 +132,9 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
            <SlPrinter className="cursor-pointer" />
-            <button className="text-white/80 hover:text-white p-1">
+            <button 
+             onClick={handleCancel}
+            className="text-white/80 hover:text-white p-1">
               <MdClose className="w-4 h-4" />
             </button>
           </div>
@@ -177,7 +179,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   <option value="pattern1">الگوی اول (فروش)</option>
                   <option value="pattern2">الگوی دوم (فروش ارزی)</option>
                 </select>
-                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button 
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" >
                   ×
                 </button>
               </div>
@@ -584,7 +587,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <div className="flex justify-center gap-4 w-full">
             <button
               onClick={handleCancel}
-              className="bg-[#d95d8b] w-1/3 text-white px-8 py-3 rounded-lg font-medium hover:bg-[#d6514f] transition-colors"
+              className="bg-red-500 w-1/3 text-white px-8 py-3 rounded-lg font-medium  hover:bg-red-600 transition-colors"
             >
               انصراف
             </button>
