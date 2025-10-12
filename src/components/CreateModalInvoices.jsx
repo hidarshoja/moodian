@@ -4,6 +4,7 @@ import { MdMinimize, MdClose, MdFullscreen } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
@@ -32,6 +33,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     totalAmount: 0,
   });
 
+  const [addItemModalOpen, setAddItemModalOpen] = useState(false);
+
   if (!isOpen2) return null;
 
   const handleInputChange = (field, value) => {
@@ -42,18 +45,23 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   };
 
   const handleAddLineItem = () => {
+    setAddItemModalOpen(true);
+  };
+
+  const handleSaveLineItem = (itemData) => {
     const newItem = {
       id: Date.now(),
-      serviceId: "",
-      serviceName: "",
-      quantity: 0,
-      unitPrice: 0,
+      serviceId: itemData.serviceItem,
+      serviceName: itemData.serviceItem,
+      quantity: itemData.quantity,
+      unitPrice: itemData.unitPrice,
       exchangeRate: 0,
       currencyAmount: 0,
-      discountAmount: 0,
-      amountAfterDiscount: 0,
+      discountAmount: itemData.discountAmount,
+      amountAfterDiscount: itemData.amountAfterDiscount,
     };
     setLineItems((prev) => [...prev, newItem]);
+    calculateTotals();
   };
 
   const handleLineItemChange = (id, field, value) => {
@@ -112,22 +120,25 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div className="w-[95%] h-[95%] max-w-7xl bg-white rounded-lg shadow-2xl relative flex flex-col">
+      <div
+        className="w-[95%] h-[95%] max-w-7xl bg-white rounded-lg shadow-2xl relative flex flex-col"
+        dir="rtl"
+      >
         {/* Header */}
         <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between">
+          <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
+          <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
             <button className="text-white/80 hover:text-white p-1">
-              <MdClose className="w-4 h-4" />
+              <MdFullscreen className="w-4 h-4" />
             </button>
             <button className="text-white/80 hover:text-white p-1">
               <MdMinimize className="w-4 h-4" />
             </button>
             <button className="text-white/80 hover:text-white p-1">
-              <MdFullscreen className="w-4 h-4" />
+              <MdClose className="w-4 h-4" />
             </button>
           </div>
-          <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
-          <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
         </div>
 
         {/* Invoice Details Section */}
@@ -142,13 +153,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 <select
                   value={invoiceData.type}
                   onChange={(e) => handleInputChange("type", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pl-8"
                 >
                   <option value="">نوع اول</option>
                   <option value="type1">نوع اول</option>
                   <option value="type2">نوع دوم</option>
                 </select>
-                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   ×
                 </button>
               </div>
@@ -163,13 +174,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 <select
                   value={invoiceData.pattern}
                   onChange={(e) => handleInputChange("pattern", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pl-8"
                 >
                   <option value="">الگوی اول (فروش)</option>
                   <option value="pattern1">الگوی اول (فروش)</option>
                   <option value="pattern2">الگوی دوم (فروش ارزی)</option>
                 </select>
-                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   ×
                 </button>
               </div>
@@ -186,7 +197,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 value={invoiceData.issueDate}
                 onChange={(date) => handleInputChange("issueDate", date)}
                 calendarPosition="bottom-right"
-                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
                 format="YYYY/MM/DD HH:mm:ss"
                 editable={false}
               />
@@ -203,7 +214,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 value={invoiceData.creationDate}
                 onChange={(date) => handleInputChange("creationDate", date)}
                 calendarPosition="bottom-right"
-                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                inputClass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
                 format="YYYY/MM/DD HH:mm:ss"
                 editable={false}
               />
@@ -221,7 +232,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   handleInputChange("description", e.target.value)
                 }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                dir="rtl"
               />
             </div>
 
@@ -288,7 +298,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   handleInputChange("customerSystemId", e.target.value)
                 }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                dir="rtl"
               />
             </div>
 
@@ -316,15 +325,15 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         <div className="flex-1 bg-white px-6 pb-4">
           {/* Table Header */}
           <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg mb-2">
-            <div className="grid grid-cols-8 gap-2 text-sm font-medium">
-              <div className="text-center">شناسه خدمت/کالا</div>
-              <div className="text-center">نام خدمت/کالا</div>
-              <div className="text-center">تعداد/مقدار</div>
-              <div className="text-center">مبلغ واحد</div>
-              <div className="text-center">نرخ برابری ارز با ریال</div>
-              <div className="text-center">میزان ارز</div>
-              <div className="text-center">مبلغ تخفیف</div>
-              <div className="text-center">مبلغ بعد از تخفیف</div>
+            <div className="grid grid-cols-8 gap-2 text-sm font-medium text-right">
+              <div>شناسه خدمت/کالا</div>
+              <div>نام خدمت/کالا</div>
+              <div>تعداد/مقدار</div>
+              <div>مبلغ واحد</div>
+              <div>نرخ برابری ارز با ریال</div>
+              <div>میزان ارز</div>
+              <div>مبلغ تخفیف</div>
+              <div>مبلغ بعد از تخفیف</div>
             </div>
           </div>
 
@@ -362,8 +371,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                           e.target.value
                         )
                       }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                      dir="rtl"
+                      className="px-2 py-1 border border-gray-300 rounded text-sm text-right"
                     />
                     <input
                       type="text"
@@ -375,8 +383,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                           e.target.value
                         )
                       }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                      dir="rtl"
+                      className="px-2 py-1 border border-gray-300 rounded text-sm text-right"
                     />
                     <input
                       type="number"
@@ -594,6 +601,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
             </button>
           </div>
         </div>
+
+        {/* Add Line Item Modal */}
+        <AddLineItemModal
+          isOpen={addItemModalOpen}
+          onClose={() => setAddItemModalOpen(false)}
+          onSave={handleSaveLineItem}
+        />
       </div>
     </div>
   );
