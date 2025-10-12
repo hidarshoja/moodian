@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 const units = [
   { id: 0, name: "انتخاب ..." },
   { id: 1, name: "لنگه" },
-  { id: 2, name: 'عدل' },
+  { id: 2, name: "عدل" },
   { id: 3, name: "جعبه" },
   { id: 4, name: "توپ" },
   { id: 5, name: "ست" },
@@ -16,7 +16,12 @@ const units = [
   { id: 10, name: "پاکت" },
 ];
 
-export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh}) {
+export default function AddServiceModal({
+  isOpen,
+  onClose,
+  setRefresh,
+  refresh,
+}) {
   const [form, setForm] = useState({
     title: "",
     sstid: "",
@@ -26,7 +31,7 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
     odr: null,
     olt: "",
     olr: null,
-    sstt:"توضیحات"
+    sstt: "توضیحات",
   });
 
   if (!isOpen) return null;
@@ -34,7 +39,10 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (["odr", "olr", "unit_id"].includes(name)) {
-      setForm((prev) => ({ ...prev, [name]: value === "" ? null : Number(value) }));
+      setForm((prev) => ({
+        ...prev,
+        [name]: value === "" ? null : Number(value),
+      }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
     }
@@ -43,35 +51,72 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
   const handleSave = async (e) => {
     e.preventDefault();
     console.log("مقادیر فرم:", form);
-    const res = await axiosClient.post(`/products`, form);
-    Swal.fire({
-      toast: true,
-      position: 'top-start', 
-      icon: 'success', // یا 'error'
-      title: 'محصول با موفقیت اضافه شد',
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      customClass: {
-        popup: 'swal2-toast'
+
+    try {
+      const res = await axiosClient.post(`/products`, form);
+
+      // Success message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "محصول با موفقیت اضافه شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+
+      // Reset form
+      setForm((prev) => ({
+        ...prev,
+        title: "",
+        sstid: "",
+        unit_id: null,
+        vra: "",
+        odt: "",
+        odr: null,
+        olt: "",
+        olr: null,
+        sstt: "توضیحات",
+      }));
+
+      console.log(`res`, res);
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error("خطا در اضافه کردن محصول:", error);
+
+      // Extract error message from response
+      let errorMessage = "خطا در اضافه کردن محصول";
+
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        // Handle validation errors
+        const errors = error.response.data.errors;
+        const errorMessages = Object.values(errors).flat();
+        errorMessage = errorMessages.join("\n");
+      } else if (error.message) {
+        errorMessage = error.message;
       }
-    });
-    setForm(prev => ({
-      ...prev,
-      title: "",
-      sstid: "",
-      unit_id: null,
-      vra: "",
-      odt: "",
-      odr: null,
-      olt: "",
-      olr: null,
-      sstt:"توضیحات"
-    }));
-  
-    console.log(`res`, res);
-    setRefresh(!refresh);
-    onClose();
+
+      // Show error message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: errorMessage,
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
   };
 
   return (
@@ -136,15 +181,15 @@ export default function AddServiceModal({ isOpen, onClose , setRefresh , refresh
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-               {units.map((u) => (
-    <option
-      key={u.id}
-      value={u.id}
-      className={u.id === 0 ? "text-red-500" : ""}
-    >
-      {u.name}
-    </option>
-  ))}
+              {units.map((u) => (
+                <option
+                  key={u.id}
+                  value={u.id}
+                  className={u.id === 0 ? "text-red-500" : ""}
+                >
+                  {u.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
