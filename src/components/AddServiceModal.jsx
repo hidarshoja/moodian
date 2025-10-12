@@ -2,6 +2,8 @@ import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
+import { CiSearch } from "react-icons/ci";
+
 const units = [
   { id: 0, name: "انتخاب ..." },
   { id: 1, name: "لنگه" },
@@ -131,6 +133,17 @@ export default function AddServiceModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <span className="text-white text-lg font-bold">کالا/خدمت جدید</span>
+          <span className="btn-custom3 cursor-pointer">
+            <span>
+              <CiSearch />
+            </span>
+            <span>
+              درج از شناسه های عمومی
+            </span>
+          </span>
+          <span className="btn-custom3 cursor-pointer">
+          StuffId 
+          </span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
           </button>
@@ -162,7 +175,7 @@ export default function AddServiceModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          {/* <div>
+          <div>
             <label className="block mb-1 text-white text-sm">
               کد کالا در سامانه مشتری
             </label>
@@ -172,7 +185,7 @@ export default function AddServiceModal({
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
-          </div> */}
+          </div>
           <div>
             <label className="block mb-1 text-white text-sm">واحد سنجش</label>
             <select
