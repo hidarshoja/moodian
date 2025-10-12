@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import { MdMinimize, MdClose, MdFullscreen } from "react-icons/md";
+import {  MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
+import { SlPrinter } from "react-icons/sl";
+
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const [invoiceData, setInvoiceData] = useState({
@@ -129,12 +131,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
-            <button className="text-white/80 hover:text-white p-1">
-              <MdFullscreen className="w-4 h-4" />
-            </button>
-            <button className="text-white/80 hover:text-white p-1">
-              <MdMinimize className="w-4 h-4" />
-            </button>
+           <SlPrinter className="cursor-pointer" />
             <button className="text-white/80 hover:text-white p-1">
               <MdClose className="w-4 h-4" />
             </button>
@@ -159,7 +156,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   <option value="type1">نوع اول</option>
                   <option value="type2">نوع دوم</option>
                 </select>
-                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   ×
                 </button>
               </div>
@@ -180,7 +177,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   <option value="pattern1">الگوی اول (فروش)</option>
                   <option value="pattern2">الگوی دوم (فروش ارزی)</option>
                 </select>
-                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   ×
                 </button>
               </div>
@@ -321,6 +318,19 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           </div>
         </div>
 
+         {/* Add New Item Button */}
+        <div className="w-full px-6 flex items-center justify-end">
+        <div className="mb-4">
+            <button
+              onClick={handleAddLineItem}
+              className="btn-custom"
+            >
+              جدید
+              <HiOutlinePlusSm className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
         {/* Line Items Section */}
         <div className="flex-1 bg-white px-6 pb-4">
           {/* Table Header */}
@@ -337,16 +347,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
             </div>
           </div>
 
-          {/* Add New Item Button */}
-          <div className="mb-4">
-            <button
-              onClick={handleAddLineItem}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-colors"
-            >
-              <HiOutlinePlusSm className="w-4 h-4" />
-              جدید
-            </button>
-          </div>
+         
 
           {/* Table Content */}
           <div className="bg-gray-50 rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
@@ -468,7 +469,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         <div className="bg-white px-6 py-4 border-t border-gray-200">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م مبلغ قبل از تخفیف
               </label>
               <input
@@ -479,7 +480,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م تخفیفات
               </label>
               <input
@@ -490,7 +491,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م مبلغ پس از کسر تخفیف
               </label>
               <input
@@ -501,7 +502,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م مبلغ پرداختی نقدی
               </label>
               <input
@@ -517,7 +518,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م مبلغ نسیه
               </label>
               <input
@@ -533,7 +534,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م مالیات بر ارزش افزوده
               </label>
               <input
@@ -549,7 +550,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 م سایر مالیات
               </label>
               <input
@@ -565,7 +566,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-1">
+              <label className="block text-gray-700 text-[10px] font-medium mb-1">
                 مبلغ کل
               </label>
               <input
@@ -579,23 +580,23 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-[#8A4DAB] px-6 py-4 rounded-b-lg">
-          <div className="flex justify-center gap-4">
+        <div className=" px-6 py-4 rounded-b-lg">
+          <div className="flex justify-center gap-4 w-full">
             <button
               onClick={handleCancel}
-              className="bg-[#8A4DAB] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#7a4299] transition-colors"
+              className="bg-[#d95d8b] w-1/3 text-white px-8 py-3 rounded-lg font-medium hover:bg-[#d6514f] transition-colors"
             >
               انصراف
             </button>
             <button
               onClick={handleSaveAndSend}
-              className="bg-[#EC4899] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#DB2777] transition-colors"
+              className="bg-[#391b59] w-1/3 text-white px-8 py-3 rounded-lg font-medium hover:bg-[#1d0f2c] transition-colors"
             >
               ذخیره و ارسال
             </button>
             <button
               onClick={handleSave}
-              className="bg-[#EC4899] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#DB2777] transition-colors"
+              className="bg-[#371c53] w-1/3 text-white px-8 py-3 rounded-lg font-medium hover:bg-[#2e1944] transition-colors"
             >
               ذخیره
             </button>
