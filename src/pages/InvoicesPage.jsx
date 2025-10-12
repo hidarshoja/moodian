@@ -4,6 +4,7 @@ import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 import { GrDocumentExcel } from "react-icons/gr";
 import ImportExcelModalInvoices from "../components/ImportExcelModalInvoices";
+import CreateModalInvoices from "../components/CreateModalInvoices";
 
 export default function InvoicesPage() {
   const [meta, setMeta] = useState({});
@@ -13,6 +14,7 @@ export default function InvoicesPage() {
   const [refresh, setRefresh] = useState(false);
   const [activeFilters] = useState({});
   const [excelModalOpen, setExcelModalOpen] = useState(false);
+  const [excelModalOpen2, setExcelModalOpen2] = useState(false);
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -51,15 +53,22 @@ export default function InvoicesPage() {
             نمای کلی فاکتور فروش کاربران
           </p>
         </div>
-         <button
-                        className="btn-custom"
-                        onClick={() => setExcelModalOpen(true)}
-                      >
-                        از اکسل
-                        <span className="inline-block">
-                          <GrDocumentExcel className="w-5 h-5" />
-                        </span>
-                      </button>
+        <div className="flex items-center justify-center gap-3">
+        <button 
+        className="btn-custom"
+        onClick={() => setExcelModalOpen2(true)}
+        >ایجاد +</button>
+       
+       <button
+                      className="btn-custom"
+                      onClick={() => setExcelModalOpen(true)}
+                    >
+                      از اکسل
+                      <span className="inline-block">
+                        <GrDocumentExcel className="w-5 h-5" />
+                      </span>
+      </button>
+        </div>
         </div>
       </div>
       <div className="p-6">
@@ -69,9 +78,14 @@ export default function InvoicesPage() {
           onRefresh={() => setRefresh(!refresh)}
         />
       </div>
+    
        <ImportExcelModalInvoices
               isOpen={excelModalOpen}
               onClose={() => setExcelModalOpen(false)}
+            />
+             <CreateModalInvoices
+              isOpen2={excelModalOpen2}
+              onClose2={() => setExcelModalOpen2(false)}
             />
       <Pagination
         meta={meta}
