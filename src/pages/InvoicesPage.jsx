@@ -5,6 +5,8 @@ import Pagination from "../components/Pagination";
 import { GrDocumentExcel } from "react-icons/gr";
 import ImportExcelModalInvoices from "../components/ImportExcelModalInvoices";
 import CreateModalInvoices from "../components/CreateModalInvoices";
+import { BsFillSendCheckFill } from "react-icons/bs";
+import { PiSealCheckBold } from "react-icons/pi";
 
 export default function InvoicesPage() {
   const [meta, setMeta] = useState({});
@@ -66,6 +68,33 @@ export default function InvoicesPage() {
                       از اکسل
                       <span className="inline-block">
                         <GrDocumentExcel className="w-5 h-5" />
+                      </span>
+      </button>
+      <button
+                      className="btn-custom"
+                     // onClick={() => setExcelModalOpen(true)}
+                    >
+                      به اکسل
+                      <span className="inline-block">
+                        <GrDocumentExcel className="w-5 h-5" />
+                      </span>
+      </button>
+      <button
+                      className="btn-custom"
+                     // onClick={() => setExcelModalOpen(true)}
+                    >
+                       ارسال گروهی
+                      <span className="inline-block">
+                        <BsFillSendCheckFill className="w-5 h-5" />
+                      </span>
+      </button>
+      <button
+                      className="btn-custom"
+                     // onClick={() => setExcelModalOpen(true)}
+                    >
+                      چک گروهی 
+                      <span className="inline-block">
+                        <PiSealCheckBold className="w-5 h-5" />
                       </span>
       </button>
         </div>
