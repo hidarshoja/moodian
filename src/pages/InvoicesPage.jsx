@@ -5,6 +5,7 @@ import Pagination from "../components/Pagination";
 import { GrDocumentExcel } from "react-icons/gr";
 import ImportExcelModalInvoices from "../components/ImportExcelModalInvoices";
 import CreateModalInvoices from "../components/CreateModalInvoices";
+import GroupInvoiceStatusCheckModal from "../components/GroupInvoiceStatusCheckModal";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { PiSealCheckBold } from "react-icons/pi";
 
@@ -17,6 +18,7 @@ export default function InvoicesPage() {
   const [activeFilters] = useState({});
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [excelModalOpen2, setExcelModalOpen2] = useState(false);
+  const [groupCheckModalOpen, setGroupCheckModalOpen] = useState(false);
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -49,55 +51,57 @@ export default function InvoicesPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
         <div className="w-full border-b border-white/10 p-6 flex  items-center justify-between">
-        <div>
-          <h1 className="text-white text-2xl font-bold">فاکتور فروش</h1>
-          <p className="text-white/60 text-sm mt-1">
-            نمای کلی فاکتور فروش کاربران
-          </p>
-        </div>
-        <div className="flex items-center justify-center gap-3">
-        <button 
-        className="btn-custom"
-        onClick={() => setExcelModalOpen2(true)}
-        >ایجاد +</button>
-       
-       <button
-                      className="btn-custom"
-                      onClick={() => setExcelModalOpen(true)}
-                    >
-                      از اکسل
-                      <span className="inline-block">
-                        <GrDocumentExcel className="w-5 h-5" />
-                      </span>
-      </button>
-      <button
-                      className="btn-custom"
-                     // onClick={() => setExcelModalOpen(true)}
-                    >
-                      به اکسل
-                      <span className="inline-block">
-                        <GrDocumentExcel className="w-5 h-5" />
-                      </span>
-      </button>
-      <button
-                      className="btn-custom"
-                     // onClick={() => setExcelModalOpen(true)}
-                    >
-                       ارسال گروهی
-                      <span className="inline-block">
-                        <BsFillSendCheckFill className="w-5 h-5" />
-                      </span>
-      </button>
-      <button
-                      className="btn-custom"
-                     // onClick={() => setExcelModalOpen(true)}
-                    >
-                      چک گروهی 
-                      <span className="inline-block">
-                        <PiSealCheckBold className="w-5 h-5" />
-                      </span>
-      </button>
-        </div>
+          <div>
+            <h1 className="text-white text-2xl font-bold">فاکتور فروش</h1>
+            <p className="text-white/60 text-sm mt-1">
+              نمای کلی فاکتور فروش کاربران
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <button
+              className="btn-custom"
+              onClick={() => setExcelModalOpen2(true)}
+            >
+              ایجاد +
+            </button>
+
+            <button
+              className="btn-custom"
+              onClick={() => setExcelModalOpen(true)}
+            >
+              از اکسل
+              <span className="inline-block">
+                <GrDocumentExcel className="w-5 h-5" />
+              </span>
+            </button>
+            <button
+              className="btn-custom"
+              // onClick={() => setExcelModalOpen(true)}
+            >
+              به اکسل
+              <span className="inline-block">
+                <GrDocumentExcel className="w-5 h-5" />
+              </span>
+            </button>
+            <button
+              className="btn-custom"
+              // onClick={() => setExcelModalOpen(true)}
+            >
+              ارسال گروهی
+              <span className="inline-block">
+                <BsFillSendCheckFill className="w-5 h-5" />
+              </span>
+            </button>
+            <button
+              className="btn-custom"
+              onClick={() => setGroupCheckModalOpen(true)}
+            >
+              چک گروهی
+              <span className="inline-block">
+                <PiSealCheckBold className="w-5 h-5" />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       <div className="p-6">
@@ -107,15 +111,19 @@ export default function InvoicesPage() {
           onRefresh={() => setRefresh(!refresh)}
         />
       </div>
-    
-       <ImportExcelModalInvoices
-              isOpen={excelModalOpen}
-              onClose={() => setExcelModalOpen(false)}
-            />
-             <CreateModalInvoices
-              isOpen2={excelModalOpen2}
-              onClose2={() => setExcelModalOpen2(false)}
-            />
+
+      <ImportExcelModalInvoices
+        isOpen={excelModalOpen}
+        onClose={() => setExcelModalOpen(false)}
+      />
+      <CreateModalInvoices
+        isOpen2={excelModalOpen2}
+        onClose2={() => setExcelModalOpen2(false)}
+      />
+      <GroupInvoiceStatusCheckModal
+        isOpen={groupCheckModalOpen}
+        onClose={() => setGroupCheckModalOpen(false)}
+      />
       <Pagination
         meta={meta}
         pageCount={pageCount}
