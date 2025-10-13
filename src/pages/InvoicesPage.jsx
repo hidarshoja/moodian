@@ -8,6 +8,7 @@ import CreateModalInvoices from "../components/CreateModalInvoices";
 import GroupInvoiceStatusCheckModal from "../components/GroupInvoiceStatusCheckModal";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { PiSealCheckBold } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 export default function InvoicesPage() {
   const [meta, setMeta] = useState({});
@@ -19,6 +20,7 @@ export default function InvoicesPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [excelModalOpen2, setExcelModalOpen2] = useState(false);
   const [groupCheckModalOpen, setGroupCheckModalOpen] = useState(false);
+  const navigate = useNavigate();
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -47,6 +49,26 @@ export default function InvoicesPage() {
       })
       .finally(() => setLoading(false));
   }, [refresh, activeFilters, pageCount]);
+
+  const handleExportExcel = () => {
+    // exportServicesToExcel(dataTable);
+    const query = buildFilterQuery(activeFilters);
+    console.log(`query`, query);
+    const separator = "&";
+    axiosClient
+      .get(`/invoices?page=${pageCount}${separator}export=1${query}`)
+      .then((response) => {
+        console.log(response.data.data);
+        setTimeout(() => {
+          navigate("/downloadExcel");
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+};
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -76,7 +98,7 @@ export default function InvoicesPage() {
             </button>
             <button
               className="btn-custom"
-              // onClick={() => setExcelModalOpen(true)}
+              onClick={handleExportExcel}
             >
               به اکسل
               <span className="inline-block">
