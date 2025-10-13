@@ -69,7 +69,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-5xl h-[80vh] bg-white rounded-lg shadow-2xl relative flex flex-col"
+        className="w-full max-w-5xl h-[80vh] bg-[#23234a] rounded-lg shadow-2xl relative flex flex-col"
         onClick={(e) => e.stopPropagation()}
         dir="rtl"
       >
@@ -91,7 +91,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {/* کالا/ خدمت جدید (New Item/Service) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 کالا/ خدمت جدید
               </label>
               <input
@@ -101,13 +101,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                   handleInputChange("serviceItem", e.target.value)
                 }
                 placeholder="انتخاب کنید"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* تعداد/مقدار (Quantity/Amount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 تعداد/مقدار
               </label>
               <input
@@ -117,13 +117,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                   handleInputChange("quantity", parseFloat(e.target.value) || 0)
                 }
                 step="0.001"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ واحد (Unit Price) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ واحد
               </label>
               <input
@@ -135,13 +135,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ قبل از تخفیف (Amount Before Discount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ قبل از تخفیف
               </label>
               <input
@@ -152,13 +152,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     : 0
                 }
                 readOnly
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm"
               />
             </div>
 
             {/* مبلغ تخفیف (Discount Amount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ تخفیف
               </label>
               <input
@@ -170,13 +170,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ بعد از تخفیف (Amount After Discount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ بعد از تخفیف
               </label>
               <input
@@ -188,13 +188,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* نرخ مالیات بر ارزش افزوده (VAT Rate) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 نرخ مالیات بر ارزش افزوده
               </label>
               <input
@@ -203,13 +203,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                 onChange={(e) =>
                   handleInputChange("vatRate", parseFloat(e.target.value) || 0)
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مالیات بر ارزش افزوده (Value Added Tax) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مالیات بر ارزش افزوده
               </label>
               <input
@@ -218,13 +218,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                 onChange={(e) =>
                   handleInputChange("vat", parseFloat(e.target.value) || 0)
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ سایر مالیات و عوارض (Other Taxes and Duties Amount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ سایر مالیات و عوارض
               </label>
               <input
@@ -236,13 +236,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ سایر وجوه قانونی (Other Legal Fees Amount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ سایر وجوه قانونی
               </label>
               <input
@@ -254,13 +254,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* سهم نقدی از پرداخت (Cash Share of Payment) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 سهم نقدی از پرداخت
               </label>
               <input
@@ -272,13 +272,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* مبلغ کل (Total Amount) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 مبلغ کل
               </label>
               <input
@@ -290,13 +290,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                     parseFloat(e.target.value) || 0
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* شماره قرارداد حق العمل کاری (Contract Number) */}
             <div>
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 شماره قرارداد حق العمل کاری
               </label>
               <input
@@ -305,13 +305,13 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                 onChange={(e) =>
                   handleInputChange("contractNumber", e.target.value)
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
             {/* ارزی (Currency) - Toggle Switch */}
             <div className="flex flex-col items-start gap-2">
-              <label className="block  text-gray-700 text-xs font-medium">
+              <label className="block  text-gray-100 text-xs font-medium">
                 ارزی
               </label>
               <div
@@ -321,7 +321,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                   type="button"
                   onClick={() => handleToggleChange("isCurrency")}
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
-                    formData.isCurrency ? "bg-blue-600" : "bg-gray-200"
+                    formData.isCurrency ? "bg-blue-600" : "bg-[#23234a]"
                   }`}
                 >
                   <span
@@ -335,7 +335,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
 
             {/* توضیحات (Description) - Full width */}
             <div className="col-span-2 lg:col-span-3">
-              <label className="block mb-1 text-gray-700 text-xs font-medium">
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
                 توضیحات
               </label>
               <textarea
@@ -344,7 +344,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
                   handleInputChange("description", e.target.value)
                 }
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
               />
             </div>
           </div>
