@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import {  MdClose } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
 import { SlPrinter } from "react-icons/sl";
-
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const [invoiceData, setInvoiceData] = useState({
@@ -121,9 +120,9 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
-        className="w-[95%] h-[95%] max-w-7xl bg-[#23234a] rounded-lg shadow-2xl relative flex flex-col"
+        className="w-[95%] min-h-[95%] max-w-7xl bg-[#23234a] rounded-lg shadow-2xl relative flex flex-col my-4"
         dir="rtl"
       >
         {/* Header */}
@@ -131,10 +130,11 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
-           <SlPrinter className="cursor-pointer" />
-            <button 
-             onClick={handleCancel}
-            className="text-white/80 hover:text-white p-1">
+            <SlPrinter className="cursor-pointer" />
+            <button
+              onClick={handleCancel}
+              className="text-white/80 hover:text-white p-1"
+            >
               <MdClose className="w-4 h-4" />
             </button>
           </div>
@@ -179,8 +179,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   <option value="pattern1">الگوی اول (فروش)</option>
                   <option value="pattern2">الگوی دوم (فروش ارزی)</option>
                 </select>
-                <button 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" >
+                <button className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   ×
                 </button>
               </div>
@@ -321,13 +320,10 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           </div>
         </div>
 
-         {/* Add New Item Button */}
+        {/* Add New Item Button */}
         <div className="w-full px-6 flex items-center justify-end">
-        <div className="mb-4">
-            <button
-              onClick={handleAddLineItem}
-              className="btn-custom"
-            >
+          <div className="mb-4">
+            <button onClick={handleAddLineItem} className="btn-custom">
               جدید
               <HiOutlinePlusSm className="w-4 h-4" />
             </button>
@@ -349,8 +345,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               <div>مبلغ بعد از تخفیف</div>
             </div>
           </div>
-
-         
 
           {/* Table Content */}
           <div className=" rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
@@ -591,16 +585,10 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
             >
               انصراف
             </button>
-            <button
-              onClick={handleSaveAndSend}
-              className="btn-custom4"
-            >
+            <button onClick={handleSaveAndSend} className="btn-custom4">
               ذخیره و ارسال
             </button>
-            <button
-              onClick={handleSave}
-              className="btn-custom4"
-            >
+            <button onClick={handleSave} className="btn-custom4">
               ذخیره
             </button>
           </div>
