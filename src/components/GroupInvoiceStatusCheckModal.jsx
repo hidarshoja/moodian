@@ -89,7 +89,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/50">
       <div
-        className="w-[90%] max-w-6xl bg-white rounded-lg shadow-2xl relative flex flex-col max-h-[90vh]"
+        className="w-[90%] max-w-6xl bg-white rounded-lg shadow-2xl relative flex flex-col max-h-[90vh] overflow-y-auto"
         dir="rtl"
       >
         {/* Header */}
@@ -122,14 +122,14 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-gray-200">
+          <div className="bg-[#23234a]">
             {invoiceData.map((invoice) => (
               <div
                 key={invoice.id}
-                className="grid grid-cols-6 gap-4 px-6 py-4 bg-pink-50 hover:bg-pink-100 transition-colors"
+                className="grid grid-cols-6 gap-4 px-6 py-4 bg-[#23234a] hover:bg-[#3c3c7d] transition-colors"
               >
                 {/* Status Checkbox */}
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-start">
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
@@ -142,35 +142,35 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
 
                 {/* Invoice Type */}
                 <div className="flex items-center text-right">
-                  <span className="text-sm text-gray-900">
+                  <span className="text-sm text-gray-100">
                     {invoice.invoiceType}
                   </span>
                 </div>
 
                 {/* Unique Tax ID */}
                 <div className="flex items-center text-right">
-                  <span className="text-sm text-gray-900 font-mono">
+                  <span className="text-sm text-gray-100 font-mono">
                     {invoice.uniqueTaxId}
                   </span>
                 </div>
 
                 {/* Issue Date */}
                 <div className="flex items-center text-right">
-                  <span className="text-sm text-gray-900">
+                  <span className="text-sm text-gray-100">
                     {invoice.issueDate}
                   </span>
                 </div>
 
                 {/* Subject */}
                 <div className="flex items-center text-right">
-                  <span className="text-sm text-gray-900">
+                  <span className="text-sm text-gray-100">
                     {invoice.subject}
                   </span>
                 </div>
 
                 {/* Pattern */}
                 <div className="flex items-center text-right">
-                  <span className="text-sm text-gray-900">
+                  <span className="text-sm text-gray-100">
                     {invoice.pattern}
                   </span>
                 </div>
@@ -180,8 +180,8 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Pagination Info */}
-        <div className="px-6 py-2 bg-gray-50 border-t border-gray-200">
-          <div className="text-sm text-gray-600">
+        <div className="px-6 py-2 bg-gray-800 border-t border-gray-200">
+          <div className="text-sm text-gray-100">
             of {invoiceData.length} items {invoiceData.length}-1
           </div>
         </div>
@@ -191,7 +191,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
           {/* Cancel Button */}
           <button
             onClick={handleCancel}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            className="bg-red-500 hover:bg-red-700 w-1/3 text-white px-6 py-2 rounded-lg font-medium transition-colors"
           >
             انصراف
           </button>
@@ -213,7 +213,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
           {/* Send Button */}
           <button
             onClick={handleSend}
-            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            className="btn-custom5"
           >
             ارسال
           </button>

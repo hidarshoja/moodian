@@ -193,6 +193,29 @@ body {
   background-image: linear-gradient(to top left,  #2e3a5c , #23234a , #6ec6ca);
 }
 
+.btn-custom5 {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* gap-1 */
+  font-size: 0.875rem; /* text-sm */
+  background-image: linear-gradient(to top right, #23234a, #2e3a5c, #6ec6ca);
+  border: 1px solid #6ec6ca;
+  color: #e0f2f1;
+  padding: 0.5rem 1rem; /* p-2 */
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  
+  transition: all 0.3s ease-out;
+  outline: none;
+  width: 33%;
+  justify-content: center;
+}
+.btn-custom5:hover {
+  border-color: #001813;
+  background-image: linear-gradient(to top left,  #2e3a5c , #23234a , #6ec6ca);
+}
+
 .swal2-confirm {
   display: flex !important;
   align-items: center !important;
