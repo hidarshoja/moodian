@@ -323,13 +323,13 @@ export default function AddCustomersModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 rounded-xl border border-white/10 text-white/80 bg-purple-700 hover:bg-purple-800 transition-all"
+              className="px-6 py-2 rounded-xl border border-white/10 text-white/80 bg-red-500 w-1/2 hover:bg-red-600 transition-all"
             >
               انصراف
             </button>
             <button
               type="submit"
-              className="px-6 py-2 rounded-xl bg-pink-300 text-[#23234a] font-bold hover:bg-pink-400 transition-all"
+              className="btn-custom4"
             >
               ذخیره
             </button>

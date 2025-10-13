@@ -188,7 +188,10 @@ body {
   width: 50%;
   justify-content: center;
 }
-
+.btn-custom4:hover {
+  border-color: #001813;
+  background-image: linear-gradient(to top left,  #2e3a5c , #23234a , #6ec6ca);
+}
 
 .swal2-confirm {
   display: flex !important;

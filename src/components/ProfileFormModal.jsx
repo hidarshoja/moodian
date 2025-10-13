@@ -152,16 +152,7 @@ export default function ProfileFormModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">وضعیت</label>
-            <input
-              type="number"
-              name="status"
-              value={form.status ?? 100}
-              onChange={onChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
+         
           <div className="md:col-span-3">
             <label className="block mb-2 text-white text-sm">نقش‌ها</label>
             <div className="flex items-center gap-6 text-white/90">
@@ -197,7 +188,7 @@ export default function ProfileFormModal({
               </label>
             </div>
           </div>
-          <div className="md:col-span-3">
+          <div className="md:col-span-1">
             <label className="block mb-1 text-white text-sm">
               شناسه sstids
             </label>
@@ -231,6 +222,32 @@ export default function ProfileFormModal({
             {errors.sstids && (
               <p className="text-red-400 text-xs mt-1">{errors.sstids}</p>
             )}
+          </div>
+          <div className="md:col-span-1">
+            <label className="block mb-1 text-white text-sm">تلفن</label>
+            <input
+              name="mobile"
+              value={form.mobile}
+              onChange={onChange}
+              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
+                errors.mobile
+                  ? "border-red-500 focus:ring-red-500/20"
+                  : "border-white/10 focus:ring-white/20"
+              }`}
+            />
+            {errors.mobile && (
+              <p className="text-red-400 text-xs mt-1">{errors.mobile}</p>
+            )}
+          </div>
+          <div className="md:col-span-1">
+            <label className="block mb-1 text-white text-sm">وضعیت</label>
+            <input
+              type="number"
+              name="status"
+              value={form.status ?? 100}
+              onChange={onChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
           </div>
           <div className="md:col-span-3">
             <label className="block mb-1 text-white text-sm">کلید خصوصی(فرمت فایل .pem)</label>
@@ -270,33 +287,18 @@ export default function ProfileFormModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">تلفن</label>
-            <input
-              name="mobile"
-              value={form.mobile}
-              onChange={onChange}
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-3 focus:outline-none focus:ring-2 ${
-                errors.mobile
-                  ? "border-red-500 focus:ring-red-500/20"
-                  : "border-white/10 focus:ring-white/20"
-              }`}
-            />
-            {errors.mobile && (
-              <p className="text-red-400 text-xs mt-1">{errors.mobile}</p>
-            )}
-          </div>
-          <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
+          
+          <div className="md:col-span-3 flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-white/10 text-white/80 bg-purple-700 hover:bg-purple-800 transition-all"
+              className="px-4 py-2 rounded-xl border border-white/10 text-white/80 bg-red-500 hover:bg-red-600 w-1/2 transition-all"
             >
               انصراف
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-pink-300 text-[#23234a] font-bold hover:bg-pink-400 transition-all"
+              className="btn-custom4"
             >
               {isEditing ? "بروزرسانی" : "ثبت"}
             </button>

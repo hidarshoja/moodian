@@ -67,7 +67,7 @@ export default function OrganizationInquiryModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl relative animate-slideIn"
+        className="w-full max-w-2xl bg-[#23234a] rounded-2xl shadow-2xl relative animate-slideIn"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -89,7 +89,7 @@ export default function OrganizationInquiryModal({
               placeholder="جستجو..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
               dir="rtl"
             />
             <button
@@ -106,7 +106,7 @@ export default function OrganizationInquiryModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* نام (Name) */}
             <div>
-              <label className="block mb-2 text-gray-700 text-sm font-medium">
+              <label className="block mb-2 text-gray-100 text-sm font-medium">
                 نام
               </label>
               <input
@@ -114,14 +114,14 @@ export default function OrganizationInquiryModal({
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
                 dir="rtl"
               />
             </div>
 
             {/* شناسه اقتصادی (Economic Identifier) */}
             <div>
-              <label className="block mb-2 text-gray-700 text-sm font-medium">
+              <label className="block mb-2 text-gray-100 text-sm font-medium">
                 شناسه اقتصادی
               </label>
               <input
@@ -129,14 +129,14 @@ export default function OrganizationInquiryModal({
                 name="economic_identifier"
                 value={formData.economic_identifier}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
                 dir="rtl"
               />
             </div>
 
             {/* کد ملی (National Code) */}
             <div>
-              <label className="block mb-2 text-gray-700 text-sm font-medium">
+              <label className="block mb-2 text-gray-100 text-sm font-medium">
                 کد ملی
               </label>
               <input
@@ -145,14 +145,14 @@ export default function OrganizationInquiryModal({
                 value={formData.national_code}
                 onChange={handleInputChange}
                 maxLength={10}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
                 dir="rtl"
               />
             </div>
 
             {/* وضعیت (Status) */}
             <div>
-              <label className="block mb-2 text-gray-700 text-sm font-medium">
+              <label className="block mb-2 text-gray-100 text-sm font-medium">
                 وضعیت
               </label>
               <input
@@ -160,7 +160,7 @@ export default function OrganizationInquiryModal({
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
                 dir="rtl"
               />
             </div>
@@ -171,13 +171,13 @@ export default function OrganizationInquiryModal({
         <div className="px-6 py-4 border-t border-gray-200 flex justify-center gap-4">
           <button
             onClick={handleCancel}
-            className="px-8 py-3 bg-[#8A4DAB] text-white rounded-lg font-medium hover:bg-[#7a4299] transition-colors"
+            className="px-8 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors w-1/2"
           >
             انصراف
           </button>
           <button
             onClick={handleSelect}
-            className="px-8 py-3 bg-[#EC4899] text-white rounded-lg font-medium hover:bg-[#DB2777] transition-colors"
+            className="btn-custom4"
           >
             انتخاب
           </button>
