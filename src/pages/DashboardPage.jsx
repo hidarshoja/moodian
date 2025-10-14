@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import axiosClient from "../axios-client";
 import { convertToPersianDate , extractTimeFromDate } from '../utils/change-date';
 import { useNavigate } from "react-router-dom";
+import { FaKey } from "react-icons/fa";
 
 export default function DashboardPage() {
   const [error] = useState(null);
@@ -70,7 +71,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 relative">
       <div>
         <div className="w-full border-b border-white/10 p-6 flex items-center justify-between">
           <div>
@@ -208,6 +209,9 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+      <div className="fixed left-3 bottom-3 w-14 h-14 rounded-full bg-orange-500 flex items-center justify-center cursor-pointer">
+        <FaKey />
+      </div>
     </div>
   );
 }
