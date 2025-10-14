@@ -1,82 +1,79 @@
-import  { createRef, useEffect, useState } from 'react';
-import { Link,  useNavigate } from 'react-router-dom';
-import axiosClient from '../../axios-client';
-import { errorMessage, successMessage } from '../../utils/Toastiy';
-import { ToastContainer } from 'react-toastify';
-
+import { createRef, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axiosClient from "../../axios-client";
+import { errorMessage, successMessage } from "../../utils/Toastiy";
+import { ToastContainer } from "react-toastify";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false)
-  const phoneRef = createRef()
-  const passwordRef = createRef()
-  const rememberRef = createRef()
+  const [isLoading, setIsLoading] = useState(false);
+  const phoneRef = createRef();
+  const passwordRef = createRef();
+  const rememberRef = createRef();
   const [timer, setTimer] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigate();
-
 
   useEffect(() => {
     const storedStartTime = localStorage.getItem("startTime");
-   
-   const currentTime = Math.floor(Date.now() / 1000);
-   const elapsedTime = currentTime - parseInt(storedStartTime, 10);
-   if (elapsedTime < 60) {
-     setTimer(60 - elapsedTime);
-   }
- }, []);
 
- useEffect(() => {
-   if (timer > 0) {
-     const interval = setInterval(() => {
-       setTimer((prevTimer) => prevTimer - 1);
-     }, 1000);
-     return () => clearInterval(interval);
-   }
- }, [timer]);
+    const currentTime = Math.floor(Date.now() / 1000);
+    const elapsedTime = currentTime - parseInt(storedStartTime, 10);
+    if (elapsedTime < 60) {
+      setTimer(60 - elapsedTime);
+    }
+  }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('ACCESS_TOKEN')
-    if (token) {
-     navigation('/')
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+      return () => clearInterval(interval);
     }
-  }, [])
+  }, [timer]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    if (token) {
+      navigation("/");
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     // setTimer(60);
     const startTime = Math.floor(Date.now() / 1000);
     localStorage.setItem("startTime", startTime.toString());
     setTimer(60);
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
       const payload = {
         mobile: phoneRef.current.value,
         password: passwordRef.current.value,
-      }
+      };
 
       if (payload.mobile.length != 10) {
-        errorMessage('شماره موبایل ده رقمی  را وارد کنید')
-        return
+        errorMessage("شماره موبایل ده رقمی  را وارد کنید");
+        return;
       }
-      const response = await axiosClient.post('/send-otp', {mobile : payload.mobile , password : payload.password})
-      
+      const response = await axiosClient.post("/send-otp", {
+        mobile: payload.mobile,
+        password: payload.password,
+      });
 
-      successMessage('کد 5 رقمی برای شما ارسال شد')
-     
-  
-      setTimeout(()=>{
-        setIsLoading(false)
-        navigation('/auth/otp',{state: payload})
-      },3100)
+      successMessage("کد 5 رقمی برای شما ارسال شد");
 
+      setTimeout(() => {
+        setIsLoading(false);
+        navigation("/auth/otp", { state: payload });
+      }, 3100);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
       if (error.response.status === 404) {
-        errorMessage('کاربری یافت نشد')
+        errorMessage("کاربری یافت نشد");
       }
-     
     }
   };
 
@@ -104,9 +101,12 @@ export default function Login() {
 
           <div className="mt-10">
             <div>
-              <form onSubmit={handleLogin}  className="space-y-6">
-              <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-color2">
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium leading-6 text-color2"
+                  >
                     شماره موبایل (بدون صفر)
                   </label>
                   <div className="mt-2">
@@ -114,7 +114,7 @@ export default function Login() {
                       id="email"
                       name="phone"
                       type="number"
-                      dir='ltr'
+                      dir="ltr"
                       ref={phoneRef}
                       required
                       className="block w-full rounded-md border-0 pl-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -129,17 +129,58 @@ export default function Login() {
                   >
                     پسورد
                   </label>
-                  <div className="mt-2">
-                  <input
+                  <div className="mt-2 relative">
+                    <input
                       id="password"
                       name="password"
-                      type="password"
-                      dir='ltr'
+                      type={showPassword ? "text" : "password"}
+                      dir="ltr"
                       autoComplete="current-password"
                       ref={passwordRef}
                       required
-                      className="block w-full rounded-md border-0 py-1.5 pl-3 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-1 flex items-center pl-3"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <svg
+                          className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -172,7 +213,7 @@ export default function Login() {
 
                 <div>
                   <button
-                     type="submit"
+                    type="submit"
                     className={`flex w-full justify-center rounded-lg bg-green-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-md hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-all duration-200${
                       timer > 0 ? "opacity-50 cursor-not-allowed" : ""
                     }`}

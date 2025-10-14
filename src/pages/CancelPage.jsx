@@ -156,17 +156,25 @@ export default function CancelPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
-      <div>
-        <div className="w-full border-b border-white/10 p-6">
+      <div className="flex items-center justify-between w-full p-6 border-b border-white/10">
+        <div className="w-1/2  p-6">
           <h1 className="text-white text-2xl font-bold">ابطال</h1>
           <div className="flex items-center justify-between mt-1">
             <p className="text-white/60 text-sm">نمای کلی ابطال فاکتورها</p>
            
           </div>
         </div>
+      <div className="w-1/2 flex items-center justify-end ">
+      <button
+              className="btn-custom"
+              
+            >
+              جدید +
+            </button>
       </div>
-
-      {/* <CancelFilter
+      </div>
+{/* 
+      <CancelFilter
         startDate={startDate}
         endDate={endDate}
         fromYear={fromYear}
