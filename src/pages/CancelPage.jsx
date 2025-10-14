@@ -1,8 +1,9 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import CancelFilter from "../components/CancelFilter";
 import CancelTable from "../components/CancelTable";
 import ViewCancelModal from "../components/ViewCancelModal";
 import EditCancelModal from "../components/EditCancelModal";
+import AddCancelModal from "../components/AddCancelModal";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
@@ -16,16 +17,17 @@ export default function CancelPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const [cancelRecords, setCancelRecords] = useState([]);
-  const [refresh , setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-  // &f[ins]=3
+    // &f[ins]=3
     axiosClient
       .get(`/invoices?page=${pageCount}`)
       .then((response) => {
@@ -36,7 +38,7 @@ export default function CancelPage() {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, [ refresh , pageCount]);
+  }, [refresh, pageCount]);
 
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
@@ -113,8 +115,6 @@ export default function CancelPage() {
     setEditModalOpen(true);
   };
 
-  
-
   const handleApprove = (record) => {
     console.log("Approve record:", record);
     setCancelRecords((prev) =>
@@ -128,8 +128,6 @@ export default function CancelPage() {
       prev.map((r) => (r.id === record.id ? { ...r, status: "رد شده" } : r))
     );
   };
-
-  
 
   const handleSaveEdit = (updatedRecord) => {
     setCancelRecords((prev) =>
@@ -151,8 +149,30 @@ export default function CancelPage() {
     setSelectedRecord(null);
   };
 
-  // Filter records based on search term
+  const handleCloseAddModal = () => {
+    setAddModalOpen(false);
+  };
 
+  const handleAddCancel = (data) => {
+    console.log("Adding cancel record:", data);
+    // Here you can add the logic to save the new cancel record
+    // For now, just show a success message
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success",
+      title: "رکورد ابطال با موفقیت اضافه شد",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
+    setRefresh(!refresh);
+  };
+
+  // Filter records based on search term
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
@@ -161,19 +181,15 @@ export default function CancelPage() {
           <h1 className="text-white text-2xl font-bold">ابطال</h1>
           <div className="flex items-center justify-between mt-1">
             <p className="text-white/60 text-sm">نمای کلی ابطال فاکتورها</p>
-           
           </div>
         </div>
-      <div className="w-1/2 flex items-center justify-end ">
-      <button
-              className="btn-custom"
-              
-            >
-              جدید +
-            </button>
+        <div className="w-1/2 flex items-center justify-end ">
+          <button className="btn-custom" onClick={() => setAddModalOpen(true)}>
+            جدید +
+          </button>
+        </div>
       </div>
-      </div>
-{/* 
+      {/* 
       <CancelFilter
         startDate={startDate}
         endDate={endDate}
@@ -197,7 +213,7 @@ export default function CancelPage() {
           onApprove={handleApprove}
           onReject={handleReject}
           loading={loading}
-          setRefresh = {setRefresh}
+          setRefresh={setRefresh}
           refresh={refresh}
         />
       </div>
@@ -219,6 +235,12 @@ export default function CancelPage() {
         onClose={handleCloseEditModal}
         record={selectedRecord}
         onSave={handleSaveEdit}
+      />
+
+      <AddCancelModal
+        isOpen={addModalOpen}
+        onClose={handleCloseAddModal}
+        onSave={handleAddCancel}
       />
     </div>
   );
