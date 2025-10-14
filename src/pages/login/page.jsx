@@ -5,7 +5,6 @@ import { errorMessage, successMessage } from "../../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
   const phoneRef = createRef();
   const passwordRef = createRef();
   const rememberRef = createRef();
@@ -37,7 +36,7 @@ export default function Login() {
     if (token) {
       navigation("/");
     }
-  }, []);
+  }, [navigation]);
 
   const handleLogin = async (e) => {
     // setTimer(60);
@@ -45,7 +44,6 @@ export default function Login() {
     localStorage.setItem("startTime", startTime.toString());
     setTimer(60);
     e.preventDefault();
-    setIsLoading(true);
 
     try {
       const payload = {
@@ -57,7 +55,7 @@ export default function Login() {
         errorMessage("شماره موبایل ده رقمی  را وارد کنید");
         return;
       }
-      const response = await axiosClient.post("/send-otp", {
+      await axiosClient.post("/send-otp", {
         mobile: payload.mobile,
         password: payload.password,
       });
@@ -65,15 +63,26 @@ export default function Login() {
       successMessage("کد 5 رقمی برای شما ارسال شد");
 
       setTimeout(() => {
-        setIsLoading(false);
         navigation("/auth/otp", { state: payload });
       }, 3100);
     } catch (error) {
       console.error(error);
-      setIsLoading(false);
-      if (error.response.status === 404) {
-        errorMessage("کاربری یافت نشد");
+      if (error && error.response) {
+        const { status, data } = error.response;
+        if (status === 422 && data && data.message) {
+          errorMessage(data.message);
+          return;
+        }
+        if (status === 404) {
+          errorMessage("کاربری یافت نشد");
+          return;
+        }
+        if (data && data.message) {
+          errorMessage(data.message);
+          return;
+        }
       }
+      errorMessage("خطا در برقراری ارتباط. لطفاً مجدداً تلاش کنید");
     }
   };
 
