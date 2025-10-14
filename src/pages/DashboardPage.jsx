@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FaKey } from "react-icons/fa";
 import DigitalSignatureModal from "../components/DigitalSignatureModal";
+import DashboardCharts from "../components/DashboardCharts";
 
 export default function DashboardPage() {
   const [error] = useState(null);
@@ -81,6 +82,9 @@ export default function DashboardPage() {
               ایجاد توکن
             </button>
           </div>
+        </div>
+        <div className="p-6">
+          <DashboardCharts />
         </div>
       </div>
       <div className="users">
