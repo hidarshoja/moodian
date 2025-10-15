@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
-import CancelFilter from "../components/CancelFilter";
 import CancelTable from "../components/CancelTable";
 import ViewCancelModal from "../components/ViewCancelModal";
 import EditCancelModal from "../components/EditCancelModal";
 import AddCancelModal from "../components/AddCancelModal";
-import { HiOutlinePlusSm } from "react-icons/hi";
+
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 import Swal from "sweetalert2";
 
 export default function CancelPage() {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [fromYear, setFromYear] = useState(null);
-  const [toYear, setToYear] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -40,33 +34,9 @@ export default function CancelPage() {
       .finally(() => setLoading(false));
   }, [refresh, pageCount]);
 
-  const handleStartDateChange = (selectedDate) => {
-    setStartDate(selectedDate);
-  };
+ 
 
-  const handleEndDateChange = (selectedDate) => {
-    setEndDate(selectedDate);
-  };
-
-  const handleFromYearChange = (selectedDate) => {
-    setFromYear(selectedDate);
-  };
-
-  const handleToYearChange = (selectedDate) => {
-    setToYear(selectedDate);
-  };
-
-  const handleSearchTermChange = (term) => {
-    setSearchTerm(term);
-  };
-
-  const handleClearAll = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setFromYear(null);
-    setToYear(null);
-    setSearchTerm("");
-  };
+ 
 
   const handleDelete = async (row) => {
     console.log(`row.id`, row.id);
@@ -153,24 +123,7 @@ export default function CancelPage() {
     setAddModalOpen(false);
   };
 
-  const handleAddCancel = (data) => {
-    console.log("Adding cancel record:", data);
-    // Here you can add the logic to save the new cancel record
-    // For now, just show a success message
-    Swal.fire({
-      toast: true,
-      position: "top-start",
-      icon: "success",
-      title: "رکورد ابطال با موفقیت اضافه شد",
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      customClass: {
-        popup: "swal2-toast",
-      },
-    });
-    setRefresh(!refresh);
-  };
+ 
 
   // Filter records based on search term
 
@@ -189,20 +142,7 @@ export default function CancelPage() {
           </button>
         </div>
       </div>
-      {/* 
-      <CancelFilter
-        startDate={startDate}
-        endDate={endDate}
-        fromYear={fromYear}
-        toYear={toYear}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
-        onFromYearChange={handleFromYearChange}
-        onToYearChange={handleToYearChange}
-        searchTerm={searchTerm}
-        onSearchTermChange={handleSearchTermChange}
-        onClearAll={handleClearAll}
-      /> */}
+   
 
       <div className="mt-6">
         <CancelTable
@@ -240,7 +180,8 @@ export default function CancelPage() {
       <AddCancelModal
         isOpen={addModalOpen}
         onClose={handleCloseAddModal}
-        onSave={handleAddCancel}
+        setRefresh={setRefresh}
+        refresh={refresh}
       />
     </div>
   );

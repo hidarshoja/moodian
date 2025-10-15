@@ -88,7 +88,7 @@ export default function CancelTable({
                 </span>
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {convertToPersianDate(record.indati2m)}
+                {convertToPersianDate(record.indatim)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 <div className="flex items-center gap-2">
