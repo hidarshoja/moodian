@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DateObject from "react-date-object";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -6,38 +7,15 @@ import { FaTimes } from "react-icons/fa";
 import axiosClient from "../axios-client";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
+import persianToGregorianString   from "../utils/persianToGregorianString"
 
-// تابع فرمت تاریخ
-function formatDate(date) {
-  if (!date) return "";
-  const yyyy = date.year || date.getFullYear();
-  const mm = String(
-    date.month ? date.month.number : date.getMonth() + 1
-  ).padStart(2, "0");
-  const dd = String(date.day ? date.day : date.getDate()).padStart(2, "0");
-  const hh = String(
-    date.hour !== undefined ? date.hour : date.getHours ? date.getHours() : 0
-  ).padStart(2, "0");
-  const min = String(
-    date.minute !== undefined
-      ? date.minute
-      : date.getMinutes
-      ? date.getMinutes()
-      : 0
-  ).padStart(2, "0");
-  const ss = String(
-    date.second !== undefined
-      ? date.second
-      : date.getSeconds
-      ? date.getSeconds()
-      : 0
-  ).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
-}
+
 
 export default function AddCancelModal({ isOpen, onClose, setRefresh , refresh }) {
   const [taxReferenceNumber, setTaxReferenceNumber] = useState("");
-  const [issuanceDate, setIssuanceDate] = useState(new Date());
+  const [issuanceDate, setIssuanceDate] = useState(
+    new DateObject({ calendar: persian, locale: persian_fa })
+  );
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async (e) => {
@@ -46,8 +24,9 @@ export default function AddCancelModal({ isOpen, onClose, setRefresh , refresh }
     if (taxReferenceNumber.trim() && issuanceDate) {
       const data = {
         taxid: taxReferenceNumber,
-        indatim: formatDate(issuanceDate),
+        indatim: persianToGregorianString(issuanceDate),
       };
+      console.log("converted:", data.indatim); 
       try {
         const res = await axiosClient.post(`/invoices/cancel-external`, data);
         console.log(`res`, res);
