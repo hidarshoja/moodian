@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
+import axiosClient from "../axios-client";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -22,25 +23,31 @@ ChartJS.register(
 );
 
 export default function DashboardCharts() {
-  // Apply Shabnam font to charts
+  const [itemChart, setItemChart] = useState({
+    status_group: [],
+    ins_group: [],
+  });
   ChartJS.defaults.font.family =
     "Shabnam, IRANSansWeb, Vazirmatn, Tahoma, Arial, sans-serif";
   ChartJS.defaults.color = "rgba(255,255,255,0.9)";
-  // Fake data (replace later with API data)
   const barData = useMemo(() => {
+    const labels = (itemChart?.status_group || []).map((i) => i.status_label);
+    const data = (itemChart?.status_group || []).map(
+      (i) => Number(i.count) || 0
+    );
     return {
-      labels: ["تعداد ابطال", "تعداد خطا از سامانه", "تعداد ارسال موفق"],
+      labels,
       datasets: [
         {
           label: "تعداد",
-          data: [3, 1, 8],
+          data,
           backgroundColor: "#ff6b5b",
           borderRadius: 8,
           barThickness: 24,
         },
       ],
     };
-  }, []);
+  }, [itemChart?.status_group]);
 
   const barOptions = useMemo(
     () => ({
@@ -74,18 +81,27 @@ export default function DashboardCharts() {
   );
 
   const doughnutData = useMemo(() => {
+    const labels = (itemChart?.ins_group || []).map((i) => i.ins_label);
+    // Use count as the value for each slice; sums will be shown in tooltip
+    const data = (itemChart?.ins_group || []).map((i) => Number(i.count) || 0);
     return {
-      labels: ["اصلی", "خالص"],
+      labels,
       datasets: [
         {
-          data: [139955550212, 119955430312],
-          backgroundColor: ["#ff6b5b", "#8b55ff"],
+          data,
+          backgroundColor: [
+            "#ff6b5b",
+            "#8b55ff",
+            "#4cc9f0",
+            "#06d6a0",
+            "#ffd166",
+          ],
           borderWidth: 0,
           hoverOffset: 4,
         },
       ],
     };
-  }, []);
+  }, [itemChart?.ins_group]);
 
   const doughnutOptions = useMemo(
     () => ({
@@ -104,15 +120,37 @@ export default function DashboardCharts() {
         tooltip: {
           rtl: true,
           callbacks: {
-            label: (ctx) => `${ctx.label} : ${ctx.formattedValue.toString()}`,
+            label: (ctx) => {
+              const label = ctx.label || "";
+              const count = ctx.parsed;
+              const match = (itemChart?.ins_group || []).find(
+                (i) => i.ins_label === label
+              );
+              const sum = match ? Number(match.sum) : 0;
+              const formattedSum = sum.toLocaleString("fa-IR");
+              const formattedCount = Number(count).toLocaleString("fa-IR");
+              return `${label} - تعداد: ${formattedCount} - مبلغ: ${formattedSum}`;
+            },
           },
         },
         title: { display: false },
       },
     }),
-    []
+    [itemChart?.ins_group]
   );
-
+  useEffect(() => {
+    axiosClient
+      .get(
+        "/report/invoice/summery?summery_includes[0]=status&summery_includes[1]=ins"
+      )
+      .then((response) => {
+        console.log(`response.data.data`, response.data.data);
+        setItemChart(response.data.data || { status_group: [], ins_group: [] });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="h-64 lg:h-80 rounded-2xl bg-[#1f2241] border border-white/10 p-4">
