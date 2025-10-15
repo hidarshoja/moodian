@@ -22,6 +22,47 @@ ChartJS.register(
   Title
 );
 
+// Maps API status_group to Bar chart data
+function buildBarData(statusGroup) {
+  const labels = (statusGroup || []).map((item) => item.status_label);
+  const counts = (statusGroup || []).map((item) => Number(item.count) || 0);
+  return {
+    labels,
+    datasets: [
+      {
+        label: "تعداد",
+        data: counts,
+        backgroundColor: "#ff6b5b",
+        borderRadius: 8,
+        barThickness: 24,
+      },
+    ],
+  };
+}
+
+// Maps API ins_group to Doughnut chart data
+function buildDoughnutData(insGroup) {
+  const labels = (insGroup || []).map((item) => item.ins_label);
+  const counts = (insGroup || []).map((item) => Number(item.count) || 0);
+  return {
+    labels,
+    datasets: [
+      {
+        data: counts,
+        backgroundColor: [
+          "#ff6b5b",
+          "#8b55ff",
+          "#4cc9f0",
+          "#06d6a0",
+          "#ffd166",
+        ],
+        borderWidth: 0,
+        hoverOffset: 4,
+      },
+    ],
+  };
+}
+
 export default function DashboardCharts() {
   const [itemChart, setItemChart] = useState({
     status_group: [],
@@ -30,24 +71,11 @@ export default function DashboardCharts() {
   ChartJS.defaults.font.family =
     "Shabnam, IRANSansWeb, Vazirmatn, Tahoma, Arial, sans-serif";
   ChartJS.defaults.color = "rgba(255,255,255,0.9)";
-  const barData = useMemo(() => {
-    const labels = (itemChart?.status_group || []).map((i) => i.status_label);
-    const data = (itemChart?.status_group || []).map(
-      (i) => Number(i.count) || 0
-    );
-    return {
-      labels,
-      datasets: [
-        {
-          label: "تعداد",
-          data,
-          backgroundColor: "#ff6b5b",
-          borderRadius: 8,
-          barThickness: 24,
-        },
-      ],
-    };
-  }, [itemChart?.status_group]);
+  // Build chart data from API response in a simple, readable way
+  const barData = useMemo(
+    () => buildBarData(itemChart?.status_group),
+    [itemChart?.status_group]
+  );
 
   const barOptions = useMemo(
     () => ({
@@ -80,27 +108,18 @@ export default function DashboardCharts() {
     []
   );
 
-  const doughnutData = useMemo(() => {
-    const labels = (itemChart?.ins_group || []).map((i) => i.ins_label);
-    // Use count as the value for each slice; sums will be shown in tooltip
-    const data = (itemChart?.ins_group || []).map((i) => Number(i.count) || 0);
-    return {
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: [
-            "#ff6b5b",
-            "#8b55ff",
-            "#4cc9f0",
-            "#06d6a0",
-            "#ffd166",
-          ],
-          borderWidth: 0,
-          hoverOffset: 4,
-        },
-      ],
-    };
+  const doughnutData = useMemo(
+    () => buildDoughnutData(itemChart?.ins_group),
+    [itemChart?.ins_group]
+  );
+
+  // Precompute a simple lookup for sums by label for tooltip display
+  const insSumByLabel = useMemo(() => {
+    const map = new Map();
+    (itemChart?.ins_group || []).forEach((item) => {
+      map.set(item.ins_label, Number(item.sum) || 0);
+    });
+    return map;
   }, [itemChart?.ins_group]);
 
   const doughnutOptions = useMemo(
@@ -122,13 +141,10 @@ export default function DashboardCharts() {
           callbacks: {
             label: (ctx) => {
               const label = ctx.label || "";
-              const count = ctx.parsed;
-              const match = (itemChart?.ins_group || []).find(
-                (i) => i.ins_label === label
-              );
-              const sum = match ? Number(match.sum) : 0;
+              const count = Number(ctx.parsed) || 0;
+              const sum = insSumByLabel.get(label) || 0;
               const formattedSum = sum.toLocaleString("fa-IR");
-              const formattedCount = Number(count).toLocaleString("fa-IR");
+              const formattedCount = count.toLocaleString("fa-IR");
               return `${label} - تعداد: ${formattedCount} - مبلغ: ${formattedSum}`;
             },
           },
@@ -136,8 +152,9 @@ export default function DashboardCharts() {
         title: { display: false },
       },
     }),
-    [itemChart?.ins_group]
+    [insSumByLabel]
   );
+  // Fetch chart data once from API and store it in state
   useEffect(() => {
     axiosClient
       .get(
