@@ -1,68 +1,23 @@
-import React, { useState } from "react";
+import  { useState , useEffect } from "react";
 import { MdClose } from "react-icons/md";
+import axiosClient from "../axios-client";
+import {convertToPersianDate} from "../utils/change-date";
+import Swal from "sweetalert2";
 
 const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   const [autoDisplay, setAutoDisplay] = useState(false);
   const [selectedInvoices, setSelectedInvoices] = useState(new Set());
+  const [invoiceData, setInvoiceData] = useState([]);
 
-  // Sample data - replace with actual data from props or API
-  const invoiceData = [
-    {
-      id: 1,
-      status: "checked",
-      invoiceType: "نوع اول",
-      uniqueTaxId: "A3FN1Y04F8D00000000109",
-      issueDate: "09:30:00 1404/07/12",
-      subject: "اصلی",
-      pattern: "الگوی اول (فروش)",
-    },
-    {
-      id: 2,
-      status: "checked",
-      invoiceType: "نوع اول",
-      uniqueTaxId: "A3FN1Y04F4200000000034",
-      issueDate: "10:53:45 1404/04/30",
-      subject: "اصلی",
-      pattern: "الگوی سوم (طلا، جواهر و پلاتین)",
-    },
-    {
-      id: 3,
-      status: "unchecked",
-      invoiceType: "نوع دوم",
-      uniqueTaxId: "A3FN1Y04F8D00000000110",
-      issueDate: "11:15:30 1404/07/13",
-      subject: "اصلی",
-      pattern: "الگوی دوم (فروش ارزی)",
-    },
-    {
-      id: 4,
-      status: "checked",
-      invoiceType: "نوع اول",
-      uniqueTaxId: "A3FN1Y04F8D00000000111",
-      issueDate: "14:22:15 1404/07/14",
-      subject: "اصلی",
-      pattern: "الگوی اول (فروش)",
-    },
-    {
-      id: 5,
-      status: "unchecked",
-      invoiceType: "نوع دوم",
-      uniqueTaxId: "A3FN1Y04F8D00000000112",
-      issueDate: "16:45:20 1404/07/15",
-      subject: "اصلی",
-      pattern: "الگوی سوم (طلا، جواهر و پلاتین)",
-    },
-    {
-      id: 6,
-      status: "checked",
-      invoiceType: "نوع اول",
-      uniqueTaxId: "A3FN1Y04F8D00000000113",
-      issueDate: "08:30:10 1404/07/16",
-      subject: "اصلی",
-      pattern: "الگوی دوم (فروش ارزی)",
-    },
-  ];
+  useEffect(() => {
+     axiosClient.get("/invoices?f[status]=-80").then((response) => {
+      console.log(response.data.data);
+    
+      setInvoiceData(response.data.data);
+    });
+  }, []);
 
+  
   const handleCheckboxChange = (invoiceId) => {
     const newSelected = new Set(selectedInvoices);
     if (newSelected.has(invoiceId)) {
@@ -73,10 +28,65 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
     setSelectedInvoices(newSelected);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     console.log("Sending selected invoices:", Array.from(selectedInvoices));
-    // Add your send logic here
-    onClose();
+    
+    // تبدیل داده به فرمت مورد نظر
+    let data = {
+      reference_numbers: Array.from(selectedInvoices).map(item => item.toString())
+    };
+    
+    console.log(`data`, data);
+    
+    try {
+      const res = await axiosClient.post(`/invoices/check-from-moadian`, data);
+  
+      // Success message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "محصول با موفقیت اضافه شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      console.log(`res`, res);
+      onClose();
+    } catch (error) {
+      console.error("خطا در اضافه کردن محصول:", error);
+  
+      // Extract error message from response
+      let errorMessage = "خطا در اضافه کردن محصول";
+  
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        // Handle validation errors
+        const errors = error.response.data.errors;
+        const errorMessages = Object.values(errors).flat();
+        errorMessage = errorMessages.join("\n");
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+  
+      // Show error message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: errorMessage,
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -129,49 +139,54 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
                 className="grid grid-cols-6 gap-4 px-6 py-4 bg-[#23234a] hover:bg-[#3c3c7d] transition-colors"
               >
                 {/* Status Checkbox */}
-                <div className="flex items-center justify-start">
+                <div className="flex items-center justify-start gap-1">
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={selectedInvoices.has(invoice.id)}
-                      onChange={() => handleCheckboxChange(invoice.id)}
+                      // بعدا در این دو خط به جای سریال نامبر رفرنس نامبر باید بزارم
+                      checked={selectedInvoices.has(invoice.serial_number)}
+                      onChange={() => handleCheckboxChange(invoice.serial_number)}
                       className="w-5 h-5 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
                     />
                   </label>
+                  <span className="text-sm text-gray-100">
+                    {invoice.status_label}
+                  </span>
                 </div>
 
                 {/* Invoice Type */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.invoiceType}
+                    {invoice.setm_label}
                   </span>
                 </div>
 
                 {/* Unique Tax ID */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100 font-mono">
-                    {invoice.uniqueTaxId}
+                    {invoice.irtaxid  ? invoice.irtaxid : "-" }
                   </span>
                 </div>
 
                 {/* Issue Date */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.issueDate}
+                    {convertToPersianDate(invoice.indatim)}
                   </span>
                 </div>
 
                 {/* Subject */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.subject}
+                    
+                    {invoice.inty_label}
                   </span>
                 </div>
 
                 {/* Pattern */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.pattern}
+                  {invoice.ins_label}
                   </span>
                 </div>
               </div>
@@ -180,11 +195,11 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Pagination Info */}
-        <div className="px-6 py-2 bg-gray-800 border-t border-gray-200">
+        {/* <div className="px-6 py-2 bg-gray-800 border-t border-gray-200">
           <div className="text-sm text-gray-100">
             of {invoiceData.length} items {invoiceData.length}-1
           </div>
-        </div>
+        </div> */}
 
         {/* Footer */}
         <div className="bg-[#1A2035] text-white px-6 py-4 rounded-b-lg flex items-center justify-between">
