@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
@@ -24,6 +24,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     sellerBranchCode: "",
   });
   const [lineItems, setLineItems] = useState([]);
+  const [editItemId, setEditItemId] = useState(null);
   const [totals, setTotals] = useState({
     totalBeforeDiscount: 0,
     totalDiscounts: 0,
@@ -37,8 +38,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
 
-  if (!isOpen2) return null;
-
   const handleInputChange = (field, value) => {
     setInvoiceData((prev) => ({
       ...prev,
@@ -46,31 +45,87 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     }));
   };
 
+  // Recalculate derived totals whenever line items change
+  useEffect(() => {
+    const calculatedTotals = lineItems.reduce(
+      (acc, item) => {
+        acc.totalBeforeDiscount += item.quantity * item.unitPrice || 0;
+        acc.totalDiscounts += item.discountAmount || 0;
+        acc.totalAfterDiscount += item.amountAfterDiscount || 0;
+        return acc;
+      },
+      {
+        totalBeforeDiscount: 0,
+        totalDiscounts: 0,
+        totalAfterDiscount: 0,
+        totalCashPaid: totals.totalCashPaid || 0,
+        totalCredit: totals.totalCredit || 0,
+        totalVAT: totals.totalVAT || 0,
+        totalOtherTaxes: totals.totalOtherTaxes || 0,
+        totalAmount: 0,
+      }
+    );
+
+    calculatedTotals.totalAmount =
+      calculatedTotals.totalAfterDiscount +
+      calculatedTotals.totalVAT +
+      calculatedTotals.totalOtherTaxes;
+
+    setTotals(calculatedTotals);
+  }, [lineItems]);
+
+  if (!isOpen2) return null;
+
   const handleAddLineItem = () => {
+    setEditItemId(null);
     setAddItemModalOpen(true);
   };
 
   const handleSaveLineItem = (itemData) => {
-    const newItem = {
-      id: Date.now(),
-      serviceId: itemData.serviceItem,
-      serviceName: itemData.serviceItem,
-      quantity: itemData.quantity,
-      unitPrice: itemData.unitPrice,
-      exchangeRate: 0,
-      currencyAmount: 0,
-      discountAmount: itemData.discountAmount,
-      amountAfterDiscount: itemData.amountAfterDiscount,
-    };
-    setLineItems((prev) => [...prev, newItem]);
+    if (editItemId) {
+      setLineItems((prev) =>
+        prev.map((item) =>
+          item.id === editItemId
+            ? {
+                ...item,
+                serviceId: itemData.serviceItem,
+                serviceName: itemData.serviceItem,
+                quantity: itemData.quantity,
+                unitPrice: itemData.unitPrice,
+                discountAmount: itemData.discountAmount,
+                amountAfterDiscount: itemData.amountAfterDiscount,
+              }
+            : item
+        )
+      );
+      setEditItemId(null);
+    } else {
+      const newItem = {
+        id: Date.now(),
+        serviceId: itemData.serviceItem,
+        serviceName: itemData.serviceItem,
+        quantity: itemData.quantity,
+        unitPrice: itemData.unitPrice,
+        exchangeRate: 0,
+        currencyAmount: 0,
+        discountAmount: itemData.discountAmount,
+        amountAfterDiscount: itemData.amountAfterDiscount,
+      };
+      setLineItems((prev) => [...prev, newItem]);
+    }
     calculateTotals();
   };
 
-  const handleLineItemChange = (id, field, value) => {
-    setLineItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
+  // removed unused inline edit handler; we edit via modal
+
+  const handleDeleteLineItem = (id) => {
+    setLineItems((prev) => prev.filter((item) => item.id !== id));
     calculateTotals();
+  };
+
+  const handleEditLineItem = (id) => {
+    setEditItemId(id);
+    setAddItemModalOpen(true);
   };
 
   const calculateTotals = () => {
@@ -361,41 +416,45 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                     key={item.id}
                     className="grid grid-cols-9 gap-2 bg-white p-2 rounded border"
                   >
-                 
-                     <span className="px-2 py-1  text-sm text-right">
-                    {item.serviceId}
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.serviceId}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                    {item.serviceName}
+                      {item.serviceName}
                     </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.quantity}
-                        </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.unitPrice}
-                        </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.exchangeRate}
-                        </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.currencyAmount}
-                        </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.discountAmount}
-                        </span>
-                        <span className="px-2 py-1  text-sm text-right">
-                        {item.amountAfterDiscount}
-                        </span>
-                 
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.quantity}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.unitPrice}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.exchangeRate}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.currencyAmount}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.discountAmount}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                      {item.amountAfterDiscount}
+                    </span>
+
                     <div className="flex items-center justify-center gap-2">
-                      <button className="text-red-500 hover:text-red-600">
+                      <button
+                        onClick={() => handleDeleteLineItem(item.id)}
+                        className="text-red-500 hover:text-red-600"
+                      >
                         <MdDelete className="w-4 h-4" />
                       </button>
-                      <button className="text-blue-500 hover:text-blue-600">
+                      <button
+                        onClick={() => handleEditLineItem(item.id)}
+                        className="text-blue-500 hover:text-blue-600"
+                      >
                         <FiEdit className="w-4 h-4" />
                       </button>
                     </div>
-                    
                   </div>
                 ))}
               </div>
@@ -538,8 +597,29 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         {/* Add Line Item Modal */}
         <AddLineItemModal
           isOpen={addItemModalOpen}
-          onClose={() => setAddItemModalOpen(false)}
+          onClose={() => {
+            setAddItemModalOpen(false);
+            setEditItemId(null);
+          }}
           onSave={handleSaveLineItem}
+          initialData={
+            editItemId
+              ? {
+                  serviceItem: lineItems.find((x) => x.id === editItemId)
+                    ?.serviceName,
+                  quantity: lineItems.find((x) => x.id === editItemId)
+                    ?.quantity,
+                  unitPrice: lineItems.find((x) => x.id === editItemId)
+                    ?.unitPrice,
+                  discountAmount: lineItems.find((x) => x.id === editItemId)
+                    ?.discountAmount,
+                  amountAfterDiscount: lineItems.find(
+                    (x) => x.id === editItemId
+                  )?.amountAfterDiscount,
+                }
+              : null
+          }
+          title={editItemId ? "ویرایش" : "جدید"}
         />
       </div>
     </div>

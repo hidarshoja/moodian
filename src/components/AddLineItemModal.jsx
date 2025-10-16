@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import PropTypes from "prop-types";
 
-export default function AddLineItemModal({ isOpen, onClose, onSave }) {
+export default function AddLineItemModal({
+  isOpen,
+  onClose,
+  onSave,
+  initialData,
+  title,
+}) {
   const [formData, setFormData] = useState({
     serviceItem: "",
     quantity: 0,
@@ -19,6 +25,46 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
     otherLegalFees: 0,
     description: "",
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setFormData({
+          serviceItem: initialData.serviceItem ?? "",
+          quantity: initialData.quantity ?? 0,
+          unitPrice: initialData.unitPrice ?? 0,
+          contractNumber: initialData.contractNumber ?? "",
+          isCurrency: initialData.isCurrency ?? false,
+          discountAmount: initialData.discountAmount ?? 0,
+          amountAfterDiscount: initialData.amountAfterDiscount ?? 0,
+          vatRate: initialData.vatRate ?? 0,
+          cashShare: initialData.cashShare ?? 0,
+          totalAmount: initialData.totalAmount ?? 0,
+          vat: initialData.vat ?? 0,
+          otherTaxes: initialData.otherTaxes ?? 0,
+          otherLegalFees: initialData.otherLegalFees ?? 0,
+          description: initialData.description ?? "",
+        });
+      } else {
+        setFormData({
+          serviceItem: "",
+          quantity: 0,
+          unitPrice: 0,
+          contractNumber: "",
+          isCurrency: false,
+          discountAmount: 0,
+          amountAfterDiscount: 0,
+          vatRate: 0,
+          cashShare: 0,
+          totalAmount: 0,
+          vat: 0,
+          otherTaxes: 0,
+          otherLegalFees: 0,
+          description: "",
+        });
+      }
+    }
+  }, [isOpen, initialData]);
 
   if (!isOpen) return null;
 
@@ -74,9 +120,8 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
         dir="rtl"
       >
         {/* Header */}
-        <div 
-        className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between flex-shrink-0">
-          <h2 className="text-lg font-bold">جدید</h2>
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between flex-shrink-0">
+          <h2 className="text-lg font-bold">{title || "جدید"}</h2>
           <button
             onClick={onClose}
             className="text-white/80 hover:text-white text-xl"
@@ -313,9 +358,7 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
               <label className="block  text-gray-100 text-xs font-medium">
                 ارزی
               </label>
-              <div
-              dir="ltr"
-              className="flex items-center pt-2">
+              <div dir="ltr" className="flex items-center pt-2">
                 <button
                   type="button"
                   onClick={() => handleToggleChange("isCurrency")}
@@ -351,17 +394,14 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
 
         {/* Action Buttons */}
         <div className="px-6 py-3 border-t border-gray-200 flex justify-center gap-4 flex-shrink-0">
-        <button
-  onClick={handleCancel}
-  className="px-6 w-1/2 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors text-sm"
->
-  انصراف
-</button>
-
           <button
-            onClick={handleSave}
-            className="btn-custom4"
+            onClick={handleCancel}
+            className="px-6 w-1/2 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors text-sm"
           >
+            انصراف
+          </button>
+
+          <button onClick={handleSave} className="btn-custom4">
             ذخیره
           </button>
         </div>
@@ -374,4 +414,6 @@ AddLineItemModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func,
+  initialData: PropTypes.object,
+  title: PropTypes.string,
 };
