@@ -389,7 +389,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         {/* Line Items Section */}
         <div className="flex-1  px-6 pb-4">
           {/* Table Header */}
-          <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg mb-2">
+          <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg">
             <div className="grid grid-cols-9 gap-2 text-sm font-medium text-right">
               <div>شناسه خدمت/کالا</div>
               <div>نام خدمت/کالا</div>
@@ -399,7 +399,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               <div>میزان ارز</div>
               <div>مبلغ تخفیف</div>
               <div>مبلغ بعد از تخفیف</div>
-              <div>حذف و ویرایش</div>
+              <div className="text-center">عملیات</div>
             </div>
           </div>
 
@@ -410,11 +410,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 رکوردی وجود ندارد
               </div>
             ) : (
-              <div className="p-4 space-y-2">
-                {lineItems.map((item) => (
+              <div>
+                {lineItems.map((item , index) => (
                   <div
                     key={item.id}
-                    className="grid grid-cols-9 gap-2 bg-white p-2 rounded border"
+                    className={`grid grid-cols-9 gap-2 p-2 text-white  ${
+                      index % 2 === 0 ? 'bg-gray-600' : 'bg-gray-500'
+                    }`}
                   >
                     <span className="px-2 py-1  text-sm text-right">
                       {item.serviceId}
@@ -441,7 +443,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                       {item.amountAfterDiscount}
                     </span>
 
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-3">
                       <button
                         onClick={() => handleDeleteLineItem(item.id)}
                         className="text-red-500 hover:text-red-600"
@@ -450,7 +452,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                       </button>
                       <button
                         onClick={() => handleEditLineItem(item.id)}
-                        className="text-blue-500 hover:text-blue-600"
+                        className="text-white hover:text-green-600"
                       >
                         <FiEdit className="w-4 h-4" />
                       </button>
