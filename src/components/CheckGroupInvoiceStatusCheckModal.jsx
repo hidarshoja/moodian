@@ -4,13 +4,13 @@ import axiosClient from "../axios-client";
 import {convertToPersianDate} from "../utils/change-date";
 import Swal from "sweetalert2";
 
-const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
+const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   const [autoDisplay, setAutoDisplay] = useState(false);
   const [selectedInvoices, setSelectedInvoices] = useState(new Set());
   const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
-     axiosClient.get("/invoices?f[status]=-80").then((response) => {
+     axiosClient.get("/invoices?f[status]=-80,-90,-10,0").then((response) => {
       console.log(response.data.data);
     
       setInvoiceData(response.data.data);
@@ -33,13 +33,13 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
     
     // تبدیل داده به فرمت مورد نظر
     let data = {
-      reference_numbers: Array.from(selectedInvoices).map(item => item.toString())
+      ids: Array.from(selectedInvoices).map(item => item.toString())
     };
     
     console.log(`data`, data);
     
     try {
-      const res = await axiosClient.post(`/invoices/check-from-moadian`, data);
+      const res = await axiosClient.post(`/invoices/send-to-moadian`, data);
   
       // Success message
       Swal.fire({
@@ -57,6 +57,9 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
       setSelectedInvoices(new Set());
       onClose();
     } catch (error) {
+      console.error("خطا در اضافه کردن محصول:", error);
+  
+      // Extract error message from response
       let errorMessage = "خطا در اضافه کردن محصول";
   
       if (error.response?.data?.message) {
@@ -103,7 +106,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         <div className="bg-[#1A2035] text-white px-6 py-4 rounded-t-lg flex items-center justify-between">
           <div className="flex-1 text-center">
             <h2 className="text-lg font-bold">
-              چک وضعیت فاکتور فروش بصورت گروهی
+            ارسال فاکتور فروش بصورت گروهی
             </h2>
           </div>
           <button
@@ -140,9 +143,8 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      // بعدا در این دو خط به جای سریال نامبر رفرنس نامبر باید بزارم
-                      checked={selectedInvoices.has(invoice.serial_number)}
-                      onChange={() => handleCheckboxChange(invoice.serial_number)}
+                      checked={selectedInvoices.has(invoice.id)}
+                      onChange={() => handleCheckboxChange(invoice.id)}
                       className="w-5 h-5 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
                     />
                   </label>
@@ -208,19 +210,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
             انصراف
           </button>
 
-          {/* Auto Display Toggle */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm">نمایش بصورت اتوماتیک</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={autoDisplay}
-                onChange={(e) => setAutoDisplay(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
+        
 
           {/* Send Button */}
           <button
@@ -235,4 +225,4 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default GroupInvoiceStatusCheckModal;
+export default CheckGroupInvoiceStatusCheckModal;

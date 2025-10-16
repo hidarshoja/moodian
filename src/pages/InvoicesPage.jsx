@@ -6,6 +6,7 @@ import { GrDocumentExcel } from "react-icons/gr";
 import ImportExcelModalInvoices from "../components/ImportExcelModalInvoices";
 import CreateModalInvoices from "../components/CreateModalInvoices";
 import GroupInvoiceStatusCheckModal from "../components/GroupInvoiceStatusCheckModal";
+import CheckGroupInvoiceStatusCheckModal from "../components/CheckGroupInvoiceStatusCheckModal";
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { PiSealCheckBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,8 @@ export default function InvoicesPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [excelModalOpen2, setExcelModalOpen2] = useState(false);
   const [groupCheckModalOpen, setGroupCheckModalOpen] = useState(false);
+  const [checkGroupCheckModalOpen, setCheckGroupCheckModalOpen] = useState(false);
+  
   const navigate = useNavigate();
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -107,7 +110,7 @@ export default function InvoicesPage() {
             </button>
             <button
               className="btn-custom"
-              // onClick={() => setExcelModalOpen(true)}
+               onClick={() => setCheckGroupCheckModalOpen(true)}
             >
               ارسال گروهی
               <span className="inline-block">
@@ -145,6 +148,10 @@ export default function InvoicesPage() {
       <GroupInvoiceStatusCheckModal
         isOpen={groupCheckModalOpen}
         onClose={() => setGroupCheckModalOpen(false)}
+      />
+      <CheckGroupInvoiceStatusCheckModal
+        isOpen={checkGroupCheckModalOpen}
+        onClose={() => setCheckGroupCheckModalOpen(false)}
       />
       <Pagination
         meta={meta}
