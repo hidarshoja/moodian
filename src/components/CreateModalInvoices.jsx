@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { SlPrinter } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const [invoiceData, setInvoiceData] = useState({
@@ -175,6 +176,83 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     onClose2();
   };
 
+  const handlePrint = () => {
+    if (!lineItems || lineItems.length === 0) {
+      Swal.fire({
+        icon: "info",
+        title: "فاکتوری موجود نیست",
+        text: "لطفاً ابتدا فاکتور جدید اضافه کنید.",
+        confirmButtonText: "باشه",
+      });
+      return;
+    }
+
+    const rowsHtml = lineItems
+      .map(
+        (item, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${item.serviceId ?? ""}</td>
+            <td>${item.serviceName ?? ""}</td>
+            <td>${item.quantity ?? 0}</td>
+            <td>${item.unitPrice ?? 0}</td>
+            <td>${item.exchangeRate ?? 0}</td>
+            <td>${item.currencyAmount ?? 0}</td>
+            <td>${item.discountAmount ?? 0}</td>
+            <td>${item.amountAfterDiscount ?? 0}</td>
+          </tr>`
+      )
+      .join("");
+
+    const html = `
+      <!doctype html>
+      <html lang="fa" dir="rtl">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>چاپ فاکتور</title>
+          <style>
+            body { font-family: Vazirmatn, Tahoma, Arial, sans-serif; padding: 24px; background: #fff; color: #111; }
+            h1 { font-size: 18px; margin-bottom: 16px; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #999; padding: 8px; font-size: 12px; text-align: center; }
+            thead { background: #f0f0f0; }
+            @media print { body { padding: 0; } }
+          </style>
+        </head>
+        <body>
+          <h1>جدول اقلام فاکتور</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>شناسه خدمت/کالا</th>
+                <th>نام خدمت/کالا</th>
+                <th>تعداد/مقدار</th>
+                <th>مبلغ واحد</th>
+                <th>نرخ برابری ارز با ریال</th>
+                <th>میزان ارز</th>
+                <th>مبلغ تخفیف</th>
+                <th>مبلغ بعد از تخفیف</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </body>
+      </html>`;
+
+    const printWindow = window.open("", "_blank", "width=900,height=700");
+    if (!printWindow) return;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -186,7 +264,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
-            <SlPrinter className="cursor-pointer" />
+            <SlPrinter onClick={handlePrint} className="cursor-pointer" />
             <button
               onClick={handleCancel}
               className="text-white/80 hover:text-white p-1"
@@ -411,11 +489,11 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               </div>
             ) : (
               <div>
-                {lineItems.map((item , index) => (
+                {lineItems.map((item, index) => (
                   <div
                     key={item.id}
                     className={`grid grid-cols-9 gap-2 p-2 text-white  ${
-                      index % 2 === 0 ? 'bg-gray-600' : 'bg-gray-500'
+                      index % 2 === 0 ? "bg-gray-600" : "bg-gray-500"
                     }`}
                   >
                     <span className="px-2 py-1  text-sm text-right">
