@@ -8,6 +8,7 @@ import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
+import Swal from "sweetalert2";
 
 export default function ServicesPage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -65,13 +66,32 @@ export default function ServicesPage() {
         .get(`/products?page=${pageCount}${query}${separator}export=1`)
         .then((response) => {
           console.log(response.data.data);
+          Swal.fire({
+            toast: true,
+            position: "top-start",
+            icon: "success",
+            title: "فایل با موفقیت بارگذاری شد",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+          });
           setTimeout(() => {
             navigate("/downloadExcel");
           }, 1000);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
+          Swal.fire({
+            toast: true,
+            position: "top-start",
+            icon: "error",
+            title: "خطا در بارگذاری فایل",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+          });
         });
+      
   };
 
   return (

@@ -10,6 +10,7 @@ import CheckGroupInvoiceStatusCheckModal from "../components/CheckGroupInvoiceSt
 import { BsFillSendCheckFill } from "react-icons/bs";
 import { PiSealCheckBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function InvoicesPage() {
   const [meta, setMeta] = useState({});
@@ -62,12 +63,34 @@ export default function InvoicesPage() {
       .get(`/invoices?page=${pageCount}${separator}export=1${query}`)
       .then((response) => {
         console.log(response.data.data);
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "success",
+          title: "فایل با موفقیت بارگذاری شد",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: { popup: "swal2-toast" },
+          background: "#111827",
+          color: "#e5e7eb",
+        });
         setTimeout(() => {
           navigate("/downloadExcel");
         }, 1000);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "error",
+          title: "خطا در بارگذاری فایل",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+        });
+        console.log(`error`, error);
       });
 };
 
