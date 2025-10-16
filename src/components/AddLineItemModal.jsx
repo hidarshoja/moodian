@@ -76,7 +76,6 @@ export default function AddLineItemModal({ isOpen, onClose, onSave }) {
         {/* Header */}
         <div 
         className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between flex-shrink-0">
-          
           <h2 className="text-lg font-bold">جدید</h2>
           <button
             onClick={onClose}

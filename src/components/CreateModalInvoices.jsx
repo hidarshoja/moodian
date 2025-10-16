@@ -7,6 +7,8 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
 import { SlPrinter } from "react-icons/sl";
+import { MdDelete } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const [invoiceData, setInvoiceData] = useState({
@@ -21,7 +23,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     customerSystemId: "",
     sellerBranchCode: "",
   });
-
   const [lineItems, setLineItems] = useState([]);
   const [totals, setTotals] = useState({
     totalBeforeDiscount: 0,
@@ -334,7 +335,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         <div className="flex-1  px-6 pb-4">
           {/* Table Header */}
           <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg mb-2">
-            <div className="grid grid-cols-8 gap-2 text-sm font-medium text-right">
+            <div className="grid grid-cols-9 gap-2 text-sm font-medium text-right">
               <div>شناسه خدمت/کالا</div>
               <div>نام خدمت/کالا</div>
               <div>تعداد/مقدار</div>
@@ -343,6 +344,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               <div>میزان ارز</div>
               <div>مبلغ تخفیف</div>
               <div>مبلغ بعد از تخفیف</div>
+              <div>حذف و ویرایش</div>
             </div>
           </div>
 
@@ -357,104 +359,43 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 {lineItems.map((item) => (
                   <div
                     key={item.id}
-                    className="grid grid-cols-8 gap-2 bg-white p-2 rounded border"
+                    className="grid grid-cols-9 gap-2 bg-white p-2 rounded border"
                   >
-                    <input
-                      type="text"
-                      value={item.serviceId}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "serviceId",
-                          e.target.value
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm text-right"
-                    />
-                    <input
-                      type="text"
-                      value={item.serviceName}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "serviceName",
-                          e.target.value
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm text-right"
-                    />
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "quantity",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
-                    <input
-                      type="number"
-                      value={item.unitPrice}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "unitPrice",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
-                    <input
-                      type="number"
-                      value={item.exchangeRate}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "exchangeRate",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
-                    <input
-                      type="number"
-                      value={item.currencyAmount}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "currencyAmount",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
-                    <input
-                      type="number"
-                      value={item.discountAmount}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "discountAmount",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
-                    <input
-                      type="number"
-                      value={item.amountAfterDiscount}
-                      onChange={(e) =>
-                        handleLineItemChange(
-                          item.id,
-                          "amountAfterDiscount",
-                          parseFloat(e.target.value) || 0
-                        )
-                      }
-                      className="px-2 py-1 border border-gray-300 rounded text-sm"
-                    />
+                 
+                     <span className="px-2 py-1  text-sm text-right">
+                    {item.serviceId}
+                    </span>
+                    <span className="px-2 py-1  text-sm text-right">
+                    {item.serviceName}
+                    </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.quantity}
+                        </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.unitPrice}
+                        </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.exchangeRate}
+                        </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.currencyAmount}
+                        </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.discountAmount}
+                        </span>
+                        <span className="px-2 py-1  text-sm text-right">
+                        {item.amountAfterDiscount}
+                        </span>
+                 
+                    <div className="flex items-center justify-center gap-2">
+                      <button className="text-red-500 hover:text-red-600">
+                        <MdDelete className="w-4 h-4" />
+                      </button>
+                      <button className="text-blue-500 hover:text-blue-600">
+                        <FiEdit className="w-4 h-4" />
+                      </button>
+                    </div>
+                    
                   </div>
                 ))}
               </div>
