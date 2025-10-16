@@ -10,57 +10,63 @@ export default function AddLineItemModal({
   title,
 }) {
   const [formData, setFormData] = useState({
-    serviceItem: "",
-    quantity: 0,
-    unitPrice: 0,
-    contractNumber: "",
-    isCurrency: false,
-    discountAmount: 0,
-    amountAfterDiscount: 0,
-    vatRate: 0,
-    cashShare: 0,
-    totalAmount: 0,
-    vat: 0,
-    otherTaxes: 0,
-    otherLegalFees: 0,
-    description: "",
+    ProductId: "",
+    am: 0,
+    fee: 0,
+    bsrn: "",
+    Show: false,
+    prdis: 0,
+    dis:0,
+    adis: 0,
+    vra: 0,
+    cop: 0,
+    vop:0,
+    tsstam: 0,
+    vam: 0,
+    odam: 0,
+    olam: 0,
+    comment: "",
   });
 
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
         setFormData({
-          serviceItem: initialData.serviceItem ?? "",
-          quantity: initialData.quantity ?? 0,
-          unitPrice: initialData.unitPrice ?? 0,
-          contractNumber: initialData.contractNumber ?? "",
-          isCurrency: initialData.isCurrency ?? false,
-          discountAmount: initialData.discountAmount ?? 0,
-          amountAfterDiscount: initialData.amountAfterDiscount ?? 0,
-          vatRate: initialData.vatRate ?? 0,
-          cashShare: initialData.cashShare ?? 0,
-          totalAmount: initialData.totalAmount ?? 0,
-          vat: initialData.vat ?? 0,
-          otherTaxes: initialData.otherTaxes ?? 0,
-          otherLegalFees: initialData.otherLegalFees ?? 0,
-          description: initialData.description ?? "",
+          ProductId: initialData.ProductId ?? "",
+          am: initialData.am ?? 0,
+          fee: initialData.fee ?? 0,
+          bsrn: initialData.bsrn ?? "",
+          Show: initialData.Show ?? false,
+          prdis: initialData.prdis ?? 0,
+          dis: initialData.dis ?? 0,
+          adis: initialData.adis ?? 0,
+          vra: initialData.vra ?? 0,
+          cop: initialData.cop ?? 0,
+          vop: initialData.vop ?? 0,
+          tsstam: initialData.tsstam ?? 0,
+          vam: initialData.vam ?? 0,
+          odam: initialData.odam ?? 0,
+          olam: initialData.olam ?? 0,
+          comment: initialData.comment ?? "",
         });
       } else {
         setFormData({
-          serviceItem: "",
-          quantity: 0,
-          unitPrice: 0,
-          contractNumber: "",
-          isCurrency: false,
-          discountAmount: 0,
-          amountAfterDiscount: 0,
-          vatRate: 0,
-          cashShare: 0,
-          totalAmount: 0,
-          vat: 0,
-          otherTaxes: 0,
-          otherLegalFees: 0,
-          description: "",
+          ProductId: "",
+          am: 0,
+          fee: 0,
+          bsrn: "",
+          Show: false,
+          prdis: 0,
+          dis:0,
+          adis: 0,
+          vra: 0,
+          cop: 0,
+          vop:0,
+          tsstam: 0,
+          vam: 0,
+          odam: 0,
+          olam: 0,
+          comment: "",
         });
       }
     }
@@ -91,20 +97,22 @@ export default function AddLineItemModal({
 
   const handleCancel = () => {
     setFormData({
-      serviceItem: "",
-      quantity: 0,
-      unitPrice: 0,
-      contractNumber: "",
-      isCurrency: false,
-      discountAmount: 0,
-      amountAfterDiscount: 0,
-      vatRate: 0,
-      cashShare: 0,
-      totalAmount: 0,
-      vat: 0,
-      otherTaxes: 0,
-      otherLegalFees: 0,
-      description: "",
+      ProductId: "",
+      am: 0,
+      fee: 0,
+      bsrn: "",
+      Show: false,
+      prdis: 0,
+      dis:0,
+      adis: 0,
+      vra: 0,
+      cop: 0,
+      vop:0,
+      tsstam: 0,
+      vam: 0,
+      odam: 0,
+      olam: 0,
+      comment: "",
     });
     onClose();
   };
@@ -132,7 +140,7 @@ export default function AddLineItemModal({
 
         {/* Form Body */}
         <div className="p-4 flex-1 overflow-y-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* کالا/ خدمت جدید (New Item/Service) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
@@ -140,25 +148,25 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.serviceItem}
+                value={formData.ProductId}
                 onChange={(e) =>
-                  handleInputChange("serviceItem", e.target.value)
+                  handleInputChange("ProductId", e.target.value)
                 }
                 placeholder="انتخاب کنید"
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
 
-            {/* تعداد/مقدار (Quantity/Amount) */}
+            {/* تعداد/مقدار (am/Amount) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 تعداد/مقدار
               </label>
               <input
                 type="number"
-                value={formData.quantity}
+                value={formData.am}
                 onChange={(e) =>
-                  handleInputChange("quantity", parseFloat(e.target.value) || 0)
+                  handleInputChange("am", parseFloat(e.target.value) || 0)
                 }
                 step="0.001"
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
@@ -172,12 +180,27 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.unitPrice}
+                value={formData.fee}
                 onChange={(e) =>
                   handleInputChange(
-                    "unitPrice",
+                    "fee",
                     parseFloat(e.target.value) || 0
                   )
+                }
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+            </div>
+
+             {/* شماره قرارداد حق العمل کاری (Contract Number) */}
+             <div>
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
+                شماره قرارداد حق العمل کاری
+              </label>
+              <input
+                type="text"
+                value={formData.bsrn}
+                onChange={(e) =>
+                  handleInputChange("bsrn", e.target.value)
                 }
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
@@ -191,8 +214,8 @@ export default function AddLineItemModal({
               <input
                 type="number"
                 value={
-                  formData.discountAmount === 0
-                    ? formData.unitPrice * formData.quantity
+                  formData.prdis === 0
+                    ? formData.fee * formData.am
                     : 0
                 }
                 readOnly
@@ -207,10 +230,10 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.discountAmount}
+                value={formData.dis}
                 onChange={(e) =>
                   handleInputChange(
-                    "discountAmount",
+                    "dis",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -225,10 +248,10 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.amountAfterDiscount}
+                value={formData.adis}
                 onChange={(e) =>
                   handleInputChange(
-                    "amountAfterDiscount",
+                    "adis",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -236,16 +259,16 @@ export default function AddLineItemModal({
               />
             </div>
 
-            {/* نرخ مالیات بر ارزش افزوده (VAT Rate) */}
+            {/* نرخ مالیات بر ارزش افزوده (vam Rate) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 نرخ مالیات بر ارزش افزوده
               </label>
               <input
                 type="number"
-                value={formData.vatRate}
+                value={formData.vra}
                 onChange={(e) =>
-                  handleInputChange("vatRate", parseFloat(e.target.value) || 0)
+                  handleInputChange("vra", parseFloat(e.target.value) || 0)
                 }
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
@@ -258,9 +281,9 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.vat}
+                value={formData.vam}
                 onChange={(e) =>
-                  handleInputChange("vat", parseFloat(e.target.value) || 0)
+                  handleInputChange("vam", parseFloat(e.target.value) || 0)
                 }
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
@@ -273,10 +296,10 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.otherTaxes}
+                value={formData.odam}
                 onChange={(e) =>
                   handleInputChange(
-                    "otherTaxes",
+                    "odam",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -291,10 +314,10 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.otherLegalFees}
+                value={formData.olam}
                 onChange={(e) =>
                   handleInputChange(
-                    "otherLegalFees",
+                    "olam",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -309,10 +332,28 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.cashShare}
+                value={formData.cop}
                 onChange={(e) =>
                   handleInputChange(
-                    "cashShare",
+                    "cop",
+                    parseFloat(e.target.value) || 0
+                  )
+                }
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+            </div>
+
+              {/*  سهم مالیات از ارزش افزوده از پرداخت (Total Amount) */}
+              <div>
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
+              سهم مالیات از ارزش افزوده از پرداخت
+              </label>
+              <input
+                type="number"
+                value={formData.vop}
+                onChange={(e) =>
+                  handleInputChange(
+                    "vop",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -327,10 +368,10 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={formData.totalAmount}
+                value={formData.tsstam}
                 onChange={(e) =>
                   handleInputChange(
-                    "totalAmount",
+                    "tsstam",
                     parseFloat(e.target.value) || 0
                   )
                 }
@@ -338,20 +379,7 @@ export default function AddLineItemModal({
               />
             </div>
 
-            {/* شماره قرارداد حق العمل کاری (Contract Number) */}
-            <div>
-              <label className="block mb-1 text-gray-100 text-xs font-medium">
-                شماره قرارداد حق العمل کاری
-              </label>
-              <input
-                type="text"
-                value={formData.contractNumber}
-                onChange={(e) =>
-                  handleInputChange("contractNumber", e.target.value)
-                }
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              />
-            </div>
+           
 
             {/* ارزی (Currency) - Toggle Switch */}
             <div className="flex flex-col items-start gap-2">
@@ -361,29 +389,29 @@ export default function AddLineItemModal({
               <div dir="ltr" className="flex items-center pt-2">
                 <button
                   type="button"
-                  onClick={() => handleToggleChange("isCurrency")}
+                  onClick={() => handleToggleChange("Show")}
                   className={`relative inline-flex h-5 border border-gray-300 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
-                    formData.isCurrency ? "bg-blue-600" : "bg-[#23234a]"
+                    formData.Show ? "bg-blue-600" : "bg-[#23234a]"
                   }`}
                 >
                   <span
                     className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                      formData.isCurrency ? "translate-x-5" : "translate-x-1"
+                      formData.Show ? "translate-x-5" : "translate-x-1"
                     }`}
                   />
                 </button>
               </div>
             </div>
 
-            {/* توضیحات (Description) - Full width */}
+            {/* توضیحات (comment) - Full width */}
             <div className="col-span-2 lg:col-span-3">
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 توضیحات
               </label>
               <textarea
-                value={formData.description}
+                value={formData.comment}
                 onChange={(e) =>
-                  handleInputChange("description", e.target.value)
+                  handleInputChange("comment", e.target.value)
                 }
                 rows={2}
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
