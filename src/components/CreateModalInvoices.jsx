@@ -258,10 +258,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     setTotals(calculatedTotals);
   };
 
-  // const handleSave = () => {
-  //   const payload = buildPayload();
-  //   console.log(JSON.stringify(payload, null, 2));
-  // };
+
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
