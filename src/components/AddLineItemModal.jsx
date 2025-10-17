@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import PropTypes from "prop-types";
+import axiosClient from "../axios-client";
 
 export default function AddLineItemModal({
   isOpen,
@@ -27,7 +28,7 @@ export default function AddLineItemModal({
     olam: 0,
     comment: "",
   });
-
+  const [dataTable, setDataTable] = useState([]);
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
@@ -71,6 +72,18 @@ export default function AddLineItemModal({
       }
     }
   }, [isOpen, initialData]);
+
+  useEffect(() => {
+    axiosClient
+      .get(`/products`)
+      .then((response) => {
+        console.log(response.data.data);
+        setDataTable(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   if (!isOpen) return null;
 
@@ -146,15 +159,19 @@ export default function AddLineItemModal({
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 کالا/ خدمت جدید
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.ProductId}
-                onChange={(e) =>
-                  handleInputChange("ProductId", e.target.value)
-                }
-                placeholder="انتخاب کنید"
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              />
+                onChange={(e) => handleInputChange("ProductId", e.target.value)}
+                className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">انتخاب کنید</option>
+                {(dataTable || []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {(c.title || "") }
+                  </option>
+                ))}
+              </select>
+            
             </div>
 
             {/* تعداد/مقدار (am/Amount) */}
