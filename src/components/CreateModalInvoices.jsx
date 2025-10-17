@@ -265,18 +265,19 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    let form = JSON.stringify(payload, null, 2);
-    console.log("مقادیر فرم:", form);
+    console.log("مقادیر فرم:", payload);
 
     try {
-      const res = await axiosClient.post(`/invoices`, form);
+      const res = await axiosClient.post(`/invoices`, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       // Success message
       Swal.fire({
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "محصول با موفقیت اضافه شد",
+        title: "فاکتور فروش  با موفقیت اضافه شد",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -316,9 +317,48 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     }
   };
 
-  const handleSaveAndSend = () => {
-    const payload = buildPayload();
-    console.log(JSON.stringify(payload, null, 2));
+  const handleSaveAndSend = async (e) => {
+    e?.preventDefault?.();
+    const payload = { ...buildPayload(), send_to_moadian: true };
+    console.log("ارسال به مودیان:", payload);
+    try {
+      const res = await axiosClient.post(`/invoices`, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "صورتحساب ذخیره و ارسال شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" },
+      });
+      console.log(`res`, res);
+    } catch (error) {
+      console.error("خطا در ذخیره و ارسال:", error);
+      let errorMessage = "خطا در ذخیره و ارسال";
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const errorMessages = Object.values(errors).flat();
+        errorMessage = errorMessages.join("\n");
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: errorMessage,
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" },
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -568,6 +608,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               <input
                 type="text"
                 value={invoiceData.sbc}
+                placeholder="4 رقم باشد"
                 onChange={(e) => handleInputChange("sbc", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
