@@ -466,9 +466,9 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               </label>
               <input
                 type="text"
-                value={invoiceData.crn}
+                value={invoiceData.bbc}
                 onChange={(e) => handleInputChange("bbc", e.target.value)}
-                placeholder="انتخاب کنید"
+                placeholder="0"
                 className="w-full px-4 bg-gray-800/70 text-white/90 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 dir="rtl"
               />
@@ -498,7 +498,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               </label>
               <input
                 type="text"
-                value={invoiceData.MyInvoiceId}
+                value={invoiceData.sbc}
                 onChange={(e) => handleInputChange("sbc", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
