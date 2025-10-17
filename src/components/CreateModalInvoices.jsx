@@ -66,6 +66,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 
   const buildPayload = () => {
     const payload = {
+      send_to_moadian: false,
       customer_id: toNumberOrNull(invoiceData.crn) ?? null,
       // user_reference: null,
       inty: toNumberOrNull(invoiceData.inty),
