@@ -12,20 +12,20 @@ export default function AddLineItemModal({
 }) {
   const [formData, setFormData] = useState({
     ProductId: "",
-    am: 0,
-    fee: 0,
+    am: null,
+    fee: null,
     bsrn: "",
     Show: false,
-    prdis: 0,
-    dis:0,
-    adis: 0,
-    vra: 0,
-    cop: 0,
-    vop:0,
-    tsstam: 0,
-    vam: 0,
-    odam: 0,
-    olam: 0,
+    prdis: null,
+    dis:null,
+    adis: null,
+    vra: null,
+    cop: null,
+    vop:null,
+    tsstam: null,
+    vam: null,
+    odam: null,
+    olam: null,
     comment: "",
   });
   const [dataTable, setDataTable] = useState([]);
@@ -34,7 +34,7 @@ export default function AddLineItemModal({
       if (initialData) {
         setFormData({
           ProductId: initialData.ProductId ?? "",
-          am: initialData.am ?? 0,
+          am: initialData.am,
           fee: initialData.fee ?? 0,
           bsrn: initialData.bsrn ?? "",
           Show: initialData.Show ?? false,
@@ -53,20 +53,20 @@ export default function AddLineItemModal({
       } else {
         setFormData({
           ProductId: "",
-          am: 0,
-          fee: 0,
+          am: null,
+          fee: null,
           bsrn: "",
           Show: false,
-          prdis: 0,
-          dis:0,
-          adis: 0,
-          vra: 0,
-          cop: 0,
-          vop:0,
-          tsstam: 0,
-          vam: 0,
-          odam: 0,
-          olam: 0,
+          prdis: null,
+          dis:null,
+          adis: null,
+          vra: null,
+          cop: null,
+          vop:null,
+          tsstam: null,
+          vam: null,
+          odam: null,
+          olam: null,
           comment: "",
         });
       }
@@ -111,20 +111,20 @@ export default function AddLineItemModal({
   const handleCancel = () => {
     setFormData({
       ProductId: "",
-      am: 0,
-      fee: 0,
+      am: null,
+      fee: null,
       bsrn: "",
       Show: false,
-      prdis: 0,
-      dis:0,
-      adis: 0,
-      vra: 0,
-      cop: 0,
-      vop:0,
-      tsstam: 0,
-      vam: 0,
-      odam: 0,
-      olam: 0,
+      prdis: null,
+      dis:null,
+      adis: null,
+      vra: null,
+      cop: null,
+      vop:null,
+      tsstam: null,
+      vam: null,
+      odam: null,
+      olam: null,
       comment: "",
     });
     onClose();
@@ -183,7 +183,7 @@ export default function AddLineItemModal({
                 type="number"
                 value={formData.am}
                 onChange={(e) =>
-                  handleInputChange("am", parseFloat(e.target.value) || 0)
+                  handleInputChange("am", parseFloat(e.target.value))
                 }
                 step="0.001"
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
@@ -230,12 +230,13 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="number"
-                value={
-                  formData.prdis === 0
-                    ? formData.fee * formData.am
-                    : 0
+                value={formData.prdis}
+                onChange={(e) =>
+                  handleInputChange(
+                    "prdis",
+                    parseFloat(e.target.value) || 0
+                  )
                 }
-                readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm"
               />
             </div>
