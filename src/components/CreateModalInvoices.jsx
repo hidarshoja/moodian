@@ -39,6 +39,92 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
 
+  const formatDateTime = (value) => {
+    if (!value) return null;
+    try {
+      const d = value instanceof Date ? value : new Date(value);
+      if (Number.isNaN(d.getTime())) return null;
+      const pad = (n) => String(n).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      const MM = pad(d.getMonth() + 1);
+      const dd = pad(d.getDate());
+      const HH = pad(d.getHours());
+      const mm = pad(d.getMinutes());
+      const ss = pad(d.getSeconds());
+      return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+    } catch {
+      return null;
+    }
+  };
+
+  const toNumberOrNull = (val) => {
+    if (val === undefined || val === null || val === "") return null;
+    const n = Number(val);
+    return Number.isNaN(n) ? null : n;
+  };
+
+  const buildPayload = () => {
+    const payload = {
+      customer_id: 1,
+      // user_reference: null,
+      inty: toNumberOrNull(invoiceData.inty),
+      irtaxid: null,
+      indatim: formatDateTime(invoiceData.indatim),
+      indati2m: formatDateTime(invoiceData.indati2m),
+      inp: toNumberOrNull(invoiceData.inp),
+      ins: 1,
+      sbc: invoiceData.sbc?.trim() || null,
+      ft: null,
+      scln: null,
+      scc: null,
+      crn: invoiceData.crn?.trim() || null,
+      cdcn: null,
+      cdcd: null,
+      billid: null,
+      setm: toNumberOrNull(invoiceData.setm),
+      cap: toNumberOrNull(totals.cap) ?? null,
+      insp: toNumberOrNull(totals.insp) ?? null,
+      tax17: null,
+      tinc: null,
+      lno: null,
+      lrno: null,
+      ocu: null,
+      oci: null,
+      dco: null,
+      dci: null,
+      tid: null,
+      rid: null,
+      lt: null,
+      cno: null,
+      did: null,
+      sg: null, // exm: [{"sgid":null,"sgt":"asd"}]
+      asn: null,
+      asd: null,
+      in: null,
+      an: null,
+      items: (lineItems || []).map((it) => ({
+        product_id: toNumberOrNull(it.serviceId),
+        am: toNumberOrNull(it.am),
+        nw: null,
+        fee: toNumberOrNull(it.fee),
+        cfee: null,
+        cut: null,
+        exr: null,
+        ssrv: null,
+        sscv: null,
+        dis: toNumberOrNull(it.dis) ?? 0,
+        consfee: null,
+        spro: null,
+        bros: null,
+        bsrn: null,
+        cui: null,
+        cpr: null,
+        sovat: null,
+      })),
+    };
+    return payload;
+  };
+
   const handleInputChange = (field, value) => {
     setInvoiceData((prev) => ({
       ...prev,
@@ -69,9 +155,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     );
 
     calculatedTotals.tbill =
-      calculatedTotals.tadis +
-      calculatedTotals.tvam +
-      calculatedTotals.todam;
+      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
   }, [lineItems]);
@@ -155,24 +239,20 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     );
 
     calculatedTotals.tbill =
-      calculatedTotals.tadis +
-      calculatedTotals.tvam +
-      calculatedTotals.todam;
+      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
   };
 
   const handleSave = () => {
-    console.log("Saving invoice:", { invoiceData, lineItems, totals });
+    const payload = buildPayload();
+    console.log(JSON.stringify(payload, null, 2));
     // TODO: Implement save functionality
   };
 
   const handleSaveAndSend = () => {
-    console.log("Saving and sending invoice:", {
-      invoiceData,
-      lineItems,
-      totals,
-    });
+    const payload = buildPayload();
+    console.log(JSON.stringify(payload, null, 2));
     // TODO: Implement save and send functionality
   };
 
@@ -296,7 +376,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                   <option value="2">نوع دوم</option>
                   <option value="3">نوع سوم</option>
                 </select>
-              
               </div>
             </div>
 
@@ -309,25 +388,24 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
                 <select
                   value={invoiceData.inp}
                   onChange={(e) => handleInputChange("inp", e.target.value)}
-                 className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                   <option value="">انتخاب الگوی صورتحساب</option>
-              <option value="1">الگوی اول (فروش)</option>
-              <option value="2">الگوی دوم (فروش ارزی)</option>
-              <option value="3">
-                الگوی سوم (صورتحساب طلا، جواهر و پلاتین){" "}
-              </option>
-              <option value="4">الگوی چهارم (قرارداد پیمانکاری) </option>
-              <option value="5">الگوی پنجم (قبوض خدماتی)</option>
-              <option value="6">الگوی ششم (بلیط هواپیما)</option>
-              <option value="7">الگوی هفتم (صادرات)</option>
-              <option value="8">الگوی هشتم (بارنامه)</option>
-              <option value="11">
-                الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا){" "}
-              </option>
-              <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
+                  <option value="">انتخاب الگوی صورتحساب</option>
+                  <option value="1">الگوی اول (فروش)</option>
+                  <option value="2">الگوی دوم (فروش ارزی)</option>
+                  <option value="3">
+                    الگوی سوم (صورتحساب طلا، جواهر و پلاتین){" "}
+                  </option>
+                  <option value="4">الگوی چهارم (قرارداد پیمانکاری) </option>
+                  <option value="5">الگوی پنجم (قبوض خدماتی)</option>
+                  <option value="6">الگوی ششم (بلیط هواپیما)</option>
+                  <option value="7">الگوی هفتم (صادرات)</option>
+                  <option value="8">الگوی هشتم (بارنامه)</option>
+                  <option value="11">
+                    الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا){" "}
+                  </option>
+                  <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
                 </select>
-              
               </div>
             </div>
 
@@ -365,8 +443,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
 
-           
-
             {/* مشتری جدید (New crn) */}
             <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
@@ -383,17 +459,15 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
             </div>
 
             {/* کد شعبه خریدار (Buyer Branch Code) */}
-           
+
             <div>
-             <label className="block mb-2 text-gray-100 text-sm font-medium">
+              <label className="block mb-2 text-gray-100 text-sm font-medium">
                 کد شعبه خریدار
               </label>
               <input
                 type="text"
                 value={invoiceData.crn}
-                 onChange={(e) =>
-                  handleInputChange("bbc", e.target.value)
-                }
+                onChange={(e) => handleInputChange("bbc", e.target.value)}
                 placeholder="انتخاب کنید"
                 className="w-full px-4 bg-gray-800/70 text-white/90 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 dir="rtl"
@@ -407,9 +481,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               </label>
               <select
                 value={invoiceData.setm}
-                onChange={(e) =>
-                  handleInputChange("setm", e.target.value)
-                }
+                onChange={(e) => handleInputChange("setm", e.target.value)}
                 className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="1">نقدی</option>
@@ -418,18 +490,16 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               </select>
             </div>
 
-               {/* کد شعبه فروشنده (Seller Branch Code) */}
-              
-              <div>
+            {/* کد شعبه فروشنده (Seller Branch Code) */}
+
+            <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
                 کد شعبه فروشنده
               </label>
               <input
                 type="text"
                 value={invoiceData.MyInvoiceId}
-                onChange={(e) =>
-                  handleInputChange("sbc", e.target.value)
-                }
+                onChange={(e) => handleInputChange("sbc", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -449,19 +519,15 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
 
-         
-
-             {/* توضیحات (comment) */}
-             <div>
+            {/* توضیحات (comment) */}
+            <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
                 توضیحات
               </label>
               <input
                 type="text"
                 value={invoiceData.comment}
-                onChange={(e) =>
-                  handleInputChange("comment", e.target.value)
-                }
+                onChange={(e) => handleInputChange("comment", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -610,7 +676,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
             </div>
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                 مبلغ نسیه
+                مبلغ نسیه
               </label>
               <input
                 type="number"
@@ -701,17 +767,11 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               ? {
                   ProductId: lineItems.find((x) => x.id === editItemId)
                     ?.serviceName,
-                  am: lineItems.find((x) => x.id === editItemId)
-                    ?.am,
-                  fee: lineItems.find((x) => x.id === editItemId)
-                    ?.fee,
-                  prdis: lineItems.find((x) => x.id === editItemId)
-                    ?.prdis,
-                    dis: lineItems.find((x) => x.id === editItemId)
-                    ?.dis,
-                  adis: lineItems.find(
-                    (x) => x.id === editItemId
-                  )?.adis,
+                  am: lineItems.find((x) => x.id === editItemId)?.am,
+                  fee: lineItems.find((x) => x.id === editItemId)?.fee,
+                  prdis: lineItems.find((x) => x.id === editItemId)?.prdis,
+                  dis: lineItems.find((x) => x.id === editItemId)?.dis,
+                  adis: lineItems.find((x) => x.id === editItemId)?.adis,
                 }
               : null
           }
