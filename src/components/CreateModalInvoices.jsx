@@ -10,6 +10,7 @@ import { SlPrinter } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
+import axiosClient from "../axios-client";
 
 export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   const [invoiceData, setInvoiceData] = useState({
@@ -36,7 +37,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     todam: 0,
     tbill: 0,
   });
-
+  const [dataTable, setDataTable] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
 
   const formatDateTime = (value) => {
@@ -124,6 +125,19 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     };
     return payload;
   };
+
+  useEffect(() => {
+ 
+    axiosClient
+      .get(`/customers`)
+      .then((response) => {
+        console.log(`response.data.data`, response.data.data);
+        setDataTable(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleInputChange = (field, value) => {
     setInvoiceData((prev) => ({
