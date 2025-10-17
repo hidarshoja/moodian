@@ -66,7 +66,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 
   const buildPayload = () => {
     const payload = {
-      customer_id: 1,
+      customer_id: toNumberOrNull(invoiceData.crn) ?? null,
       // user_reference: null,
       inty: toNumberOrNull(invoiceData.inty),
       irtaxid: null,
@@ -78,7 +78,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
       ft: null,
       scln: null,
       scc: null,
-      crn: invoiceData.crn?.trim() || null,
+      crn: null,
       cdcn: null,
       cdcd: null,
       billid: null,
@@ -127,7 +127,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
   };
 
   useEffect(() => {
- 
     axiosClient
       .get(`/customers`)
       .then((response) => {
@@ -457,19 +456,23 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
               />
             </div>
 
-            {/* مشتری جدید (New crn) */}
+            {/* مشتری جدید (customer select) */}
             <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
                 مشتری جدید
               </label>
-              <input
-                type="text"
+              <select
                 value={invoiceData.crn}
                 onChange={(e) => handleInputChange("crn", e.target.value)}
-                placeholder="انتخاب کنید"
-                className="w-full px-4 bg-gray-800/70 text-white/90 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                dir="rtl"
-              />
+                className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">انتخاب کنید</option>
+                {(dataTable || []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {(c.name || "") + (c.last_name ? " " + c.last_name : "")}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* کد شعبه خریدار (Buyer Branch Code) */}
