@@ -257,16 +257,67 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     setTotals(calculatedTotals);
   };
 
-  const handleSave = () => {
+  // const handleSave = () => {
+  //   const payload = buildPayload();
+  //   console.log(JSON.stringify(payload, null, 2));
+  // };
+  const handleSave = async (e) => {
+    e.preventDefault();
     const payload = buildPayload();
-    console.log(JSON.stringify(payload, null, 2));
-    // TODO: Implement save functionality
+    let form = JSON.stringify(payload, null, 2);
+    console.log("مقادیر فرم:", form);
+
+    try {
+      const res = await axiosClient.post(`/invoices`, form);
+
+      // Success message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "محصول با موفقیت اضافه شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      console.log(`res`, res);
+    } catch (error) {
+      console.error("خطا در اضافه کردن محصول:", error);
+      let errorMessage = "خطا در اضافه کردن محصول";
+
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        // Handle validation errors
+        const errors = error.response.data.errors;
+        const errorMessages = Object.values(errors).flat();
+        errorMessage = errorMessages.join("\n");
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      // Show error message
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: errorMessage,
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
   };
 
   const handleSaveAndSend = () => {
     const payload = buildPayload();
     console.log(JSON.stringify(payload, null, 2));
-    // TODO: Implement save and send functionality
   };
 
   const handleCancel = () => {
