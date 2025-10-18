@@ -45,8 +45,7 @@ export default function OrganizationInquiryModal({
           title: "موفقیت",
           text: "درخواست با موفقیت انجام شد",
           icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
+          confirmButtonText: "باشه",
         });
 
         // Auto-fill form with response data
@@ -64,7 +63,7 @@ export default function OrganizationInquiryModal({
       console.error("Search error:", error);
       Swal.fire({
         title: "خطا",
-        text: "خطا در دریافت اطلاعات. لطفاً دوباره تلاش کنید.",
+        text: "کد اقتصادی یافت نشد",
         icon: "error",
         confirmButtonText: "باشه",
       });
@@ -128,8 +127,8 @@ export default function OrganizationInquiryModal({
         </div>
 
         {/* Search Section */}
-        <div className="px-6 py-4 border-b border-gray-200">
-          <div className="relative">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-center gap-2">
+          <div className="w-5/6">
             <input
               type="text"
               placeholder="شناسه اقتصادی را وارد کنید و دکمه جستجو را کلیک کنید..."
@@ -139,12 +138,16 @@ export default function OrganizationInquiryModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
               dir="rtl"
             />
-            <button
+           
+          </div>
+          <div className="w-1/6">
+            
+          <button
               onClick={handleSearch}
               disabled={isSearching || isSearchCompleted}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-custom6"
             >
-              <CiSearch className="w-5 h-5" />
+              <CiSearch className="w-6 h-6  text-white hover:text-green-600" />
             </button>
           </div>
         </div>
