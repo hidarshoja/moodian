@@ -2,6 +2,8 @@ import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { CiSearch } from "react-icons/ci";
 import PropTypes from "prop-types";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
 export default function OrganizationInquiryModal({
   isOpen,
@@ -9,6 +11,8 @@ export default function OrganizationInquiryModal({
   onSelectCustomer,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchCompleted, setIsSearchCompleted] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     economic_identifier: "",
@@ -18,17 +22,55 @@ export default function OrganizationInquiryModal({
 
   if (!isOpen) return null;
 
-  const handleSearch = () => {
-    // TODO: Implement search functionality
-    console.log("Searching for:", searchTerm);
-  };
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      Swal.fire({
+        title: "خطا",
+        text: "لطفاً شناسه اقتصادی را وارد کنید",
+        icon: "error",
+        confirmButtonText: "باشه",
+      });
+      return;
+    }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setIsSearching(true);
+    try {
+      const response = await axiosClient.get(
+        `/tax/economic-code-information?economic_code=${searchTerm.trim()}`
+      );
+
+      if (response.data.message === "موفقیت آمیز") {
+        // Show success message
+        await Swal.fire({
+          title: "موفقیت",
+          text: "درخواست با موفقیت انجام شد",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        // Auto-fill form with response data
+        setFormData({
+          name: response.data.data.nameTrade,
+          economic_identifier: searchTerm.trim(),
+          national_code: response.data.data.nationalId,
+          status: response.data.data.taxpayerStatus,
+        });
+
+        // Mark search as completed to disable inputs
+        setIsSearchCompleted(true);
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      Swal.fire({
+        title: "خطا",
+        text: "خطا در دریافت اطلاعات. لطفاً دوباره تلاش کنید.",
+        icon: "error",
+        confirmButtonText: "باشه",
+      });
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSelect = () => {
@@ -47,6 +89,8 @@ export default function OrganizationInquiryModal({
       national_code: "",
       status: "",
     });
+    setSearchTerm("");
+    setIsSearchCompleted(false);
     onClose();
   };
 
@@ -58,6 +102,8 @@ export default function OrganizationInquiryModal({
       national_code: "",
       status: "",
     });
+    setSearchTerm("");
+    setIsSearchCompleted(false);
     onClose();
   };
 
@@ -86,15 +132,17 @@ export default function OrganizationInquiryModal({
           <div className="relative">
             <input
               type="text"
-              placeholder="جستجو..."
+              placeholder="شناسه اقتصادی را وارد کنید و دکمه جستجو را کلیک کنید..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              disabled={isSearchCompleted}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
               dir="rtl"
             />
             <button
               onClick={handleSearch}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              disabled={isSearching || isSearchCompleted}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <CiSearch className="w-5 h-5" />
             </button>
@@ -113,8 +161,8 @@ export default function OrganizationInquiryModal({
                 type="text"
                 name="name"
                 value={formData.name}
-                onChange={handleInputChange}
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                disabled={true} 
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 dir="rtl"
               />
             </div>
@@ -128,8 +176,8 @@ export default function OrganizationInquiryModal({
                 type="text"
                 name="economic_identifier"
                 value={formData.economic_identifier}
-                onChange={handleInputChange}
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                disabled={true} 
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 dir="rtl"
               />
             </div>
@@ -143,9 +191,8 @@ export default function OrganizationInquiryModal({
                 type="text"
                 name="national_code"
                 value={formData.national_code}
-                onChange={handleInputChange}
-                maxLength={10}
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                disabled={true} 
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 dir="rtl"
               />
             </div>
@@ -159,8 +206,8 @@ export default function OrganizationInquiryModal({
                 type="text"
                 name="status"
                 value={formData.status}
-                onChange={handleInputChange}
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                disabled={true} 
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 dir="rtl"
               />
             </div>
@@ -175,10 +222,7 @@ export default function OrganizationInquiryModal({
           >
             انصراف
           </button>
-          <button
-            onClick={handleSelect}
-            className="btn-custom4"
-          >
+          <button onClick={handleSelect} className="btn-custom4">
             انتخاب
           </button>
         </div>

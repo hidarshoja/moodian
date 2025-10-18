@@ -22,7 +22,7 @@ export default function AddCustomersModal({
 }) {
   const [form, setForm] = useState({
     name: "",
-    economic_code: "14011728696",
+    economic_code: "",
     postal_code: "",
     type: null,
     national_code: "",
@@ -105,7 +105,7 @@ export default function AddCustomersModal({
     setForm((prev) => ({
       ...prev,
       name: "",
-      economic_code: "14011728696",
+      economic_code: "",
       postal_code: "",
       type: null,
       national_code: "",
