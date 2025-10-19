@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect , useState  } from "react";
 import { GrClose } from "react-icons/gr";
 import { CiSearch } from "react-icons/ci";
 import {
@@ -8,6 +8,8 @@ import {
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
 import PropTypes from "prop-types";
+import axiosClient from "../axios-client";
+import Pagination from "./Pagination";
 
 export default function SearchPublicIdentifiersModal({
   isOpen,
@@ -15,16 +17,47 @@ export default function SearchPublicIdentifiersModal({
   onSelectItem,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("service"); // service, production, import
+  const [activeTab, setActiveTab] = useState(""); // service, production, import
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+ const[dataTable , setDataTable] = useState([]);
+ const[searchTermClick , setSearchTermClick] = useState(false);
+ const [meta, setMeta] = useState({});
+ const [pageCount, setPageCount] = useState(1);
+ const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+  setLoading(true);
+  let query =  `/sstids?page=${pageCount} `;
+
+  if (searchTerm && !activeTab) {
+    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
+  } else if (!searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
+  } else if (searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
+  }
+
+  axiosClient
+    .get(query)
+    .then((response) => {
+         setMeta(response.data.meta);
+      setDataTable(response.data.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    }).finally(() => setLoading(false));
+    setSearchTermClick(false);
+}, [searchTermClick, activeTab,pageCount]);
+
 
   if (!isOpen) return null;
 
-  const handleSearch = () => {
-    // TODO: Implement search functionality
-    console.log("Searching for:", searchTerm, "in tab:", activeTab);
-  };
+  
+
+ 
+
+  
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -40,13 +73,15 @@ export default function SearchPublicIdentifiersModal({
   };
 
   const tabs = [
-    { key: "service", label: "عمومی خدمت" },
-    { key: "production", label: "عمومی تولید" },
-    { key: "import", label: "عمومی وارداتی" },
+    { key: "شناسه عمومی خدمت", label: "عمومی خدمت" },
+    { key: "شناسه عمومی تولید", label: "عمومی تولید" },
+    { key: "شناسه عمومی وارداتی", label: "عمومی وارداتی" },
   ];
 
-  // Mock data for demonstration
-  const mockData = [];
+ const handleTabDelete = () => {
+  setActiveTab("");
+  setSearchTerm("");
+ }
 
   return (
     <div
@@ -87,7 +122,7 @@ export default function SearchPublicIdentifiersModal({
 
             {/* Search Button */}
             <button
-              onClick={handleSearch}
+              onClick={() => {setSearchTermClick(true)}}
               className="bg-[#1A2035] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#2a3155] transition-colors"
             >
               <CiSearch className="w-5 h-5" />
@@ -109,6 +144,14 @@ export default function SearchPublicIdentifiersModal({
                   {tab.label}
                 </button>
               ))}
+                <button
+                  onClick={handleTabDelete}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors "bg-white text-gray-100 border border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  پاک کردن فیلترها
+                </button>
+
             </div>
           </div>
 
@@ -125,22 +168,22 @@ export default function SearchPublicIdentifiersModal({
 
         {/* Content Area */}
         <div className="flex-1 p-6 overflow-auto">
-          {mockData.length === 0 ? (
+          {dataTable.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-gray-500 text-lg">رکوردی وجود ندارد</p>
             </div>
           ) : (
             <div className="space-y-2">
-              {mockData.map((item, index) => (
+              {dataTable.map((item, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-4 gap-4 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  className="grid grid-cols-4 gap-4 p-3 border text-white border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-800 cursor-pointer"
                   onClick={() => handleSelectItem(item)}
                 >
-                  <div className="text-center">{item.identifier}</div>
-                  <div className="text-center">{item.name}</div>
+                  <div className="text-center">{item.sstid}</div>
+                  <div className="text-center">{item.description}</div>
                   <div className="text-center">{item.type}</div>
-                  <div className="text-center">{item.vatRate}</div>
+                  <div className="text-center">{item.vat}</div>
                 </div>
               ))}
             </div>
@@ -150,7 +193,7 @@ export default function SearchPublicIdentifiersModal({
         {/* Footer */}
         <div className="border-t border-gray-200">
           {/* Pagination Bar */}
-          <div className="bg-[#1A2035] text-white px-6 py-3 flex items-center justify-between">
+          {/* <div className="bg-[#1A2035] text-white px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCurrentPage(1)}
@@ -190,7 +233,13 @@ export default function SearchPublicIdentifiersModal({
                     totalItems
                   )}`}
             </div>
-          </div>
+          </div> */}
+           <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      /> 
 
           {/* Cancel Button */}
           <div className="py-4 flex justify-center">
