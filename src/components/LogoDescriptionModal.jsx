@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 export default function LogoDescriptionModal({ isOpen, onClose }) {
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [logoPreview, setLogoPreview] = useState("/img/ice-logo.svg"); // Default logo
+  const [logoPreview, setLogoPreview] = useState("/img/ice-logo.svg");
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -18,12 +19,58 @@ export default function LogoDescriptionModal({ isOpen, onClose }) {
     }
   };
 
-  const handleSave = () => {
-    // Handle save functionality
-    console.log("Description:", description);
-    console.log("Selected file:", selectedFile);
-    // Add your save logic here
-    onClose();
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    // استفاده از FormData برای ارسال فایل
+    const formData = new FormData();
+
+    if (selectedFile) {
+      formData.append("logo", selectedFile);
+    }
+    formData.append("description", description);
+
+    console.log("مقادیر فرم:", {
+      logo: selectedFile ? selectedFile.name : "No file selected",
+      description: description,
+    });
+
+    try {
+      const res = await axiosClient.put(`/profile/update`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "اطلاعات با موفقیت به‌روزرسانی شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+
+      onClose();
+    } catch (error) {
+      console.error("خطا در ارسال اطلاعات:", error);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در ارسال اطلاعات",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -60,9 +107,9 @@ export default function LogoDescriptionModal({ isOpen, onClose }) {
         {/* Content */}
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-           {/* Right Section - Logo */}
-           <div className="flex flex-col items-center">
-           <label className="block text-sm font-medium text-gray-100 mb-2">
+            {/* Right Section - Logo */}
+            <div className="flex flex-col items-center">
+              <label className="block text-sm font-medium text-gray-100 mb-2">
                 فرمت png و کمتر از 10 کیلوبایت
               </label>
               <div className="mb-4">
@@ -96,8 +143,6 @@ export default function LogoDescriptionModal({ isOpen, onClose }) {
                 placeholder="توضیحات خود را وارد کنید..."
               />
             </div>
-
-            
           </div>
         </div>
 
@@ -109,10 +154,7 @@ export default function LogoDescriptionModal({ isOpen, onClose }) {
           >
             انصراف
           </button>
-          <button
-            onClick={handleSave}
-            className="btn-custom4"
-          >
+          <button onClick={handleSave} className="btn-custom4">
             ذخیره
           </button>
         </div>
