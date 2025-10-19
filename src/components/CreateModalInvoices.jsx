@@ -258,7 +258,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
     setTotals(calculatedTotals);
   };
 
-
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
@@ -373,6 +372,81 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
       return;
     }
 
+    // Get customer name
+    const selectedCustomer = dataTable.find((c) => c.id == invoiceData.crn);
+    const customerName = selectedCustomer
+      ? (selectedCustomer.name || "") +
+        (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
+      : "انتخاب نشده";
+
+    // Get inty text
+    const getIntyText = (value) => {
+      switch (value) {
+        case "1":
+          return "نوع اول";
+        case "2":
+          return "نوع دوم";
+        case "3":
+          return "نوع سوم";
+        default:
+          return "نامشخص";
+      }
+    };
+
+    // Get inp text
+    const getInpText = (value) => {
+      switch (value) {
+        case "1":
+          return "الگوی اول (فروش)";
+        case "2":
+          return "الگوی دوم (فروش ارزی)";
+        case "3":
+          return "الگوی سوم (صورتحساب طلا، جواهر و پلاتین)";
+        case "4":
+          return "الگوی چهارم (قرارداد پیمانکاری)";
+        case "5":
+          return "الگوی پنجم (قبوض خدماتی)";
+        case "6":
+          return "الگوی ششم (بلیط هواپیما)";
+        case "7":
+          return "الگوی هفتم (صادرات)";
+        case "8":
+          return "الگوی هشتم (بارنامه)";
+        case "11":
+          return "الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا)";
+        case "13":
+          return "الگوی سیزدهم (فروش خدمات بیمهای)";
+        default:
+          return "انتخاب نشده";
+      }
+    };
+
+    // Get setm text
+    const getSetmText = (value) => {
+      switch (value) {
+        case "1":
+          return "نقدی";
+        case "2":
+          return "نسیه";
+        case "3":
+          return "نسیه/نقدی";
+        default:
+          return "نامشخص";
+      }
+    };
+
+    // Format date
+    const formatDateForPrint = (date) => {
+      if (!date) return "نامشخص";
+      try {
+        const d = date instanceof Date ? date : new Date(date);
+        if (Number.isNaN(d.getTime())) return "نامشخص";
+        return d.toLocaleDateString("fa-IR");
+      } catch {
+        return "نامشخص";
+      }
+    };
+
     const rowsHtml = lineItems
       .map(
         (item, index) => `
@@ -399,7 +473,11 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           <title>چاپ فاکتور</title>
           <style>
             body { font-family: Vazirmatn, Tahoma, Arial, sans-serif; padding: 24px; background: #fff; color: #111; }
-            h1 { font-size: 18px; margin-bottom: 16px; }
+            h1 { font-size: 18px; margin-bottom: 16px; text-align: center; }
+            .invoice-info { margin-bottom: 20px; }
+            .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            .info-table td { padding: 8px; font-size: 12px; border: 1px solid #ddd; }
+            .info-table .label { background: #f5f5f5; font-weight: bold; width: 30%; }
             table { width: 100%; border-collapse: collapse; }
             th, td { border: 1px solid #999; padding: 8px; font-size: 12px; text-align: center; }
             thead { background: #f0f0f0; }
@@ -407,7 +485,44 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           </style>
         </head>
         <body>
-          <h1>جدول اقلام فاکتور</h1>
+          <h1>فاکتور فروش</h1>
+          
+          <div class="invoice-info">
+            <table class="info-table">
+              <tr>
+                <td class="label">نوع:</td>
+                <td>${getIntyText(invoiceData.inty)}</td>
+                <td class="label">الگوی فروش:</td>
+                <td>${getInpText(invoiceData.inp)}</td>
+              </tr>
+              <tr>
+                <td class="label">تاریخ صدور:</td>
+                <td>${formatDateForPrint(invoiceData.indatim)}</td>
+                <td class="label">تاریخ ایجاد:</td>
+                <td>${formatDateForPrint(invoiceData.indati2m)}</td>
+              </tr>
+              <tr>
+                <td class="label">مشتری:</td>
+                <td>${customerName}</td>
+                <td class="label">کد شعبه خریدار:</td>
+                <td>${invoiceData.bbc || "نامشخص"}</td>
+              </tr>
+              <tr>
+                <td class="label">روش تسویه:</td>
+                <td>${getSetmText(invoiceData.setm)}</td>
+                <td class="label">کد شعبه فروشنده:</td>
+                <td>${invoiceData.sbc || "نامشخص"}</td>
+              </tr>
+              <tr>
+                <td class="label">ش ف در سامانه مشتری:</td>
+                <td>${invoiceData.MyInvoiceId || "نامشخص"}</td>
+                <td class="label">توضیحات:</td>
+                <td>${invoiceData.comment || "ندارد"}</td>
+              </tr>
+            </table>
+          </div>
+
+          <h2>جدول اقلام فاکتور</h2>
           <table>
             <thead>
               <tr>
