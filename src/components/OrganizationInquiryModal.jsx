@@ -36,7 +36,7 @@ export default function OrganizationInquiryModal({
     setIsSearching(true);
     try {
       const response = await axiosClient.get(
-        `/tax/economic-code-information?economic_code=${searchTerm.trim()}`
+        `/moadian/economic-code-information?economic_code=${searchTerm.trim()}`
       );
 
       if (response.data.message === "موفقیت آمیز") {
