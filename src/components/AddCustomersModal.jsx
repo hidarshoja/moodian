@@ -85,7 +85,6 @@ export default function AddCustomersModal({
     }
     setErrors(newErrors);
   };
-
   const handleSave = async (e) => {
     e.preventDefault();
     console.log("مقادیر فرم:", form);

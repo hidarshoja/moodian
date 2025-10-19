@@ -5,6 +5,8 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import LogoDescriptionModal from "./LogoDescriptionModal";
 import PropTypes from "prop-types";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
 export default function DesktopSidebar({
   desktopSidebarOpen,
@@ -12,10 +14,45 @@ export default function DesktopSidebar({
 }) {
   const location = useLocation();
   const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
-
+  const [isSuccess, setIsSuccess] = useState(false);
   const handleLogoClick = () => {
     setIsLogoModalOpen(true);
   };
+
+  const checkMoadian = async () => {
+    try {
+      const response = await axiosClient.get("/moadian/fiscal-info");
+      console.log(response.data.data);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success", // یا 'error'
+        title: "ارتباط برقرار است.",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setIsSuccess(true);
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error", // یا 'error'
+        title: "خطا در برقرای ارتباط",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setIsSuccess(false);
+    }
+  };
+
   return (
     <>
       <Transition.Root show={desktopSidebarOpen} as={Fragment}>
@@ -82,6 +119,11 @@ export default function DesktopSidebar({
         isOpen={isLogoModalOpen}
         onClose={() => setIsLogoModalOpen(false)}
       />
+      <div className="fixed bottom-9 right-5 w-60 flex items-center text-sm rounded-md cursor-pointer justify-center py-2 text-white border border-green-500 hover:bg-green-600 hover:text-white"
+      onClick={checkMoadian}
+      >
+       {isSuccess ?"ارتباط بر قرار است" : "چک ارتباط با سامانه مودیان" } 
+      </div>
     </>
   );
 }
