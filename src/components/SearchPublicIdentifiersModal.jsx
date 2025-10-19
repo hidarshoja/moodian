@@ -1,15 +1,9 @@
-import { useEffect , useState  } from "react";
+import { useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import { CiSearch } from "react-icons/ci";
-import {
-  MdKeyboardDoubleArrowLeft,
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight,
-  MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
-import Pagination from "./Pagination";
+import Pagination2 from "./Pagination2";
 
 export default function SearchPublicIdentifiersModal({
   isOpen,
@@ -18,51 +12,40 @@ export default function SearchPublicIdentifiersModal({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState(""); // service, production, import
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
- const[dataTable , setDataTable] = useState([]);
- const[searchTermClick , setSearchTermClick] = useState(false);
- const [meta, setMeta] = useState({});
- const [pageCount, setPageCount] = useState(1);
- const [loading, setLoading] = useState(true);
+  const [dataTable, setDataTable] = useState([]);
+  const [searchTermClick, setSearchTermClick] = useState(false);
+  const [meta, setMeta] = useState({});
+  const [pageCount, setPageCount] = useState(1);
 
- useEffect(() => {
-  setLoading(true);
-  let query =  `/sstids?page=${pageCount} `;
+  useEffect(() => {
+    let query = `/sstids?page=${pageCount} `;
 
-  if (searchTerm && !activeTab) {
-    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
-  } else if (!searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
-  } else if (searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
-  }
+    if (searchTerm && !activeTab) {
+      query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
+    } else if (!searchTerm && activeTab) {
+      query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
+    } else if (searchTerm && activeTab) {
+      query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
+    }
 
-  axiosClient
-    .get(query)
-    .then((response) => {
-         setMeta(response.data.meta);
-      setDataTable(response.data.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    }).finally(() => setLoading(false));
+    axiosClient
+      .get(query)
+      .then((response) => {
+        setMeta(response.data.meta);
+        setDataTable(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
     setSearchTermClick(false);
-}, [searchTermClick, activeTab,pageCount]);
-
+  }, [searchTermClick, activeTab, pageCount, searchTerm]);
 
   if (!isOpen) return null;
-
-  
-
- 
-
-  
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSearchTerm("");
-    setCurrentPage(1);
+    setPageCount(1);
   };
 
   const handleSelectItem = (item) => {
@@ -78,10 +61,10 @@ export default function SearchPublicIdentifiersModal({
     { key: "شناسه عمومی وارداتی", label: "عمومی وارداتی" },
   ];
 
- const handleTabDelete = () => {
-  setActiveTab("");
-  setSearchTerm("");
- }
+  const handleTabDelete = () => {
+    setActiveTab("");
+    setSearchTerm("");
+  };
 
   return (
     <div
@@ -122,7 +105,9 @@ export default function SearchPublicIdentifiersModal({
 
             {/* Search Button */}
             <button
-              onClick={() => {setSearchTermClick(true)}}
+              onClick={() => {
+                setSearchTermClick(true);
+              }}
               className="bg-[#1A2035] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#2a3155] transition-colors"
             >
               <CiSearch className="w-5 h-5" />
@@ -144,14 +129,13 @@ export default function SearchPublicIdentifiersModal({
                   {tab.label}
                 </button>
               ))}
-                <button
-                  onClick={handleTabDelete}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors "bg-white text-gray-100 border border-gray-300 hover:bg-gray-50"
+              <button
+                onClick={handleTabDelete}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors "bg-white text-gray-100 border border-gray-300 hover:bg-gray-50"
                   }`}
-                >
-                  پاک کردن فیلترها
-                </button>
-
+              >
+                پاک کردن فیلترها
+              </button>
             </div>
           </div>
 
@@ -234,12 +218,12 @@ export default function SearchPublicIdentifiersModal({
                   )}`}
             </div>
           </div> */}
-           <Pagination
-        meta={meta}
-        pageCount={pageCount}
-        setPageCount={setPageCount}
-        setLoading={setLoading}
-      /> 
+          <Pagination2
+            currentPage={pageCount}
+            setCurrentPage={setPageCount}
+            totalItems={meta.total || 0}
+            itemsPerPage={meta.per_page || 10}
+          />
 
           {/* Cancel Button */}
           <div className="py-4 flex justify-center">
