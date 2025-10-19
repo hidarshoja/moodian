@@ -105,7 +105,7 @@ export default function InvoicesPage() {
               نمای کلی فاکتور فروش کاربران
             </p>
           </div>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-3 flex-wrap lg:flex-nowrap">
             <button
               className="btn-custom"
               onClick={() => setExcelModalOpen2(true)}

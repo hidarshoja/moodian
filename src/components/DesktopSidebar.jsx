@@ -119,7 +119,7 @@ export default function DesktopSidebar({
         isOpen={isLogoModalOpen}
         onClose={() => setIsLogoModalOpen(false)}
       />
-      <div className="fixed bottom-9 right-5 w-60 flex items-center text-sm rounded-md cursor-pointer justify-center py-2 text-white border border-green-500 hover:bg-green-600 hover:text-white"
+      <div className="fixed bottom-9 right-5 lg:w-44 xl:w-60 flex items-center text-sm rounded-md cursor-pointer justify-center py-2 text-white border border-green-500 hover:bg-green-600 hover:text-white"
       onClick={checkMoadian}
       >
        {isSuccess ?"ارتباط بر قرار است" : "چک ارتباط با سامانه مودیان" } 

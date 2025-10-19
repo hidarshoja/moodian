@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useState , useCallback } from "react";
 import PropTypes from "prop-types";
 import { Menu } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
@@ -12,6 +12,8 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { BiLogOutCircle } from "react-icons/bi";
 import { CiUser } from "react-icons/ci";
 import { TiPhoneOutline } from "react-icons/ti";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
 export default function Header({
   setSidebarOpen,
@@ -22,6 +24,7 @@ export default function Header({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  const [isSuccess, setIsSuccess] = useState(false);
    const handleLogout = useCallback(() => {
   //   // Clear token and redux user, then redirect to login
     localStorage.removeItem("ACCESS_TOKEN");
@@ -61,8 +64,41 @@ export default function Header({
       action: handleLogout,
       icon: <BiLogOutCircle className="w-4 h-4 " />,
     },
-   
   ];
+
+  const checkMoadian = async () => {
+    try {
+      const response = await axiosClient.get("/moadian/fiscal-info");
+      console.log(response.data.data);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success", // یا 'error'
+        title: "ارتباط برقرار است.",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setIsSuccess(true);
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error", // یا 'error'
+        title: "خطا در برقرای ارتباط",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setIsSuccess(false);
+    }
+  };
 
   return (
     <div className="header-panel sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4  border-b-2 border-[#3b466c] px-4 sm:gap-x-6 sm:px-6 lg:px-8 shadow-sm text-right font-sans">
@@ -85,6 +121,11 @@ export default function Header({
       )}
       <div className="flex flex-1 gap-x-4 justify-end lg:gap-x-6">
         <div className="flex items-center gap-x-4 lg:gap-x-6">
+        <div className="fixed bottom-3 right-3 p-2 flex items-center text-[10px] rounded-md cursor-pointer justify-center  text-white border border-green-500 hover:bg-green-600 hover:text-white lg:hidden"
+      onClick={checkMoadian}
+      >
+       {isSuccess ?"ارتباط بر قرار است" : "چک ارتباط با سامانه مودیان" } 
+        </div>
           <Menu
             as="div"
             className="flex flex-wrap items-center justify-end gap-1"

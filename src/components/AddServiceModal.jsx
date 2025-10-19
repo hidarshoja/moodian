@@ -155,7 +155,12 @@ export default function AddServiceModal({
             </span>
             <span>درج از شناسه های عمومی</span>
           </span>
-          <span className="btn-custom3 cursor-pointer">StuffId</span>
+          <span
+  className="btn-custom3 cursor-pointer"
+  onClick={() => window.open('https://stuffid.tax.gov.ir/', '_blank')}
+>
+  StuffId
+</span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
           </button>
