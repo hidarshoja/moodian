@@ -60,7 +60,6 @@ export default function SearchPublicIdentifiersModal({
     { key: "شناسه عمومی تولید", label: "عمومی تولید" },
     { key: "شناسه عمومی وارداتی", label: "عمومی وارداتی" },
   ];
-
   const handleTabDelete = () => {
     setActiveTab("");
     setSearchTerm("");

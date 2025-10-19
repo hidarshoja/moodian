@@ -129,9 +129,8 @@ export default function AddServiceModal({
     // Populate form with selected item data
     setForm((prev) => ({
       ...prev,
-      title: item.name || "",
-      sstid: item.identifier || "",
-      vra: item.vatRate || "",
+      sstid: item.sstid || "",
+      vra: item.vat || "",
     }));
   };
 
