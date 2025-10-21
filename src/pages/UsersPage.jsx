@@ -246,13 +246,58 @@ export default function UsersPage() {
 
       if (error.response?.status === 422) {
         const errors = error.response.data.errors;
-        if (errors.tins) {
-          errorMessage("کد اقتصادی قبلاً ثبت شده است");
-        } else if (errors.email) {
-          errorMessage("ایمیل قبلاً ثبت شده است");
-        } else {
-          errorMessage("خطا در اعتبارسنجی داده‌ها");
-        }
+
+        // نمایش تمام خطاها به صورت جداگانه
+        Object.keys(errors).forEach((field) => {
+          const fieldErrors = errors[field];
+          if (Array.isArray(fieldErrors)) {
+            fieldErrors.forEach((errorMsg) => {
+              // ترجمه خطاها به فارسی
+              let translatedError = errorMsg;
+
+              // ترجمه خطاهای رایج
+              if (errorMsg.includes("The mobile field must be 10 digits")) {
+                translatedError = "شماره موبایل باید ۱۰ رقم باشد";
+              } else if (
+                errorMsg.includes(
+                  "The mobile field must start with one of the following: 9"
+                )
+              ) {
+                translatedError = "شماره موبایل باید با ۹ شروع شود";
+              } else if (errorMsg.includes("The tins has already been taken")) {
+                translatedError = "کد اقتصادی قبلاً ثبت شده است";
+              } else if (errorMsg.includes("The roles field is required")) {
+                translatedError = "نقش کاربر الزامی است";
+              } else if (
+                errorMsg.includes("The moadian private key field is required")
+              ) {
+                translatedError = "کلید خصوصی مودیان الزامی است";
+              } else if (
+                errorMsg.includes("The moadian certificate field is required")
+              ) {
+                translatedError = "گواهی مودیان الزامی است";
+              } else if (
+                errorMsg.includes("The email has already been taken")
+              ) {
+                translatedError = "ایمیل قبلاً ثبت شده است";
+              } else if (errorMsg.includes("The email field is required")) {
+                translatedError = "ایمیل الزامی است";
+              } else if (errorMsg.includes("The name field is required")) {
+                translatedError = "نام الزامی است";
+              } else if (errorMsg.includes("The last_name field is required")) {
+                translatedError = "نام خانوادگی الزامی است";
+              } else if (errorMsg.includes("The tins field is required")) {
+                translatedError = "کد اقتصادی الزامی است";
+              } else if (errorMsg.includes("The mobile field is required")) {
+                translatedError = "شماره موبایل الزامی است";
+              } else if (errorMsg.includes("The password field is required")) {
+                translatedError = "رمز عبور الزامی است";
+              }
+
+              errorMessage(translatedError);
+            });
+          }
+        });
       } else if (error.response?.status === 404) {
         errorMessage("کاربر مورد نظر یافت نشد");
       } else if (error.response?.status === 500) {
@@ -350,7 +395,7 @@ export default function UsersPage() {
         onClose={() => setIsUserModalOpen(false)}
       />
       <ToastContainer
-        position="top-right"
+        position="top-left"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
