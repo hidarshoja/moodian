@@ -21,9 +21,9 @@ export default function ProfileListUsers({
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نام و نام خانوادگی
             </th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">
+            {/* <th className="text-right px-4 py-3 whitespace-nowrap">
               نوع کاربر
-            </th>
+            </th> */}
             <th className="text-right px-4 py-3 whitespace-nowrap">
                شماره تماس
             </th>
@@ -55,9 +55,9 @@ export default function ProfileListUsers({
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.last_name}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              {/* <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.roles[0]?.name}
-              </td>
+              </td> */}
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.mobile}
               </td>
