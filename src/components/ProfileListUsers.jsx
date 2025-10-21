@@ -12,6 +12,9 @@ export default function ProfileListUsers({
       <table className="min-w-full">
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap">
+               #
+            </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نام کاربری
             </th>
@@ -20,6 +23,9 @@ export default function ProfileListUsers({
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نوع کاربر
+            </th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">
+               شماره تماس
             </th>
             <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
@@ -40,16 +46,21 @@ export default function ProfileListUsers({
               key={i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.name2}
+               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.id}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.name}
+                {r?.name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.side}
+                {r?.last_name}
               </td>
-
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.roles[0]?.name}
+              </td>
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.mobile}
+              </td>
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button

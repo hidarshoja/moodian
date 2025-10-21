@@ -23,6 +23,7 @@ import SupportPage from "./pages/SupportPage";
 import OtpPage from "./pages/login/OtpPage";
 import DownloadExcel from "./pages/DownloadExcel";
 import CreateToken from "./pages/CreateToken";
+import UsersPage from "./pages/UsersPage";
 
 export const route = createBrowserRouter([
     {
@@ -105,9 +106,13 @@ export const route = createBrowserRouter([
                 path: '/create-token',
                 element: <CreateToken />
             },
+            {
+                path: '/users',
+                element: <UsersPage />
+            },
         ]
     },
-    // ConnectionsPage
+    // ConnectionsPage 
     {
         path: '/auth',
         element: <AuthLayout />,
