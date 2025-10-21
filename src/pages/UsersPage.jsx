@@ -101,7 +101,7 @@ export default function UsersPage() {
       email: u?.email || "",
       password: "",
       status: u?.status || 100,
-      sstids: u?.sstids || "",
+      sstids: Array.isArray(u?.sstids) ? u.sstids[0] || "" : u?.sstids || "",
       roles: u?.roles?.map((role) => role.id) || [],
       moadian_username: u?.moadian_username || "",
       moadian_private_key: null,
@@ -142,30 +142,56 @@ export default function UsersPage() {
   const handleSubmitUser = async (e) => {
     e.preventDefault();
 
+    console.log("Form data:", userForm);
+    console.log("Editing user index:", editingUserIndex);
+    console.log("User ID:", records[editingUserIndex]?.id);
+
     try {
       const formData = new FormData();
 
       // اضافه کردن فیلدهای متنی
-      formData.append("name", userForm.name);
-      formData.append("last_name", userForm.last_name);
-      formData.append("tins", userForm.tins);
-      formData.append("mobile", userForm.mobile);
-      formData.append("email", userForm.email);
-      formData.append("password", userForm.password);
-      formData.append("status", userForm.status);
-      formData.append("moadian_username", userForm.moadian_username);
-      formData.append("address", userForm.address);
-      formData.append("postal_code", userForm.postal_code);
+      formData.append("name", userForm.name || "");
+      formData.append("last_name", userForm.last_name || "");
+      formData.append("tins", userForm.tins || "");
+      formData.append("mobile", userForm.mobile || "");
+      formData.append("email", userForm.email || "");
+      formData.append("password", userForm.password || "");
+      formData.append("status", userForm.status || 100);
+      formData.append("moadian_username", userForm.moadian_username || "");
+      formData.append("address", userForm.address || "");
+      formData.append("postal_code", userForm.postal_code || "");
 
       // اضافه کردن sstids
-      if (userForm.sstids && userForm.sstids.trim()) {
-        formData.append("sstids[0]", userForm.sstids);
+      if (userForm.sstids) {
+        // اگر sstids آرایه است
+        if (Array.isArray(userForm.sstids)) {
+          userForm.sstids.forEach((sstid, index) => {
+            if (sstid && sstid.trim()) {
+              formData.append(`sstids[${index}]`, sstid);
+            }
+          });
+        }
+        // اگر sstids رشته است
+        else if (
+          typeof userForm.sstids === "string" &&
+          userForm.sstids.trim()
+        ) {
+          formData.append("sstids[0]", userForm.sstids);
+        }
       }
 
       // اضافه کردن roles
-      userForm.roles.forEach((role, index) => {
-        formData.append(`roles[${index}]`, role);
-      });
+      if (
+        userForm.roles &&
+        Array.isArray(userForm.roles) &&
+        userForm.roles.length > 0
+      ) {
+        userForm.roles.forEach((role, index) => {
+          if (role !== null && role !== undefined) {
+            formData.append(`roles[${index}]`, role);
+          }
+        });
+      }
 
       // اضافه کردن فایل‌ها
       if (userForm.moadian_private_key instanceof File) {
@@ -175,10 +201,20 @@ export default function UsersPage() {
         formData.append("moadian_certificate", userForm.moadian_certificate);
       }
 
+      // Debug: نمایش محتویات FormData
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
       if (editingUserIndex !== null) {
-        // ویرایش کاربر موجود
-        await axiosClientAdmin.put(
-          `/users/${records[editingUserIndex].id}`,
+        // ویرایش کاربر موجود - اضافه کردن _method: PUT
+        formData.append("_method", "PUT");
+        const userId = records[editingUserIndex].id;
+        console.log("Updating user with ID:", userId);
+
+        const response = await axiosClientAdmin.post(
+          `/users/${userId}`,
           formData,
           {
             headers: {
@@ -186,14 +222,17 @@ export default function UsersPage() {
             },
           }
         );
+        console.log("Update response:", response);
         successMessage("کاربر با موفقیت ویرایش شد");
       } else {
         // ایجاد کاربر جدید
-        await axiosClientAdmin.post("/users", formData, {
+        console.log("Creating new user");
+        const response = await axiosClientAdmin.post("/users", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        console.log("Create response:", response);
         successMessage("کاربر با موفقیت ایجاد شد");
       }
 
@@ -201,7 +240,26 @@ export default function UsersPage() {
       fetchUsers(); // بارگذاری مجدد لیست کاربران
     } catch (error) {
       console.error("Error saving user:", error);
-      errorMessage("خطا در ذخیره کاربر");
+      console.error("Error response:", error.response);
+      console.error("Error status:", error.response?.status);
+      console.error("Error data:", error.response?.data);
+
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors;
+        if (errors.tins) {
+          errorMessage("کد اقتصادی قبلاً ثبت شده است");
+        } else if (errors.email) {
+          errorMessage("ایمیل قبلاً ثبت شده است");
+        } else {
+          errorMessage("خطا در اعتبارسنجی داده‌ها");
+        }
+      } else if (error.response?.status === 404) {
+        errorMessage("کاربر مورد نظر یافت نشد");
+      } else if (error.response?.status === 500) {
+        errorMessage("خطای سرور");
+      } else {
+        errorMessage(`خطا در ذخیره کاربر: ${error.message}`);
+      }
     }
   };
 
