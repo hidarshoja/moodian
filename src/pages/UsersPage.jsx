@@ -4,12 +4,15 @@ import KeySettingsModal from "../components/KeySettingsModal";
 import UserFormModal from "../components/UserFormModal";
 import Swal from "sweetalert2";
 import axiosClientAdmin from "../axios-clientAdmin";
+import { errorMessage, successMessage } from "../utils/Toastiy";
+import { ToastContainer } from "react-toastify";
+import axiosClient from "../axios-client";
 
 export default function UsersPage() {
   const [records, setRecords] = useState([]);
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [pageCount] = useState(1);
-
+  const [keyModalIndex, setKeyModalIndex] = useState(null);
   const [activeFilters] = useState({});
   const [keyModalData, setKeyModalData] = useState({
     id: "",
@@ -111,9 +114,7 @@ export default function UsersPage() {
     setIsUserModalOpen(true);
   };
 
-  const deleteUser = (index) => {
-    console.log(`records[index]`, records[index]);
-  };
+ 
 
   const handleUserChange = (e) => {
     const { name, value, type, files, checked } = e.target;
@@ -409,15 +410,15 @@ export default function UsersPage() {
     }
 
     try {
-      await axiosClientAdmin.put(`/admin/users/${keyModalData.id}`, formData, {
+      await axiosClient.put(`/admin/users/${keyModalData.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      successMessage("کاربر با موفقیت ویرایش شد");
+     
       setIsKeyModalOpen(false);
     } catch (error) {
-      errorMessage("خطا در ویرایش کاربر");
+    
       setIsKeyModalOpen(false);
     }
   };
@@ -425,6 +426,30 @@ export default function UsersPage() {
     fetchUsers();
   }, [fetchUsers]);
 
+  const deleteRecord = async (index) => {
+    try {
+      const user = records[index];
+      console.log(`Deleting user:`, user);
+
+      const res = await axiosClient.delete(`/admin/users/${user.id}`);
+      console.log(`Delete response:`, res);
+
+      setRecords((prev) => prev.filter((_, i) => i !== index));
+
+      successMessage("کاربر با موفقیت حذف شد");
+    } catch (error) {
+      errorMessage("خطا در حذف کاربر");
+    }
+  };
+  const openKeySettings = (index) => {
+    setKeyModalIndex(index);
+    const user = records[index];
+    console.log(`user.id`, user.id);
+    setKeyModalData({
+      id: user.id,
+    });
+    setIsKeyModalOpen(true);
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -445,9 +470,9 @@ export default function UsersPage() {
       <div className="mx-auto p-6">
         <ProfileListUsers
           users={records}
-          onDelete={deleteUser}
+          onDelete={deleteRecord}
           onEdit={openEditUser}
-          onOpenKeySettings={openEditUser}
+          onOpenKeySettings={openKeySettings}
         />
       </div>
 
@@ -467,6 +492,18 @@ export default function UsersPage() {
         onChange={handleUserChange}
         onSubmit={handleSubmitUser}
         onClose={() => setIsUserModalOpen(false)}
+      />
+          <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
       />
     </div>
   );

@@ -12,8 +12,8 @@ export default function KeySettingsModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
       <div className="w-full max-w-3xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl overflow-hidden relative animate-slideIn">
-        <div className="bg-gradient-to-l from-[#23234a] via-[#2e3a5c] to-[#6ec6ca] text-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
-          <h3 className="font-semibold">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl flex-shrink-0">
+          <h3 className="font-semibold text-white">
             تنظیمات جهت ارسال دیتا به سامانه مودیان
           </h3>
           <button onClick={onClose} className="text-white/80 hover:text-white">
@@ -83,13 +83,13 @@ export default function KeySettingsModal({
         <div className="px-6 pb-6 pt-4 flex items-center justify-between gap-4">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-purple-700/90 text-white py-3 hover:bg-purple-800 transition-all"
+            className="flex-1 rounded-xl bg-red-500 text-white py-2 hover:bg-red-700 transition-all"
           >
             انصراف
           </button>
           <button
             onClick={onSave}
-            className="flex-1 rounded-xl bg-pink-400/70 text-[#23234a] font-bold py-3 hover:bg-pink-400 transition-all"
+            className="btn-custom4"
           >
             ذخیره
           </button>

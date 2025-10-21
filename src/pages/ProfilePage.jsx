@@ -179,14 +179,7 @@ export default function ProfilePage() {
         }
       }
 
-      if (
-        !preprocessed.mobile ||
-        preprocessed.mobile.length !== 10 ||
-        !preprocessed.mobile.startsWith("9")
-      ) {
-        alert("شماره موبایل باید ۱۰ رقم و با 9 شروع شود (نمونه: 9123456789)");
-        return;
-      }
+      
 
       // Convert sstids string to array if it exists
       if (preprocessed.sstids && String(preprocessed.sstids).length === 13) {

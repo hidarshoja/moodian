@@ -12,15 +12,7 @@ export default function ProfileFormModal({
   const [errors, setErrors] = useState({});
 
   // Validation functions
-  const validateMobile = (mobile) => {
-    if (!mobile) return "شماره موبایل الزامی است";
-    const mobileStr = String(mobile);
-    const digits = mobileStr.replace(/\D/g, "");
-    if (digits.length !== 10 || !digits.startsWith("9")) {
-      return "شماره موبایل باید ۱۰ رقم و با 9 شروع شود";
-    }
-    return "";
-  };
+ 
 
   const validateTins = (tins) => {
     if (!tins) return "کد اقتصادی الزامی است";
@@ -46,8 +38,7 @@ export default function ProfileFormModal({
   useEffect(() => {
     const newErrors = {};
 
-    const mobileError = validateMobile(form.mobile);
-    if (mobileError) newErrors.mobile = mobileError;
+    
 
     const tinsError = validateTins(form.tins);
     if (tinsError) newErrors.tins = tinsError;
