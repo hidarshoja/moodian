@@ -80,7 +80,8 @@ export default function DesktopSidebar({
             </button>
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul className="flex flex-1 flex-col gap-y-2 mt-4">
+            {/* <ul className="flex flex-1 flex-col gap-y-2 mt-4"> */}
+            <ul className="flex flex-1 flex-col mt-4">
               <span
                 onClick={handleLogoClick}
                 className="text-white cursor-pointer text-sm hover:text-orange-300 mb-3"
@@ -92,10 +93,12 @@ export default function DesktopSidebar({
                 return (
                   <li
                     key={item.name}
-                    //  className=" sidebar-shutter w-full border-2 border-gray-700 rounded-lg"
-                    className={` w-full border-2 border-gray-700 rounded-lg ${
+                    className={` w-full border border-gray-700  ${
                       isActive ? "sidebar-shutter-active" : "sidebar-shutter"
                     }`}
+                    // className={` w-full border-2 border-gray-700 rounded-lg ${
+                    //   isActive ? "sidebar-shutter-active" : "sidebar-shutter"
+                    // }`}
                   >
                     <Link
                       to={item.href}
