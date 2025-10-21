@@ -2,8 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import ProfileListUsers from "../components/ProfileListUsers";
 import KeySettingsModal from "../components/KeySettingsModal";
 import UserFormModal from "../components/UserFormModal";
-import { errorMessage, successMessage } from "../utils/Toastiy";
-import { ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 import axiosClientAdmin from "../axios-clientAdmin";
 
 export default function UsersPage() {
@@ -223,7 +222,18 @@ export default function UsersPage() {
           }
         );
         console.log("Update response:", response);
-        successMessage("کاربر با موفقیت ویرایش شد");
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "success",
+          title: "کاربر با موفقیت ویرایش شد",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       } else {
         // ایجاد کاربر جدید
         console.log("Creating new user");
@@ -233,7 +243,18 @@ export default function UsersPage() {
           },
         });
         console.log("Create response:", response);
-        successMessage("کاربر با موفقیت ایجاد شد");
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "success",
+          title: "کاربر با موفقیت ایجاد شد",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       }
 
       setIsUserModalOpen(false);
@@ -246,8 +267,9 @@ export default function UsersPage() {
 
       if (error.response?.status === 422) {
         const errors = error.response.data.errors;
+        const translatedErrors = [];
 
-        // نمایش تمام خطاها به صورت جداگانه
+        // ترجمه تمام خطاها
         Object.keys(errors).forEach((field) => {
           const fieldErrors = errors[field];
           if (Array.isArray(fieldErrors)) {
@@ -294,16 +316,68 @@ export default function UsersPage() {
                 translatedError = "رمز عبور الزامی است";
               }
 
-              errorMessage(translatedError);
+              translatedErrors.push(translatedError);
             });
           }
         });
+
+        // نمایش تمام خطاها در یک SweetAlert
+        const errorList = translatedErrors
+          .map((error) => `• ${error}`)
+          .join("\n");
+
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "error",
+          title: "خطاهای اعتبارسنجی",
+          html: `<div style="text-align: right; direction: rtl;">${errorList}</div>`,
+          showConfirmButton: false,
+          timer: 8000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       } else if (error.response?.status === 404) {
-        errorMessage("کاربر مورد نظر یافت نشد");
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "error",
+          title: "کاربر مورد نظر یافت نشد",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       } else if (error.response?.status === 500) {
-        errorMessage("خطای سرور");
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "error",
+          title: "خطای سرور",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       } else {
-        errorMessage(`خطا در ذخیره کاربر: ${error.message}`);
+        Swal.fire({
+          toast: true,
+          position: "top-start",
+          icon: "error",
+          title: `خطا در ذخیره کاربر: ${error.message}`,
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
       }
     }
   };
@@ -393,18 +467,6 @@ export default function UsersPage() {
         onChange={handleUserChange}
         onSubmit={handleSubmitUser}
         onClose={() => setIsUserModalOpen(false)}
-      />
-      <ToastContainer
-        position="top-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={true}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
       />
     </div>
   );
