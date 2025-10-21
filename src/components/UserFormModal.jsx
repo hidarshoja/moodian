@@ -151,13 +151,15 @@ export default function UserFormModal({
           </div>
           <div className="md:col-span-1">
             <label className="block mb-1 text-white text-sm">وضعیت</label>
-            <input
-              type="number"
+            <select
               name="status"
               value={form.status ?? 100}
               onChange={onChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
+            >
+              <option value={100}>فعال</option>
+              <option value={-100}>غیرفعال</option>
+            </select>
           </div>
           <div className="md:col-span-1">
             <label className="block mb-1 text-white text-sm">
