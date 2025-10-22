@@ -15,7 +15,7 @@ import { ImConnection } from "react-icons/im";
 import { SiAmazonsimpleemailservice } from "react-icons/si";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { PiUsersThreeLight } from "react-icons/pi";
-
+import { GiCheckedShield } from "react-icons/gi";
 
 export const navigation = [
   {
@@ -94,5 +94,10 @@ export const navigation = [
     name: "کاربران",
     icon: <PiUsersThreeLight className="w-5 h-5 ml-2" />,
     href: "/users",
+  },
+  {
+    name: "تنظیمات دسترسی",
+    icon: <GiCheckedShield className="w-5 h-5 ml-2" />,
+    href: "/roles",
   },
 ];

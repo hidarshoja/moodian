@@ -24,6 +24,7 @@ import OtpPage from "./pages/login/OtpPage";
 import DownloadExcel from "./pages/DownloadExcel";
 import CreateToken from "./pages/CreateToken";
 import UsersPage from "./pages/UsersPage";
+import RolesPage from "./pages/RolesPage";
 
 export const route = createBrowserRouter([
     {
@@ -110,6 +111,10 @@ export const route = createBrowserRouter([
                 path: '/users',
                 element: <UsersPage />
             },
+            {
+                path: '/roles',
+                element: <RolesPage />
+            }  
         ]
     },
     // ConnectionsPage 
