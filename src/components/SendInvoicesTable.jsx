@@ -1,5 +1,5 @@
 import Spinner from "../utils/Spinner";
-import { formatDateToYMD } from "../utils/change-date";
+import { convertToPersianDate } from "../utils/change-date";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
@@ -256,7 +256,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                 {r?.customer?.name} {r?.customer?.last_name}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {formatDateToYMD(r.created_at)}
+                {convertToPersianDate(r.created_at)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
                 {r.tadis  ? r.tadis : "-"}

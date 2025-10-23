@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import {convertToPersianDate} from "../utils/change-date";
 
 export default function RolesTable({ roles, onEdit, onDelete }) {
   return (
@@ -9,6 +10,7 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نام نقش</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">محافظ</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ ایجاد</th>
             <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
         </thead>
@@ -36,6 +38,9 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.guard_name}
+              </td>
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {convertToPersianDate(r?.created_at)}
               </td>
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">

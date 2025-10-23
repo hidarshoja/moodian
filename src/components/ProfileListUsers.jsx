@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { GoKey } from "react-icons/go";
+import { convertToPersianDate } from "../utils/change-date.js"
 
 export default function ProfileListUsers({
   users,
@@ -21,9 +22,9 @@ export default function ProfileListUsers({
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نام و نام خانوادگی
             </th>
-            {/* <th className="text-right px-4 py-3 whitespace-nowrap">
-              نوع کاربر
-            </th> */}
+            <th className="text-right px-4 py-3 whitespace-nowrap">
+             تاریخ ایجاد
+            </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
                شماره تماس
             </th>
@@ -55,9 +56,9 @@ export default function ProfileListUsers({
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.last_name}
               </td>
-              {/* <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.roles[0]?.name}
-              </td> */}
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              {convertToPersianDate(r?.created_at)}
+              </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.mobile}
               </td>

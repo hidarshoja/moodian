@@ -4,6 +4,7 @@ import { errorMessage, successMessage } from "../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
 import { GoKey } from "react-icons/go";
+import { convertToPersianDate } from "../utils/change-date";
 
 export default function ProfilePage() {
   const [profileData, setProfileData] = useState(null);
@@ -240,7 +241,7 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="text"
-                  value={profileData.created_at || ""}
+                  value={convertToPersianDate(profileData.created_at) || ""}
                   readOnly
                   className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none cursor-not-allowed"
                 />
@@ -253,7 +254,7 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="text"
-                  value={profileData.updated_at || ""}
+                  value={convertToPersianDate(profileData.updated_at) || ""}
                   readOnly
                   className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none cursor-not-allowed"
                 />
