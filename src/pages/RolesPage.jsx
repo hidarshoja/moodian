@@ -11,7 +11,8 @@ export default function RolesPage() {
   const [roles, setRoles] = useState([]);
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [permission , setPermission] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -33,6 +34,21 @@ export default function RolesPage() {
   useEffect(() => {
     fetchRoles();
   }, [fetchRoles]);
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const res = await axiosClientAdmin.get(`/permissions`);
+        console.log("res.data", res.data);
+        setPermission(res.data);
+      } catch (err) {
+        console.error("خطا در دریافت دسترسی‌ها:", err);
+      }
+    };
+  
+    fetchPermissions();
+  }, []);
+  
 
   const openCreate = () => {
     setEditingIndex(null);
@@ -90,7 +106,7 @@ export default function RolesPage() {
       errorMessage("حذف نقش ناموفق بود");
     }
   };
-
+console.log(`permission`, permission);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
@@ -125,6 +141,7 @@ export default function RolesPage() {
         onChange={onChange}
         onSubmit={onSubmit}
         onClose={() => setIsModalOpen(false)}
+        permission={permission}
       />
 
       <ToastContainer

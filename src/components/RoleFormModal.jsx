@@ -7,6 +7,7 @@ export default function RoleFormModal({
   onChange,
   onSubmit,
   onClose,
+  permission
 }) {
   if (!isOpen) return null;
 
