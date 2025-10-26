@@ -17,13 +17,8 @@ import { PiUsersThreeLight } from "react-icons/pi";
 import { GiCheckedShield } from "react-icons/gi";
 const userData = localStorage.getItem("USER");
 const parsedUser = JSON.parse(userData);
-const permissions = parsedUser?.roles?.[0]?.permissions;
-console.log(permissions);
 const permissionNames = parsedUser?.roles?.[0]?.permissions?.map((p) => p.name);
-console.log(permissionNames);
-const hasProductsView = permissionNames?.includes("product.view");
-const hasCustomerView = permissionNames?.includes("customer.view");
-const hasInvoiceView = permissionNames?.includes("invoice.view");
+
 
 // Define all menu items with their required permissions
 const allNavigationItems = [
