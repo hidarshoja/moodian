@@ -12,11 +12,11 @@ export default function RolesPage() {
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [permission , setPermission] = useState([]);
+  const [permission, setPermission] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [form, setForm] = useState({ name: "" });
+  const [form, setForm] = useState({ name: "", permissions: [] });
 
   const fetchRoles = useCallback(async () => {
     try {
@@ -45,20 +45,22 @@ export default function RolesPage() {
         console.error("خطا در دریافت دسترسی‌ها:", err);
       }
     };
-  
+
     fetchPermissions();
   }, []);
-  
 
   const openCreate = () => {
     setEditingIndex(null);
-    setForm({ name: "" });
+    setForm({ name: "", permissions: [] });
     setIsModalOpen(true);
   };
 
   const openEdit = (index) => {
     setEditingIndex(index);
-    setForm({ name: roles[index]?.name || "" });
+    setForm({
+      name: roles[index]?.name || "",
+      permissions: roles[index]?.permissions || [],
+    });
     setIsModalOpen(true);
   };
 
@@ -72,10 +74,16 @@ export default function RolesPage() {
     try {
       if (editingIndex !== null) {
         const id = roles[editingIndex].id;
-        await axiosClientAdmin.put(`/roles/${id}`, { name: form.name });
+        await axiosClientAdmin.put(`/roles/${id}`, {
+          name: form.name,
+          permissions: form.permissions,
+        });
         successMessage("نقش با موفقیت ویرایش شد");
       } else {
-        await axiosClientAdmin.post(`/roles`, { name: form.name });
+        await axiosClientAdmin.post(`/roles`, {
+          name: form.name,
+          permissions: form.permissions,
+        });
         successMessage("نقش با موفقیت ایجاد شد");
       }
       setIsModalOpen(false);
@@ -106,7 +114,7 @@ export default function RolesPage() {
       errorMessage("حذف نقش ناموفق بود");
     }
   };
-console.log(`permission`, permission);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>

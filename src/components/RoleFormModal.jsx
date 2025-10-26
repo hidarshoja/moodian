@@ -7,9 +7,23 @@ export default function RoleFormModal({
   onChange,
   onSubmit,
   onClose,
-  permission
+  permission,
 }) {
   if (!isOpen) return null;
+
+  const handlePermissionChange = (permissionId) => {
+    const currentPermissions = form.permissions || [];
+    const updatedPermissions = currentPermissions.includes(permissionId)
+      ? currentPermissions.filter((id) => id !== permissionId)
+      : [...currentPermissions, permissionId];
+
+    onChange({
+      target: {
+        name: "permissions",
+        value: updatedPermissions,
+      },
+    });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -36,6 +50,35 @@ export default function RoleFormModal({
             />
           </div>
 
+          <div>
+            <label className="block text-sm text-white/70 mb-3">
+              دسترسی‌ها
+            </label>
+            <div className="max-h-60 overflow-y-auto grid grid-cols-2 gap-2">
+              {permission &&
+                permission.map((perm) => (
+                  <div
+                    key={perm.id}
+                    className="flex items-center space-x-2 space-x-reverse"
+                  >
+                    <input
+                      type="checkbox"
+                      id={`permission-${perm.id}`}
+                      checked={form.permissions?.includes(perm.id) || false}
+                      onChange={() => handlePermissionChange(perm.id)}
+                      className="w-4 h-4 text-indigo-600 bg-white/5 border-white/10 rounded focus:ring-indigo-500 focus:ring-2"
+                    />
+                    <label
+                      htmlFor={`permission-${perm.id}`}
+                      className="text-xs text-white/80 cursor-pointer leading-tight"
+                    >
+                      {perm.display_name}
+                    </label>
+                  </div>
+                ))}
+            </div>
+          </div>
+
           <div className="flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
@@ -60,8 +103,19 @@ export default function RoleFormModal({
 RoleFormModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
-  form: PropTypes.shape({ name: PropTypes.string }).isRequired,
+  form: PropTypes.shape({
+    name: PropTypes.string,
+    permissions: PropTypes.arrayOf(PropTypes.number),
+  }).isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  permission: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      display_name: PropTypes.string.isRequired,
+      guard_name: PropTypes.string.isRequired,
+    })
+  ),
 };
