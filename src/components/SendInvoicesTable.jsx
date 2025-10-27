@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import EditInvoiceModalNew from "./EditInvoiceModalNew";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { TiDeleteOutline } from "react-icons/ti";
 
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -124,18 +125,28 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
 
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
                 <div className="flex items-center justify-center gap-2">
-                  <button
-                    className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                    onClick={() => handleDelete(r)}
-                  >
-                    <FiTrash2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                    onClick={() => handleEdit(r)}
-                  >
-                    <FiEdit2 className="w-4 h-4" />
-                  </button>
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-red-500/20 text-red-500"
+                      onClick={() => handleDelete(r)}
+                    >
+                      <TiDeleteOutline className="w-5 h-5" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      حذف
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <FiEdit2 className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      ویرایش
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
