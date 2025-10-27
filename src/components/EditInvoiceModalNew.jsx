@@ -46,14 +46,6 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
   // Initialize form data when invoiceData changes
   useEffect(() => {
     if (invoiceData && isOpen) {
-      // Extract item values from first item if exists
-      const firstItem =
-        invoiceData.items &&
-        Array.isArray(invoiceData.items) &&
-        invoiceData.items.length > 0
-          ? invoiceData.items[0]
-          : {};
-
       setFormData({
         id: invoiceData.id || "",
         inty: invoiceData.inty || "1",
@@ -123,24 +115,6 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     }
   }, [invoiceData, isOpen]);
 
-  const formatDateTime = (value) => {
-    if (!value) return null;
-    try {
-      const d = value instanceof Date ? value : new Date(value);
-      if (Number.isNaN(d.getTime())) return null;
-      const pad = (n) => String(n).padStart(2, "0");
-      const yyyy = d.getFullYear();
-      const MM = pad(d.getMonth() + 1);
-      const dd = pad(d.getDate());
-      const HH = pad(d.getHours());
-      const mm = pad(d.getMinutes());
-      const ss = pad(d.getSeconds());
-      return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
-    } catch {
-      return null;
-    }
-  };
-
   const toNumberOrNull = (val) => {
     if (val === undefined || val === null || val === "") return null;
     const n = Number(val);
@@ -187,13 +161,13 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
       in: null,
       an: null,
       items: (lineItems || []).map((it) => ({
-        product_id: toNumberOrNull(it.serviceId),
+        product_id: toNumberOrNull(it.product_id),
         am: toNumberOrNull(it.am),
         nw: null,
         fee: toNumberOrNull(it.fee),
-        cfee: null,
+        cfee: toNumberOrNull(it.cfee),
         cut: null,
-        exr: null,
+        exr: toNumberOrNull(it.exr),
         ssrv: null,
         sscv: null,
         dis: toNumberOrNull(it.dis) ?? 0,
@@ -232,10 +206,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
   useEffect(() => {
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
-        acc.tprdis += item.am * item.fee || 0;
-        acc.tdis += item.prdis || 0;
+        const itemTotal = (item.am || 0) * (item.fee || 0);
+        acc.tprdis += itemTotal;
         acc.tdis += item.dis || 0;
-        acc.tadis += item.adis || 0;
+        acc.tadis += itemTotal - (item.dis || 0);
         return acc;
       },
       {
@@ -254,6 +228,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lineItems]);
 
   if (!isOpen) return null;
@@ -270,13 +245,13 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
           item.id === editItemId
             ? {
                 ...item,
-                serviceId: itemData.ProductId,
-                serviceName: itemData.ProductId,
+                product_id: itemData.ProductId,
                 am: itemData.am,
                 fee: itemData.fee,
-                prdis: itemData.prdis,
                 dis: itemData.dis,
                 adis: itemData.adis,
+                exr: itemData.exr || item.exr || 0,
+                cfee: itemData.cfee || item.cfee || 0,
               }
             : item
         )
@@ -285,13 +260,11 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     } else {
       const newItem = {
         id: Date.now(),
-        serviceId: itemData.ProductId,
-        serviceName: itemData.ProductId,
+        product_id: itemData.ProductId,
         am: itemData.am,
         fee: itemData.fee,
-        exchangeRate: 0,
-        currencyAmount: 0,
-        prdis: itemData.prdis,
+        exr: itemData.exr || 0,
+        cfee: itemData.cfee || 0,
         dis: itemData.dis,
         adis: itemData.adis,
       };
@@ -314,20 +287,20 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     // Calculate totals based on line items
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
-        acc.tprdis += item.am * item.fee || 0;
-        acc.tdis += item.prdis || 0;
+        const itemTotal = (item.am || 0) * (item.fee || 0);
+        acc.tprdis += itemTotal;
         acc.tdis += item.dis || 0;
-        acc.tadis += item.adis || 0;
+        acc.tadis += itemTotal - (item.dis || 0);
         return acc;
       },
       {
         tprdis: 0,
         tdis: 0,
         tadis: 0,
-        cap: 0,
-        insp: 0,
-        tvam: 0,
-        todam: 0,
+        cap: totals.cap || 0,
+        insp: totals.insp || 0,
+        tvam: totals.tvam || 0,
+        todam: totals.todam || 0,
         tbill: 0,
       }
     );
@@ -896,16 +869,16 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {}
-                      {new Intl.NumberFormat('fa-IR').format(item?.fee)}
+                      {new Intl.NumberFormat("fa-IR").format(item?.fee)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item?.exr}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                    {item?.cfee}
+                      {item?.cfee}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                    {item?.dis}
+                      {item?.dis}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item?.adis}
@@ -1076,10 +1049,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
             editItemId
               ? {
                   ProductId: lineItems.find((x) => x.id === editItemId)
-                    ?.serviceName,
+                    ?.product_id,
                   am: lineItems.find((x) => x.id === editItemId)?.am,
                   fee: lineItems.find((x) => x.id === editItemId)?.fee,
-                  prdis: lineItems.find((x) => x.id === editItemId)?.prdis,
+                  prdis: lineItems.find((x) => x.id === editItemId)?.dis || 0,
                   dis: lineItems.find((x) => x.id === editItemId)?.dis,
                   adis: lineItems.find((x) => x.id === editItemId)?.adis,
                 }
