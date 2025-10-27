@@ -1,5 +1,6 @@
 import axios from "axios";
 import { navigate } from "./utils/navigation";
+import Swal from "sweetalert2";
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/api/v1`,
@@ -23,8 +24,15 @@ axiosClient.interceptors.response.use(
     } else if (response.status === 404) {
       //Show not found
     } else if (response.status === 403) {
-      localStorage.removeItem("ACCESS_TOKEN");
-      navigate("/auth/login");
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "عدم دسترسی",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+      });
     }
 
     throw error;

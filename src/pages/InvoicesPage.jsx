@@ -90,7 +90,6 @@ export default function InvoicesPage() {
           timer: 4000,
           timerProgressBar: true,
         });
-        console.log(`error`, error);
       });
 };
 
