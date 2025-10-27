@@ -70,6 +70,40 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     }
   };
 
+  const handleSendToMoadian = async (row) => {
+    try {
+      const res = await axiosClient.post('/invoices/send-to-moadian', {
+        ids: [row.id]
+      });
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "فاکتور با موفقیت به مودیان ارسال شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در ارسال فاکتور به مودیان",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
+  };
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -159,7 +193,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-green-500/20 text-green-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleSendToMoadian(r)}
                     >
                       <BsSendArrowUp className="w-4 h-4" />
                     </button>
