@@ -72,7 +72,7 @@ const hasSummeryView = permissionNames?.includes("report.invoice.summery");
         });
     }
   }, []);
-
+console.log(`activityUser`, activityUser);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 relative">
       <div>
@@ -156,7 +156,7 @@ const hasSummeryView = permissionNames?.includes("report.invoice.summery");
                 </div>
               </div>
               <div className="mt-6 px-6 pb-6">
-                <div className="text-white font-semibold mb-3">فعالیت‌ها</div>
+                <div className="text-white font-semibold mb-3">آخرین فاکتورهای ارسالی </div>
                 <ul className="space-y-2">
                   {activityUser?.length > 0 &&
                     [...activityUser].reverse().map((act) => (
