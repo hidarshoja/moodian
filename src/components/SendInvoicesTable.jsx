@@ -138,6 +138,50 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     }
   };
 
+  const handleCheckStatus = async (row) => {
+    try {
+      const referenceNumber = row?.reference_number;
+      if (!referenceNumber) {
+        Swal.fire({
+          icon: "error",
+          title: "رفرنس نامبر وجود ندارد.",
+          toast: true,
+          position: "top-start",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          customClass: { popup: "swal2-toast" }
+        });
+        return;
+      }
+      await axiosClient.post('/invoices/check-from-moadian', {
+        reference_numbers: [referenceNumber]
+      });
+      Swal.fire({
+        icon: "success",
+        title: "درخواست چک وضعیت ارسال شد.",
+        toast: true,
+        position: "top-start",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" }
+      });
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "خطا در ارسال چک وضعیت",
+        toast: true,
+        position: "top-start",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" }
+      });
+    }
+  };
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -250,7 +294,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleCheckStatus(r)}
                     >
                       <GrStatusGood className="w-4 h-4" />
                     </button>
