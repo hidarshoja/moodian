@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
+export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing }) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -764,7 +764,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
       >
         {/* Header */}
         <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between">
-          <h2 className="text-lg font-bold">ویرایش فاکتور فروش</h2>
+        {isEditing === "edit" ? "ویرایش فاکتور" : "اصلاح فاکتور"}
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
             <SlPrinter onClick={handlePrint} className="cursor-pointer" />
@@ -1234,4 +1234,5 @@ EditInvoiceModalNew.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   invoiceData: PropTypes.object,
+  isEditing :PropTypes.bool.isRequired,
 };

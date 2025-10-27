@@ -17,6 +17,7 @@ import { BsSendArrowUp } from "react-icons/bs";
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [isInvoice, setIsInvoice] = useState(null);
 
   const handleDelete = async (row) => {
     try {
@@ -56,9 +57,10 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     }
   };
 
-  const handleEdit = (row) => {
+  const handleEdit = (row , name) => {
     setSelectedInvoice(row);
     setIsEditModalOpen(true);
+    setIsInvoice(name);
   };
 
   const closeEditModal = () => {
@@ -249,7 +251,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                 <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleEdit(r , "edit")}
                     >
                       <FiEdit2 className="w-4 h-4" />
                     </button>
@@ -317,7 +319,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleEdit(r , "correction")}
                     >
                       <FiEdit className="w-4 h-4" />
                     </button>
@@ -359,6 +361,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
+        isEditing = {isInvoice}
       />
     </div>
   );
