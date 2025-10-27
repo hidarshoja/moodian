@@ -40,6 +40,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     tbill: 0,
   });
   const [customers, setCustomers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
 
@@ -121,14 +122,38 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     return Number.isNaN(n) ? null : n;
   };
 
+  const formatDateTime = (date) => {
+    if (!date) return null;
+    try {
+      const d = date instanceof Date ? date : new Date(date);
+      if (Number.isNaN(d.getTime())) return null;
+
+      // Format as YYYY-MM-DD HH:MM:SS
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const hours = String(d.getHours()).padStart(2, "0");
+      const minutes = String(d.getMinutes()).padStart(2, "0");
+      const seconds = String(d.getSeconds()).padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch {
+      return null;
+    }
+  };
+
   const buildPayload = () => {
     const payload = {
       id: formData.id,
       customer_id: toNumberOrNull(formData.crn) ?? null,
       inty: toNumberOrNull(formData.inty),
       irtaxid: null,
-      indatim: convertJalaliDatetimeToGregorian(formData.indatim),
-      indati2m: convertJalaliDatetimeToGregorian(formData.indati2m),
+      indatim: convertJalaliDatetimeToGregorian(
+        formatDateTime(formData.indatim)
+      ),
+      indati2m: convertJalaliDatetimeToGregorian(
+        formatDateTime(formData.indati2m)
+      ),
       inp: toNumberOrNull(formData.inp),
       ins: 1,
       sbc: formData.sbc?.trim() || null,
@@ -174,10 +199,20 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
         consfee: null,
         spro: null,
         bros: null,
-        bsrn: null,
+        bsrn: it.bsrn || null,
         cui: null,
         cpr: null,
         sovat: null,
+        // Additional fields from AddLineItemModal
+        vra: toNumberOrNull(it.vra),
+        vam: toNumberOrNull(it.vam),
+        odam: toNumberOrNull(it.odam),
+        olam: toNumberOrNull(it.olam),
+        cop: toNumberOrNull(it.cop),
+        vop: toNumberOrNull(it.vop),
+        tsstam: toNumberOrNull(it.tsstam),
+        comment: it.comment || null,
+        Show: it.Show || false,
       })),
     };
     return payload;
@@ -192,6 +227,16 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      });
+
+    axiosClient
+      .get(`/products`)
+      .then((response) => {
+        console.log(`products response:`, response.data.data);
+        setProducts(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
       });
   }, []);
 
@@ -239,6 +284,11 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
   };
 
   const handleSaveLineItem = (itemData) => {
+    // Calculate adis if not provided
+    const calculatedAdis =
+      itemData.adis ||
+      (itemData.am || 0) * (itemData.fee || 0) - (itemData.dis || 0);
+
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -249,9 +299,29 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
                 am: itemData.am,
                 fee: itemData.fee,
                 dis: itemData.dis,
-                adis: itemData.adis,
+                adis: calculatedAdis,
                 exr: itemData.exr || item.exr || 0,
                 cfee: itemData.cfee || item.cfee || 0,
+                bsrn: itemData.bsrn || "",
+                comment: itemData.comment || "",
+                vra: itemData.vra || 0,
+                vam: itemData.vam || 0,
+                odam: itemData.odam || 0,
+                olam: itemData.olam || 0,
+                cop: itemData.cop || 0,
+                vop: itemData.vop || 0,
+                tsstam: itemData.tsstam || 0,
+                Show: itemData.Show || false,
+                // Update product info if available
+                product: itemData.ProductId
+                  ? {
+                      sstid: itemData.ProductId,
+                      title:
+                        products.find((p) => p.id == itemData.ProductId)
+                          ?.title || "",
+                      ...item.product,
+                    }
+                  : item.product,
               }
             : item
         )
@@ -266,7 +336,24 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
         exr: itemData.exr || 0,
         cfee: itemData.cfee || 0,
         dis: itemData.dis,
-        adis: itemData.adis,
+        adis: calculatedAdis,
+        bsrn: itemData.bsrn || "",
+        comment: itemData.comment || "",
+        vra: itemData.vra || 0,
+        vam: itemData.vam || 0,
+        odam: itemData.odam || 0,
+        olam: itemData.olam || 0,
+        cop: itemData.cop || 0,
+        vop: itemData.vop || 0,
+        tsstam: itemData.tsstam || 0,
+        Show: itemData.Show || false,
+        product: itemData.ProductId
+          ? {
+              sstid: itemData.ProductId,
+              title:
+                products.find((p) => p.id == itemData.ProductId)?.title || "",
+            }
+          : null,
       };
       setLineItems((prev) => [...prev, newItem]);
     }
@@ -335,6 +422,24 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
         },
       });
       console.log(`res`, res);
+
+      // Refresh the data after successful save
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+          .then((response) => {
+            console.log("Refreshed line items:", response.data.data);
+            setLineItems(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error refreshing line items:", error);
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
+      }
+
       onClose();
     } catch (error) {
       console.error("خطا در ویرایش فاکتور:", error);
@@ -369,12 +474,36 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
 
   const handleSaveAndSend = async (e) => {
     e?.preventDefault?.();
-    const payload = { ...buildPayload(), send_to_moadian: true };
-    console.log("ارسال به مودیان:", payload);
+
     try {
-      const res = await axiosClient.put(`/invoices/${formData.id}`, payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      // First, save the invoice
+      const payload = buildPayload();
+      console.log("ذخیره فاکتور:", payload);
+
+      const saveRes = await axiosClient.put(
+        `/invoices/${formData.id}`,
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("فاکتور ذخیره شد:", saveRes);
+
+      // Then, send to moadian
+      const sendData = {
+        ids: [formData.id.toString()],
+      };
+      console.log("ارسال به مودیان:", sendData);
+
+      const sendRes = await axiosClient.post(
+        `/invoices/send-to-moadian`,
+        sendData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       Swal.fire({
         toast: true,
         position: "top-start",
@@ -385,7 +514,25 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
       });
-      console.log(`res`, res);
+      console.log(`ارسال موفق:`, sendRes);
+
+      // Refresh the data after successful save and send
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+          .then((response) => {
+            console.log("Refreshed line items after send:", response.data.data);
+            setLineItems(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error refreshing line items:", error);
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
+      }
+
       onClose();
     } catch (error) {
       console.error("خطا در ویرایش و ارسال:", error);
@@ -859,29 +1006,28 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
                     }`}
                   >
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.product?.sstid}
+                      {item?.product?.sstid || item?.product_id}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.product?.title}
+                      {item?.product?.title || ""}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.am}
+                      {item.am || 0}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {}
-                      {new Intl.NumberFormat("fa-IR").format(item?.fee)}
+                      {new Intl.NumberFormat("fa-IR").format(item?.fee || 0)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.exr}
+                      {item?.exr || 0}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.cfee}
+                      {item?.cfee || 0}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.dis}
+                      {new Intl.NumberFormat("fa-IR").format(item?.dis || 0)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item?.adis}
+                      {new Intl.NumberFormat("fa-IR").format(item?.adis || 0)}
                     </span>
 
                     <div className="flex items-center justify-center gap-3">
@@ -1047,15 +1193,34 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
           onSave={handleSaveLineItem}
           initialData={
             editItemId
-              ? {
-                  ProductId: lineItems.find((x) => x.id === editItemId)
-                    ?.product_id,
-                  am: lineItems.find((x) => x.id === editItemId)?.am,
-                  fee: lineItems.find((x) => x.id === editItemId)?.fee,
-                  prdis: lineItems.find((x) => x.id === editItemId)?.dis || 0,
-                  dis: lineItems.find((x) => x.id === editItemId)?.dis,
-                  adis: lineItems.find((x) => x.id === editItemId)?.adis,
-                }
+              ? (() => {
+                  const item = lineItems.find((x) => x.id === editItemId);
+                  if (!item) return null;
+
+                  const prdis = (item.am || 0) * (item.fee || 0);
+                  const adis = prdis - (item.dis || 0);
+
+                  return {
+                    ProductId: item.product_id,
+                    am: item.am,
+                    fee: item.fee,
+                    prdis: prdis,
+                    dis: item.dis,
+                    adis: adis,
+                    bsrn: item.bsrn || "",
+                    comment: item.comment || "",
+                    vra: item.vra || 0,
+                    vam: item.vam || 0,
+                    odam: item.odam || 0,
+                    olam: item.olam || 0,
+                    cop: item.cop || 0,
+                    vop: item.vop || 0,
+                    tsstam: item.tsstam || 0,
+                    Show: item.Show || false,
+                    exr: item.exr || 0,
+                    cfee: item.cfee || 0,
+                  };
+                })()
               : null
           }
           title={editItemId ? "ویرایش" : "جدید"}
