@@ -104,6 +104,40 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     }
   };
 
+  const handleCancelInvoice = async (row) => {
+    try {
+      await axiosClient.post(`/invoices/${row.id}/cancel`, {
+        send_to_moadian: false
+      });
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "ابطال فاکتور با موفقیت انجام شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast"
+        }
+      });
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در ابطال فاکتور",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast"
+        }
+      });
+    }
+  };
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -204,7 +238,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleCancelInvoice(r)}
                     >
                       <FiTrash2 className="w-4 h-4" />
                     </button>
