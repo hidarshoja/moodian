@@ -7,6 +7,12 @@ import EditInvoiceModalNew from "./EditInvoiceModalNew";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { TiDeleteOutline } from "react-icons/ti";
+import { FaRegPlusSquare } from "react-icons/fa";
+import { MdOutlineSlideshow } from "react-icons/md";
+import { FaRegListAlt } from "react-icons/fa";
+import { GrStatusGood } from "react-icons/gr";
+import { FiEdit } from "react-icons/fi";
+import { BsSendArrowUp } from "react-icons/bs";
 
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -123,8 +129,19 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                 {r.inty_label}
               </td>
 
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
+              <td className="px-5 py-3 text-white/90 text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-center gap-2">
+                <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <FiEdit2 className="w-4 h-4" />
+                    </button>
+                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      ویرایش
+                    </div>
+                  </div>
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-red-500/20 text-red-500"
@@ -138,15 +155,84 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   </div>
                   <div className="relative group">
                     <button
+                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <BsSendArrowUp className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      ارسال
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
                       onClick={() => handleEdit(r)}
                     >
-                      <FiEdit2 className="w-4 h-4" />
+                      <FiTrash2 className="w-4 h-4" />
                     </button>
                     <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      ویرایش
+                      ابطال
                     </div>
                   </div>
+                 
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <GrStatusGood className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      چک وضعیت
+                    </div>
+                  </div>
+                 
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <FaRegListAlt className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      لیست خطاها
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-red-500/20 text-red-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <FiEdit className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      اصلاح
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <MdOutlineSlideshow className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      نمایش
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <button
+                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                      onClick={() => handleEdit(r)}
+                    >
+                      <FaRegPlusSquare className="w-4 h-4" />
+                    </button>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      تکثیر
+                    </div>
+                  </div>
+                  
                 </div>
               </td>
             </tr>
