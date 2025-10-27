@@ -36,6 +36,9 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
           popup: "swal2-toast",
         },
       });
+      if (onRefresh) {
+        onRefresh();
+      }
     } catch (error) {
       console.log(`error`, error);
       Swal.fire({
