@@ -4,6 +4,7 @@ import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import EditInvoiceModalNew from "./EditInvoiceModalNew";
+import EditInvoiceModalShow from "./EditInvoiceModalShow";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -16,6 +17,7 @@ import { BsSendArrowUp } from "react-icons/bs";
 
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditModalOpen2, setIsEditModalOpen2] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isInvoice, setIsInvoice] = useState(null);
 
@@ -63,8 +65,15 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     setIsInvoice(name);
   };
 
+  const handleShow = (row , name) => {
+    setSelectedInvoice(row);
+    setIsEditModalOpen2(true);
+    setIsInvoice(name);
+  };
+
   const closeEditModal = () => {
     setIsEditModalOpen(false);
+    setIsEditModalOpen2(false);
     setSelectedInvoice(null);
     // Refresh the data after closing modal
     if (onRefresh) {
@@ -330,7 +339,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-green-500/20 text-green-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleShow(r)}
                     >
                       <MdOutlineSlideshow className="w-4 h-4" />
                     </button>
@@ -359,6 +368,14 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
 
       <EditInvoiceModalNew
         isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        invoiceData={selectedInvoice}
+        isEditing = {isInvoice}
+      />
+
+      {/* EditInvoiceModalShow */}
+      <EditInvoiceModalShow
+        isOpen={isEditModalOpen2}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
         isEditing = {isInvoice}
