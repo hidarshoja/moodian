@@ -41,6 +41,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
   });
   const [customers, setCustomers] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
+  const [loadingItems, setLoadingItems] = useState(false);
 
   // Initialize form data when invoiceData changes
   useEffect(() => {
@@ -71,21 +72,53 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
         sbc: invoiceData.sbc || "",
       });
 
-      // Set line items
-      if (invoiceData.items && Array.isArray(invoiceData.items)) {
-        const formattedItems = invoiceData.items.map((item, index) => ({
-          id: Date.now() + index,
-          serviceId: item.product_id || "",
-          serviceName: item.product_id || "",
-          am: item.am || 0,
-          fee: item.fee || 0,
-          exchangeRate: item.exr || 0,
-          currencyAmount: item.cfee || 0,
-          prdis: item.dis || 0,
-          dis: item.dis || 0,
-          adis: item.am * item.fee - (item.dis || 0),
-        }));
-        setLineItems(formattedItems);
+      // Fetch line items from API
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+          .then((response) => {
+            console.log("Line items response:", response.data.data);
+            setLineItems(response.data.data);
+            // if (response.data.data && Array.isArray(response.data.data)) {
+            //   const formattedItems = response.data.data.map((item, index) => ({
+            //     id: Date.now() + index,
+            //     serviceId: item.product_id || "",
+            //     serviceName: item.product_id || "",
+            //     am: item.am || 0,
+            //     fee: item.fee || 0,
+            //     exchangeRate: item.exr || 0,
+            //     currencyAmount: item.cfee || 0,
+            //     prdis: item.dis || 0,
+            //     dis: item.dis || 0,
+            //     adis: item.am * item.fee - (item.dis || 0),
+            //   }));
+            //   console.log(`formattedItems`, formattedItems);
+            //   setLineItems(response.data.data);
+            // }
+          })
+          .catch((error) => {
+            console.error("Error fetching line items:", error);
+            // Fallback to existing items if API fails
+            if (invoiceData.items && Array.isArray(invoiceData.items)) {
+              const formattedItems = invoiceData.items.map((item, index) => ({
+                id: Date.now() + index,
+                serviceId: item.product_id || "",
+                serviceName: item.product_id || "",
+                am: item.am || 0,
+                fee: item.fee || 0,
+                exchangeRate: item.exr || 0,
+                currencyAmount: item.cfee || 0,
+                prdis: item.dis || 0,
+                dis: item.dis || 0,
+                adis: item.am * item.fee - (item.dis || 0),
+              }));
+              setLineItems(formattedItems);
+            }
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
       }
     }
   }, [invoiceData, isOpen]);
@@ -602,7 +635,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
     printWindow.print();
     printWindow.close();
   };
-
+  console.log(`lineItems`, lineItems);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -832,7 +865,14 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
 
           {/* Table Content */}
           <div className=" rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
-            {lineItems.length === 0 ? (
+            {loadingItems ? (
+              <div className="flex items-center justify-center h-32 text-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                  در حال بارگذاری اقلام...
+                </div>
+              </div>
+            ) : lineItems.length === 0 ? (
               <div className="flex items-center justify-center h-32 text-gray-100">
                 رکوردی وجود ندارد
               </div>
@@ -846,28 +886,29 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData }) {
                     }`}
                   >
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.serviceId}
+                      {item?.product?.sstid}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.serviceName}
+                      {item?.product?.title}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item.am}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.fee}
+                      {}
+                      {new Intl.NumberFormat('fa-IR').format(item?.fee)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.exchangeRate}
+                      {item?.exr}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.currencyAmount}
+                    {item?.cfee}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.prdis}
+                    {item?.dis}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.adis}
+                      {item?.adis}
                     </span>
 
                     <div className="flex items-center justify-center gap-3">
