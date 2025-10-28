@@ -14,12 +14,15 @@ import { FaRegListAlt } from "react-icons/fa";
 import { GrStatusGood } from "react-icons/gr";
 import { FiEdit } from "react-icons/fi";
 import { BsSendArrowUp } from "react-icons/bs";
+import ErrorListModal from "./ErrorListModal";
 
 export default function SendInvoicesTable({ records, loading, onRefresh }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditModalOpen2, setIsEditModalOpen2] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isInvoice, setIsInvoice] = useState(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+const [errorList, setErrorList] = useState([]);
 
   const handleDelete = async (row) => {
     try {
@@ -193,6 +196,12 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
     }
   };
 
+  const handleShowErrors = (row) => {
+    const errors = row?.error?.error || [];
+    setErrorList(errors);
+    setIsErrorModalOpen(true);
+  };
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -217,7 +226,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">مبلغ کل</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">عملیات</th>
+            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -317,7 +326,7 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-green-500/20 text-green-500"
-                      onClick={() => handleEdit(r)}
+                      onClick={() => handleShowErrors(r)}
                     >
                       <FaRegListAlt className="w-4 h-4" />
                     </button>
@@ -380,6 +389,13 @@ export default function SendInvoicesTable({ records, loading, onRefresh }) {
         invoiceData={selectedInvoice}
         isEditing = {isInvoice}
       />
+
+<ErrorListModal
+  isOpen={isErrorModalOpen}
+  onClose={() => setIsErrorModalOpen(false)}
+  errors={errorList}
+/>
+
     </div>
   );
 }
