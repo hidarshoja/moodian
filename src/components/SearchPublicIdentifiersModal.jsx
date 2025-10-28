@@ -16,17 +16,28 @@ export default function SearchPublicIdentifiersModal({
   const [searchTermClick, setSearchTermClick] = useState(false);
   const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
+  const [nameSearch , setNameSearch] = useState(null);
 
   useEffect(() => {
     let query = `/sstids?page=${pageCount} `;
-
-    if (searchTerm && !activeTab) {
-      query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
-    } else if (!searchTerm && activeTab) {
-      query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
-    } else if (searchTerm && activeTab) {
-      query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
-    }
+if(nameSearch === "id"){
+  if (searchTerm && !activeTab) {
+    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
+  } else if (!searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
+  } else if (searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
+  }
+}else{
+  if (searchTerm && !activeTab) {
+    query = `/sstids?page=${pageCount}&&f[description]=${searchTerm}`;
+  } else if (!searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
+  } else if (searchTerm && activeTab) {
+    query = `/sstids?page=${pageCount}&&f[description]=${searchTerm}&&f[type]=${activeTab}`;
+  }
+}
+  
 
     axiosClient
       .get(query)
@@ -64,7 +75,7 @@ export default function SearchPublicIdentifiersModal({
     setActiveTab("");
     setSearchTerm("");
   };
-console.log(`dataTable`, dataTable);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur animate-fadeInStagger"
@@ -89,9 +100,10 @@ console.log(`dataTable`, dataTable);
 
         {/* Search and Filter Section */}
         <div className="px-6 py-4 border-b border-gray-200">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center flex-col gap-4 mb-4">
             {/* Search Input */}
-            <div className="flex-1">
+          <div className="w-full flex gap-2">
+          <div className="w-2/4">
               <input
                 type="text"
                 placeholder="جستجو ..."
@@ -106,15 +118,30 @@ console.log(`dataTable`, dataTable);
             <button
               onClick={() => {
                 setSearchTermClick(true);
+                setNameSearch("id");
               }}
-              className="bg-[#1A2035] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#2a3155] transition-colors"
+              className="bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors"
             >
-              <CiSearch className="w-5 h-5" />
-              جستجو
+              <CiSearch className="w-5 h-5 text-[10px]" />
+             <span>
+             جسجو براساس شناسه
+             </span>
             </button>
-
+            <button
+              onClick={() => {
+                setSearchTermClick(true);
+                setNameSearch("name");
+              }}
+              className="bg-[#1A2035] w-1/4 text-white px-1  py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors"
+            >
+              <CiSearch className="w-5 h-5 text-[10px]" />
+               <span>
+               جسجو براساس نام
+               </span>
+            </button>
+          </div>
             {/* Tab Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
