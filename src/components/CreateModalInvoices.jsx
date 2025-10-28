@@ -12,7 +12,7 @@ import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 
-export default function CreateModalInvoices({ isOpen2, onClose2 }) {
+export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setRefresh }) {
   const [invoiceData, setInvoiceData] = useState({
     inty: "1",
     inp: "",
@@ -281,7 +281,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
           popup: "swal2-toast",
         },
       });
-      console.log(`res`, res);
+      setRefresh(!refresh);
+      onClose2();
     } catch (error) {
       console.error("خطا در اضافه کردن محصول:", error);
       let errorMessage = "خطا در اضافه کردن محصول";
@@ -331,7 +332,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
       });
-      console.log(`res`, res);
+      setRefresh(!refresh);
+      onClose2();
     } catch (error) {
       console.error("خطا در ذخیره و ارسال:", error);
       let errorMessage = "خطا در ذخیره و ارسال";
@@ -1007,4 +1009,6 @@ export default function CreateModalInvoices({ isOpen2, onClose2 }) {
 CreateModalInvoices.propTypes = {
   isOpen2: PropTypes.bool.isRequired,
   onClose2: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
+  setRefresh: PropTypes.func.isRequired,
 };

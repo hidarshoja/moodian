@@ -167,6 +167,8 @@ export default function InvoicesPage() {
       <CreateModalInvoices
         isOpen2={excelModalOpen2}
         onClose2={() => setExcelModalOpen2(false)}
+        refresh = {refresh}
+        setRefresh={setRefresh}
       />
       <GroupInvoiceStatusCheckModal
         isOpen={groupCheckModalOpen}
