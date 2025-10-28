@@ -31,6 +31,7 @@ export default function AddLineItemModal({
     name: null,
     sstid: null,
   });
+  const [feeInputValue, setFeeInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ واحد
   const [dataTable, setDataTable] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -103,6 +104,28 @@ export default function AddLineItemModal({
     }
   }, [isOpen, initialData, dataTable]);
 
+  // مقدار اولیه نمایش مبلغ واحد را طبق مقدار اولیه fee ست کن
+  useEffect(() => {
+    if (isOpen) {
+      setFeeInputValue(
+        formData.fee !== null &&
+          formData.fee !== undefined &&
+          formData.fee !== ""
+          ? numberWithCommas(formData.fee)
+          : ""
+      );
+    }
+  }, [isOpen, formData.fee]);
+
+  // تابع برای فرمت سه‌رقمی
+  function numberWithCommas(value) {
+    if (value === null || value === undefined || value === "") return "";
+    // فقط اعداد و اعشار
+    const parts = value.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  }
+
   useEffect(() => {
     axiosClient
       .get(`/products`)
@@ -117,7 +140,7 @@ export default function AddLineItemModal({
 
   if (!isOpen) return null;
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field, value, rawInput) => {
     setFormData((prev) => {
       const newData = {
         ...prev,
@@ -145,6 +168,12 @@ export default function AddLineItemModal({
 
       return newData;
     });
+    if (field === "fee") {
+      // موقع تغییر کاربر، مقدار فرمت‌شده را هم به صورت همزمان آپدیت کن
+      setFeeInputValue(
+        rawInput !== undefined ? rawInput : numberWithCommas(value)
+      );
+    }
   };
 
   const handleToggleChange = (field) => {
@@ -309,10 +338,13 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.fee}
-                onChange={(e) =>
-                  handleInputChange("fee", parseFloat(e.target.value) || 0)
-                }
+                value={feeInputValue}
+                onChange={(e) => {
+                  // حذف کاماها برای مقدار قابل محاسبه، سپس فرمت مجدد برای نمایش
+                  const raw = e.target.value.replace(/,/g, "");
+                  const floatValue = parseFloat(raw) || 0;
+                  handleInputChange("fee", floatValue, numberWithCommas(raw));
+                }}
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
