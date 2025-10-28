@@ -74,9 +74,7 @@ export default function AddLineItemModal({
           sstid: initialData.sstid ?? "",
         });
         // Find and set the selected product based on ProductId
-        const product = dataTable.find(
-          (p) => p.title === initialData.ProductId
-        );
+        const product = dataTable.find((p) => p.id == initialData.ProductId);
         setSelectedProduct(product || null);
       } else {
         setFormData({
