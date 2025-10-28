@@ -555,7 +555,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     printWindow.print();
     printWindow.close();
   };
-console.log(`totals`, totals);
+console.log(`lineItems`, lineItems);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
