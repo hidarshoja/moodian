@@ -105,6 +105,12 @@ export default function AddLineItemModal({
           newData.adis = totalAmount - (dis || 0);
           newData.prdis = totalAmount;
         }
+
+        if (am && fee) {
+          const totalAmount = am * fee;
+          newData.adis = totalAmount - (dis || 0);
+          newData.tsstam = totalAmount - (dis || 0);
+        }
       }
 
       return newData;
@@ -234,19 +240,6 @@ export default function AddLineItemModal({
               />
             </div>
 
-            {/* مبلغ قبل از تخفیف (Amount Before Discount) */}
-            <div>
-              <label className="block mb-1 text-gray-100 text-xs font-medium">
-                مبلغ قبل از تخفیف
-              </label>
-              <input
-                type="number"
-                value={formData.prdis || 0}
-                readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm"
-              />
-            </div>
-
             {/* مبلغ تخفیف (Discount Amount) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
@@ -262,6 +255,21 @@ export default function AddLineItemModal({
               />
             </div>
 
+            {/* مبلغ قبل از تخفیف (Amount Before Discount) */}
+            <div>
+              <label className="block mb-1 text-gray-100 text-xs font-medium">
+                مبلغ قبل از تخفیف
+              </label>
+              <input
+                type="number"
+                value={formData.prdis || 0}
+                readOnly
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+              />
+            </div>
+
+            
+
             {/* مبلغ بعد از تخفیف (Amount After Discount) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
@@ -271,7 +279,7 @@ export default function AddLineItemModal({
                 type="number"
                 value={formData.adis || 0}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
             </div>
 
@@ -373,9 +381,10 @@ export default function AddLineItemModal({
               <input
                 type="number"
                 value={formData.tsstam}
-                onChange={(e) =>
-                  handleInputChange("tsstam", parseFloat(e.target.value) || 0)
-                }
+                // onChange={(e) =>
+                //   handleInputChange("tsstam", parseFloat(e.target.value) || 0)
+                // }
+                readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
