@@ -303,6 +303,7 @@ export default function CreateModalInvoices({
       });
       setRefresh(!refresh);
       onClose2();
+      resetForm();
     } catch (error) {
       console.error("خطا در اضافه کردن محصول:", error);
       let errorMessage = "خطا در اضافه کردن محصول";
@@ -354,6 +355,7 @@ export default function CreateModalInvoices({
       });
       setRefresh(!refresh);
       onClose2();
+      resetForm();
     } catch (error) {
       console.error("خطا در ذخیره و ارسال:", error);
       let errorMessage = "خطا در ذخیره و ارسال";
