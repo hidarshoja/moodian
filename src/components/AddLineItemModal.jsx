@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { GrClose } from "react-icons/gr";
+import { FaChevronDown } from "react-icons/fa";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
 
@@ -29,6 +30,24 @@ export default function AddLineItemModal({
     comment: "",
   });
   const [dataTable, setDataTable] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
@@ -50,6 +69,11 @@ export default function AddLineItemModal({
           olam: initialData.olam ?? 0,
           comment: initialData.comment ?? "",
         });
+        // Find and set the selected product based on ProductId
+        const product = dataTable.find(
+          (p) => p.title === initialData.ProductId
+        );
+        setSelectedProduct(product || null);
       } else {
         setFormData({
           ProductId: "",
@@ -69,9 +93,11 @@ export default function AddLineItemModal({
           olam: null,
           comment: "",
         });
+        setSelectedProduct(null);
       }
+      setIsDropdownOpen(false);
     }
-  }, [isOpen, initialData]);
+  }, [isOpen, initialData, dataTable]);
 
   useEffect(() => {
     axiosClient
@@ -124,6 +150,16 @@ export default function AddLineItemModal({
     }));
   };
 
+  const handleProductSelect = (product) => {
+    setSelectedProduct(product);
+    handleInputChange("ProductId", product.title);
+    setIsDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   const handleSave = () => {
     if (onSave) {
       onSave(formData);
@@ -150,9 +186,11 @@ export default function AddLineItemModal({
       olam: null,
       comment: "",
     });
+    setSelectedProduct(null);
+    setIsDropdownOpen(false);
     onClose();
   };
-
+  console.log(`dataTable`, dataTable);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"
@@ -178,22 +216,66 @@ export default function AddLineItemModal({
         <div className="p-4 flex-1 overflow-y-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* کالا/ خدمت جدید (New Item/Service) */}
-            <div>
+            <div className="relative" ref={dropdownRef}>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 کالا/ خدمت جدید
               </label>
-              <select
-                value={formData.title}
-                onChange={(e) => handleInputChange("ProductId", e.target.value)}
-                className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+              {/* Custom Dropdown Button */}
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right flex items-center justify-between"
               >
-                <option value="">انتخاب کنید</option>
-                {(dataTable || []).map((c) => (
-                  <option key={c.id} value={c.title}>
-                    {c.title || ""}
-                  </option>
-                ))}
-              </select>
+                <span className="truncate">
+                  {selectedProduct ? selectedProduct.title : "انتخاب کنید"}
+                </span>
+                <FaChevronDown
+                  className={`text-sm text-white/70 transition-transform duration-200 ${
+                    isDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* Custom Dropdown List */}
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl max-h-80 overflow-hidden">
+                  {/* Table Header */}
+                  <div className="bg-gray-700 px-3 py-2 border-b border-gray-600">
+                    <div className="grid grid-cols-2 gap-4 text-xs font-medium text-white/80">
+                      <span>نام کالا</span>
+                      <span>شناسه کالا</span>
+                    </div>
+                  </div>
+
+                  {/* Table Body - Scrollable */}
+                  <div className="max-h-64 overflow-y-auto">
+                    {(dataTable || []).length === 0 ? (
+                      <div className="px-3 py-4 text-center text-white/60 text-sm">
+                        اطلاعاتی یافت نشد
+                      </div>
+                    ) : (
+                      (dataTable || []).map((product) => (
+                        <button
+                          key={product.id}
+                          type="button"
+                          onClick={() => handleProductSelect(product)}
+                          className="w-full px-3 py-2 hover:bg-gray-700 transition-colors duration-150 border-b border-gray-700/50 last:border-b-0"
+                        >
+                          <div className="grid grid-cols-2 gap-4 text-sm text-white/90 text-right">
+                            <span className="truncate">
+                              {product.title || "-"}
+                            </span>
+                            <span className="truncate">
+                              {product.sstid || "-"}
+                            </span>
+                          </div>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* تعداد/مقدار (am/Amount) */}
@@ -267,8 +349,6 @@ export default function AddLineItemModal({
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
             </div>
-
-            
 
             {/* مبلغ بعد از تخفیف (Amount After Discount) */}
             <div>
