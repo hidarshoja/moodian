@@ -187,6 +187,7 @@ export default function CreateModalInvoices({
   };
 
   const handleSaveLineItem = (itemData) => {
+    console.log(`itemData`, itemData);
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -200,6 +201,8 @@ export default function CreateModalInvoices({
                 prdis: itemData.prdis,
                 dis: itemData.dis,
                 adis: itemData.adis,
+                name: itemData.name,
+                sstid: itemData.sstid,
               }
             : item
         )
@@ -217,6 +220,8 @@ export default function CreateModalInvoices({
         prdis: itemData.prdis,
         dis: itemData.dis,
         adis: itemData.adis,
+        name: itemData.name,
+        sstid: itemData.sstid,
       };
       setLineItems((prev) => [...prev, newItem]);
     }
@@ -806,10 +811,10 @@ export default function CreateModalInvoices({
                     }`}
                   >
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.serviceId}
+                      {item.sstid}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.serviceName}
+                      {item.name}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item.am}
@@ -824,7 +829,7 @@ export default function CreateModalInvoices({
                       {item.currencyAmount}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.prdis}
+                      {item.dis }
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item.adis}

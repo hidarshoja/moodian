@@ -28,6 +28,8 @@ export default function AddLineItemModal({
     odam: null,
     olam: null,
     comment: "",
+    name: null,
+    sstid: null,
   });
   const [dataTable, setDataTable] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -68,6 +70,8 @@ export default function AddLineItemModal({
           odam: initialData.odam ?? 0,
           olam: initialData.olam ?? 0,
           comment: initialData.comment ?? "",
+          name: initialData.name ?? "",
+          sstid: initialData.sstid ?? "",
         });
         // Find and set the selected product based on ProductId
         const product = dataTable.find(
@@ -92,6 +96,8 @@ export default function AddLineItemModal({
           odam: null,
           olam: null,
           comment: "",
+          name: null,
+          sstid: null,
         });
         setSelectedProduct(null);
       }
@@ -153,6 +159,8 @@ export default function AddLineItemModal({
   const handleProductSelect = (product) => {
     setSelectedProduct(product);
     handleInputChange("ProductId", product.id);
+    handleInputChange("name", product.title);
+    handleInputChange("sstid", product.sstid);
     setIsDropdownOpen(false);
   };
 
@@ -185,6 +193,8 @@ export default function AddLineItemModal({
       odam: null,
       olam: null,
       comment: "",
+      name: null,
+      sstid: null,
     });
     setSelectedProduct(null);
     setIsDropdownOpen(false);
