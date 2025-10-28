@@ -32,6 +32,7 @@ export default function AddLineItemModal({
     sstid: null,
   });
   const [feeInputValue, setFeeInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ واحد
+  const [disInputValue, setDisInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ تخفیف
   const [dataTable, setDataTable] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -116,6 +117,18 @@ export default function AddLineItemModal({
       );
     }
   }, [isOpen, formData.fee]);
+  // مقدار اولیه برای نمایش تخفیف
+  useEffect(() => {
+    if (isOpen) {
+      setDisInputValue(
+        formData.dis !== null &&
+          formData.dis !== undefined &&
+          formData.dis !== ""
+          ? numberWithCommas(formData.dis)
+          : ""
+      );
+    }
+  }, [isOpen, formData.dis]);
 
   // تابع برای فرمت سه‌رقمی
   function numberWithCommas(value) {
@@ -171,6 +184,11 @@ export default function AddLineItemModal({
     if (field === "fee") {
       // موقع تغییر کاربر، مقدار فرمت‌شده را هم به صورت همزمان آپدیت کن
       setFeeInputValue(
+        rawInput !== undefined ? rawInput : numberWithCommas(value)
+      );
+    }
+    if (field === "dis") {
+      setDisInputValue(
         rawInput !== undefined ? rawInput : numberWithCommas(value)
       );
     }
@@ -369,10 +387,12 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.dis}
-                onChange={(e) =>
-                  handleInputChange("dis", parseFloat(e.target.value) || 0)
-                }
+                value={disInputValue}
+                onChange={(e) => {
+                  const raw = e.target.value.replace(/,/g, "");
+                  const floatValue = parseFloat(raw) || 0;
+                  handleInputChange("dis", floatValue, numberWithCommas(raw));
+                }}
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
