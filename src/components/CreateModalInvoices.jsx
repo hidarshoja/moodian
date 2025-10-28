@@ -159,8 +159,8 @@ export default function CreateModalInvoices({
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = item.tprdis - item.tbill || 0;
-        acc.tdis = item.tprdis - item.tbill || 0;
+        acc.tdis = item.adis - item.fee || 0;
+        acc.tdis = item.adis - item.fee || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -255,8 +255,8 @@ export default function CreateModalInvoices({
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = item.tprdis - item.tbill || 0;
-        acc.tdis = item.tprdis - item.tbill || 0;
+        acc.tdis = item.adis  - item.fee || 0;
+        acc.tdis = item.adis - item.fee || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -830,22 +830,23 @@ export default function CreateModalInvoices({
                       {item.name}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.am}
+                      {new Intl.NumberFormat('fa-IR').format(item.am)}
+
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.fee}
+                      {new Intl.NumberFormat('fa-IR').format(item.fee)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.exchangeRate}
+                      {new Intl.NumberFormat('fa-IR').format(item.exchangeRate)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.currencyAmount}
+                      {new Intl.NumberFormat('fa-IR').format(item.currencyAmount)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.dis}
+                      {new Intl.NumberFormat('fa-IR').format(item.dis)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.adis}
+                      {new Intl.NumberFormat('fa-IR').format(item.adis) }
                     </span>
 
                     <div className="flex items-center justify-center gap-3">
@@ -877,8 +878,8 @@ export default function CreateModalInvoices({
                 م مبلغ قبل از تخفیف
               </label>
               <input
-                type="number"
-                value={totals.tprdis}
+                type="text"
+                value={ totals.tprdis ? Number(totals.tprdis).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100"
               />
@@ -888,8 +889,8 @@ export default function CreateModalInvoices({
                 م تخفیفات
               </label>
               <input
-                type="number"
-                value={totals.tdis}
+                type="text"
+                value={ totals.tdis ? Number(totals.tdis).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100"
               />
@@ -899,8 +900,8 @@ export default function CreateModalInvoices({
                 م مبلغ پس از کسر تخفیف
               </label>
               <input
-                type="number"
-                value={totals.tadis}
+                type="text"
+                value={ totals.tadis ? Number(totals.tadis).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100"
               />
@@ -977,7 +978,7 @@ export default function CreateModalInvoices({
               </label>
               <input
                 type="text"
-                value={totals.tbill}
+                value={ totals.tbill ? Number(totals.tbill).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold"
               />
