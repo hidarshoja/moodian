@@ -18,9 +18,8 @@ import { GiCheckedShield } from "react-icons/gi";
 const userData = localStorage.getItem("USER");
 const parsedUser = JSON.parse(userData);
 const permissionNames = parsedUser?.roles?.[0]?.permissions?.map((p) => p.name);
-
-
-// Define all menu items with their required permissions
+const roleName = parsedUser?.roles?.[0]?.name;
+console.log(`roleName`, roleName);
 const allNavigationItems = [
   {
     name: "داشبورد",
@@ -120,8 +119,15 @@ const allNavigationItems = [
   },
 ];
 
+const isSuperAdmin =
+  roleName &&
+  roleName.trim().replace(/\s+/g, " ").toLowerCase() === "super admin";
+const navigationItems = isSuperAdmin
+  ? allNavigationItems.map((item) => ({ ...item, permission: null }))
+  : allNavigationItems;
+
 // Filter navigation based on user permissions
-export const navigation = allNavigationItems.filter((item) => {
+export const navigation = navigationItems.filter((item) => {
   // If no permission is required, always show the item
   if (!item.permission) {
     return true;
