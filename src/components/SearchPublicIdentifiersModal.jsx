@@ -38,7 +38,7 @@ export default function SearchPublicIdentifiersModal({
         console.error("Error fetching data:", error);
       });
     setSearchTermClick(false);
-  }, [searchTermClick, activeTab, pageCount, searchTerm]);
+  }, [searchTermClick, activeTab, pageCount]);
 
   if (!isOpen) return null;
 
