@@ -183,13 +183,13 @@ export default function AddLineItemModal({
                 کالا/ خدمت جدید
               </label>
               <select
-                value={formData.ProductId}
+                value={formData.title}
                 onChange={(e) => handleInputChange("ProductId", e.target.value)}
                 className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">انتخاب کنید</option>
                 {(dataTable || []).map((c) => (
-                  <option key={c.id} value={c.id}>
+                  <option key={c.id} value={c.title}>
                     {c.title || ""}
                   </option>
                 ))}

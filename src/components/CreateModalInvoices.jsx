@@ -12,7 +12,12 @@ import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 
-export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setRefresh }) {
+export default function CreateModalInvoices({
+  isOpen2,
+  onClose2,
+  refresh,
+  setRefresh,
+}) {
   const [invoiceData, setInvoiceData] = useState({
     inty: "1",
     inp: "",
@@ -151,8 +156,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = (item.tprdis - item.tbill ) || 0;
-        acc.tdis = (item.tprdis - item.tbill ) || 0;
+        acc.tdis = item.tprdis - item.tbill || 0;
+        acc.tdis = item.tprdis - item.tbill || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -235,8 +240,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = (item.tprdis - item.tbill ) || 0;
-        acc.tdis = (item.tprdis - item.tbill ) || 0;
+        acc.tdis = item.tprdis - item.tbill || 0;
+        acc.tdis = item.tprdis - item.tbill || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -555,7 +560,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     printWindow.print();
     printWindow.close();
   };
-console.log(`lineItems`, lineItems);
+  console.log(`lineItems`, lineItems);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
