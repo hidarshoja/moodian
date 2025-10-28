@@ -380,6 +380,7 @@ const [errorList, setErrorList] = useState([]);
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
         isEditing = {isInvoice}
+        onRefresh={onRefresh}
       />
 
       {/* EditInvoiceModalShow */}

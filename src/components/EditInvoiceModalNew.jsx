@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing }) {
+export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing , onRefresh }) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -421,7 +421,9 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
           popup: "swal2-toast",
         },
       });
-      console.log(`res`, res);
+      if (onRefresh) {
+        onRefresh();
+      }
 
       // Refresh the data after successful save
       if (invoiceData.id) {
@@ -514,7 +516,9 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
       });
-      console.log(`ارسال موفق:`, sendRes);
+      if (onRefresh) {
+        onRefresh();
+      }
 
       // Refresh the data after successful save and send
       if (invoiceData.id) {
@@ -1235,4 +1239,5 @@ EditInvoiceModalNew.propTypes = {
   onClose: PropTypes.func.isRequired,
   invoiceData: PropTypes.object,
   isEditing :PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
 };
