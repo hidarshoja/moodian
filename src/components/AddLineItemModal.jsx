@@ -202,7 +202,7 @@ export default function AddLineItemModal({
                 تعداد/مقدار
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.am}
                 onChange={(e) =>
                   handleInputChange("am", parseFloat(e.target.value))
@@ -218,7 +218,7 @@ export default function AddLineItemModal({
                 مبلغ واحد
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.fee}
                 onChange={(e) =>
                   handleInputChange("fee", parseFloat(e.target.value) || 0)
@@ -227,7 +227,7 @@ export default function AddLineItemModal({
               />
             </div>
 
-            {/* شماره قرارداد حق العمل کاری (Contract Number) */}
+            {/* شماره قرارداد حق العمل کاری (Contract text) */}
             <div>
               <label className="block mb-1 text-gray-100 text-xs font-medium">
                 شماره قرارداد حق العمل کاری
@@ -246,7 +246,7 @@ export default function AddLineItemModal({
                 مبلغ تخفیف
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.dis}
                 onChange={(e) =>
                   handleInputChange("dis", parseFloat(e.target.value) || 0)
@@ -261,7 +261,7 @@ export default function AddLineItemModal({
                 مبلغ قبل از تخفیف
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.prdis || 0}
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
@@ -276,7 +276,7 @@ export default function AddLineItemModal({
                 مبلغ بعد از تخفیف
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.adis || 0}
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
@@ -289,7 +289,7 @@ export default function AddLineItemModal({
                 نرخ مالیات بر ارزش افزوده
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.vra}
                 onChange={(e) =>
                   handleInputChange("vra", parseFloat(e.target.value) || 0)
@@ -304,7 +304,7 @@ export default function AddLineItemModal({
                 مالیات بر ارزش افزوده
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.vam}
                 onChange={(e) =>
                   handleInputChange("vam", parseFloat(e.target.value) || 0)
@@ -319,7 +319,7 @@ export default function AddLineItemModal({
                 مبلغ سایر مالیات و عوارض
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.odam}
                 onChange={(e) =>
                   handleInputChange("odam", parseFloat(e.target.value) || 0)
@@ -334,7 +334,7 @@ export default function AddLineItemModal({
                 مبلغ سایر وجوه قانونی
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.olam}
                 onChange={(e) =>
                   handleInputChange("olam", parseFloat(e.target.value) || 0)
@@ -349,7 +349,7 @@ export default function AddLineItemModal({
                 سهم نقدی از پرداخت
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.cop}
                 onChange={(e) =>
                   handleInputChange("cop", parseFloat(e.target.value) || 0)
@@ -364,7 +364,7 @@ export default function AddLineItemModal({
                 سهم مالیات از ارزش افزوده از پرداخت
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.vop}
                 onChange={(e) =>
                   handleInputChange("vop", parseFloat(e.target.value) || 0)
@@ -379,7 +379,7 @@ export default function AddLineItemModal({
                 مبلغ کل
               </label>
               <input
-                type="number"
+                type="text"
                 value={formData.tsstam}
                 // onChange={(e) =>
                 //   handleInputChange("tsstam", parseFloat(e.target.value) || 0)
