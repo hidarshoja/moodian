@@ -131,6 +131,7 @@ export default function AddServiceModal({
       ...prev,
       sstid: item.sstid || "",
       vra: item.vat || "",
+      odr: item.vat_custom_purposes || "",
     }));
   };
 

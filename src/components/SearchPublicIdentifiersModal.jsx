@@ -64,7 +64,7 @@ export default function SearchPublicIdentifiersModal({
     setActiveTab("");
     setSearchTerm("");
   };
-
+console.log(`dataTable`, dataTable);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur animate-fadeInStagger"
@@ -139,12 +139,16 @@ export default function SearchPublicIdentifiersModal({
           </div>
 
           {/* Table Headers */}
-          <div className="grid grid-cols-4 gap-4 bg-gray-100 p-3 rounded-lg">
+          <div className="grid grid-cols-5 gap-4 bg-gray-100 p-3 rounded-lg">
             <div className="text-center font-medium text-gray-700">شناسه</div>
             <div className="text-center font-medium text-gray-700">نام</div>
             <div className="text-center font-medium text-gray-700">نوع</div>
             <div className="text-center font-medium text-gray-700">
               نرخ ارزش افزوده
+            </div>
+           
+            <div className="text-center font-medium text-gray-700">
+              نرخ سایر مالیات و عوارض 
             </div>
           </div>
         </div>
@@ -160,13 +164,14 @@ export default function SearchPublicIdentifiersModal({
               {dataTable.map((item, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-4 gap-4 p-3 border text-white border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-800 cursor-pointer"
+                  className="grid grid-cols-5 gap-4 p-3 border text-white border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-800 cursor-pointer"
                   onClick={() => handleSelectItem(item)}
                 >
-                  <div className="text-center">{item.sstid}</div>
-                  <div className="text-center">{item.description}</div>
-                  <div className="text-center">{item.type}</div>
-                  <div className="text-center">{item.vat}</div>
+                  <div className="text-center">{item?.sstid}</div>
+                  <div className="text-center">{item?.description}</div>
+                  <div className="text-center">{item?.type}</div>
+                  <div className="text-center">{item?.vat}</div>
+                  <div className="text-center">{item?.vat_custom_purposes}</div>
                 </div>
               ))}
             </div>
