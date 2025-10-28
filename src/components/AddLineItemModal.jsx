@@ -152,7 +152,7 @@ export default function AddLineItemModal({
 
   const handleProductSelect = (product) => {
     setSelectedProduct(product);
-    handleInputChange("ProductId", product.title);
+    handleInputChange("ProductId", product.id);
     setIsDropdownOpen(false);
   };
 
