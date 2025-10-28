@@ -27,6 +27,7 @@ export default function CustomersTable({
   setRefresh,
   refresh,
   loading = false,
+  onRequestEditCustomer,
 }) {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [row, setRow] = useState({
@@ -350,7 +351,26 @@ export default function CustomersTable({
                 <td className="p-2  text-center">{item?.tel || "-"}</td>
                 <td className="p-2  text-center">{item?.branch_code || "-"}</td>
                 <td className="p-2  text-center">
-                  {/* دکمه‌های حذف و ویرایش */}
+                  <button
+                    className="p-1 rounded hover:bg-blue-500/20 text-blue-500 mx-1"
+                    title="ویرایش"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRequestEditCustomer && onRequestEditCustomer(item);
+                    }}
+                  >
+                    <FiEdit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="p-1 rounded hover:bg-red-500/20 text-red-500 mx-1"
+                    title="حذف"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(item);
+                    }}
+                  >
+                    <FiTrash2 className="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             );
@@ -366,4 +386,5 @@ CustomersTable.propTypes = {
   setRefresh: PropTypes.func,
   refresh: PropTypes.bool,
   loading: PropTypes.bool,
+  onRequestEditCustomer: PropTypes.func,
 };

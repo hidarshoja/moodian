@@ -9,6 +9,7 @@ import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import EditCustomersModal from "../components/EditCustomersModal";
 
 export default function CustomersPage() {
   const [meta, setMeta] = useState({});
@@ -35,21 +36,22 @@ export default function CustomersPage() {
     { id: 3, name: "مشارکت مدنی" },
     { id: 4, name: "اتباع غیر ایرانی" },
   ];
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-   const buildFilterQuery = (filters) => {
-      const params = [];
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          if (key === "type") {
-            params.push(`f[${key}]=${value}`);
-          } else {
-            params.push(`f[${key}]=${encodeURIComponent(value)}`);
-          }
+  const buildFilterQuery = (filters) => {
+    const params = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (key === "type") {
+          params.push(`f[${key}]=${value}`);
+        } else {
+          params.push(`f[${key}]=${encodeURIComponent(value)}`);
         }
-      });
-      return params.length ? "&" + params.join("&") : "";
-    };
-
+      }
+    });
+    return params.length ? "&" + params.join("&") : "";
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -65,8 +67,6 @@ export default function CustomersPage() {
       })
       .finally(() => setLoading(false));
   }, [refresh, activeFilters, pageCount]);
-
-
 
   // تابع برای گرفتن داده از کامپوننت فرزند
   const handleExportExcel = () => {
@@ -103,7 +103,7 @@ export default function CustomersPage() {
           timerProgressBar: true,
         });
       });
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
@@ -112,6 +112,14 @@ export default function CustomersPage() {
         onClose={() => setModalOpen(false)}
         refresh={refresh}
         setRefresh={setRefresh}
+      />
+      {/* Edit modal */}
+      <EditCustomersModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        refresh={refresh}
+        setRefresh={setRefresh}
+        customer={selectedCustomer}
       />
       <ImportExcelModalUser
         isOpen={excelModalOpen}
@@ -270,6 +278,11 @@ export default function CustomersPage() {
           refresh={refresh}
           setRefresh={setRefresh}
           loading={loading}
+          // اضافه کردن هندلر ویرایش
+          onRequestEditCustomer={(customer) => {
+            setSelectedCustomer(customer);
+            setEditModalOpen(true);
+          }}
         />
       </div>
       <Pagination
