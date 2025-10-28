@@ -260,22 +260,7 @@ export default function ProfilePage() {
                 />
               </div>
 
-              {/* SSTIDS */}
-              <div>
-                <label className="block mb-2 text-white text-sm">
-                  شناسه‌های SST
-                </label>
-                <input
-                  type="text"
-                  value={
-                    Array.isArray(profileData.sstids)
-                      ? profileData.sstids.join(", ")
-                      : profileData.sstids || ""
-                  }
-                  readOnly
-                  className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-3 focus:outline-none cursor-not-allowed"
-                />
-              </div>
+             
 
               {/* Postal Code */}
               <div>
