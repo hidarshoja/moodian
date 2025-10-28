@@ -157,6 +157,7 @@ export default function InvoicesPage() {
           records={dataTable}
           loading={loading}
           onRefresh={() => setRefresh(!refresh)}
+          onClose2={() => setExcelModalOpen2(false)}
         />
       </div>
 

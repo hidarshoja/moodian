@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing , onRefresh }) {
+export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing , onRefresh , onClose2 }) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -424,7 +424,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
       if (onRefresh) {
         onRefresh();
       }
-
+      handleCancel();
       // Refresh the data after successful save
       if (invoiceData.id) {
         setLoadingItems(true);
@@ -441,9 +441,9 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
             setLoadingItems(false);
           });
       }
-
-      onClose();
+      handleCancel();
     } catch (error) {
+      handleCancel();
       console.error("خطا در ویرایش فاکتور:", error);
       let errorMessage = "خطا در ویرایش فاکتور";
 
@@ -519,7 +519,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
       if (onRefresh) {
         onRefresh();
       }
-
+      handleCancel();
       // Refresh the data after successful save and send
       if (invoiceData.id) {
         setLoadingItems(true);
@@ -536,9 +536,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
             setLoadingItems(false);
           });
       }
-
-      onClose();
+      handleCancel();
     } catch (error) {
+      handleCancel();
+    
       console.error("خطا در ویرایش و ارسال:", error);
       let errorMessage = "خطا در ویرایش و ارسال";
       if (error.response?.data?.message) {
@@ -1063,10 +1064,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 م مبلغ قبل از تخفیف
               </label>
               <input
-                type="number"
-                value={totals.tprdis}
+               type="text"
+                value={ totals.tprdis ? Number(totals.tprdis).toLocaleString("fa-IR") : ""}
                 readOnly
-                className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100"
+                className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
             <div>
@@ -1074,10 +1075,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 م تخفیفات
               </label>
               <input
-                type="number"
-                value={totals.tdis}
+                  type="text"
+                value={ totals.tdis ? Number(totals.tdis).toLocaleString("fa-IR") : ""}
                 readOnly
-                className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100"
+                className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
             <div>
@@ -1085,10 +1086,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 م مبلغ پس از کسر تخفیف
               </label>
               <input
-                type="number"
-                value={totals.tadis}
+               type="text"
+                value={ totals.tadis ? Number(totals.tadis).toLocaleString("fa-IR") : ""}
                 readOnly
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100"
+                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
             <div>
@@ -1098,13 +1099,14 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
               <input
                 type="number"
                 value={totals.cap}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    cap: parseFloat(e.target.value) || 0,
-                  }))
-                }
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded"
+                readOnly
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     cap: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
+                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
             <div>
@@ -1114,13 +1116,14 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
               <input
                 type="number"
                 value={totals.insp}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    insp: parseFloat(e.target.value) || 0,
-                  }))
-                }
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded"
+                readOnly
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     insp: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
+                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
             <div>
@@ -1136,7 +1139,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                     tvam: parseFloat(e.target.value) || 0,
                   }))
                 }
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded"
+                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
             <div>
@@ -1152,7 +1155,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                     todam: parseFloat(e.target.value) || 0,
                   }))
                 }
-                className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded"
+                className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
             </div>
             <div>
@@ -1160,10 +1163,10 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 مبلغ کل
               </label>
               <input
-                type="number"
-                value={totals.tbill}
+                      type="text"
+                value={ totals.tbill ? Number(totals.tbill).toLocaleString("fa-IR") : ""}
                 readOnly
-                className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold"
+                className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />
             </div>
           </div>
@@ -1253,4 +1256,5 @@ EditInvoiceModalNew.propTypes = {
   invoiceData: PropTypes.object,
   isEditing :PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
+  onClose2: PropTypes.func.isRequired,
 };

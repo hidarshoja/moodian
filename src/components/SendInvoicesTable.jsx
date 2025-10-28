@@ -16,7 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import { BsSendArrowUp } from "react-icons/bs";
 import ErrorListModal from "./ErrorListModal";
 
-export default function SendInvoicesTable({ records, loading, onRefresh }) {
+export default function SendInvoicesTable({ records, loading, onRefresh , onClose2}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditModalOpen2, setIsEditModalOpen2] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -381,6 +381,7 @@ const [errorList, setErrorList] = useState([]);
         invoiceData={selectedInvoice}
         isEditing = {isInvoice}
         onRefresh={onRefresh}
+        onClose2={onClose2}
       />
 
       {/* EditInvoiceModalShow */}
@@ -389,6 +390,7 @@ const [errorList, setErrorList] = useState([]);
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
         isEditing = {isInvoice}
+        
       />
 
 <ErrorListModal
@@ -405,4 +407,5 @@ SendInvoicesTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
+  onClose2: PropTypes.func.isRequired,
 };
