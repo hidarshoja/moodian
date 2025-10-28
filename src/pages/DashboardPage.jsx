@@ -21,12 +21,8 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const userData = localStorage.getItem("USER");
 const parsedUser = JSON.parse(userData);
-const permissions = parsedUser?.roles?.[0]?.permissions;
-console.log(permissions);
-const permissionNames = parsedUser?.roles?.[0]?.permissions?.map((p) => p.name);
-console.log(permissionNames);
-const hasInvoiceView = permissionNames?.includes("invoice.view");
-const hasSummeryView = permissionNames?.includes("report.invoice.summery");
+
+
   const openActivityModal = (user, activity) => {
     setSelectedUser(user);
     setSelectedActivity(activity);
@@ -61,7 +57,7 @@ const hasSummeryView = permissionNames?.includes("report.invoice.summery");
   // Removed unused profile fetch to satisfy linter: selected user reference wasn't used
 
   useEffect(() => {
-    if(hasInvoiceView){
+   
       axiosClient
         .get("/invoices")
         .then((response) => {
@@ -70,9 +66,9 @@ const hasSummeryView = permissionNames?.includes("report.invoice.summery");
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-    }
+    
   }, []);
-console.log(`activityUser`, activityUser);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 relative">
       <div>
@@ -96,14 +92,14 @@ console.log(`activityUser`, activityUser);
         <div className="w-full flex items-center justify-center text-xl text-white mt-10">
           کاربر { parsedUser.name + " " + parsedUser.last_name }  به پنل مدیریت خود خوش آمدید!
         </div>
-        {hasSummeryView && <>
+        
            <div className="p-6">
           <DashboardCharts />
            </div> 
-        </>}
+        
       </div>
-      {
-        hasInvoiceView &&<>
+      
+       
            <div className="users">
         {user === null && (
           <div className="p-8 text-white text-center">در حال بارگذاری...</div>
@@ -192,8 +188,8 @@ console.log(`activityUser`, activityUser);
           </div>
         )}
           </div>
-        </>
-      }
+      
+    
 
       {isActivityModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
