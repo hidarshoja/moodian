@@ -18,7 +18,8 @@ export default function CreateModalInvoices({
   refresh,
   setRefresh,
 }) {
-  const [invoiceData, setInvoiceData] = useState({
+  // مقدار اولیه stateها برای ریست راحت
+  const initialInvoiceData = {
     inty: "1",
     inp: "",
     indatim: new Date(),
@@ -29,10 +30,8 @@ export default function CreateModalInvoices({
     setm: "نقدی",
     MyInvoiceId: "",
     sbc: "",
-  });
-  const [lineItems, setLineItems] = useState([]);
-  const [editItemId, setEditItemId] = useState(null);
-  const [totals, setTotals] = useState({
+  };
+  const initialTotals = {
     tprdis: 0,
     tdis: 0,
     tadis: 0,
@@ -41,7 +40,11 @@ export default function CreateModalInvoices({
     tvam: 0,
     todam: 0,
     tbill: 0,
-  });
+  };
+  const [invoiceData, setInvoiceData] = useState(initialInvoiceData);
+  const [lineItems, setLineItems] = useState([]);
+  const [editItemId, setEditItemId] = useState(null);
+  const [totals, setTotals] = useState(initialTotals);
   const [dataTable, setDataTable] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
 
@@ -178,6 +181,13 @@ export default function CreateModalInvoices({
 
     setTotals(calculatedTotals);
   }, [lineItems]);
+
+  const resetForm = () => {
+    setInvoiceData(initialInvoiceData);
+    setLineItems([]);
+    setTotals(initialTotals);
+    setEditItemId(null);
+  };
 
   if (!isOpen2) return null;
 
@@ -370,6 +380,7 @@ export default function CreateModalInvoices({
   };
 
   const handleCancel = () => {
+    resetForm();
     onClose2();
   };
 
@@ -829,7 +840,7 @@ export default function CreateModalInvoices({
                       {item.currencyAmount}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {item.dis }
+                      {item.dis}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
                       {item.adis}
