@@ -404,7 +404,7 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.prdis || 0}
+                value={ formData.prdis ? Number(formData.prdis).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
@@ -417,7 +417,7 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.adis || 0}
+                value={ formData.adis ? Number(formData.adis).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
@@ -520,7 +520,7 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.tsstam}
+                value={ formData.tsstam ? Number(formData.tsstam).toLocaleString("fa-IR") : ""}
                 // onChange={(e) =>
                 //   handleInputChange("tsstam", parseFloat(e.target.value) || 0)
                 // }
