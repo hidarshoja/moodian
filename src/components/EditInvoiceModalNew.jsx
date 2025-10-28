@@ -1197,36 +1197,49 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
           onSave={handleSaveLineItem}
           initialData={
             editItemId
-              ? (() => {
-                  const item = lineItems.find((x) => x.id === editItemId);
-                  if (!item) return null;
-
-                  const prdis = (item.am || 0) * (item.fee || 0);
-                  const adis = prdis - (item.dis || 0);
-
-                  return {
-                    ProductId: item.product_id,
-                    am: item.am,
-                    fee: item.fee,
-                    prdis: prdis,
-                    dis: item.dis,
-                    adis: adis,
-                    bsrn: item.bsrn || "",
-                    comment: item.comment || "",
-                    vra: item.vra || 0,
-                    vam: item.vam || 0,
-                    odam: item.odam || 0,
-                    olam: item.olam || 0,
-                    cop: item.cop || 0,
-                    vop: item.vop || 0,
-                    tsstam: item.tsstam || 0,
-                    Show: item.Show || false,
-                    exr: item.exr || 0,
-                    cfee: item.cfee || 0,
-                  };
-                })()
+              ? {
+                  ProductId: lineItems.find((x) => x.id === editItemId)
+                    ?.serviceName,
+                  am: lineItems.find((x) => x.id === editItemId)?.am,
+                  fee: lineItems.find((x) => x.id === editItemId)?.fee,
+                  prdis: lineItems.find((x) => x.id === editItemId)?.prdis,
+                  dis: lineItems.find((x) => x.id === editItemId)?.dis,
+                  adis: lineItems.find((x) => x.id === editItemId)?.adis,
+                }
               : null
           }
+          // initialData={
+          //   editItemId
+          //     ? (() => {
+          //         const item = lineItems.find((x) => x.id === editItemId);
+          //         if (!item) return null;
+
+          //         const prdis = (item.am || 0) * (item.fee || 0);
+          //         const adis = prdis - (item.dis || 0);
+
+          //         return {
+          //           ProductId: item.product_id,
+          //           am: item.am,
+          //           fee: item.fee,
+          //           prdis: prdis,
+          //           dis: item.dis,
+          //           adis: adis,
+          //           bsrn: item.bsrn || "",
+          //           comment: item.comment || "",
+          //           vra: item.vra || 0,
+          //           vam: item.vam || 0,
+          //           odam: item.odam || 0,
+          //           olam: item.olam || 0,
+          //           cop: item.cop || 0,
+          //           vop: item.vop || 0,
+          //           tsstam: item.tsstam || 0,
+          //           Show: item.Show || false,
+          //           exr: item.exr || 0,
+          //           cfee: item.cfee || 0,
+          //         };
+          //       })()
+          //     : null
+          // }
           title={editItemId ? "ویرایش" : "جدید"}
         />
       </div>
