@@ -151,8 +151,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis += item.prdis || 0;
-        acc.tdis += item.dis || 0;
+        acc.tdis = (item.tprdis - item.tbill ) || 0;
+        acc.tdis = (item.tprdis - item.tbill ) || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -235,8 +235,8 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis += item.prdis || 0;
-        acc.tdis += item.dis || 0;
+        acc.tdis = (item.tprdis - item.tbill ) || 0;
+        acc.tdis = (item.tprdis - item.tbill ) || 0;
         acc.tadis += item.adis || 0;
         return acc;
       },
@@ -555,7 +555,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
     printWindow.print();
     printWindow.close();
   };
-
+console.log(`totals`, totals);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -889,12 +889,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
               <input
                 type="number"
                 value={totals.cap}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    cap: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                readOnly
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     cap: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded"
               />
             </div>
@@ -905,12 +906,13 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
               <input
                 type="number"
                 value={totals.insp}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    insp: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                readOnly
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     insp: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded"
               />
             </div>
@@ -919,7 +921,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
                 م مالیات بر ارزش افزوده
               </label>
               <input
-                type="number"
+                type="text"
                 value={totals.tvam}
                 onChange={(e) =>
                   setTotals((prev) => ({
@@ -935,7 +937,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
                 م سایر مالیات
               </label>
               <input
-                type="number"
+                type="text"
                 value={totals.todam}
                 onChange={(e) =>
                   setTotals((prev) => ({
@@ -951,7 +953,7 @@ export default function CreateModalInvoices({ isOpen2, onClose2 , refresh , setR
                 مبلغ کل
               </label>
               <input
-                type="number"
+                type="text"
                 value={totals.tbill}
                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold"
