@@ -72,7 +72,9 @@ export default function SearchFilterBar({
               <button
                 key={index}
                 onClick={() => handleFilterClick(filter)}
-                className={`btn-custom`}
+                className={` ${
+                  activeFilter === filter ? 'bg-green-600 text-white px-3 py-1.5 border rounded-lg' : 'btn-custom'
+                }`}
               >
                 {filter}
               </button>
