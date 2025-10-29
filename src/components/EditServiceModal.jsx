@@ -1,0 +1,214 @@
+import { useState, useEffect } from "react";
+import { GrClose } from "react-icons/gr";
+import PropTypes from "prop-types";
+
+const units = [
+  { id: 0, name: "انتخاب ..." },
+  { id: 1, name: "لنگه" },
+  { id: 2, name: "عدل" },
+  { id: 3, name: "جعبه" },
+  { id: 4, name: "توپ" },
+  { id: 5, name: "ست" },
+  { id: 6, name: "دست" },
+  { id: 7, name: "کارتن" },
+  { id: 8, name: "عدد" },
+  { id: 9, name: "بسته" },
+  { id: 10, name: "پاکت" },
+];
+
+export default function EditServiceModal({
+  isOpen,
+  onClose,
+  onEdit,
+  loading,
+  initialData = {},
+}) {
+  const [form, setForm] = useState({
+    title: "",
+    sstid: "",
+    unit_id: "",
+    vra: "",
+    odt: "",
+    odr: "",
+    olt: "",
+    olr: "",
+    customCode: "",
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      setForm({ ...form, ...initialData });
+    }
+    // eslint-disable-next-line
+  }, [isOpen, initialData]);
+
+  if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onEdit(form);
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
+          <span className="text-white text-lg font-bold">ویرایش کالا/خدمت</span>
+          <button onClick={onClose} className="text-white/80 hover:text-white">
+            <GrClose />
+          </button>
+        </div>
+        <form
+          className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+          onSubmit={handleSubmit}
+        >
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              نام کالا/خدمت
+            </label>
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">شناسه</label>
+            <input
+              name="sstid"
+              value={form.sstid}
+              onChange={handleChange}
+              maxLength={13}
+              minLength={13}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              کد کالا در سامانه مشتری
+            </label>
+            <input
+              name="customCode"
+              value={form.customCode}
+              onChange={handleChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">واحد سنجش</label>
+            <select
+              name="unit_id"
+              value={form.unit_id}
+              onChange={handleChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            >
+              {units.map((u) => (
+                <option
+                  key={u.id}
+                  value={u.id}
+                  className={u.id === 0 ? "text-red-500" : ""}
+                >
+                  {u.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              نرخ ارزش افزوده
+            </label>
+            <input
+              name="vra"
+              value={form.vra}
+              onChange={handleChange}
+              type="number"
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              موضوع سایر مالیات و عوارض
+            </label>
+            <input
+              name="odt"
+              value={form.odt}
+              onChange={handleChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              نرخ سایر مالیات و عوارض
+            </label>
+            <input
+              name="odr"
+              value={form.odr}
+              onChange={handleChange}
+              type="number"
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              موضوع سایر وجوه قانونی
+            </label>
+            <input
+              name="olt"
+              value={form.olt}
+              onChange={handleChange}
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-white text-sm">
+              نرخ سایر وجوه قانونی
+            </label>
+            <input
+              name="olr"
+              value={form.olr}
+              onChange={handleChange}
+              type="number"
+              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+          </div>
+          <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 rounded-xl border border-white/10 text-white/80 bg-purple-700 hover:bg-purple-800 transition-all"
+            >
+              انصراف
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 rounded-xl bg-blue-300 text-[#23234a] font-bold hover:bg-blue-400 transition-all"
+              disabled={loading}
+            >
+              {loading ? "در حال ویرایش ..." : "ویرایش"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+EditServiceModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+  initialData: PropTypes.object,
+};
