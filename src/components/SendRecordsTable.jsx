@@ -1,22 +1,29 @@
 import Spinner from "../utils/Spinner";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import SendStatusDetailsModal from "./SendStatusDetailsModal";
 
-export default function SendRecordsTable({
-  records,
-  loading
-}) {
+export default function SendRecordsTable({ records, loading }) {
+  const [openDetail, setOpenDetail] = useState(null);
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
-       {loading && (
+      {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
           <Spinner />
         </div>
       )}
-      <table  className={`min-w-full text-white ${
+      <table
+        className={`min-w-full text-white ${
           loading ? "opacity-30 pointer-events-none" : ""
-        }`}>
+        }`}
+      >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
-            <th className="text-right px-4 py-3 whitespace-nowrap"> وضعیت ارسال </th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">
+              {" "}
+              وضعیت ارسال{" "}
+            </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               فاکتور اصلی
             </th>
@@ -24,7 +31,7 @@ export default function SendRecordsTable({
               فاکتور اصلاحی
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
-          فاکتور برگشتی
+              فاکتور برگشتی
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               فاکتور ابطالی
@@ -48,30 +55,43 @@ export default function SendRecordsTable({
               key={i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.status_label }
+              <td
+                className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
+                onClick={() => setOpenDetail(r)}
+              >
+                {r?.status_label}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r.inp === 1 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-              {r.inp === 2 ? r.ins_label : "-"}
+                {r.inp === 2 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-              {r.inp === 3 ? r.ins_label : "-"}
+                {r.inp === 3 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-              {r.inp === 4 ? r.ins_label : "-"}
+                {r.inp === 4 ? r.ins_label : "-"}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
                 {r.asn}
               </td>
-              
-            
             </tr>
           ))}
         </tbody>
       </table>
+      {openDetail && (
+        <SendStatusDetailsModal
+          isOpen={!!openDetail}
+          record={openDetail}
+          onClose={() => setOpenDetail(null)}
+        />
+      )}
     </div>
   );
 }
+
+SendRecordsTable.propTypes = {
+  records: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
+};
