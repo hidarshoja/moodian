@@ -205,6 +205,20 @@ export default function AddLineItemModal({
         } else {
           newData.odam = 0;
         }
+        // اضافه کردن محاسبه olam
+        if (selectedProduct?.olr && (newData.adis || prev.adis)) {
+          const adisVal = newData.adis !== undefined ? newData.adis : prev.adis;
+          let olr = selectedProduct.olr;
+          if (typeof olr === "string") olr = parseFloat(olr);
+          if (!olr) olr = 0;
+          if (adisVal && olr) {
+            newData.olam = Math.round((adisVal * olr) / 100);
+          } else {
+            newData.olam = 0;
+          }
+        } else {
+          newData.olam = 0;
+        }
       }
 
       return newData;
