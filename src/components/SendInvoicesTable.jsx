@@ -316,10 +316,10 @@ export default function SendInvoicesTable({
                   </div>
                   </> }
                  
-                  {r.status === 0 ||
+                  {(r.status === 0 ||
                     r.status === -10 ||
                     r.status === -80 ||
-                    (r.status === -90 && (
+                    r.status === -90) && (
                       <div className="relative group">
                         <button
                           className="p-1 rounded hover:bg-green-500/20 text-green-500"
@@ -331,7 +331,7 @@ export default function SendInvoicesTable({
                           ارسال
                         </div>
                       </div>
-                    ))}
+                    )}
 { r.can_cancel === true && <>
                   <div className="relative group">
                     <button
@@ -358,9 +358,7 @@ export default function SendInvoicesTable({
                       </div>
                     </div>
                   )}
-                  {r.status === -10 ||
-                    r.status === -80 ||
-                    (r.status === -90 && (
+                  {(r.status == -10 || r.status == -80 || r.status == -90)&& (
                       <div className="relative group">
                         <button
                           className="p-1 rounded hover:bg-green-500/20 text-green-500"
@@ -372,7 +370,7 @@ export default function SendInvoicesTable({
                           لیست خطاها
                         </div>
                       </div>
-                    ))}
+                    )}
 { r.can_correction === true && <>
                   <div className="relative group">
                     <button
