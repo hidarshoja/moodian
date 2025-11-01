@@ -398,7 +398,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "فاکتور فروش با موفقیت ویرایش شد",
+        title:"کپی فاکتور با موفقیت انجام شد!",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -429,8 +429,8 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       handleCancel();
     } catch (error) {
       handleCancel();
-      console.error("خطا در ویرایش فاکتور:", error);
-      let errorMessage = "خطا در ویرایش فاکتور";
+      console.error("خطا در کپی فاکتور:", error);
+      let errorMessage = "خطا در کپی فاکتور";
 
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
@@ -495,7 +495,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "صورتحساب ویرایش و ارسال شد",
+        title: "کپی فاکتور با موفقیت انجام شد!",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -525,8 +525,8 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     } catch (error) {
       handleCancel();
     
-      console.error("خطا در ویرایش و ارسال:", error);
-      let errorMessage = "خطا در ویرایش و ارسال";
+      console.error("خطا در کپی فاکتور:", error);
+      let errorMessage = "خطا در کپی فاکتور";
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.errors) {
@@ -745,7 +745,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     printWindow.print();
     printWindow.close();
   };
-  console.log(`lineItems`, lineItems);
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div

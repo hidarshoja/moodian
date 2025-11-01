@@ -87,6 +87,14 @@ export default function SendInvoicesTable({
     setIsEditModalOpen3(true);
   };
 
+  const closeAllModals = () => {
+    setIsEditModalOpen(false);
+    setIsEditModalOpen2(false);
+    setIsEditModalOpen3(false); // مهم!
+    setSelectedInvoice(null);
+    if (onRefresh) onRefresh();
+  };
+
   const closeEditModal = () => {
     setIsEditModalOpen(false);
     setIsEditModalOpen2(false);
@@ -412,11 +420,11 @@ export default function SendInvoicesTable({
 
       <EditInvoiceModalNew2
         isOpen={isEditModalOpen3}
-        onClose={closeEditModal}
+        onClose={closeAllModals}
         invoiceData={selectedInvoice}
         isEditing={isInvoice}
         onRefresh={onRefresh}
-        onClose2={onClose2}
+        onClose2={closeAllModals}
       />
     </div>
   );
