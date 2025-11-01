@@ -10,6 +10,8 @@ export default function AddLineItemModal({
   onSave,
   initialData,
   title,
+  selectedProduct,
+  setSelectedProduct,
 }) {
   const [formData, setFormData] = useState({
     ProductId: "",
@@ -35,9 +37,7 @@ export default function AddLineItemModal({
   const [disInputValue, setDisInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ تخفیف
   const [dataTable, setDataTable] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const dropdownRef = useRef(null);
-  const [feeVariable, setFeeVariable] = useState(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -658,4 +658,6 @@ AddLineItemModal.propTypes = {
   onSave: PropTypes.func,
   initialData: PropTypes.object,
   title: PropTypes.string,
+  selectedProduct: PropTypes.object,
+  setSelectedProduct: PropTypes.func,
 };

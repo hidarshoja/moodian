@@ -47,7 +47,7 @@ export default function CreateModalInvoices({
   const [totals, setTotals] = useState(initialTotals);
   const [dataTable, setDataTable] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
-
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const formatDateTime = (value) => {
     if (!value) return null;
     try {
@@ -578,7 +578,8 @@ export default function CreateModalInvoices({
     printWindow.print();
     printWindow.close();
   };
- 
+ console.log(`selectedProduct`, selectedProduct);
+ console.log(`lineItems`, lineItems);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -869,6 +870,9 @@ export default function CreateModalInvoices({
             )}
           </div>
         </div>
+        {(() => {
+          console.log(`totals`, totals);
+        })()}
         {/* Financial Summary Section */}
         <div className="px-6 py-4 border-t border-gray-200">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -889,7 +893,7 @@ export default function CreateModalInvoices({
               </label>
               <input
                 type="text"
-                value={ totals.tdis ? Number(totals.tdis).toLocaleString("fa-IR") : ""}
+                value={((totals.tprdis ? Number(totals.tprdis) : 0) - (totals.tadis ? Number(totals.tadis) : 0)).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1006,6 +1010,8 @@ export default function CreateModalInvoices({
         {/* Add Line Item Modal */}
         <AddLineItemModal
           isOpen={addItemModalOpen}
+          setSelectedProduct={setSelectedProduct}
+          selectedProduct={selectedProduct}
           onClose={() => {
             setAddItemModalOpen(false);
             setEditItemId(null);
