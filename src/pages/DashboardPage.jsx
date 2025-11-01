@@ -89,9 +89,14 @@ console.log(`activityUser`, activityUser);
             </button>
           </div>
         </div>
-        <div className="w-full flex items-center justify-center text-xl text-white mt-10">
-          کاربر { parsedUser?.name + " " + parsedUser?.last_name }  به پنل مدیریت خود خوش آمدید!
-        </div>
+        {
+          parsedUser && (
+            <div className="w-full flex items-center justify-center text-xl text-white mt-10">
+              کاربر { parsedUser?.name + " " + parsedUser?.last_name }  به پنل مدیریت خود خوش آمدید!
+            </div>
+          )
+        }
+    
         
            <div className="p-6">
           <DashboardCharts />
