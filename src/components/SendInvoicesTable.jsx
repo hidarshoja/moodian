@@ -15,14 +15,21 @@ import { GrStatusGood } from "react-icons/gr";
 import { FiEdit } from "react-icons/fi";
 import { BsSendArrowUp } from "react-icons/bs";
 import ErrorListModal from "./ErrorListModal";
+import EditInvoiceModalNew2 from "./EditInvoiceModalNew2";
 
-export default function SendInvoicesTable({ records, loading, onRefresh , onClose2}) {
+export default function SendInvoicesTable({
+  records,
+  loading,
+  onRefresh,
+  onClose2,
+}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditModalOpen2, setIsEditModalOpen2] = useState(false);
+  const [isEditModalOpen3, setIsEditModalOpen3] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isInvoice, setIsInvoice] = useState(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-const [errorList, setErrorList] = useState([]);
+  const [errorList, setErrorList] = useState([]);
 
   const handleDelete = async (row) => {
     try {
@@ -62,16 +69,22 @@ const [errorList, setErrorList] = useState([]);
     }
   };
 
-  const handleEdit = (row , name) => {
+  const handleEdit = (row, name) => {
     setSelectedInvoice(row);
     setIsEditModalOpen(true);
     setIsInvoice(name);
   };
 
-  const handleShow = (row , name) => {
+  const handleShow = (row, name) => {
     setSelectedInvoice(row);
     setIsEditModalOpen2(true);
     setIsInvoice(name);
+  };
+
+  const handleClone = (row) => {
+    setSelectedInvoice(row); // فاکتور انتخابی
+    setIsInvoice("clone"); // یا می‌توانی false یا مقدار مناسب برای isEditing بگذاری
+    setIsEditModalOpen3(true);
   };
 
   const closeEditModal = () => {
@@ -86,8 +99,8 @@ const [errorList, setErrorList] = useState([]);
 
   const handleSendToMoadian = async (row) => {
     try {
-      const res = await axiosClient.post('/invoices/send-to-moadian', {
-        ids: [row.id]
+      const res = await axiosClient.post("/invoices/send-to-moadian", {
+        ids: [row.id],
       });
       Swal.fire({
         toast: true,
@@ -121,7 +134,7 @@ const [errorList, setErrorList] = useState([]);
   const handleCancelInvoice = async (row) => {
     try {
       await axiosClient.post(`/invoices/${row.id}/cancel`, {
-        send_to_moadian: false
+        send_to_moadian: false,
       });
       Swal.fire({
         toast: true,
@@ -132,8 +145,8 @@ const [errorList, setErrorList] = useState([]);
         timer: 4000,
         timerProgressBar: true,
         customClass: {
-          popup: "swal2-toast"
-        }
+          popup: "swal2-toast",
+        },
       });
       if (onRefresh) onRefresh();
     } catch (error) {
@@ -146,8 +159,8 @@ const [errorList, setErrorList] = useState([]);
         timer: 4000,
         timerProgressBar: true,
         customClass: {
-          popup: "swal2-toast"
-        }
+          popup: "swal2-toast",
+        },
       });
     }
   };
@@ -164,12 +177,12 @@ const [errorList, setErrorList] = useState([]);
           showConfirmButton: false,
           timer: 4000,
           timerProgressBar: true,
-          customClass: { popup: "swal2-toast" }
+          customClass: { popup: "swal2-toast" },
         });
         return;
       }
-      await axiosClient.post('/invoices/check-from-moadian', {
-        reference_numbers: [referenceNumber]
+      await axiosClient.post("/invoices/check-from-moadian", {
+        reference_numbers: [referenceNumber],
       });
       Swal.fire({
         icon: "success",
@@ -179,7 +192,7 @@ const [errorList, setErrorList] = useState([]);
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
-        customClass: { popup: "swal2-toast" }
+        customClass: { popup: "swal2-toast" },
       });
       if (onRefresh) onRefresh();
     } catch (error) {
@@ -191,7 +204,7 @@ const [errorList, setErrorList] = useState([]);
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
-        customClass: { popup: "swal2-toast" }
+        customClass: { popup: "swal2-toast" },
       });
     }
   };
@@ -266,10 +279,10 @@ const [errorList, setErrorList] = useState([]);
 
               <td className="px-5 py-3 text-white/90 text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-center gap-2">
-                <div className="relative group">
+                  <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleEdit(r , "edit")}
+                      onClick={() => handleEdit(r, "edit")}
                     >
                       <FiEdit2 className="w-4 h-4" />
                     </button>
@@ -310,7 +323,7 @@ const [errorList, setErrorList] = useState([]);
                       ابطال
                     </div>
                   </div>
-                 
+
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
@@ -322,7 +335,7 @@ const [errorList, setErrorList] = useState([]);
                       چک وضعیت
                     </div>
                   </div>
-                 
+
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-green-500/20 text-green-500"
@@ -337,7 +350,7 @@ const [errorList, setErrorList] = useState([]);
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-red-500/20 text-red-500"
-                      onClick={() => handleEdit(r , "correction")}
+                      onClick={() => handleEdit(r, "correction")}
                     >
                       <FiEdit className="w-4 h-4" />
                     </button>
@@ -358,8 +371,8 @@ const [errorList, setErrorList] = useState([]);
                   </div>
                   <div className="relative group">
                     <button
-                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleEdit(r)}
+                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                      onClick={() => handleClone(r)}
                     >
                       <FaRegPlusSquare className="w-4 h-4" />
                     </button>
@@ -367,7 +380,6 @@ const [errorList, setErrorList] = useState([]);
                       تکثیر
                     </div>
                   </div>
-                  
                 </div>
               </td>
             </tr>
@@ -379,7 +391,7 @@ const [errorList, setErrorList] = useState([]);
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
-        isEditing = {isInvoice}
+        isEditing={isInvoice}
         onRefresh={onRefresh}
         onClose2={onClose2}
       />
@@ -389,16 +401,23 @@ const [errorList, setErrorList] = useState([]);
         isOpen={isEditModalOpen2}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
-        isEditing = {isInvoice}
-        
+        isEditing={isInvoice}
       />
 
-<ErrorListModal
-  isOpen={isErrorModalOpen}
-  onClose={() => setIsErrorModalOpen(false)}
-  errors={errorList}
-/>
+      <ErrorListModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        errors={errorList}
+      />
 
+      <EditInvoiceModalNew2
+        isOpen={isEditModalOpen3}
+        onClose={closeEditModal}
+        invoiceData={selectedInvoice}
+        isEditing={isInvoice}
+        onRefresh={onRefresh}
+        onClose2={onClose2}
+      />
     </div>
   );
 }
