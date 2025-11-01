@@ -71,24 +71,9 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Line items response:", response.data.data);
+         
             setLineItems(response.data.data);
-            // if (response.data.data && Array.isArray(response.data.data)) {
-            //   const formattedItems = response.data.data.map((item, index) => ({
-            //     id: Date.now() + index,
-            //     serviceId: item.product_id || "",
-            //     serviceName: item.product_id || "",
-            //     am: item.am || 0,
-            //     fee: item.fee || 0,
-            //     exchangeRate: item.exr || 0,
-            //     currencyAmount: item.cfee || 0,
-            //     prdis: item.dis || 0,
-            //     dis: item.dis || 0,
-            //     adis: item.am * item.fee - (item.dis || 0),
-            //   }));
-            //   console.log(`formattedItems`, formattedItems);
-            //   setLineItems(response.data.data);
-            // }
+         
           })
           .catch((error) => {
             console.error("Error fetching line items:", error);
@@ -222,7 +207,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     axiosClient
       .get(`/customers`)
       .then((response) => {
-        console.log(`response.data.data`, response.data.data);
+        
         setCustomers(response.data.data);
       })
       .catch((error) => {
@@ -232,7 +217,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     axiosClient
       .get(`/products`)
       .then((response) => {
-        console.log(`products response:`, response.data.data);
+       
         setProducts(response.data.data);
       })
       .catch((error) => {
@@ -401,7 +386,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    console.log("مقادیر فرم:", payload);
+   
 
     try {
       const res = await axiosClient.put(`/invoices/${formData.id}`, payload, {
@@ -421,7 +406,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
           popup: "swal2-toast",
         },
       });
-      console.log(`res`, res);
+  
 
       // Refresh the data after successful save
       if (invoiceData.id) {
@@ -429,7 +414,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Refreshed line items:", response.data.data);
+           
             setLineItems(response.data.data);
           })
           .catch((error) => {
@@ -478,7 +463,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     try {
       // First, save the invoice
       const payload = buildPayload();
-      console.log("ذخیره فاکتور:", payload);
+     
 
       const saveRes = await axiosClient.put(
         `/invoices/${formData.id}`,
@@ -488,13 +473,13 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
         }
       );
 
-      console.log("فاکتور ذخیره شد:", saveRes);
+      
 
       // Then, send to moadian
       const sendData = {
         ids: [formData.id.toString()],
       };
-      console.log("ارسال به مودیان:", sendData);
+     
 
       const sendRes = await axiosClient.post(
         `/invoices/send-to-moadian`,
@@ -514,7 +499,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
       });
-      console.log(`ارسال موفق:`, sendRes);
+    
 
       // Refresh the data after successful save and send
       if (invoiceData.id) {
@@ -522,7 +507,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Refreshed line items after send:", response.data.data);
+      
             setLineItems(response.data.data);
           })
           .catch((error) => {
@@ -755,7 +740,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     printWindow.print();
     printWindow.close();
   };
-  console.log(`lineItems`, lineItems);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div

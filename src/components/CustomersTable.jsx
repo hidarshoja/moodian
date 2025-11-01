@@ -45,55 +45,13 @@ export default function CustomersTable({
     type: "انتخاب ...",
   });
 
-  // sync کردن inputها با dataTable هنگام وارد کردن کد
-  const handleCodeChange = (e) => {
-    const name = e.target.value;
-    setRow((prev) => ({ ...prev, name }));
-    const found = dataTable.find((item) => item.name === name);
-    console.log(`found`, found);
-    if (found) {
-      setRow({ ...found });
-    } else {
-      setRow((prev) => ({
-        ...prev,
-        address: "",
-        branch_code: "",
-        description: "",
-        economic_code: "",
-        id: "",
-        last_name: "",
-        national_code: "",
-        passport_number: "",
-        postal_code: "",
-        tel: "",
-        type: "انتخاب ...",
-      }));
-    }
-  };
-
-  // ویرایش مقدار هر فیلد
-  const handleFieldChange = (field, value) => {
-    setRow((prev) => ({ ...prev, [field]: value }));
-
-    // مقدار اولیه را پیدا کن
-    const original = dataTable.find((item) => item.sstid === row.sstid);
-    if (original && original[field] !== value) {
-      // setEditedFields((prev) => ({ ...prev, [field]: value })); // This line was removed as per the edit hint
-    } else {
-      // اگر مقدار به حالت اولیه برگشت، از editedFields حذف کن
-      // setEditedFields((prev) => { // This line was removed as per the edit hint
-      //   const updated = { ...prev }; // This line was removed as per the edit hint
-      //   delete updated[field]; // This line was removed as per the edit hint
-      //   return updated; // This line was removed as per the edit hint
-      // }); // This line was removed as per the edit hint
-    }
-  };
+ 
 
   // حذف ردیف با کد فعلی
   const handleDelete = async (row) => {
     try {
       const res = await axiosClient.delete(`/customers/${row.id}`);
-      console.log(`Delete response:`, res);
+    
 
       setRefresh(!refresh);
       Swal.fire({

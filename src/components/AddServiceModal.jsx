@@ -56,7 +56,7 @@ export default function AddServiceModal({
 
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log("مقادیر فرم:", form);
+   
 
     try {
       const res = await axiosClient.post(`/products`, form);
@@ -89,7 +89,7 @@ export default function AddServiceModal({
         sstt: "توضیحات",
       }));
 
-      console.log(`res`, res);
+  
       setRefresh(!refresh);
       onClose();
     } catch (error) {

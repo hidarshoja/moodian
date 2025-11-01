@@ -46,7 +46,7 @@ export default function InvoicesPage() {
     axiosClient
       .get(`/invoices?page=${pageCount}${query}`)
       .then((response) => {
-        console.log(`response.data.data`, response.data.data);
+    
         setDataTable(response.data.data);
         setMeta(response.data.meta);
       })
@@ -59,12 +59,12 @@ export default function InvoicesPage() {
   const handleExportExcel = () => {
     // exportServicesToExcel(dataTable);
     const query = buildFilterQuery(activeFilters);
-    console.log(`query`, query);
+    
     const separator = "&";
     axiosClient
       .get(`/invoices?page=${pageCount}${separator}export=1${query}`)
       .then((response) => {
-        console.log(response.data.data);
+       
         Swal.fire({
           toast: true,
           position: "top-start",

@@ -139,7 +139,7 @@ export default function CreateModalInvoices({
     axiosClient
       .get(`/customers`)
       .then((response) => {
-        console.log(`response.data.data`, response.data.data);
+     
         setDataTable(response.data.data);
       })
       .catch((error) => {
@@ -197,7 +197,7 @@ export default function CreateModalInvoices({
   };
 
   const handleSaveLineItem = (itemData) => {
-    console.log(`itemData`, itemData);
+
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -281,7 +281,7 @@ export default function CreateModalInvoices({
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    console.log("مقادیر فرم:", payload);
+    
 
     try {
       const res = await axiosClient.post(`/invoices`, payload, {
@@ -338,7 +338,7 @@ export default function CreateModalInvoices({
   const handleSaveAndSend = async (e) => {
     e?.preventDefault?.();
     const payload = { ...buildPayload(), send_to_moadian: true };
-    console.log("ارسال به مودیان:", payload);
+
     try {
       const res = await axiosClient.post(`/invoices`, payload, {
         headers: { "Content-Type": "application/json" },
@@ -578,7 +578,7 @@ export default function CreateModalInvoices({
     printWindow.print();
     printWindow.close();
   };
-  console.log(`lineItems`, lineItems);
+ 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div

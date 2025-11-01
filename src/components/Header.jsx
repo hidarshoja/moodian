@@ -69,7 +69,7 @@ export default function Header({
   const checkMoadian = async () => {
     try {
       const response = await axiosClient.get("/moadian/fiscal-info");
-      console.log(response.data.data);
+    
       Swal.fire({
         toast: true,
         position: "top-start",

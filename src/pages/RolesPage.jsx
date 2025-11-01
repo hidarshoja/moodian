@@ -39,7 +39,7 @@ export default function RolesPage() {
     const fetchPermissions = async () => {
       try {
         const res = await axiosClientAdmin.get(`/permissions`);
-        console.log("res.data", res.data);
+      
         setPermission(res.data);
       } catch (err) {
         console.error("خطا در دریافت دسترسی‌ها:", err);

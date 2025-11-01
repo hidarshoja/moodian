@@ -45,7 +45,7 @@ const handleDownload = async (number) => {
 const handleDelete = async (row) => {
   try {
     const res = await axiosClient.delete(`/import-exports/${row}`);
-    console.log(`Delete response:`, res);
+ 
 
     setRefresh(!refresh);
     Swal.fire({

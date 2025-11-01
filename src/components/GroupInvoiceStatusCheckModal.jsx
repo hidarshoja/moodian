@@ -11,7 +11,7 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
      axiosClient.get("/invoices?f[status]=-80").then((response) => {
-      console.log(response.data.data);
+  
     
       setInvoiceData(response.data.data);
     });
@@ -29,14 +29,14 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   };
 
   const handleSend = async () => {
-    console.log("Sending selected invoices:", Array.from(selectedInvoices));
+   
     
     // تبدیل داده به فرمت مورد نظر
     let data = {
       reference_numbers: Array.from(selectedInvoices).map(item => item.toString())
     };
     
-    console.log(`data`, data);
+   
     
     try {
       const res = await axiosClient.post(`/invoices/check-from-moadian`, data);

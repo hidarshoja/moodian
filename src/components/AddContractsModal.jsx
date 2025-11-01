@@ -26,7 +26,7 @@ export default function AddContractsModal({ isOpen, onClose }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log("مقادیر فرم:", form);
+    
     onClose();
   };
 

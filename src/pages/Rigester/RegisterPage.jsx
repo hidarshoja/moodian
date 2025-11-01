@@ -112,10 +112,7 @@ export default function RegisterPage() {
         postData
       );
 
-      console.log("Registration response:", response.data);
-
    
-      console.log("Registration data saved to localStorage");
 
       // Navigate to login page after successful registration
       navigate("/auth/login");

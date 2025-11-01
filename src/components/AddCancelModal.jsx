@@ -26,10 +26,10 @@ export default function AddCancelModal({ isOpen, onClose, setRefresh , refresh }
         taxid: taxReferenceNumber,
         indatim: persianToGregorianString(issuanceDate),
       };
-      console.log("converted:", data.indatim); 
+    
       try {
         const res = await axiosClient.post(`/invoices/cancel-external`, data);
-        console.log(`res`, res);
+      
         setTaxReferenceNumber("");
         setIssuanceDate(new Date());
         onClose();

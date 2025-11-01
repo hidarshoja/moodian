@@ -30,10 +30,7 @@ export default function LogoDescriptionModal({ isOpen, onClose }) {
     }
     formData.append("description", description);
 
-    console.log("مقادیر فرم:", {
-      logo: selectedFile ? selectedFile.name : "No file selected",
-      description: description,
-    });
+   
 
     try {
       const res = await axiosClient.put(`/profile/update`, formData, {

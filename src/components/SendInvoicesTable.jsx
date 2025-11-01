@@ -34,7 +34,7 @@ export default function SendInvoicesTable({
   const handleDelete = async (row) => {
     try {
       const res = await axiosClient.delete(`/invoices/${row.id}`);
-      console.log(`Delete response:`, res);
+   
 
       //  setRefresh(!refresh);
       Swal.fire({
@@ -284,9 +284,7 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
                 {r.inty_label}
               </td>
-              {(() => {
-                console.log(`r`, r);
-              })()}
+             
               <td className="px-5 py-3 text-white/90 text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-center gap-2">
                   { r.can_update === true && <>

@@ -74,7 +74,7 @@ export default function OrganizationInquiryModal({
 
   const handleSelect = () => {
     // Log the form data
-    console.log("Selected customer data:", formData);
+   
 
     // Call the callback function if provided
     if (onSelectCustomer) {

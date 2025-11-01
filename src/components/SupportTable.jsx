@@ -71,13 +71,13 @@ export default function SupportTable({dataTable ,setDataTable}) {
   // ارسال داده به API تستی هنگام ویرایش
   const handleEdit = async () => {
     try {
-      console.log("ارسال داده ویرایش:", row);
+   
       const response = await axios.post(
         "https://jsonplaceholder.typicode.com/posts",
         row
       );
       showSuccessToast("ویرایش با موفقیت انجام شد!");
-      console.log("پاسخ سرور:", response.data);
+     
     } catch (error) {
       showErrorToast("خطا در ارسال داده!");
       console.error(error);

@@ -72,12 +72,12 @@ export default function CustomersPage() {
   const handleExportExcel = () => {
     // exportServicesToExcel(dataTable);
     const query = buildFilterQuery(activeFilters);
-    console.log(`query`, query);
+    
     const separator = "&";
     axiosClient
       .get(`/customers?page=${pageCount}${separator}export=1${query}`)
       .then((response) => {
-        console.log(response.data.data);
+        
         Swal.fire({
           toast: true,
           position: "top-start",

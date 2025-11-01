@@ -71,7 +71,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Line items response:", response.data.data);
+    
             setLineItems(response.data.data);
    
           })
@@ -207,7 +207,6 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     axiosClient
       .get(`/customers`)
       .then((response) => {
-        console.log(`response.data.data`, response.data.data);
         setCustomers(response.data.data);
       })
       .catch((error) => {
@@ -217,7 +216,6 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     axiosClient
       .get(`/products`)
       .then((response) => {
-        console.log(`products response:`, response.data.data);
         setProducts(response.data.data);
       })
       .catch((error) => {
@@ -386,7 +384,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    console.log("مقادیر فرم:", payload);
+    
 
     try {
       const res = await axiosClient.post(`/invoices`, payload, {
@@ -416,7 +414,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Refreshed line items:", response.data.data);
+       
             setLineItems(response.data.data);
           })
           .catch((error) => {
@@ -465,7 +463,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     try {
       // First, save the invoice
       const payload = buildPayload();
-      console.log("ذخیره فاکتور:", payload);
+     
 
       const saveRes = await axiosClient.post(
         `/invoices`,
@@ -475,13 +473,13 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         }
       );
 
-      console.log("فاکتور ذخیره شد:", saveRes);
+     
 
       // Then, send to moadian
       const sendData = {
         ids: [formData.id.toString()],
       };
-      console.log("ارسال به مودیان:", sendData);
+     
 
       const sendRes = await axiosClient.post(
         `/invoices/send-to-moadian`,
@@ -511,7 +509,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         axiosClient
           .get(`/invoice/items?invoice_id=${invoiceData.id}`)
           .then((response) => {
-            console.log("Refreshed line items after send:", response.data.data);
+        
             setLineItems(response.data.data);
           })
           .catch((error) => {

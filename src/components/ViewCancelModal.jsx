@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 
 export default function ViewCancelModal({ isOpen, onClose, record }) {
-  console.log(`record`, record);
+ 
   if (!isOpen || !record) return null;
 
 

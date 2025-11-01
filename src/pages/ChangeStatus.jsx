@@ -88,12 +88,12 @@ export default function ChangeStatus() {
   };
 
   const handleDelete = (record) => {
-    console.log("Delete record:", record);
+   
     setStatusRecords((prev) => prev.filter((r) => r.id !== record.id));
   };
 
   const handleApprove = (record) => {
-    console.log("Approve record:", record);
+   
     setStatusRecords((prev) =>
       prev.map((r) =>
         r.id === record.id
@@ -104,7 +104,7 @@ export default function ChangeStatus() {
   };
 
   const handleReject = (record) => {
-    console.log("Reject record:", record);
+   
     setStatusRecords((prev) =>
       prev.map((r) =>
         r.id === record.id

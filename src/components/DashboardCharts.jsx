@@ -161,7 +161,7 @@ export default function DashboardCharts() {
         "/report/invoice/summery?summery_includes[0]=status&summery_includes[1]=ins"
       )
       .then((response) => {
-        console.log(`response.data.data`, response.data.data);
+      
         setItemChart(response.data.data || { status_group: [], ins_group: [] });
       })
       .catch((error) => {

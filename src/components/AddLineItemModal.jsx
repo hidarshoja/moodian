@@ -37,6 +37,7 @@ export default function AddLineItemModal({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const dropdownRef = useRef(null);
+  const [feeVariable, setFeeVariable] = useState(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -143,7 +144,7 @@ export default function AddLineItemModal({
     axiosClient
       .get(`/products`)
       .then((response) => {
-        console.log(response.data.data);
+      
         setDataTable(response.data.data);
       })
       .catch((error) => {
@@ -245,7 +246,7 @@ export default function AddLineItemModal({
     setIsDropdownOpen(false);
     onClose();
   };
-  console.log(`dataTable`, dataTable);
+ 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"

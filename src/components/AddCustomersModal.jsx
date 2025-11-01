@@ -87,7 +87,7 @@ export default function AddCustomersModal({
   };
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log("مقادیر فرم:", form);
+
     const res = await axiosClient.post(`/customers`, form);
     Swal.fire({
       toast: true,
@@ -116,7 +116,7 @@ export default function AddCustomersModal({
       last_name: "",
     }));
 
-    console.log(`res`, res);
+   
     setRefresh(!refresh);
     onClose();
   };

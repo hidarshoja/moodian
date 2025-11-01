@@ -44,8 +44,7 @@ export default function PasswordPage() {
   ]);
 
   const handlePasswordChange = (formData) => {
-    console.log("Password change request:", formData);
-    // Add new record to history
+   
     const newRecord = {
       id: passwordHistory.length + 1,
       username: "current_user", // This would come from auth context
@@ -68,7 +67,7 @@ export default function PasswordPage() {
 
 
   const handleDelete = (record) => {
-    console.log("Delete record:", record);
+  
     setPasswordHistory((prev) => prev.filter((r) => r.id !== record.id));
   };
 

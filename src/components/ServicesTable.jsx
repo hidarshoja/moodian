@@ -91,7 +91,7 @@ export default function ServicesTable({
   const handleDelete = async (row) => {
     try {
       const res = await axiosClient.delete(`/products/${row.id}`);
-      console.log(`Delete response:`, res);
+      
 
       setRefresh(!refresh);
       Swal.fire({

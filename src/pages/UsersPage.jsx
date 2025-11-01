@@ -60,7 +60,7 @@ export default function UsersPage() {
       const response = await axiosClientAdmin.get(
         `/users?page=${pageCount}${query}`
       );
-      console.log(`response.data.data`, response.data.data);
+     
       setRecords(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -142,9 +142,7 @@ export default function UsersPage() {
   const handleSubmitUser = async (e) => {
     e.preventDefault();
 
-    console.log("Form data:", userForm);
-    console.log("Editing user index:", editingUserIndex);
-    console.log("User ID:", records[editingUserIndex]?.id);
+  
 
     try {
       const formData = new FormData();
@@ -201,8 +199,7 @@ export default function UsersPage() {
         formData.append("moadian_certificate", userForm.moadian_certificate);
       }
 
-      // Debug: نمایش محتویات FormData
-      console.log("FormData contents:");
+     
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
@@ -211,7 +208,7 @@ export default function UsersPage() {
         // ویرایش کاربر موجود - اضافه کردن _method: PUT
         formData.append("_method", "PUT");
         const userId = records[editingUserIndex].id;
-        console.log("Updating user with ID:", userId);
+       
 
         const response = await axiosClientAdmin.post(
           `/users/${userId}`,
@@ -222,7 +219,7 @@ export default function UsersPage() {
             },
           }
         );
-        console.log("Update response:", response);
+       
         Swal.fire({
           toast: true,
           position: "top-start",
@@ -236,14 +233,13 @@ export default function UsersPage() {
           },
         });
       } else {
-        // ایجاد کاربر جدید
-        console.log("Creating new user");
+      
         const response = await axiosClientAdmin.post("/users", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log("Create response:", response);
+      
         Swal.fire({
           toast: true,
           position: "top-start",
@@ -429,10 +425,10 @@ export default function UsersPage() {
   const deleteRecord = async (index) => {
     try {
       const user = records[index];
-      console.log(`Deleting user:`, user);
+      
 
       const res = await axiosClient.delete(`/admin/users/${user.id}`);
-      console.log(`Delete response:`, res);
+     
 
       setRecords((prev) => prev.filter((_, i) => i !== index));
 
@@ -444,7 +440,7 @@ export default function UsersPage() {
   const openKeySettings = (index) => {
     setKeyModalIndex(index);
     const user = records[index];
-    console.log(`user.id`, user.id);
+  
     setKeyModalData({
       id: user.id,
     });

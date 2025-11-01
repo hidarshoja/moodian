@@ -65,7 +65,7 @@ export default function ServicesPage() {
       axiosClient
         .get(`/products?page=${pageCount}${query}${separator}export=1`)
         .then((response) => {
-          console.log(response.data.data);
+        
           Swal.fire({
             toast: true,
             position: "top-start",

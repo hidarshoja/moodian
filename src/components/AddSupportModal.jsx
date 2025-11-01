@@ -28,7 +28,7 @@ export default function AddSupportModal({ isOpen, onClose }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log("مقادیر فرم:", form);
+   
     onClose();
   };
 

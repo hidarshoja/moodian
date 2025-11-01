@@ -39,10 +39,10 @@ export default function CancelPage() {
  
 
   const handleDelete = async (row) => {
-    console.log(`row.id`, row.id);
+    
     try {
       const res = await axiosClient.delete(`/invoices/${row.id}`);
-      console.log(`Delete response:`, res);
+     
 
       //  setRefresh(!refresh);
       Swal.fire({
@@ -86,14 +86,14 @@ export default function CancelPage() {
   };
 
   const handleApprove = (record) => {
-    console.log("Approve record:", record);
+   
     setCancelRecords((prev) =>
       prev.map((r) => (r.id === record.id ? { ...r, status: "تایید شده" } : r))
     );
   };
 
   const handleReject = (record) => {
-    console.log("Reject record:", record);
+   
     setCancelRecords((prev) =>
       prev.map((r) => (r.id === record.id ? { ...r, status: "رد شده" } : r))
     );

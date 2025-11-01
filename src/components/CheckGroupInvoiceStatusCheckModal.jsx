@@ -5,14 +5,12 @@ import {convertToPersianDate} from "../utils/change-date";
 import Swal from "sweetalert2";
 
 const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
-  const [autoDisplay, setAutoDisplay] = useState(false);
   const [selectedInvoices, setSelectedInvoices] = useState(new Set());
   const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
      axiosClient.get("/invoices?f[status]=-80,-90,-10,0").then((response) => {
-      console.log(response.data.data);
-    
+     
       setInvoiceData(response.data.data);
     });
   }, []);
@@ -29,14 +27,14 @@ const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   };
 
   const handleSend = async () => {
-    console.log("Sending selected invoices:", Array.from(selectedInvoices));
+    
     
     // تبدیل داده به فرمت مورد نظر
     let data = {
       ids: Array.from(selectedInvoices).map(item => item.toString())
     };
     
-    console.log(`data`, data);
+
     
     try {
       const res = await axiosClient.post(`/invoices/send-to-moadian`, data);
