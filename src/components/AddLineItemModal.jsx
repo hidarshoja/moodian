@@ -177,6 +177,20 @@ export default function AddLineItemModal({
           newData.adis = totalAmount - (dis || 0);
           newData.tsstam = totalAmount - (dis || 0);
         }
+        // اضافه کردن محاسبه vam
+        if (selectedProduct?.vra && (newData.adis || prev.adis)) {
+          const adisVal = newData.adis !== undefined ? newData.adis : prev.adis;
+          let vra = selectedProduct.vra;
+          if (typeof vra === "string") vra = parseFloat(vra);
+          if (!vra) vra = 0;
+          if (adisVal && vra) {
+            newData.vam = Math.round((adisVal * vra) / 100);
+          } else {
+            newData.vam = 0;
+          }
+        } else {
+          newData.vam = 0;
+        }
       }
 
       return newData;
