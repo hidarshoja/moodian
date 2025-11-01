@@ -90,7 +90,7 @@ console.log(`activityUser`, activityUser);
           </div>
         </div>
         <div className="w-full flex items-center justify-center text-xl text-white mt-10">
-          کاربر { parsedUser.name + " " + parsedUser.last_name }  به پنل مدیریت خود خوش آمدید!
+          کاربر { parsedUser?.name + " " + parsedUser?.last_name }  به پنل مدیریت خود خوش آمدید!
         </div>
         
            <div className="p-6">
