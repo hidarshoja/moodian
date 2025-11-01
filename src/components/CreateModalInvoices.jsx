@@ -51,6 +51,7 @@ export default function CreateModalInvoices({
   const [totalDiscount, setTotalDiscount] = useState(0);
 const[tax , setTax] = useState(0);
 const[totalOdam, setTotalOdam] = useState(0);
+const [olamTotal, setOlamTotal] = useState(0);
 const[totalPrice , setTotalPrice] = useState(0);
 
   const formatDateTime = (value) => {
@@ -190,6 +191,17 @@ const[totalPrice , setTotalPrice] = useState(0);
     const sumDiscount = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
     const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
     const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
+    const sumOlam = lineItems?.reduce((sum, item) => sum + (item?.olam || 0), 0);
+    const total = lineItems?.reduce((sum, item) => {
+      const adis = item?.adis || 0;
+      const vam = item?.vam || 0;
+      const odam = item?.odam || 0;
+      const olam = item?.olam || 0;
+      return sum + (adis + vam + odam + olam);
+    }, 0);
+   
+    setOlamTotal(sumOlam);
+    setTotalPrice(total);
     setTotalDiscount(sumDiscount);
     setTax(sumTax);
     setTotalOdam(sumOdam);
@@ -211,8 +223,7 @@ const[totalPrice , setTotalPrice] = useState(0);
   };
 
   const handleSaveLineItem = (itemData) => {
-console.log(`itemData`, itemData);
-console.log(`editItemId`, editItemId);
+
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -306,7 +317,7 @@ console.log(`editItemId`, editItemId);
     );
 
     calculatedTotals.tbill =
-      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
+      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam ;
 
     setTotals(calculatedTotals);
   };
@@ -610,9 +621,7 @@ console.log(`editItemId`, editItemId);
     printWindow.print();
     printWindow.close();
   };
- console.log(`selectedProduct`, selectedProduct);
- console.log(`lineItems`, lineItems);
- console.log(`totalDiscount`, totalDiscount);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -903,9 +912,7 @@ console.log(`editItemId`, editItemId);
             )}
           </div>
         </div>
-        {(() => {
-          console.log(`totals`, totals);
-        })()}
+     
         {/* Financial Summary Section */}
         <div className="px-6 py-4 border-t border-gray-200">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -961,11 +968,11 @@ console.log(`editItemId`, editItemId);
             </div>
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                مبلغ نسیه
+                مبلغ سایر وجوه قانونی
               </label>
               <input
-                type="number"
-                value={totals.insp}
+                type="text"
+                value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
                 // onChange={(e) =>
                 //   setTotals((prev) => ({
@@ -1016,7 +1023,7 @@ console.log(`editItemId`, editItemId);
               </label>
               <input
                 type="text"
-                value={ totals.tbill ? Number(totals.tbill).toLocaleString("fa-IR") : ""}
+                value={totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""}
                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />
