@@ -191,6 +191,20 @@ export default function AddLineItemModal({
         } else {
           newData.vam = 0;
         }
+        // اضافه کردن محاسبه odam
+        if (selectedProduct?.odr && (newData.adis || prev.adis)) {
+          const adisVal = newData.adis !== undefined ? newData.adis : prev.adis;
+          let odr = selectedProduct.odr;
+          if (typeof odr === "string") odr = parseFloat(odr);
+          if (!odr) odr = 0;
+          if (adisVal && odr) {
+            newData.odam = Math.round((adisVal * odr) / 100);
+          } else {
+            newData.odam = 0;
+          }
+        } else {
+          newData.odam = 0;
+        }
       }
 
       return newData;
