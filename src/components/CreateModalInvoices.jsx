@@ -214,6 +214,15 @@ console.log(`editItemId`, editItemId);
                 adis: itemData.adis,
                 name: itemData.name,
                 sstid: itemData.sstid,
+                vam : itemData?.vam,
+                odam : itemData?.odam,
+                olam : itemData?.olam,
+                cop : itemData?.cop,
+                vop : itemData?.vop,
+                tsstam : itemData?.tsstam,
+                Show : itemData?.Show,
+                exr : itemData?.exr,
+                cfee : itemData?.cfee,
               }
             : item
         )
@@ -233,6 +242,15 @@ console.log(`editItemId`, editItemId);
         adis: itemData.adis,
         name: itemData.name,
         sstid: itemData.sstid,
+        vam : itemData?.vam,
+        odam : itemData?.odam,
+        olam : itemData?.olam,
+        cop : itemData?.cop,
+        vop : itemData?.vop,
+        tsstam : itemData?.tsstam,
+        Show : itemData?.Show,
+        exr : itemData?.exr,
+        cfee : itemData?.cfee,
       };
       setLineItems((prev) => [...prev, newItem]);
     }
@@ -282,7 +300,6 @@ console.log(`editItemId`, editItemId);
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    
 
     try {
       const res = await axiosClient.post(`/invoices`, payload, {
