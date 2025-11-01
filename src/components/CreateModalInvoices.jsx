@@ -197,7 +197,8 @@ export default function CreateModalInvoices({
   };
 
   const handleSaveLineItem = (itemData) => {
-
+console.log(`itemData`, itemData);
+console.log(`editItemId`, editItemId);
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>

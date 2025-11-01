@@ -214,6 +214,7 @@ export default function AddLineItemModal({
   };
 
   const handleSave = () => {
+    console.log(`formData`, formData);
     if (onSave) {
       onSave(formData);
     }
