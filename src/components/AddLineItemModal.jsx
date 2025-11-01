@@ -144,7 +144,6 @@ export default function AddLineItemModal({
     axiosClient
       .get(`/products`)
       .then((response) => {
-      
         setDataTable(response.data.data);
       })
       .catch((error) => {
@@ -246,7 +245,7 @@ export default function AddLineItemModal({
     setIsDropdownOpen(false);
     onClose();
   };
- 
+  console.log(`selectedProduct`, selectedProduct);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"
@@ -405,7 +404,11 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={ formData.prdis ? Number(formData.prdis).toLocaleString("fa-IR") : ""}
+                value={
+                  formData.prdis
+                    ? Number(formData.prdis).toLocaleString("fa-IR")
+                    : ""
+                }
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
@@ -418,7 +421,11 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={ formData.adis ? Number(formData.adis).toLocaleString("fa-IR") : ""}
+                value={
+                  formData.adis
+                    ? Number(formData.adis).toLocaleString("fa-IR")
+                    : ""
+                }
                 readOnly
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
@@ -431,11 +438,9 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.vra}
-                onChange={(e) =>
-                  handleInputChange("vra", parseFloat(e.target.value) || 0)
-                }
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                value={selectedProduct?.vra ?? ""}
+                readOnly
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-not-allowed"
               />
             </div>
 
@@ -521,7 +526,11 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={ formData.tsstam ? Number(formData.tsstam).toLocaleString("fa-IR") : ""}
+                value={
+                  formData.tsstam
+                    ? Number(formData.tsstam).toLocaleString("fa-IR")
+                    : ""
+                }
                 // onChange={(e) =>
                 //   handleInputChange("tsstam", parseFloat(e.target.value) || 0)
                 // }
