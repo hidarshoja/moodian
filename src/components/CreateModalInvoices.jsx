@@ -48,6 +48,11 @@ export default function CreateModalInvoices({
   const [dataTable, setDataTable] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+const[tax , setTax] = useState(0);
+const[totalOdam, setTotalOdam] = useState(0);
+const[totalPrice , setTotalPrice] = useState(0);
+
   const formatDateTime = (value) => {
     if (!value) return null;
     try {
@@ -180,6 +185,15 @@ export default function CreateModalInvoices({
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
+
+
+    const sumDiscount = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
+    const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
+    const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
+    setTotalDiscount(sumDiscount);
+    setTax(sumTax);
+    setTotalOdam(sumOdam);
+
   }, [lineItems]);
 
   const resetForm = () => {
@@ -598,6 +612,7 @@ console.log(`editItemId`, editItemId);
   };
  console.log(`selectedProduct`, selectedProduct);
  console.log(`lineItems`, lineItems);
+ console.log(`totalDiscount`, totalDiscount);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -911,7 +926,7 @@ console.log(`editItemId`, editItemId);
               </label>
               <input
                 type="text"
-                value={((totals.tprdis ? Number(totals.tprdis) : 0) - (totals.tadis ? Number(totals.tadis) : 0)).toLocaleString("fa-IR")}
+                value={Number(totalDiscount).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -967,13 +982,14 @@ console.log(`editItemId`, editItemId);
               </label>
               <input
                 type="text"
-                value={totals.tvam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    tvam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                value={Number(tax).toLocaleString("fa-IR")}
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     tvam: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
+                readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -983,13 +999,14 @@ console.log(`editItemId`, editItemId);
               </label>
               <input
                 type="text"
-                value={totals.todam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    todam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                value={Number(totalOdam).toLocaleString("fa-IR")}
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     todam: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
+                readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
             </div>
