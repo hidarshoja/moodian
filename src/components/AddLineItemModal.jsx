@@ -451,11 +451,15 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.vam}
-                onChange={(e) =>
-                  handleInputChange("vam", parseFloat(e.target.value) || 0)
+                value={
+                  selectedProduct?.vra && formData.prdis
+                    ? Math.round(
+                        (formData.adis * selectedProduct.vra) / 100
+                      ).toLocaleString("fa-IR")
+                    : ""
                 }
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                readOnly
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
             </div>
 
@@ -466,11 +470,25 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.odam}
-                onChange={(e) =>
-                  handleInputChange("odam", parseFloat(e.target.value) || 0)
-                }
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                value={(() => {
+                  let percent = selectedProduct?.odr;
+                  if (
+                    percent === null ||
+                    percent === undefined ||
+                    percent === ""
+                  )
+                    return "";
+                  if (typeof percent === "string")
+                    percent = parseFloat(percent);
+                  if (isNaN(percent)) percent = 0;
+                  return formData.adis && percent
+                    ? Math.round(
+                        (formData.adis * percent) / 100
+                      ).toLocaleString("fa-IR")
+                    : "0";
+                })()}
+                readOnly
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
             </div>
 
@@ -481,11 +499,25 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.olam}
-                onChange={(e) =>
-                  handleInputChange("olam", parseFloat(e.target.value) || 0)
-                }
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                value={(() => {
+                  let percent = selectedProduct?.olr;
+                  if (
+                    percent === null ||
+                    percent === undefined ||
+                    percent === ""
+                  )
+                    return "";
+                  if (typeof percent === "string")
+                    percent = parseFloat(percent);
+                  if (isNaN(percent)) percent = 0;
+                  return formData.adis && percent
+                    ? Math.round(
+                        (formData.adis * percent) / 100
+                      ).toLocaleString("fa-IR")
+                    : "0";
+                })()}
+                readOnly
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
               />
             </div>
 
@@ -526,16 +558,42 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={
-                  formData.tsstam
-                    ? Number(formData.tsstam).toLocaleString("fa-IR")
-                    : ""
-                }
-                // onChange={(e) =>
-                //   handleInputChange("tsstam", parseFloat(e.target.value) || 0)
-                // }
+                value={(() => {
+                  const afterDiscount = Number(formData.adis) || 0;
+                  // مالیات بر ارزش افزوده
+                  let vra = selectedProduct?.vra;
+                  if (typeof vra === "string") vra = parseFloat(vra);
+                  if (!vra) vra = 0;
+                  const vat =
+                    afterDiscount && vra
+                      ? Math.round((formData.prdis * vra) / 100)
+                      : 0;
+                  // سایر مالیات و عوارض
+                  let odr = selectedProduct?.odr;
+                  if (typeof odr === "string") odr = parseFloat(odr);
+                  if (!odr) odr = 0;
+                  const otherTax =
+                    afterDiscount && odr
+                      ? Math.round((afterDiscount * odr) / 100)
+                      : 0;
+                  // سایر وجوه قانونی
+                  let olr = selectedProduct?.olr;
+                  if (typeof olr === "string") olr = parseFloat(olr);
+                  if (!olr) olr = 0;
+                  const otherLegal =
+                    afterDiscount && olr
+                      ? Math.round((afterDiscount * olr) / 100)
+                      : 0;
+                  // جمع کل
+                  return (
+                    afterDiscount +
+                    vat +
+                    otherTax +
+                    otherLegal
+                  ).toLocaleString("fa-IR");
+                })()}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-not-allowed"
               />
             </div>
 
