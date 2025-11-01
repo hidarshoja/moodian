@@ -284,10 +284,13 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
                 {r.inty_label}
               </td>
-
+              {(() => {
+                console.log(`r`, r);
+              })()}
               <td className="px-5 py-3 text-white/90 text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-center gap-2">
-                  <div className="relative group">
+                  { r.can_update === true && <>
+                    <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
                       onClick={() => handleEdit(r, "edit")}
@@ -297,8 +300,10 @@ export default function SendInvoicesTable({
                     <div className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                       ویرایش
                     </div>
-                  </div>
-                  <div className="relative group">
+                  </div></>}
+                  
+                  { r.can_delete === true && <>
+                    <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-red-500/20 text-red-500"
                       onClick={() => handleDelete(r)}
@@ -309,17 +314,25 @@ export default function SendInvoicesTable({
                       حذف
                     </div>
                   </div>
-                  <div className="relative group">
-                    <button
-                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
-                      onClick={() => handleSendToMoadian(r)}
-                    >
-                      <BsSendArrowUp className="w-4 h-4" />
-                    </button>
-                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      ارسال
-                    </div>
-                  </div>
+                  </> }
+                 
+                  {r.status === 0 ||
+                    r.status === -10 ||
+                    r.status === -80 ||
+                    (r.status === -90 && (
+                      <div className="relative group">
+                        <button
+                          className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                          onClick={() => handleSendToMoadian(r)}
+                        >
+                          <BsSendArrowUp className="w-4 h-4" />
+                        </button>
+                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                          ارسال
+                        </div>
+                      </div>
+                    ))}
+{ r.can_cancel === true && <>
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
@@ -331,30 +344,36 @@ export default function SendInvoicesTable({
                       ابطال
                     </div>
                   </div>
-
-                  <div className="relative group">
-                    <button
-                      className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
-                      onClick={() => handleCheckStatus(r)}
-                    >
-                      <GrStatusGood className="w-4 h-4" />
-                    </button>
-                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      چک وضعیت
+                  </> }
+                  {r.taxid !== null && (
+                    <div className="relative group">
+                      <button
+                        className="p-1 rounded hover:bg-blue-500/20 text-blue-500"
+                        onClick={() => handleCheckStatus(r)}
+                      >
+                        <GrStatusGood className="w-4 h-4" />
+                      </button>
+                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        چک وضعیت
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="relative group">
-                    <button
-                      className="p-1 rounded hover:bg-green-500/20 text-green-500"
-                      onClick={() => handleShowErrors(r)}
-                    >
-                      <FaRegListAlt className="w-4 h-4" />
-                    </button>
-                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      لیست خطاها
-                    </div>
-                  </div>
+                  )}
+                  {r.status === -10 ||
+                    r.status === -80 ||
+                    (r.status === -90 && (
+                      <div className="relative group">
+                        <button
+                          className="p-1 rounded hover:bg-green-500/20 text-green-500"
+                          onClick={() => handleShowErrors(r)}
+                        >
+                          <FaRegListAlt className="w-4 h-4" />
+                        </button>
+                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                          لیست خطاها
+                        </div>
+                      </div>
+                    ))}
+{ r.can_correction === true && <>
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-red-500/20 text-red-500"
@@ -366,6 +385,7 @@ export default function SendInvoicesTable({
                       اصلاح
                     </div>
                   </div>
+                  </> }
                   <div className="relative group">
                     <button
                       className="p-1 rounded hover:bg-green-500/20 text-green-500"

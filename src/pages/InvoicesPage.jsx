@@ -46,6 +46,7 @@ export default function InvoicesPage() {
     axiosClient
       .get(`/invoices?page=${pageCount}${query}`)
       .then((response) => {
+        console.log(`response.data.data`, response.data.data);
         setDataTable(response.data.data);
         setMeta(response.data.meta);
       })
