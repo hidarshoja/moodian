@@ -43,6 +43,13 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
   const [products, setProducts] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
+  const [totalDiscount2 , setTotalDiscount2] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalDiscount3 , setTotalDiscount3] = useState(0);
+  const[tax , setTax] = useState(0);
+  const[totalOdam, setTotalOdam] = useState(0);
+  const [olamTotal, setOlamTotal] = useState(0);
+  const[totalPrice , setTotalPrice] = useState(0);
 
   // Initialize form data when invoiceData changes
   useEffect(() => {
@@ -258,7 +265,23 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
+    console.log(`lineItems`, lineItems);
+
+    const sumDiscount = lineItems?.reduce((sum, item) => sum + ((item?.am * item?.fee) || 0), 0);
+    const sumDiscount2 = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
+    const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
+    const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
+    const sumOlam = lineItems?.reduce((sum, item) => sum + (item?.olam || 0), 0);
+
+   
+    setOlamTotal(sumOlam);
+    setTotalPrice((totalDiscount3 + olamTotal + tax + totalOdam));
+    setTotalDiscount(sumDiscount);
+    setTotalDiscount2(sumDiscount2);
+    setTotalDiscount3(sumDiscount - sumDiscount2);
+    setTax(sumTax);
+    setTotalOdam(sumOdam);
   }, [lineItems]);
 
   if (!isOpen) return null;
@@ -1083,7 +1106,8 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
             </div> */}
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                مبلغ نسیه
+               
+مبلغ سایر وجوه قانونی
               </label>
               <input
                 type="number"
