@@ -1060,7 +1060,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
               </label>
               <input
                  type="text"
-                 value={ totals.tprdis ? Number(totals.tprdis).toLocaleString("fa-IR") : ""}
+                 value={Number(totalDiscount).toLocaleString("fa-IR")}
                  readOnly
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1071,8 +1071,8 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
               </label>
               <input
                   type="text"
-                  value={ totals.tdis ? Number(totals.tdis).toLocaleString("fa-IR") : ""}
-                readOnly
+                  value={Number(totalDiscount2).toLocaleString("fa-IR")}
+                  readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
@@ -1082,7 +1082,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
               </label>
               <input
                 type="text"
-                value={ totals.tadis ? Number(totals.tadis).toLocaleString("fa-IR") : ""}
+                value={Number(totalDiscount3).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1110,8 +1110,8 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
 مبلغ سایر وجوه قانونی
               </label>
               <input
-                type="number"
-                value={totals.insp}
+                type="text"
+                value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
                 // onChange={(e) =>
                 //   setTotals((prev) => ({
@@ -1127,14 +1127,9 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
                 م مالیات بر ارزش افزوده
               </label>
               <input
-                type="number"
-                value={totals.tvam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    tvam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                  type="text"
+                  value={Number(tax).toLocaleString("fa-IR")}
+                  readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1143,14 +1138,9 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
                 م سایر مالیات
               </label>
               <input
-                type="number"
-                value={totals.todam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    todam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                 type="text"
+                 value={Number(totalOdam).toLocaleString("fa-IR")}
+                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1160,7 +1150,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
               </label>
               <input
               type="text"
-              value={ totals.tbill ? Number(totals.tbill).toLocaleString("fa-IR") : ""}
+              value={totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""}
               readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />
