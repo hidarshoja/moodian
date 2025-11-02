@@ -264,9 +264,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
-   
-    console.log(`lineItems`, lineItems);
-
+  
     const sumDiscount = lineItems?.reduce((sum, item) => sum + ((item?.am * item?.fee) || 0), 0);
     const sumDiscount2 = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
     const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
