@@ -915,14 +915,14 @@ const[totalPrice , setTotalPrice] = useState(0);
      
         {/* Financial Summary Section */}
         <div className="px-6 py-4 border-t border-gray-200">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 م مبلغ قبل از تخفیف
               </label>
               <input
                 type="text"
-                value={ totals.tprdis ? Number(totals.tprdis).toLocaleString("fa-IR") : ""}
+                value={Number(totalDiscount).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -949,7 +949,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 م مبلغ پرداختی نقدی
               </label>
@@ -965,7 +965,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                 // }
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 مبلغ سایر وجوه قانونی

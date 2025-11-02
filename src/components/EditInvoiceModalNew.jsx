@@ -43,6 +43,13 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
   const [products, setProducts] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
+  const [totalDiscount2 , setTotalDiscount2] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalDiscount3 , setTotalDiscount3] = useState(0);
+  const[tax , setTax] = useState(0);
+  const[totalOdam, setTotalOdam] = useState(0);
+  const [olamTotal, setOlamTotal] = useState(0);
+  const[totalPrice , setTotalPrice] = useState(0);
 
   // Initialize form data when invoiceData changes
   useEffect(() => {
@@ -257,7 +264,23 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
+    console.log(`lineItems`, lineItems);
+
+    const sumDiscount = lineItems?.reduce((sum, item) => sum + ((item?.am * item?.fee) || 0), 0);
+    const sumDiscount2 = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
+    const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
+    const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
+    const sumOlam = lineItems?.reduce((sum, item) => sum + (item?.olam || 0), 0);
+
+   
+    setOlamTotal(sumOlam);
+    setTotalPrice((totalDiscount3 + olamTotal + tax + totalOdam));
+    setTotalDiscount(sumDiscount);
+    setTotalDiscount2(sumDiscount2);
+    setTotalDiscount3(sumDiscount - sumDiscount2);
+    setTax(sumTax);
+    setTotalOdam(sumOdam);
   }, [lineItems]);
 
   if (!isOpen) return null;
@@ -1042,14 +1065,14 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
 
         {/* Financial Summary Section */}
         <div className="px-6 py-4 border-t border-gray-200">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 م مبلغ قبل از تخفیف
               </label>
               <input
                type="text"
-                value={ totals.tprdis ? Number(totals.tprdis).toLocaleString("fa-IR") : ""}
+               value={Number(totalDiscount).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1060,7 +1083,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
               </label>
               <input
                   type="text"
-                value={ totals.tdis ? Number(totals.tdis).toLocaleString("fa-IR") : ""}
+                  value={Number(totalDiscount2).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1071,12 +1094,12 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
               </label>
               <input
                type="text"
-                value={ totals.tadis ? Number(totals.tadis).toLocaleString("fa-IR") : ""}
+               value={Number(totalDiscount3).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 م مبلغ پرداختی نقدی
               </label>
@@ -1092,14 +1115,14 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 // }
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                مبلغ نسیه
+              مبلغ سایر وجوه قانونی
               </label>
               <input
-                type="number"
-                value={totals.insp}
+                type="text"
+                value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
                 // onChange={(e) =>
                 //   setTotals((prev) => ({
@@ -1115,14 +1138,15 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 م مالیات بر ارزش افزوده
               </label>
               <input
-                type="number"
-                value={totals.tvam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    tvam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+                type="text"
+                value={Number(tax).toLocaleString("fa-IR")}
+                readOnly
+                // onChange={(e) =>
+                //   setTotals((prev) => ({
+                //     ...prev,
+                //     tvam: parseFloat(e.target.value) || 0,
+                //   }))
+                // }
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1131,14 +1155,9 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                 م سایر مالیات
               </label>
               <input
-                type="number"
-                value={totals.todam}
-                onChange={(e) =>
-                  setTotals((prev) => ({
-                    ...prev,
-                    todam: parseFloat(e.target.value) || 0,
-                  }))
-                }
+               type="text"
+               value={Number(totalOdam).toLocaleString("fa-IR")}
+               readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1148,8 +1167,8 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
               </label>
               <input
                       type="text"
-                value={ totals.tbill ? Number(totals.tbill).toLocaleString("fa-IR") : ""}
-                readOnly
+                      value={totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""}
+                      readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />
             </div>
