@@ -10,35 +10,72 @@ export default function SearchPublicIdentifiersModal({
   onClose,
   onSelectItem,
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState(""); // service, production, import
+  // حذف searchTermClick و nameSearch و ترکیب کردن در یک state واحد برای جستجو
+  const [searchParams, setSearchParams] = useState({
+    term: "",
+    type: "name", // "id" یا "name"
+    tab: "", // نام بندی تب
+    page: 1,
+  });
   const [dataTable, setDataTable] = useState([]);
-  const [searchTermClick, setSearchTermClick] = useState(false);
   const [meta, setMeta] = useState({});
-  const [pageCount, setPageCount] = useState(1);
-  const [nameSearch , setNameSearch] = useState(null);
 
+  // آپدیت برای فرم ورودی (صرفاً مقدار term را عوض کند، جستجو نکند)
+  const updateSearchField = (term) => {
+    setSearchParams((prev) => ({ ...prev, term }));
+  };
+
+  // تغییر صفحه
+  const handlePageChange = (page) => {
+    setSearchParams((prev) => ({ ...prev, page }));
+  };
+
+  // تغییر تب
+  const handleTabChange = (tab) => {
+    setSearchParams((prev) => ({ ...prev, tab, page: 1 }));
+  };
+
+  // جستجو فقط با دکمه (type و term و page=1 با هم تنظیم شود)
+  const handleSearchBy = (type) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      type,
+      page: 1,
+      trigger: Math.random(),
+    }));
+  };
+
+  // پاک کردن فیلتر
+  const handleClearFilters = () => {
+    setSearchParams({
+      term: "",
+      type: "name",
+      tab: "",
+      page: 1,
+      trigger: Math.random(),
+    });
+  };
+
+  // useEffect فقط روی trigger، type، tab، page
   useEffect(() => {
-    let query = `/sstids?page=${pageCount} `;
-if(nameSearch === "id"){
-  if (searchTerm && !activeTab) {
-    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}`;
-  } else if (!searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
-  } else if (searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[sstid]=${searchTerm}&&f[type]=${activeTab}`;
-  }
-}else{
-  if (searchTerm && !activeTab) {
-    query = `/sstids?page=${pageCount}&&f[description]=${searchTerm}`;
-  } else if (!searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[type]=${activeTab}`;
-  } else if (searchTerm && activeTab) {
-    query = `/sstids?page=${pageCount}&&f[description]=${searchTerm}&&f[type]=${activeTab}`;
-  }
-}
-  
-
+    let query = `/sstids?page=${searchParams.page}`;
+    if (searchParams.type === "id") {
+      if (searchParams.term && !searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[sstid]=${searchParams.term}`;
+      } else if (!searchParams.term && searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[type]=${searchParams.tab}`;
+      } else if (searchParams.term && searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[sstid]=${searchParams.term}&&f[type]=${searchParams.tab}`;
+      }
+    } else {
+      if (searchParams.term && !searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[description]=${searchParams.term}`;
+      } else if (!searchParams.term && searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[type]=${searchParams.tab}`;
+      } else if (searchParams.term && searchParams.tab) {
+        query = `/sstids?page=${searchParams.page}&&f[description]=${searchParams.term}&&f[type]=${searchParams.tab}`;
+      }
+    }
     axiosClient
       .get(query)
       .then((response) => {
@@ -48,16 +85,14 @@ if(nameSearch === "id"){
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-    setSearchTermClick(false);
-  }, [searchTermClick, activeTab, pageCount]);
+  }, [
+    searchParams.trigger,
+    searchParams.type,
+    searchParams.tab,
+    searchParams.page,
+  ]);
 
   if (!isOpen) return null;
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setSearchTerm("");
-    setPageCount(1);
-  };
 
   const handleSelectItem = (item) => {
     if (onSelectItem) {
@@ -71,10 +106,6 @@ if(nameSearch === "id"){
     { key: "شناسه عمومی تولید", label: "عمومی تولید" },
     { key: "شناسه عمومی وارداتی", label: "عمومی وارداتی" },
   ];
-  const handleTabDelete = () => {
-    setActiveTab("");
-    setSearchTerm("");
-  };
 
   return (
     <div
@@ -102,44 +133,38 @@ if(nameSearch === "id"){
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center flex-col gap-4 mb-4">
             {/* Search Input */}
-          <div className="w-full flex gap-2">
-          <div className="w-2/4">
-              <input
-                type="text"
-                placeholder="جستجو ..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
-                dir="rtl"
-              />
+            <div className="w-full flex gap-2">
+              <div className="w-2/4">
+                <input
+                  type="text"
+                  placeholder="جستجو ..."
+                  value={searchParams.term}
+                  onChange={(e) => updateSearchField(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                  dir="rtl"
+                />
+              </div>
+              {/* Search by ID */}
+              <button
+                onClick={() => handleSearchBy("id")}
+                className={`bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors ${
+                  searchParams.type === "id" ? "ring-2 ring-blue-500" : ""
+                }`}
+              >
+                <CiSearch className="w-5 h-5 text-[10px]" />
+                <span>جسجو براساس شناسه</span>
+              </button>
+              {/* Search by Name */}
+              <button
+                onClick={() => handleSearchBy("name")}
+                className={`bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors ${
+                  searchParams.type === "name" ? "ring-2 ring-blue-500" : ""
+                }`}
+              >
+                <CiSearch className="w-5 h-5 text-[10px]" />
+                <span>جسجو براساس نام</span>
+              </button>
             </div>
-
-            {/* Search Button */}
-            <button
-              onClick={() => {
-                setSearchTermClick(true);
-                setNameSearch("id");
-              }}
-              className="bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors"
-            >
-              <CiSearch className="w-5 h-5 text-[10px]" />
-             <span>
-             جسجو براساس شناسه
-             </span>
-            </button>
-            <button
-              onClick={() => {
-                setSearchTermClick(true);
-                setNameSearch("name");
-              }}
-              className="bg-[#1A2035] w-1/4 text-white px-1  py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors"
-            >
-              <CiSearch className="w-5 h-5 text-[10px]" />
-               <span>
-               جسجو براساس نام
-               </span>
-            </button>
-          </div>
             {/* Tab Buttons */}
             <div className="flex gap-2 w-full">
               {tabs.map((tab) => (
@@ -147,7 +172,7 @@ if(nameSearch === "id"){
                   key={tab.key}
                   onClick={() => handleTabChange(tab.key)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeTab === tab.key
+                    searchParams.tab === tab.key
                       ? "bg-[#4A90E2] text-white"
                       : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                   }`}
@@ -156,9 +181,8 @@ if(nameSearch === "id"){
                 </button>
               ))}
               <button
-                onClick={handleTabDelete}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors "bg-white text-gray-100 border border-gray-300 hover:bg-gray-50"
-                  }`}
+                onClick={handleClearFilters}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
               >
                 پاک کردن فیلترها
               </button>
@@ -173,9 +197,9 @@ if(nameSearch === "id"){
             <div className="text-center font-medium text-gray-700">
               نرخ ارزش افزوده
             </div>
-           
+
             <div className="text-center font-medium text-gray-700">
-              نرخ سایر مالیات و عوارض 
+              نرخ سایر مالیات و عوارض
             </div>
           </div>
         </div>
@@ -250,8 +274,8 @@ if(nameSearch === "id"){
             </div>
           </div> */}
           <Pagination2
-            currentPage={pageCount}
-            setCurrentPage={setPageCount}
+            currentPage={searchParams.page}
+            setCurrentPage={handlePageChange}
             totalItems={meta.total || 0}
             itemsPerPage={meta.per_page || 10}
           />
