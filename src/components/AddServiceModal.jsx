@@ -123,7 +123,7 @@ export default function AddServiceModal({
       odr: item.vat_custom_purposes || "",
     }));
   };
-console.log(`units`, units);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
