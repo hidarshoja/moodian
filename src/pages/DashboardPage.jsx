@@ -228,12 +228,12 @@ const parsedUser = JSON.parse(userData);
           </div>
         </div>
       )}
-      <div
+      {/* <div
         onClick={() => setIsSignatureModalOpen(true)}
         className="fixed left-3 bottom-3 w-14 h-14 rounded-full bg-orange-500 flex items-center justify-center cursor-pointer hover:bg-orange-600 transition-colors"
       >
         <FaKey className="text-white" />
-      </div>
+      </div> */}
 
       <DigitalSignatureModal
         isOpen={isSignatureModalOpen}
