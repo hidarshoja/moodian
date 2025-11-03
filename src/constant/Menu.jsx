@@ -4,6 +4,7 @@ import {
   UsersIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
+import { LuImport } from "react-icons/lu";
 import { VscReport } from "react-icons/vsc";
 import { PiChartScatter } from "react-icons/pi";
 import { BiGitCompare } from "react-icons/bi";
@@ -116,6 +117,12 @@ const allNavigationItems = [
     icon: <GiCheckedShield className="w-5 h-5 ml-2" />,
     href: "/roles",
     permission: "role.view", // Add appropriate permission if needed
+  },
+  {
+    name: "ایمپورت و اکسپورت",
+    icon: <LuImport className="w-5 h-5 ml-2" />,
+    href: "/downloadExcel",
+    permission: null, // Add appropriate permission if needed
   },
 ];
 
