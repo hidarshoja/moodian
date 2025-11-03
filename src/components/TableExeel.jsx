@@ -4,6 +4,7 @@ import { convertToPersianDate } from "../utils/change-date";
 import { GrDocumentExcel } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import { MdDeleteOutline } from "react-icons/md";
+import { BiErrorAlt } from "react-icons/bi";
 import Swal from "sweetalert2";
 
 function Spinner() {
@@ -42,41 +43,63 @@ const handleDownload = async (number) => {
 
 
 
-const handleDelete = async (row) => {
-  try {
-    const res = await axiosClient.delete(`/import-exports/${row}`);
- 
-
-    setRefresh(!refresh);
-    Swal.fire({
-      toast: true,
-      position: "top-start",
-      icon: "success", // یا 'error'
-      title: "فایل اکسل با موفقیت حذف شد",
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      customClass: {
-        popup: "swal2-toast",
-      },
-    });
+  const handleDelete = async (row) => {
+    try {
+      const res = await axiosClient.delete(`/import-exports/${row}`);
   
-  } catch (error) {
-    console.log(`error`, error);
-    Swal.fire({
-      toast: true,
-      position: "top-start",
-      icon: "error",
-      title: "خطا در حذف اکسل",
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      customClass: {
-        popup: "swal2-toast",
-      },
-    });
-  }
-};
+
+      setRefresh(!refresh);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success", // یا 'error'
+        title: "فایل اکسل با موفقیت حذف شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    
+    } catch (error) {
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در حذف اکسل",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+    }
+  };
+  const handleErrors = async (row) => {
+    try {
+      const res = await axiosClient.get(`/import-exports/${row}/errors`);
+      console.log(`res`, res);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "عرور ها با موفقیت دریافت شد",
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.log(`error`, error);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "error",
+        title: "خطا در دریافت عرور ها",
+        showConfirmButton: false,
+      });
+    } 
+  };
 
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
@@ -155,6 +178,14 @@ const handleDelete = async (row) => {
                        className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                      >
                        <MdDeleteOutline width={20} height={20} />
+                     </button>
+
+                     <button
+                       onClick={() => handleErrors(r.id)}
+                       title="عرور ها"
+                       className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                     >
+                       <BiErrorAlt width={20} height={20} />
                      </button>
                    
                    </div>
