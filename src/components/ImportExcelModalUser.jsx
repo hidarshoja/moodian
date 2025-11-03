@@ -103,6 +103,18 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
     }
   };
 
+  // دانلود فایل نمونه
+  const handleDownloadSample = () => {
+    // مسیر فایل نمونه در پوشه public/file (در صورت تغییر، این مسیر را ویرایش کنید)
+    const url = "/file/sample.xlsx"; // یا نام واقعی فایل نمونه
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "sample.xlsx"); // نامی که کاربر دانلود می‌کند
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-black/40"
@@ -144,7 +156,9 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
             <button className="btn-custom" onClick={handleImport}>
               بارگذاری
             </button>
-            <button className="btn-custom">فایل نمونه</button>
+            <button className="btn-custom" onClick={handleDownloadSample}>
+              فایل نمونه
+            </button>
           </div>
         </div>
         <div
