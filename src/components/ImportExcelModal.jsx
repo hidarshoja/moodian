@@ -28,6 +28,15 @@ export default function ImportExcelModal({ isOpen, onClose }) {
     if (e.target === e.currentTarget) onClose();
   };
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/file/Arz.xlsx"; // مسیر از public شروع می‌شود
+    link.download = "arzFile.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-black/40"
@@ -67,7 +76,9 @@ export default function ImportExcelModal({ isOpen, onClose }) {
           </div>
           <div className="flex flex-col md:flex-row gap-2 my-1">
             <button className="btn-custom">بارگذاری</button>
-            <button className="btn-custom">فایل نمونه</button>
+            <button className="btn-custom"
+            onClick={handleDownload}
+            >فایل نمونه</button>
           </div>
         </div>
         <div

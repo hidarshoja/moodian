@@ -107,6 +107,15 @@ export default function ImportExcelModalInvoices({ isOpen, onClose }) {
     }
   };
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/file/Gold.xlsx"; // مسیر از public شروع می‌شود
+    link.download = "goldFile.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-black/40"
@@ -176,7 +185,9 @@ export default function ImportExcelModalInvoices({ isOpen, onClose }) {
             <button className="btn-custom" onClick={handleImport}>
               بارگذاری
             </button>
-            <button className="btn-custom">فایل نمونه</button>
+            <button className="btn-custom"
+            onClick={handleDownload}
+            >فایل نمونه</button>
           </div>
         </div>
         <div
