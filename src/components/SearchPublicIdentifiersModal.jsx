@@ -5,6 +5,14 @@ import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
 import Pagination2 from "./Pagination2";
 
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
 export default function SearchPublicIdentifiersModal({
   isOpen,
   onClose,
@@ -19,6 +27,7 @@ export default function SearchPublicIdentifiersModal({
   });
   const [dataTable, setDataTable] = useState([]);
   const [meta, setMeta] = useState({});
+  const [loading, setLoading] = useState(false);
 
   // آپدیت برای فرم ورودی (صرفاً مقدار term را عوض کند، جستجو نکند)
   const updateSearchField = (term) => {
@@ -76,13 +85,16 @@ export default function SearchPublicIdentifiersModal({
         query = `/sstids?page=${searchParams.page}&&f[description]=${searchParams.term}&&f[type]=${searchParams.tab}`;
       }
     }
+    setLoading(true);
     axiosClient
       .get(query)
       .then((response) => {
         setMeta(response.data.meta);
         setDataTable(response.data.data);
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error fetching data:", error);
       });
   }, [
@@ -206,7 +218,9 @@ export default function SearchPublicIdentifiersModal({
 
         {/* Content Area */}
         <div className="flex-1 p-6 overflow-auto">
-          {dataTable.length === 0 ? (
+          {loading ? (
+            <Spinner />
+          ) : dataTable.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-gray-500 text-lg">رکوردی وجود ندارد</p>
             </div>
