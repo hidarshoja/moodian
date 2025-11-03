@@ -87,38 +87,56 @@ export default function AddCustomersModal({
   };
   const handleSave = async (e) => {
     e.preventDefault();
-
-    const res = await axiosClient.post(`/customers`, form);
-    Swal.fire({
-      toast: true,
-      position: "top-start",
-      icon: "success", // یا 'error'
-      title: "مشتری با موفقیت اضافه شد",
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      customClass: {
-        popup: "swal2-toast",
-      },
-    });
-    setForm((prev) => ({
-      ...prev,
-      name: "",
-      economic_code: "",
-      postal_code: "",
-      type: null,
-      national_code: "",
-      tel: "",
-      branch_code: "",
-      address: "",
-      description: "",
-      passport_number: "",
-      last_name: "",
-    }));
-
-   
-    setRefresh(!refresh);
-    onClose();
+    try {
+      const res = await axiosClient.post(`/customers`, form);
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "مشتری با موفقیت اضافه شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "swal2-toast",
+        },
+      });
+      setForm((prev) => ({
+        ...prev,
+        name: "",
+        economic_code: "",
+        postal_code: "",
+        type: null,
+        national_code: "",
+        tel: "",
+        branch_code: "",
+        address: "",
+        description: "",
+        passport_number: "",
+        last_name: "",
+      }));
+      setRefresh(!refresh);
+      onClose();
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.errors) {
+        // همه پیام‌های ارور را در یک متن جمع کن
+        const errorMessages = Object.values(err.response.data.errors)
+          .flat()
+          .join("<br>");
+        Swal.fire({
+          icon: "error",
+          html: errorMessages,
+          position: "top-start",
+          toast: true,
+          showConfirmButton: false,
+          timer: 5000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "swal2-toast",
+          },
+        });
+      }
+    }
   };
 
   const handleSelectFromOrganization = (customerData) => {
