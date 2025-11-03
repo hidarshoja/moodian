@@ -103,13 +103,10 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
     }
   };
 
-  // دانلود فایل نمونه
-  const handleDownloadSample = () => {
-    // مسیر فایل نمونه در پوشه public/file (در صورت تغییر، این مسیر را ویرایش کنید)
-    const url = "/file/sample.xlsx"; // یا نام واقعی فایل نمونه
+  const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "sample.xlsx"); // نامی که کاربر دانلود می‌کند
+    link.href = "/file/userFile.xlsx"; // مسیر از public شروع می‌شود
+    link.download = "userFile.xlsx";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -156,9 +153,9 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
             <button className="btn-custom" onClick={handleImport}>
               بارگذاری
             </button>
-            <button className="btn-custom" onClick={handleDownloadSample}>
-              فایل نمونه
-            </button>
+            <button className="btn-custom" onClick={handleDownload}>
+  فایل نمونه
+</button>
           </div>
         </div>
         <div
