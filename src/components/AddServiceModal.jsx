@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrClose } from "react-icons/gr";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import { CiSearch } from "react-icons/ci";
 import SearchPublicIdentifiersModal from "./SearchPublicIdentifiersModal";
 import PropTypes from "prop-types";
-
-
 
 export default function AddServiceModal({
   isOpen,
@@ -28,6 +26,14 @@ export default function AddServiceModal({
   });
 
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [initialRates, setInitialRates] = useState({ vra: "", odr: null });
+
+  // Update initialRates when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setInitialRates({ vra: form.vra, odr: form.odr });
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -45,10 +51,42 @@ export default function AddServiceModal({
 
   const handleSave = async (e) => {
     e.preventDefault();
-   
+
+    // If both initial rates are empty, proceed as usual
+    const bothRatesInitiallyEmpty =
+      (!initialRates.vra && !initialRates.odr) ||
+      (initialRates.vra === "" &&
+        (initialRates.odr === null || initialRates.odr === ""));
+
+    // Check if either vra or odr changed and was not empty initially
+    const vraChanged = initialRates.vra !== "" && form.vra !== initialRates.vra;
+    const odrChanged =
+      initialRates.odr !== null && form.odr !== initialRates.odr;
+
+    if (!bothRatesInitiallyEmpty && (vraChanged || odrChanged)) {
+      // Some rate(s) modified! Show confirmation dialog
+      const result = await Swal.fire({
+        title:
+          "شما مقادیر نرخ ارزش افزوده و/یا نرخ سایر مالیات را تغییر دادید. مطمئن هستید؟",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "بله، ذخیره کن",
+        cancelButtonText: "خیر، بازگردانی مقادیر قبلی",
+      });
+
+      if (!result.isConfirmed) {
+        // Restore previous rates
+        setForm((prev) => ({
+          ...prev,
+          vra: initialRates.vra,
+          odr: initialRates.odr,
+        }));
+        return;
+      }
+    }
 
     try {
-      const res = await axiosClient.post(`/products`, form);
+      await axiosClient.post(`/products`, form);
 
       // Success message
       Swal.fire({
@@ -78,7 +116,6 @@ export default function AddServiceModal({
         sstt: "توضیحات",
       }));
 
-  
       setRefresh(!refresh);
       onClose();
     } catch (error) {
@@ -122,6 +159,10 @@ export default function AddServiceModal({
       vra: item.vat || "",
       odr: item.vat_custom_purposes || "",
     }));
+    setInitialRates({
+      vra: item.vat || "",
+      odr: item.vat_custom_purposes || "",
+    });
   };
 
   return (
@@ -146,11 +187,11 @@ export default function AddServiceModal({
             <span>درج از شناسه های عمومی</span>
           </span>
           <span
-  className="btn-custom3 cursor-pointer"
-  onClick={() => window.open('https://stuffid.tax.gov.ir/', '_blank')}
->
-  StuffId
-</span>
+            className="btn-custom3 cursor-pointer"
+            onClick={() => window.open("https://stuffid.tax.gov.ir/", "_blank")}
+          >
+            StuffId
+          </span>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <GrClose />
           </button>
@@ -201,15 +242,16 @@ export default function AddServiceModal({
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              {units?.length > 0 && units?.map((u) => (
-                <option
-                  key={u.id}
-                  value={u.id}
-                  className={u.id === 0 ? "text-red-500" : ""}
-                >
-                  {u.title}
-                </option>
-              ))}
+              {units?.length > 0 &&
+                units?.map((u) => (
+                  <option
+                    key={u.id}
+                    value={u.id}
+                    className={u.id === 0 ? "text-red-500" : ""}
+                  >
+                    {u.title}
+                  </option>
+                ))}
             </select>
           </div>
           <div>

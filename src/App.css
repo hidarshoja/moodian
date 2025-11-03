@@ -19,6 +19,16 @@ body{
   @apply bg-green-800 text-white 
 }
 
+.swal2-actions {
+  flex-direction: row-reverse !important;
+}
+
+.swal2-cancel {
+  background-color: #23234a !important;
+  color: #fff !important;
+  border: 1px solid #23234a !important;
+  font-size: 12px !important;
+}
 
 
 
