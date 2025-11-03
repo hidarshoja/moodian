@@ -18,6 +18,7 @@ export default function ServicesPage() {
   const [excelModalOpen, setExcelModalOpen] = useState(false);
   const [dataTable, setDataTable] = useState([]);
   const [refresh , setRefresh] = useState(false);
+  const [units, setUnits] = useState([]);
  const navigate = useNavigate();
   const initialFilters = {
     title: "",
@@ -56,6 +57,19 @@ export default function ServicesPage() {
       })
       .finally(() => setLoading(false));
   }, [refresh, activeFilters , pageCount]);
+
+  useEffect(() => {
+   
+    axiosClient
+      .get(`/units`)
+      .then((response) => {
+        setUnits(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      
+  }, []);
 
 
   const handleExportExcel = () => {
@@ -96,7 +110,7 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <AddServiceModal isOpen={modalOpen} refresh={refresh} setRefresh={setRefresh} onClose={() => setModalOpen(false)} />
+      <AddServiceModal isOpen={modalOpen} refresh={refresh} setRefresh={setRefresh} onClose={() => setModalOpen(false)} units={units} />
       <ImportExcelModal
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
