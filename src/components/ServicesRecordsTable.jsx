@@ -58,7 +58,7 @@ export default function ServicesRecordsTable({ records, loading }) {
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
                 onClick={() => setOpenDetail(r)}
               >
-                {r?.product?.title}
+                {r?.title}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {new Intl.NumberFormat('fa-IR').format(r?.original_invoice)}

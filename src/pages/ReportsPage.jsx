@@ -12,20 +12,16 @@ import Pagination from "../components/Pagination";
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [meta, setMeta] = useState({});
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const [dataTable, setDataTable] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-  const [fromMonth, setFromMonth] = useState(null);
-  const [toMonth, setToMonth] = useState(null);
-  const [dataTableItem, setDataTableItem] = useState([]);
-  const [metaItem, setMetaItem] = useState({});
+  const [meta, setMeta] = useState({});
   const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("مشتری");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
-  const [groupBy, setGroupBy] = useState("customer_id");
+  const [fromMonth, setFromMonth] = useState(null);
+  const [toMonth, setToMonth] = useState(null);
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -59,35 +55,34 @@ export default function ReportsPage() {
   useEffect(() => {
     setLoading(true);
 
+    let groupByValue;
     switch (filterTable) {
       case "کالا/خدمات":
-        setGroupBy("product_id");
+        groupByValue = "product_id";
         break;
       case "روش تسویه":
-        setGroupBy("setm");
+        groupByValue = "setm";
         break;
       case "وضعیت ارسال":
-        setGroupBy("status");
+        groupByValue = "status";
         break;
       default:
-        setGroupBy("customer_id");
+        groupByValue = "customer_id";
     }
-    const query = buildFilterQuery(activeFilters) + `&group_by=${groupBy}`;
+    const query =
+      buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data);
-
-        setMetaItem(response.data.meta);
+        setMeta(response.data.meta);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, [refresh, activeFilters, pageCount, filterTable]);
+  }, [activeFilters, pageCount, filterTable]);
 
-  console.log(`groupBy`, groupBy);
-  console.log(`filterTable`, filterTable);
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
   };
@@ -183,7 +178,7 @@ export default function ReportsPage() {
           <CustomersRecordsTable records={dataTable} loading={loading} />
         )}
         {filterTable === "کالا/خدمات" && (
-          <ServicesRecordsTable records={dataTableItem} loading={loading} />
+          <ServicesRecordsTable records={dataTable} loading={loading} />
         )}
         {filterTable === "روش تسویه" && (
           <SettlementRecordsTable records={dataTable} loading={loading} />
@@ -191,12 +186,12 @@ export default function ReportsPage() {
         {filterTable === "وضعیت ارسال" && (
           <SendRecordsTable records={dataTable} loading={loading} />
         )}
-        <Pagination
+        {/* <Pagination
           meta={meta}
           pageCount={pageCount}
           setPageCount={setPageCount}
           setLoading={setLoading}
-        />
+        /> */}
       </div>
     </div>
   );
