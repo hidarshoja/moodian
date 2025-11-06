@@ -59,23 +59,27 @@ export default function SendRecordsTable({ records, loading }) {
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
                 onClick={() => setOpenDetail(r)}
               >
-                {r?.status_label}
+                {r?.title}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.inp === 1 ? r.ins_label : "-"}
+                {new Intl.NumberFormat('fa-IR').format(r?.original_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.inp === 2 ? r.ins_label : "-"}
+                {new Intl.NumberFormat('fa-IR').format(r?.corrective_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r.inp === 3 ? r.ins_label : "-"}
+                {new Intl.NumberFormat('fa-IR').format(r?.returned_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {r.inp === 4 ? r.ins_label : "-"}
+                {new Intl.NumberFormat('fa-IR').format(r?.cancellation_invoice)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
-                {r.asn}
-              </td>
+              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+              {new Intl.NumberFormat('fa-IR').format(
+                Number(r?.original_invoice) +
+              Number(r?.corrective_invoice) +
+               Number(r?.returned_invoice)
+              )}
+               </td>
             </tr>
           ))}
         </tbody>

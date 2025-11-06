@@ -22,10 +22,11 @@ export default function ReportsPage() {
   const [dataTableItem, setDataTableItem] = useState([]);
   const [metaItem, setMetaItem] = useState({});
   const [activeFilters, setActiveFilters] = useState({});
-  const [filterTable, setFilterTable] = useState("");
+  const [filterTable, setFilterTable] = useState("مشتری");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
- 
+  const [groupBy, setGroupBy] = useState("customer_id");
+
   const buildFilterQuery = (filters) => {
     const params = [];
     Object.entries(filters).forEach(([key, value]) => {
@@ -39,40 +40,54 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-  
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const query = buildFilterQuery(activeFilters);
+  //   axiosClient
+  //     .get(`/invoices?page=${pageCount}${query}`)
+  //     .then((response) => {
+  //       setDataTable(response.data.data);
+  //       setMeta(response.data.meta);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     })
+  //     .finally(() => setLoading(false));
+  // }, [refresh, activeFilters, pageCount]);
+
   useEffect(() => {
     setLoading(true);
-    const query = buildFilterQuery(activeFilters);
+
+    switch (filterTable) {
+      case "کالا/خدمات":
+        setGroupBy("product_id");
+        break;
+      case "روش تسویه":
+        setGroupBy("setm");
+        break;
+      case "وضعیت ارسال":
+        setGroupBy("status");
+        break;
+      default:
+        setGroupBy("customer_id");
+    }
+    const query = buildFilterQuery(activeFilters) + `&group_by=${groupBy}`;
     axiosClient
-      .get(`/invoices?page=${pageCount}${query}`)
+      .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data);
-        setMeta(response.data.meta);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      })
-      .finally(() => setLoading(false));
-  }, [refresh, activeFilters, pageCount]);
 
-
-  
-  useEffect(() => {
-    setLoading(true);
-    const query = buildFilterQuery(activeFilters);
-    axiosClient
-      .get(`/invoice/items?page=${pageCount}${query}`)
-      .then((response) => {
-        setDataTableItem(response.data.data);
-      
         setMetaItem(response.data.meta);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [refresh, activeFilters, pageCount, filterTable]);
 
+  console.log(`groupBy`, groupBy);
+  console.log(`filterTable`, filterTable);
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
   };
@@ -107,7 +122,7 @@ export default function ReportsPage() {
     const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
     const startMonth = toEnglishDigits(fromMonth?.format?.("YYYY/MM/DD") || "");
     const endMonth = toEnglishDigits(toMonth?.format?.("YYYY/MM/DD") || "");
-  
+
     let created_at = start;
     if (start && end) {
       created_at = `${start},${end}`;
@@ -118,15 +133,13 @@ export default function ReportsPage() {
       created_at,
       status: status || "",
     };
-  
+
     setActiveFilters(newFilters);
   };
 
   const handleSearchTermChange = (term) => {
     setSearchTerm(term);
   };
-
- 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
@@ -150,8 +163,8 @@ export default function ReportsPage() {
         setStatus={setStatus}
         status={status}
         onSendAll={handleSendAll}
-        setStartDate = {setStartDate}
-        setEndDate= {setEndDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
         setFromMonth={setFromMonth}
         setToMonth={setToMonth}
       />
@@ -163,39 +176,27 @@ export default function ReportsPage() {
         />
       </div>
       <div className="mt-6">
-        {filterTable === "" && <RecordsTable
-          records={dataTable}
-          loading={loading}
-         />}
+        {filterTable === "" && (
+          <RecordsTable records={dataTable} loading={loading} />
+        )}
         {filterTable === "مشتری" && (
-          <CustomersRecordsTable
-           records={dataTable}
-          loading={loading} />
+          <CustomersRecordsTable records={dataTable} loading={loading} />
         )}
         {filterTable === "کالا/خدمات" && (
-          <ServicesRecordsTable
-           records={dataTableItem}
-          loading={loading}
-            />
+          <ServicesRecordsTable records={dataTableItem} loading={loading} />
         )}
         {filterTable === "روش تسویه" && (
-          <SettlementRecordsTable
-           records={dataTable}
-          loading={loading}
-           />
+          <SettlementRecordsTable records={dataTable} loading={loading} />
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable 
-          records={dataTable}
-          loading={loading}
-          />
+          <SendRecordsTable records={dataTable} loading={loading} />
         )}
-          <Pagination
-        meta={meta}
-        pageCount={pageCount}
-        setPageCount={setPageCount}
-        setLoading={setLoading}
-      />
+        <Pagination
+          meta={meta}
+          pageCount={pageCount}
+          setPageCount={setPageCount}
+          setLoading={setLoading}
+        />
       </div>
     </div>
   );
