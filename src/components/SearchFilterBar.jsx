@@ -6,7 +6,7 @@ export default function SearchFilterBar({
   searchTerm,
   onSearchTermChange,
 }) {
-  const [activeFilter, setActiveFilter] = useState("");
+  const [activeFilter, setActiveFilter] = useState("مشتری");
 
   const filterButtons = [
     "مشتری",
