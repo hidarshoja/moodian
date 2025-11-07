@@ -22,6 +22,7 @@ export default function ReportsPage() {
   const [status, setStatus] = useState("");
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null); // new state
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -36,7 +37,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-
+console.log(`selectedCustomerId`, selectedCustomerId);
   // useEffect(() => {
   //   setLoading(true);
   //   const query = buildFilterQuery(activeFilters);
@@ -69,8 +70,7 @@ export default function ReportsPage() {
       default:
         groupByValue = "customer_id";
     }
-    const query =
-      buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
+    const query = buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
@@ -175,7 +175,12 @@ export default function ReportsPage() {
           <RecordsTable records={dataTable} loading={loading} />
         )}
         {filterTable === "مشتری" && (
-          <CustomersRecordsTable records={dataTable} loading={loading} />
+          <CustomersRecordsTable
+            records={dataTable}
+            loading={loading}
+            selectedCustomerId={selectedCustomerId}
+            setSelectedCustomerId={setSelectedCustomerId}
+          />
         )}
         {filterTable === "کالا/خدمات" && (
           <ServicesRecordsTable records={dataTable} loading={loading} />

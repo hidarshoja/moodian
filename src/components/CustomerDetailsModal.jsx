@@ -19,46 +19,15 @@ export default function CustomerDetailsModal({ isOpen, onClose, record }) {
   const { customer, user, ...row } = record;
 
   const visibleFields = [
-    { label: "کد یکتای رکورد", value: row.id, icon: <FaHashtag /> },
     { label: "شناسه مشتری", value: row.customer_id, icon: <FaUser /> },
-    { label: "کد اقتصادی خریدار", value: row.tins, icon: <FaIdCard /> },
-    {
-      label: "شماره سریال دستگاه",
-      value: row.serial_number,
-      icon: <FaIdCard />,
-    },
-    { label: "شماره مرجع", value: row.reference_number, icon: <FaHashtag /> },
-    {
-      label: "تاریخ ثبت",
-      value: row.created_at ? convertToPersianDate(row.created_at) : null,
-      icon: <FaCalendarCheck />,
-    },
-    {
-      label: "آخرین بروزرسانی",
-      value: row.updated_at ? convertToPersianDate(row.updated_at) : null,
-      icon: <FaCalendarCheck />,
-    },
     { label: "شناسه مالیاتی", value: row.taxid, icon: <FaBuilding /> },
-    {
-      label: "کد ملی/شناسه",
-      value: customer?.national_code,
-      icon: <FaIdCard />,
-    },
-    { label: "نام", value: customer?.name, icon: <FaUser /> },
-    { label: "نام خانوادگی", value: customer?.last_name, icon: <FaUser /> },
-    { label: "کد پستی", value: customer?.postal_code, icon: <FaAddressCard /> },
-    {
-      label: "نوع",
-      value: customer?.type !== null ? customer.type : null,
-      icon: <FaUser />,
-    },
-    { label: "وضعیت رکورد", value: row.status_label, icon: <FaAddressCard /> },
-    { label: "نوع صورتحساب", value: row.inty_label, icon: <FaAddressCard /> },
-    { label: "نوع فروش", value: row.inp_label, icon: <FaAddressCard /> },
-    { label: "شناسه کاربری", value: row.user_id, icon: <FaUser /> },
-    { label: "شماره تماس", value: customer?.tel, icon: <FaPhone /> },
-    { label: "آدرس", value: customer?.address, icon: <FaAddressCard /> },
-    { label: "توضیحات", value: customer?.description, icon: <FaAddressCard /> },
+    { label: "نام", value: row?.title, icon: <FaUser /> },
+    { label: "نام خانوادگی", value: row?.title, icon: <FaUser /> },
+    { label: "فاکتور اصلی", value: row.original_invoice, icon: <FaAddressCard /> },
+    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaAddressCard /> },
+    { label: "فاکتور ابطالی", value: row.cancellation_invoice, icon: <FaAddressCard /> },
+    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaAddressCard /> },
+    { label: "خالص", value: null, icon: <FaUser /> },
   ];
 
   return (

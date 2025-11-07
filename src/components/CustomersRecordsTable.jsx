@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import CustomerDetailsModal from "./CustomerDetailsModal";
 
-export default function CustomersRecordsTable({ records, loading }) {
+export default function CustomersRecordsTable({
+  records,
+  loading,
+  selectedCustomerId,
+  setSelectedCustomerId,
+}) {
   const [openDetail, setOpenDetail] = useState(null);
 
   return (
@@ -52,33 +57,42 @@ export default function CustomersRecordsTable({ records, loading }) {
           {records.map((r, i) => (
             <tr
               key={i}
-              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
+              className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
+                selectedCustomerId === r.customer_id
+                  ? "klickBtnTD"
+                  : ""
+              }`}
+              onClick={() => setSelectedCustomerId(r.customer_id)}
+              style={{ cursor: "pointer" }}
             >
               <td
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
-                onClick={() => setOpenDetail(r)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenDetail(r);
+                }}
               >
-                {r?.title} 
+                {r?.title}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat('fa-IR').format(r?.original_invoice)}
+                {new Intl.NumberFormat("fa-IR").format(r?.original_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat('fa-IR').format(r?.corrective_invoice)}
+                {new Intl.NumberFormat("fa-IR").format(r?.corrective_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat('fa-IR').format(r?.returned_invoice)}
+                {new Intl.NumberFormat("fa-IR").format(r?.returned_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {new Intl.NumberFormat('fa-IR').format(r?.cancellation_invoice)}
+                {new Intl.NumberFormat("fa-IR").format(r?.cancellation_invoice)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-              {new Intl.NumberFormat('fa-IR').format(
-                Number(r?.original_invoice) +
-              Number(r?.corrective_invoice) +
-               Number(r?.returned_invoice)
-              )}
-               </td>
+                {new Intl.NumberFormat("fa-IR").format(
+                  Number(r?.original_invoice) +
+                    Number(r?.corrective_invoice) +
+                    Number(r?.returned_invoice)
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -97,4 +111,6 @@ export default function CustomersRecordsTable({ records, loading }) {
 CustomersRecordsTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool,
+  selectedCustomerId: PropTypes.number,
+  setSelectedCustomerId: PropTypes.func,
 };
