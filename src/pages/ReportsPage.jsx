@@ -8,6 +8,7 @@ import SettlementRecordsTable from "../components/SettlementRecordsTable";
 import SendRecordsTable from "../components/SendRecordsTable";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+import InvoiceDetailsModal from "../components/InvoiceDetailsModal";
 
 export default function ReportsPage() {
   const [startDate, setStartDate] = useState(null);
@@ -23,6 +24,8 @@ export default function ReportsPage() {
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null); // new state
+  const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
+  const [invoiceDetails, setInvoiceDetails] = useState(null);
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -37,7 +40,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-console.log(`selectedCustomerId`, selectedCustomerId);
+  console.log(`selectedCustomerId`, selectedCustomerId);
   // useEffect(() => {
   //   setLoading(true);
   //   const query = buildFilterQuery(activeFilters);
@@ -54,6 +57,7 @@ console.log(`selectedCustomerId`, selectedCustomerId);
   // }, [refresh, activeFilters, pageCount]);
 
   useEffect(() => {
+ 
     setLoading(true);
 
     let groupByValue;
@@ -136,6 +140,22 @@ console.log(`selectedCustomerId`, selectedCustomerId);
     setSearchTerm(term);
   };
 
+  // function to handle invoice details fetch
+  const handleRequestInvoiceDetails = async () => {
+    if (!selectedCustomerId) return;
+   
+    try {
+      const res = await axiosClient.get(
+        `/invoices?f[customer_id]=${selectedCustomerId}`
+      );
+      setInvoiceDetails(res.data);
+      setIsInvoiceDetailsOpen(true);
+    } catch (err) {
+      // optionally show a toast or error state
+      setInvoiceDetails(null);
+    } 
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
@@ -168,6 +188,8 @@ console.log(`selectedCustomerId`, selectedCustomerId);
           setFilterTable={setFilterTable}
           searchTerm={searchTerm}
           onSearchTermChange={handleSearchTermChange}
+          onRequestInvoiceDetails={handleRequestInvoiceDetails}
+          selectedCustomerId={selectedCustomerId}
         />
       </div>
       <div className="mt-6">
@@ -191,6 +213,14 @@ console.log(`selectedCustomerId`, selectedCustomerId);
         {filterTable === "وضعیت ارسال" && (
           <SendRecordsTable records={dataTable} loading={loading} />
         )}
+
+{isInvoiceDetailsOpen && invoiceDetails && (
+  <InvoiceDetailsModal
+    isOpen={isInvoiceDetailsOpen}
+    onClose={() => setIsInvoiceDetailsOpen(false)}
+    data={invoiceDetails}
+  />
+)}
         {/* <Pagination
           meta={meta}
           pageCount={pageCount}
@@ -198,6 +228,7 @@ console.log(`selectedCustomerId`, selectedCustomerId);
           setLoading={setLoading}
         /> */}
       </div>
+      {/* TODO: render modal here later */}
     </div>
   );
 }

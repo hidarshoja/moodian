@@ -5,6 +5,8 @@ export default function SearchFilterBar({
   setFilterTable,
   searchTerm,
   onSearchTermChange,
+  onRequestInvoiceDetails, // new
+  selectedCustomerId, // new
 }) {
   const [activeFilter, setActiveFilter] = useState("مشتری");
 
@@ -40,6 +42,10 @@ export default function SearchFilterBar({
     onSearchTermChange(e.target.value);
   };
 
+  const handleDetailsRequest = () => {
+    if (onRequestInvoiceDetails) onRequestInvoiceDetails();
+  };
+
   return (
     <div className="w-full mb-4">
       {/* Search Bar */}
@@ -73,7 +79,9 @@ export default function SearchFilterBar({
                 key={index}
                 onClick={() => handleFilterClick(filter)}
                 className={` ${
-                  activeFilter === filter ? 'bg-green-600 text-white px-3 py-1.5 border rounded-lg' : 'btn-custom'
+                  activeFilter === filter
+                    ? "bg-green-600 text-white px-3 py-1.5 border rounded-lg"
+                    : "btn-custom"
                 }`}
               >
                 {filter}
@@ -82,11 +90,26 @@ export default function SearchFilterBar({
           </div>
 
           <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end gap-2">
-            {actionButtons.map((filter, index) => (
-              <button key={index + 4} className="btn-custom">
-                {filter}
-              </button>
-            ))}
+            {/* Action Buttons */}
+            <button
+              className="btn-custom"
+              onClick={handleDetailsRequest}
+              disabled={!selectedCustomerId}
+              style={
+                !selectedCustomerId
+                  ? { opacity: 0.5, cursor: "not-allowed" }
+                  : {}
+              }
+            >
+              ریز فاکتور
+            </button>
+            {actionButtons
+              .filter((btn) => btn !== "ریز فاکتور")
+              .map((filter, index) => (
+                <button key={index + 4} className="btn-custom">
+                  {filter}
+                </button>
+              ))}
           </div>
         </div>
       </div>
