@@ -24,6 +24,7 @@ export default function ReportsPage() {
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null); // new state
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
 
@@ -193,9 +194,7 @@ export default function ReportsPage() {
         />
       </div>
       <div className="mt-6">
-        {filterTable === "" && (
-          <RecordsTable records={dataTable} loading={loading} />
-        )}
+       
         {filterTable === "مشتری" && (
           <CustomersRecordsTable
             records={dataTable}
@@ -205,7 +204,11 @@ export default function ReportsPage() {
           />
         )}
         {filterTable === "کالا/خدمات" && (
-          <ServicesRecordsTable records={dataTable} loading={loading} />
+          <ServicesRecordsTable
+           records={dataTable}
+            loading={loading}
+            setSelectedProductId={setSelectedProductId}
+            selectedProductId={selectedProductId} />
         )}
         {filterTable === "روش تسویه" && (
           <SettlementRecordsTable records={dataTable} loading={loading} />

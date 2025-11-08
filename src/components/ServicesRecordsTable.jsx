@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 
-export default function ServicesRecordsTable({ records, loading }) {
+export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId}) {
   const [openDetail, setOpenDetail] = useState(null);
 
   return (
@@ -50,10 +50,16 @@ export default function ServicesRecordsTable({ records, loading }) {
             </tr>
           )}
           {records.map((r, i) => (
-            <tr
-              key={i}
-              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
-            >
+           <tr
+           key={i}
+           className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
+            setSelectedProductId === r.product_id
+               ? "klickBtnTD"
+               : ""
+           }`}
+           onClick={() => selectedProductId(r.product_id)}
+           style={{ cursor: "pointer" }}
+         >
               <td
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
                 onClick={() => setOpenDetail(r)}
@@ -97,4 +103,6 @@ export default function ServicesRecordsTable({ records, loading }) {
 ServicesRecordsTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool,
+  setSelectedProductId: PropTypes.number,
+  selectedProductId: PropTypes.func,
 };
