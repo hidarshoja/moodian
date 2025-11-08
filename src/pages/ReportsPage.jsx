@@ -142,20 +142,44 @@ export default function ReportsPage() {
   };
 
   // function to handle invoice details fetch
-  const handleRequestInvoiceDetails = async () => {
-    if (!selectedCustomerId) return;
+  // const handleRequestInvoiceDetails = async () => {
+  //   if (!selectedCustomerId) return;
    
+  //   try {
+  //     const res = await axiosClient.get(
+  //       `/invoices?f[customer_id]=${selectedCustomerId}`
+  //     );
+  //     setInvoiceDetails(res.data);
+  //     setIsInvoiceDetailsOpen(true);
+  //   } catch (err) {
+  //     // optionally show a toast or error state
+  //     setInvoiceDetails(null);
+  //   } 
+  // };
+
+  const handleRequestInvoiceDetails = async () => {
     try {
-      const res = await axiosClient.get(
-        `/invoices?f[customer_id]=${selectedCustomerId}`
-      );
-      setInvoiceDetails(res.data);
-      setIsInvoiceDetailsOpen(true);
+      if (selectedCustomerId) {
+        const res = await axiosClient.get(
+          `/invoices?f[customer_id]=${selectedCustomerId}`
+        );
+        setInvoiceDetails(res.data);
+        setIsInvoiceDetailsOpen(true);
+      } else if (selectedProductId) {
+        const res = await axiosClient.get(
+          `/invoices?f[product_id]=${selectedProductId}`
+        );
+        setInvoiceDetails(res.data);
+        setIsInvoiceDetailsOpen(true);
+      } else {
+        // هیچ کدام انتخاب نشده
+        return;
+      }
     } catch (err) {
-      // optionally show a toast or error state
       setInvoiceDetails(null);
-    } 
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">

@@ -5,7 +5,7 @@ import ProductDetailsModal from "./ProductDetailsModal";
 
 export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId}) {
   const [openDetail, setOpenDetail] = useState(null);
-
+console.log(selectedProductId);
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -50,14 +50,15 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
             </tr>
           )}
           {records.map((r, i) => (
+            console.log(r.product_id),
            <tr
            key={i}
            className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
-            setSelectedProductId === r.product_id
+            selectedProductId === r.product_id
                ? "klickBtnTD"
                : ""
            }`}
-           onClick={() => selectedProductId(r.product_id)}
+           onClick={() => setSelectedProductId(r.product_id)}
            style={{ cursor: "pointer" }}
          >
               <td
@@ -103,6 +104,6 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
 ServicesRecordsTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool,
-  setSelectedProductId: PropTypes.number,
-  selectedProductId: PropTypes.func,
+  selectedProductId: PropTypes.number,
+  setSelectedProductId: PropTypes.func,
 };
