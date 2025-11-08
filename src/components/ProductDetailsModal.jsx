@@ -1,57 +1,22 @@
 import { GrClose } from "react-icons/gr";
 import {
-  FaCube,
-  FaHashtag,
-  FaMoneyBill,
-  
-  FaUser,
-  FaCalendarCheck,
-
-} from "react-icons/fa6";
-import { FaIdCard } from "react-icons/fa";
-import { convertToPersianDate } from "../utils/change-date";
+  FaExchangeAlt,
+  FaListAlt,
+  FaIdCard,
+  FaCube 
+} from "react-icons/fa";
 
 export default function ProductDetailsModal({ isOpen, onClose, record }) {
   if (!isOpen || !record) return null;
 
   const { product, invoice, ...main } = record;
   const rows = [
-    { label: "شناسه ردیف", value: main.id, icon: <FaHashtag /> },
-    { label: "کد فاکتور", value: main.invoice_id },
-    { label: "شناسه کالا", value: main.product_id, icon: <FaCube /> },
-    { label: "کد مالیاتی کالا", value: main.sstid, icon: <FaIdCard /> },
-    { label: "عنوان کالا", value: product?.title, icon: <FaCube /> },
-    { label: "واحد", value: main.mu },
-    { label: "مقدار", value: main.am},
-    { label: "فی", value: main.fee, icon: <FaMoneyBill /> },
-    { label: "جمع", value: main.cfee, icon: <FaMoneyBill /> },
-    { label: "تخفیف", value: main.dis, icon: <FaMoneyBill /> },
-    { label: "ارزش افزوده", value: main.vra, icon: <FaMoneyBill /> },
-    {
-      label: "توضیح کالا",
-      value: main.sstt || product?.sstt,
-    
-    },
-    { label: "واحد مالیاتی (کالا)", value: product?.sstid, icon: <FaIdCard /> },
-    {
-      label: "نام کاربر ثبت کننده فاکتور",
-      value: invoice?.user_id,
-      icon: <FaUser />,
-    },
-    { label: "نوع فاکتور", value: invoice?.inty_label },
-    {
-      label: "وضعیت فاکتور",
-      value: invoice?.status_label,
-      
-    },
-    {
-      label: "تاریخ ایجاد فاکتور",
-      value: invoice?.created_at
-        ? convertToPersianDate(invoice.created_at)
-        : null,
-      icon: <FaCalendarCheck />,
-    },
-    { label: "توضیحات فاکتور", value: invoice?.notes },
+    { label: "نام کالا", value: main.title, icon: <FaExchangeAlt /> },
+    { label: "وضعیت ", value: main.status, icon: <FaListAlt /> },
+    { label: "فاکتور برگشتی", value: main.returned_invoice, icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: main.corrective_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: main?.original_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: main?.cancellation_invoice, icon: <FaIdCard /> },
   ];
 
   return (

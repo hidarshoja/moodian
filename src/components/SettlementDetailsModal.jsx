@@ -1,49 +1,23 @@
 import { GrClose } from "react-icons/gr";
 import {
   FaMoneyCheckAlt,
-  FaHashtag,
-  FaUser,
-  FaCalendarCheck,
+  FaExchangeAlt,
   FaListAlt,
   FaIdCard,
 } from "react-icons/fa";
-import { convertToPersianDate } from "../utils/change-date";
+
 
 export default function SettlementDetailsModal({ isOpen, onClose, record }) {
   if (!isOpen || !record) return null;
 
   const { customer, user, ...row } = record;
   const visibleFields = [
-    { label: "کد یکتای رکورد", value: row.id, icon: <FaHashtag /> },
-    { label: "شماره فاکتور", value: row.inno, icon: <FaListAlt /> },
-    { label: "سریال دستگاه", value: row.serial_number, icon: <FaIdCard /> },
-    { label: "کد اقتصادی", value: row.tins, icon: <FaIdCard /> },
-    { label: "شماره مرجع", value: row.reference_number, icon: <FaHashtag /> },
-    { label: "نوع تسویه", value: row.setm_label, icon: <FaMoneyCheckAlt /> },
-    { label: "نوع صورتحساب", value: row.inty_label, icon: <FaListAlt /> },
-    { label: "نوع فروش", value: row.inp_label, icon: <FaListAlt /> },
-    { label: "نام مشتری", value: customer?.name, icon: <FaUser /> },
-    {
-      label: "نام خانوادگی مشتری",
-      value: customer?.last_name,
-      icon: <FaUser />,
-    },
-    {
-      label: "کد ملی مشتری",
-      value: customer?.national_code,
-      icon: <FaIdCard />,
-    },
-    {
-      label: "تاریخ ایجاد",
-      value: row.created_at ? convertToPersianDate(row.created_at) : null,
-      icon: <FaCalendarCheck />,
-    },
-    {
-      label: "آخرین بروزرسانی",
-      value: row.updated_at ? convertToPersianDate(row.updated_at) : null,
-      icon: <FaCalendarCheck />,
-    },
-    { label: "وضعیت رکورد", value: row.status_label, icon: <FaListAlt /> },
+    { label: "وضعیت ارسال", value: row.title, icon: <FaExchangeAlt /> },
+    { label: "وضعیت ", value: row.status, icon: <FaListAlt /> },
+    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: row?.original_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: row?.cancellation_invoice, icon: <FaIdCard /> },
   ];
 
   return (

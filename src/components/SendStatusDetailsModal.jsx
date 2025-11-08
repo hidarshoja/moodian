@@ -14,33 +14,13 @@ export default function SendStatusDetailsModal({ isOpen, onClose, record }) {
 
   const { customer, user, ...row } = record;
   const visibleFields = [
-    { label: "کد یکتای رکورد", value: row.id, icon: <FaHashtag /> },
-    { label: "کد فاکتور", value: row.inno, icon: <FaListAlt /> },
-    { label: "وضعیت ارسال", value: row.status_label, icon: <FaExchangeAlt /> },
-    { label: "وضعیت صورتحساب", value: row.inty_label, icon: <FaListAlt /> },
-    { label: "نوع فروش", value: row.inp_label, icon: <FaListAlt /> },
-    { label: "کد اقتصادی", value: row.tins, icon: <FaIdCard /> },
-    { label: "نام مشتری", value: customer?.name, icon: <FaUser /> },
-    {
-      label: "نام خانوادگی مشتری",
-      value: customer?.last_name,
-      icon: <FaUser />,
-    },
-    {
-      label: "کدملی مشتری",
-      value: customer?.national_code,
-      icon: <FaIdCard />,
-    },
-    {
-      label: "تاریخ ایجاد",
-      value: row.created_at ? convertToPersianDate(row.created_at) : null,
-      icon: <FaCalendarCheck />,
-    },
-    {
-      label: "آخرین بروزرسانی",
-      value: row.updated_at ? convertToPersianDate(row.updated_at) : null,
-      icon: <FaCalendarCheck />,
-    },
+ 
+    { label: "وضعیت ارسال", value: row.title, icon: <FaExchangeAlt /> },
+    { label: "وضعیت ", value: row.status, icon: <FaListAlt /> },
+    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: row?.original_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: row?.cancellation_invoice, icon: <FaIdCard /> },
   ];
   return (
     <div
