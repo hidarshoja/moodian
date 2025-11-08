@@ -201,6 +201,11 @@ export default function ReportsPage() {
           onSearchTermChange={handleSearchTermChange}
           onRequestInvoiceDetails={handleRequestInvoiceDetails}
           selectedCustomerId={selectedCustomerId}
+          selectedProductId={selectedProductId}
+          stemId={stemId}
+          statusId={statusId}
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
       <div className="mt-6">

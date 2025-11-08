@@ -1,4 +1,7 @@
 import { useState } from "react";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 export default function SearchFilterBar({
@@ -7,15 +10,19 @@ export default function SearchFilterBar({
   onSearchTermChange,
   onRequestInvoiceDetails, // new
   selectedCustomerId, // new
+  selectedProductId, // new
+  stemId, // new
+  statusId,
+  startDate,
+  endDate, // new
 }) {
   const [activeFilter, setActiveFilter] = useState("مشتری");
-
+  const navigate = useNavigate();
   const filterButtons = [
     "مشتری",
     "کالا/خدمات",
     "روش تسویه",
     "وضعیت ارسال",
-    "ریز فاکتور اکسل",
     "ریز فاکتور",
     "به اکسل",
   ];
@@ -45,6 +52,66 @@ export default function SearchFilterBar({
   const handleDetailsRequest = () => {
     if (onRequestInvoiceDetails) onRequestInvoiceDetails();
   };
+  function toEnglishDigits(str) {
+    if (!str) return "";
+    return str.replace(/[۰-۹]/g, (d) => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
+  }
+  
+const handleActionClick = async () => {
+  let query = "";
+  if (selectedCustomerId) {
+    query += `&f[customer_id]=${selectedCustomerId}`;
+  }
+  if (selectedProductId) {
+    query += `&f[product_id]=${selectedProductId}`;
+  }
+  if (stemId) {
+    query += `&f[setm]=${stemId}`;
+  }
+  if (statusId) {
+    query += `&f[status]=${statusId}`;
+  }
+  if(startDate) {
+    const start = toEnglishDigits(startDate?.format?.("YYYY/MM/DD") || "");
+    query += `&f[indatim][min]=${start}`;
+  }
+  if(endDate) {
+    const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
+    query += `&f[indatim][max]=${end}`;
+  }
+  try {
+    await axiosClient.get(`/invoices?export=true${query}`);
+
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success",
+      title: "فایل با موفقیت بارگذاری شد",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+    });
+
+    setTimeout(() => {
+      navigate("/downloadExcel");
+    }, 1000);
+
+  } catch (error) {
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "error",
+      title: "خطا در دریافت داده‌ها",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+    });
+  }
+};
+     
+   
+  
+  
 
   return (
     <div className="w-full mb-4">
@@ -97,6 +164,13 @@ export default function SearchFilterBar({
             
             >
               ریز فاکتور
+            </button>
+            <button
+              className="btn-custom"
+              onClick={() => handleActionClick()}
+            
+            >
+             ریز فاکتور اکسل
             </button>
             {actionButtons
               .filter((btn) => btn !== "ریز فاکتور")
