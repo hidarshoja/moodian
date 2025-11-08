@@ -28,6 +28,7 @@ export default function ReportsPage() {
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [stemId , setStemId] = useState(null);
+  const [ statusId , setStatusId] = useState(null);
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -150,7 +151,13 @@ export default function ReportsPage() {
         );
         setInvoiceDetails(res.data);
         setIsInvoiceDetailsOpen(true);
-      }  else {
+      }  else if (statusId) {
+        const res = await axiosClient.get(
+          `/invoices?f[status]=${statusId}`
+        );
+        setInvoiceDetails(res.data);
+        setIsInvoiceDetailsOpen(true);
+      } else {
         // هیچ کدام انتخاب نشده
         return;
       }
@@ -223,7 +230,13 @@ export default function ReportsPage() {
           />
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable records={dataTable} loading={loading} />
+          <SendRecordsTable records={dataTable} loading={loading}
+          setStemId = {setStemId}
+          setSelectedProductId = {setSelectedProductId}
+          setSelectedCustomerId = {setSelectedCustomerId}
+          setStatusId={setStatusId}
+          statusId={statusId}
+          />
         )}
 
 {isInvoiceDetailsOpen && invoiceDetails && (

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import SendStatusDetailsModal from "./SendStatusDetailsModal";
 
-export default function SendRecordsTable({ records, loading }) {
+export default function SendRecordsTable({ records, loading , setStemId , setSelectedProductId , setSelectedCustomerId , setStatusId ,statusId }) {
   const [openDetail, setOpenDetail] = useState(null);
 
   return (
@@ -51,9 +51,20 @@ export default function SendRecordsTable({ records, loading }) {
             </tr>
           )}
           {records.map((r, i) => (
-            <tr
+              <tr
               key={i}
-              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
+              className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
+                statusId === r.status
+                  ? "klickBtnTD"
+                  : ""
+              }`}
+              onClick={() => {
+               setStemId(null);
+               setSelectedCustomerId(null); 
+               setSelectedProductId(null);
+               setStatusId(r.status);         
+             }}
+              style={{ cursor: "pointer" }}
             >
               <td
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
@@ -98,4 +109,9 @@ export default function SendRecordsTable({ records, loading }) {
 SendRecordsTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool,
+  setStemId: PropTypes.func,
+  setSelectedCustomerId : PropTypes.func,
+  setSelectedProductId: PropTypes.func,
+  statusId: PropTypes.number,
+  setStatusId: PropTypes.func,
 };
