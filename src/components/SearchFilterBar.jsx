@@ -94,12 +94,7 @@ export default function SearchFilterBar({
             <button
               className="btn-custom"
               onClick={handleDetailsRequest}
-              disabled={!selectedCustomerId}
-              style={
-                !selectedCustomerId
-                  ? { opacity: 0.5, cursor: "not-allowed" }
-                  : {}
-              }
+            
             >
               ریز فاکتور
             </button>

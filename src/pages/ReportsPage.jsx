@@ -27,6 +27,7 @@ export default function ReportsPage() {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
+  const [stemId , setStemId] = useState(null);
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -41,21 +42,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-  console.log(`selectedCustomerId`, selectedCustomerId);
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const query = buildFilterQuery(activeFilters);
-  //   axiosClient
-  //     .get(`/invoices?page=${pageCount}${query}`)
-  //     .then((response) => {
-  //       setDataTable(response.data.data);
-  //       setMeta(response.data.meta);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, [refresh, activeFilters, pageCount]);
+ 
 
   useEffect(() => {
  
@@ -141,21 +128,7 @@ export default function ReportsPage() {
     setSearchTerm(term);
   };
 
-  // function to handle invoice details fetch
-  // const handleRequestInvoiceDetails = async () => {
-  //   if (!selectedCustomerId) return;
-   
-  //   try {
-  //     const res = await axiosClient.get(
-  //       `/invoices?f[customer_id]=${selectedCustomerId}`
-  //     );
-  //     setInvoiceDetails(res.data);
-  //     setIsInvoiceDetailsOpen(true);
-  //   } catch (err) {
-  //     // optionally show a toast or error state
-  //     setInvoiceDetails(null);
-  //   } 
-  // };
+ 
 
   const handleRequestInvoiceDetails = async () => {
     try {
@@ -167,11 +140,17 @@ export default function ReportsPage() {
         setIsInvoiceDetailsOpen(true);
       } else if (selectedProductId) {
         const res = await axiosClient.get(
-          `/invoices?f[product_id]=${selectedProductId}`
+          `/invoices?f[items.product_id]=${selectedProductId}`
         );
         setInvoiceDetails(res.data);
         setIsInvoiceDetailsOpen(true);
-      } else {
+      } else if (stemId) {
+        const res = await axiosClient.get(
+          `/invoices?f[setm]=${stemId}`
+        );
+        setInvoiceDetails(res.data);
+        setIsInvoiceDetailsOpen(true);
+      }  else {
         // هیچ کدام انتخاب نشده
         return;
       }
@@ -232,10 +211,16 @@ export default function ReportsPage() {
            records={dataTable}
             loading={loading}
             setSelectedProductId={setSelectedProductId}
-            selectedProductId={selectedProductId} />
+            selectedProductId={selectedProductId}
+            setSelectedCustomerId ={setSelectedCustomerId} />
         )}
         {filterTable === "روش تسویه" && (
-          <SettlementRecordsTable records={dataTable} loading={loading} />
+          <SettlementRecordsTable records={dataTable} loading={loading} 
+          stemId={stemId}
+          setStemId = {setStemId}
+          setSelectedProductId = {setSelectedProductId}
+          setSelectedCustomerId = {setSelectedCustomerId}
+          />
         )}
         {filterTable === "وضعیت ارسال" && (
           <SendRecordsTable records={dataTable} loading={loading} />

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 
-export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId}) {
+export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId , setSelectedCustomerId}) {
   const [openDetail, setOpenDetail] = useState(null);
 console.log(selectedProductId);
   return (
@@ -58,7 +58,10 @@ console.log(selectedProductId);
                ? "klickBtnTD"
                : ""
            }`}
-           onClick={() => setSelectedProductId(r.product_id)}
+           onClick={() => {
+            setSelectedProductId(r.product_id);
+            setSelectedCustomerId(null);          
+          }}
            style={{ cursor: "pointer" }}
          >
               <td
@@ -106,4 +109,5 @@ ServicesRecordsTable.propTypes = {
   loading: PropTypes.bool,
   selectedProductId: PropTypes.number,
   setSelectedProductId: PropTypes.func,
+  setSelectedCustomerId : PropTypes.func,
 };

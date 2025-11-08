@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import SettlementDetailsModal from "./SettlementDetailsModal";
 
-export default function SettlementRecordsTable({ records, loading }) {
+export default function SettlementRecordsTable({ records, loading , stemId, setStemId , setSelectedCustomerId , setSelectedProductId }) {
   const [openDetail, setOpenDetail] = useState(null);
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
@@ -49,10 +49,20 @@ export default function SettlementRecordsTable({ records, loading }) {
             </tr>
           )}
           {records.map((r, i) => (
-            <tr
-              key={i}
-              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
-            >
+             <tr
+             key={i}
+             className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
+              stemId === r.setm
+                 ? "klickBtnTD"
+                 : ""
+             }`}
+             onClick={() => {
+              setStemId(r.setm);
+              setSelectedCustomerId(null); 
+              setSelectedProductId(null);         
+            }}
+             style={{ cursor: "pointer" }}
+           >
               <td
                 className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
                 onClick={() => setOpenDetail(r)}
@@ -96,4 +106,8 @@ export default function SettlementRecordsTable({ records, loading }) {
 SettlementRecordsTable.propTypes = {
   records: PropTypes.array.isRequired,
   loading: PropTypes.bool,
+  stemId: PropTypes.number,
+  setStemId: PropTypes.func,
+  setSelectedCustomerId : PropTypes.func,
+  setSelectedProductId: PropTypes.func,
 };

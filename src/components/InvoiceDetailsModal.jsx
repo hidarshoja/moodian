@@ -49,7 +49,7 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
                         <thead>
                           <tr className="text-white bg-[#161636]">
                             <th className="py-4">نام کالا/خدمت</th>
-                            <th className="py-4">مقدار</th>
+                            <th className="py-4">مقدار / تعداد</th>
                           </tr>
                         </thead>
                         <tbody>
