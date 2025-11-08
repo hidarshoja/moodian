@@ -13,11 +13,11 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
           <div className="text-white text-lg font-bold">ریز فاکتور فروش ها</div>
           <button onClick={onClose} className="text-white">×</button>
         </div>
-        <table className="w-full my-3">
+        <table className="w-full ">
           <thead>
-            <tr className="text-white bg-[#232354]">
+            <tr className="text-white bg-[#161636]">
               {/* Your columns */}
-              <th>TaxId</th>
+              <th className="py-4">TaxId</th>
               <th>وضعیت</th>
               <th>موضوع</th>
               <th>مشتری</th>
@@ -28,12 +28,12 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
           <tbody>
             {data.data?.map((row, i) => (
               <React.Fragment key={i}>
-                <tr className="text-white">
-                  <td>{row.taxid}</td>
-                  <td>{row.status_label}</td>
-                  <td>{row.inp_label}</td>
-                  <td>{row.customer_name}</td>
-                  <td>{Number(row.total_amount).toLocaleString("fa-IR")}</td>
+                <tr className="text-white border-t p-2 border-white/10 odd:bg-white/5 even:bg-white/10">
+                  <td className="text-center p-2">{row?.taxid}</td>
+                  <td className="text-center p-2">{row?.status_label}</td>
+                  <td className="text-center p-2">{row?.inp_label}</td>
+                  <td className="text-center p-2">{row?.customer?.name} - {row?.customer?.last_name}</td>
+                  <td className="text-center p-2">{Number(row?.tadis).toLocaleString("fa-IR")}</td>
                   <td>
                     <button onClick={() => setOpenRow(openRow === i ? null : i)}>
                       {openRow === i ? "−" : "+"}
@@ -47,16 +47,19 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
                       {/* جدول ردیف‌ها/جزئیات هر فاکتور */}
                       <table className="w-full border mt-2">
                         <thead>
-                          <tr>
-                            <th>نام کالا/خدمت</th>
-                            <th>مقدار</th>
+                          <tr className="text-white bg-[#161636]">
+                            <th className="py-4">نام کالا/خدمت</th>
+                            <th className="py-4">مقدار</th>
                           </tr>
                         </thead>
                         <tbody>
                            {row.items?.map((item, idx) => (
-                              <tr key={idx}>
-                                 <td>{item.product_name}</td>
-                                 <td>{item.quantity}</td>
+                              <tr key={idx} className="text-white border-t p-2 border-white/10 bg-white/5">
+                                 <td className="text-center p-2">{item?.product?.title}</td>
+                                 <td className="text-center p-2">
+                                  {Number(item?.am).toLocaleString("fa-IR")}
+                                  /{Number(item?.fee).toLocaleString("fa-IR")}
+                                  </td>
                               </tr>
                            ))}
                         </tbody>
@@ -68,7 +71,7 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
             ))}
           </tbody>
         </table>
-        <button onClick={onClose} className="btn-custom w-full mt-4">انصراف</button>
+        <button onClick={onClose} className="btn-custom6 text-center w-full mt-4">انصراف</button>
       </div>
     </div>
   );
