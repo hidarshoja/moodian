@@ -2,6 +2,7 @@ import { useState } from "react";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { GrDocumentExcel } from "react-icons/gr";
 
 // eslint-disable-next-line react/prop-types
 export default function SearchFilterBar({
@@ -110,7 +111,7 @@ const handleActionClick = async () => {
 };
      
    
-  
+
   
 
   return (
@@ -172,13 +173,11 @@ const handleActionClick = async () => {
             >
              ریز فاکتور اکسل
             </button>
-            {actionButtons
-              .filter((btn) => btn !== "ریز فاکتور")
-              .map((filter, index) => (
-                <button key={index + 4} className="btn-custom">
-                  {filter}
-                </button>
-              ))}
+            <button onClick={handleActionClick} className="btn-custom">
+                به اکسل
+              
+              </button>
+          
           </div>
         </div>
       </div>
