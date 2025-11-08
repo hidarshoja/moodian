@@ -19,7 +19,7 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
         }`}
       >
         <thead>
-          <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <tr className="text-white/80 text-sm">
             <th className="text-right px-4 py-3 whitespace-nowrap">
               {" "}
               وضعیت ارسال{" "}

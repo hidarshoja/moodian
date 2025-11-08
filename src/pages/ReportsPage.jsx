@@ -29,6 +29,7 @@ export default function ReportsPage() {
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [stemId , setStemId] = useState(null);
   const [ statusId , setStatusId] = useState(null);
+  const [filterRemove , setFilterRemove] = useState(true);
 
   const buildFilterQuery = (filters) => {
     const params = [];
@@ -36,13 +37,17 @@ export default function ReportsPage() {
       if (value) {
         if (key === "type") {
           params.push(`${key}=${value}`);
-        } else {
+        } else if (key.startsWith("f[indatim]") && filterRemove ) {
+          // اگر فیلتر تاریخ است، مستقیم اضافه کن
+          params.push(`${key}=${encodeURIComponent(value)}`);
+        } else if (filterRemove) {
           params.push(`f[${key}]=${encodeURIComponent(value)}`);
         }
       }
     });
     return params.length ? "&" + params.join("&") : "";
   };
+  
  
 
   useEffect(() => {
@@ -74,7 +79,7 @@ export default function ReportsPage() {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, [activeFilters, pageCount, filterTable]);
+  }, [activeFilters, pageCount, filterTable , filterRemove]);
 
   const handleStartDateChange = (selectedDate) => {
     setStartDate(selectedDate);
@@ -95,7 +100,7 @@ export default function ReportsPage() {
   const handleClearAll = () => {
     setStartDate(null);
     setEndDate(null);
-
+    setFilterRemove(false);
     setFromMonth(null);
     setToMonth(null);
   };
@@ -106,24 +111,32 @@ export default function ReportsPage() {
   }
 
   const handleSendAll = () => {
+    setFilterRemove(true);
     const start = toEnglishDigits(startDate?.format?.("YYYY/MM/DD") || "");
     const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
     const startMonth = toEnglishDigits(fromMonth?.format?.("YYYY/MM/DD") || "");
     const endMonth = toEnglishDigits(toMonth?.format?.("YYYY/MM/DD") || "");
-
-    let created_at = start;
+  
+    let minDate = "";
+    let maxDate = "";
+  
     if (start && end) {
-      created_at = `${start},${end}`;
+      minDate = start;
+      maxDate = end;
     } else if (startMonth && endMonth) {
-      created_at = `${startMonth},${endMonth}`;
+      minDate = startMonth;
+      maxDate = endMonth;
     }
+  
     const newFilters = {
-      created_at,
+      "f[indatim][min]": minDate,
+      "f[indatim][max]": maxDate,
       status: status || "",
     };
-
+  
     setActiveFilters(newFilters);
   };
+  
 
   const handleSearchTermChange = (term) => {
     setSearchTerm(term);
