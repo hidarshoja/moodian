@@ -212,15 +212,37 @@ const handleActionClick2 = async () => {
           <button onClick={handleSearch} className="btn-custom">
             جستجو
           </button>
-          {activeFilters.map((filter, index) => (
-            <button
-              key={index}
-              onClick={() => handleClearFilter(filter)}
-              className="btn-custom"
-            >
-              {filter} - {selectedCustomer?.title} X
-            </button>
-          ))}
+         {activeFilters.map((filter, index) => {
+  // تابع کمکی برای برگردوندن مقدار مناسب هر فیلتر
+  let filterValue = "";
+  switch (filter) {
+    case "مشتری":
+      filterValue = selectedCustomer?.title;
+      break;
+    case "کالا/خدمات":
+      filterValue = selectedProduct?.title;
+      break;
+    case "روش تسویه":
+      filterValue = stem?.title;
+      break;
+    case "وضعیت ارسال":
+      filterValue = status?.title;
+      break;
+    default:
+      filterValue = "";
+  }
+
+  return (
+    <button
+      key={index}
+      onClick={() => handleClearFilter(filter)}
+      className="btn-custom"
+    >
+      {filter} {filterValue && ` [ ${filterValue} ] `}  X
+    </button>
+  );
+})}
+
         </div>
       </div>
 
