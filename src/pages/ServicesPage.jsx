@@ -23,7 +23,7 @@ export default function ServicesPage() {
   const initialFilters = {
     title: "",
     last_name: "",
-    olr: "",
+    sstid: "",
     tel: "",
     unit_id: "",
   };
@@ -114,6 +114,8 @@ export default function ServicesPage() {
       <ImportExcelModal
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
+        setRefresh={setRefresh}
+        refresh={refresh}
       />
       <div>
         <div className="w-full border-b border-white/10 p-6">
@@ -169,8 +171,8 @@ export default function ServicesPage() {
           <div>
             <label className="block mb-1 text-white text-sm">کد شناسه</label>
             <input
-              name="olr"
-              value={filterInputs.olr}
+              name="sstid"
+              value={filterInputs.sstid}
               onChange={e => setFilterInputs(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               type="number"
               maxLength={10}

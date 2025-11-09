@@ -178,7 +178,6 @@ export default function ImportExcelModalInvoices({ isOpen, onClose }) {
               </option>
               <option value="13">الگوی سیزدهم (فروش خدمات بیمهای)</option>
             </select>
-            
           </div>
          </div>
           <div className="flex flex-col md:flex-row gap-2 my-1">

@@ -1,10 +1,13 @@
 import React, { useRef, useState } from "react";
 import * as XLSX from "xlsx";
+import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
-export default function ImportExcelModal({ isOpen, onClose }) {
+export default function ImportExcelModal({ isOpen, onClose , refresh , setRefresh}) {
   const fileInputRef = useRef();
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
+   const [selectedFile, setSelectedFile] = useState(null);
 
   if (!isOpen) return null;
 
@@ -12,6 +15,7 @@ export default function ImportExcelModal({ isOpen, onClose }) {
     const file = e.target.files[0];
     if (!file) return;
     setFileName(file.name);
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = (evt) => {
       const bstr = evt.target.result;
@@ -35,6 +39,56 @@ export default function ImportExcelModal({ isOpen, onClose }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleImport = async (e) => {
+    e.preventDefault();
+    if (!selectedFile) {
+      Swal.fire({
+        icon: "warning",
+        title: "ابتدا فایل را انتخاب کنید",
+        background: "#0a0a22",
+        color: "#e5e7eb",
+        confirmButtonColor: "#1f2937",
+      });
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("excel", selectedFile);
+      await axiosClient.post(`/products/import`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      Swal.fire({
+        toast: true,
+        position: "top-start",
+        icon: "success",
+        title: "فایل با موفقیت بارگذاری شد",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        customClass: { popup: "swal2-toast" },
+        background: "#111827",
+        color: "#e5e7eb",
+      });
+      onClose();
+      setSelectedFile(null);
+      setFileName("");
+      setExcelData([]);
+      setRefresh(!refresh);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "خطا در بارگذاری فایل",
+        text: error?.response?.data?.message || "دوباره تلاش کنید",
+        background: "#0a0a22",
+        color: "#e5e7eb",
+        confirmButtonColor: "#1f2937",
+      });
+    }
   };
 
   return (
@@ -75,7 +129,8 @@ export default function ImportExcelModal({ isOpen, onClose }) {
             )}
           </div>
           <div className="flex flex-col md:flex-row gap-2 my-1">
-            <button className="btn-custom">بارگذاری</button>
+            <button className="btn-custom"
+            onClick={handleImport}>بارگذاری</button>
             <button className="btn-custom"
             onClick={handleDownload}
             >فایل نمونه</button>
