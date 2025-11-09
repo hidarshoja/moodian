@@ -160,7 +160,7 @@ const handleActionClick2 = async () => {
     }
     query += `&group_by=${groupByValue}`;
   }
-  console.log(`query`, query);
+ 
   try {
     await axiosClient.get(`/report/invoice/ins-summery?export=true${query}`);
 
