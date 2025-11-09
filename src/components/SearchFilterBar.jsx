@@ -15,7 +15,8 @@ export default function SearchFilterBar({
   stemId, // new
   statusId,
   startDate,
-  endDate, // new
+  endDate,
+  filterTable
 }) {
   const [activeFilter, setActiveFilter] = useState("مشتری");
   const navigate = useNavigate();
@@ -43,7 +44,6 @@ export default function SearchFilterBar({
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
-    // Search is handled by the parent component through onSearchTermChange
   };
 
   const handleSearchInputChange = (e) => {
@@ -57,7 +57,7 @@ export default function SearchFilterBar({
     if (!str) return "";
     return str.replace(/[۰-۹]/g, (d) => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
   }
-  
+  console.log(`filterTable`, filterTable);
 const handleActionClick = async () => {
   let query = "";
   if (selectedCustomerId) {
@@ -80,8 +80,79 @@ const handleActionClick = async () => {
     const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
     query += `&f[indatim][max]=${end}`;
   }
+ 
   try {
     await axiosClient.get(`/invoices?export=true${query}`);
+
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success",
+      title: "فایل با موفقیت بارگذاری شد",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+    });
+
+    setTimeout(() => {
+      navigate("/downloadExcel");
+    }, 1000);
+
+  } catch (error) {
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "error",
+      title: "خطا در دریافت داده‌ها",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+    });
+  }
+};
+
+const handleActionClick2 = async () => {
+  let query = "";
+  if (selectedCustomerId) {
+    query += `&f[customer_id]=${selectedCustomerId}`;
+  }
+  if (selectedProductId) {
+    query += `&f[product_id]=${selectedProductId}`;
+  }
+  if (stemId) {
+    query += `&f[setm]=${stemId}`;
+  }
+  if (statusId) {
+    query += `&f[status]=${statusId}`;
+  }
+  if(startDate) {
+    const start = toEnglishDigits(startDate?.format?.("YYYY/MM/DD") || "");
+    query += `&f[indatim][min]=${start}`;
+  }
+  if(endDate) {
+    const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
+    query += `&f[indatim][max]=${end}`;
+  }
+   let groupByValue;
+  if(filterTable) {
+    switch (filterTable) {
+      case "کالا/خدمات":
+        groupByValue = "product_id";
+        break;
+      case "روش تسویه":
+        groupByValue = "setm";
+        break;
+      case "وضعیت ارسال":
+        groupByValue = "status";
+        break;
+      default:
+        groupByValue = "customer_id";
+    }
+    query += `&group_by=${groupByValue}`;
+  }
+  console.log(`query`, query);
+  try {
+    await axiosClient.get(`/report/invoice/ins-summery?export=true${query}`);
 
     Swal.fire({
       toast: true,
@@ -173,7 +244,7 @@ const handleActionClick = async () => {
             >
              ریز فاکتور اکسل
             </button>
-            <button onClick={handleActionClick} className="btn-custom">
+            <button onClick={handleActionClick2} className="btn-custom">
                 به اکسل
               
               </button>

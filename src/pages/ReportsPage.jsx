@@ -427,12 +427,10 @@ export default function ReportsPage() {
   };
 
   const handleSearchTermChange = (term) => {
-    console.log(`term`, term);
     setSearchTerm(term);
   };
 
-  console.log(`dataTable`, dataTable);
-  console.log(`filteredData`, filteredData); // برای دیباگ
+
 
   const handleRequestInvoiceDetails = async () => {
     try {
@@ -507,6 +505,7 @@ export default function ReportsPage() {
           statusId={statusId}
           startDate={startDate}
           endDate={endDate}
+          filterTable={filterTable}
         />
       </div>
       <div className="mt-6">
