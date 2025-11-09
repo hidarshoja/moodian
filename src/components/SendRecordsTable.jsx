@@ -59,9 +59,9 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
                   : ""
               }`}
               onClick={() => {
-               setStemId(null);
-               setSelectedCustomerId(null); 
-               setSelectedProductId(null);
+              // setStemId(null);
+             //  setSelectedCustomerId(null); 
+             //  setSelectedProductId(null);
                setStatusId(r.status); 
                setStatusName(r);        
              }}
