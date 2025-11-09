@@ -506,6 +506,7 @@ export default function ReportsPage() {
           startDate={startDate}
           endDate={endDate}
           filterTable={filterTable}
+          setSearchTerm={setSearchTerm}
         />
       </div>
       <div className="mt-6">

@@ -16,7 +16,8 @@ export default function SearchFilterBar({
   statusId,
   startDate,
   endDate,
-  filterTable
+  filterTable,
+  setSearchTerm
 }) {
   const [activeFilter, setActiveFilter] = useState("مشتری");
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export default function SearchFilterBar({
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
     setFilterTable(filter);
+    setSearchTerm("");
   };
 
   const handleClearFilter = () => {
