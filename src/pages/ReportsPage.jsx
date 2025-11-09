@@ -331,7 +331,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-
+console.log(`selectedCustomerId`, selectedCustomerId);
   useEffect(() => {
     setLoading(true);
 
@@ -349,7 +349,20 @@ export default function ReportsPage() {
       default:
         groupByValue = "customer_id";
     }
-    const query = buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
+    
+    let query = buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
+    if(selectedCustomerId) {
+      query += `&f[customer_id]=${selectedCustomerId}`
+    }
+    if(selectedProductId) {
+      query += `&f[items.product_id]=${selectedProductId}`
+    }
+    if(stemId) {
+      query += `&f[setm]=${stemId}`
+    }
+    if(statusId) {
+      query += `&f[status]=${statusId}`
+    } 
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {

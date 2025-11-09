@@ -61,7 +61,7 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
            onClick={() => {
             setSelectedProductId(r.product_id);
             setSelectedProduct(r);
-            setSelectedCustomerId(null);          
+           // setSelectedCustomerId(null);          
           }}
            style={{ cursor: "pointer" }}
          >
