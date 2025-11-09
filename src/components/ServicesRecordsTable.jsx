@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 
-export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId , setSelectedCustomerId}) {
+export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId , setSelectedCustomerId , setSelectedProduct}) {
   const [openDetail, setOpenDetail] = useState(null);
-console.log(selectedProductId);
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -60,6 +60,7 @@ console.log(selectedProductId);
            }`}
            onClick={() => {
             setSelectedProductId(r.product_id);
+            setSelectedProduct(r);
             setSelectedCustomerId(null);          
           }}
            style={{ cursor: "pointer" }}

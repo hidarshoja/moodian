@@ -17,7 +17,10 @@ export default function SearchFilterBar({
   endDate,
   filterTable,
   setSearchTerm,
-  selectedCustomer
+  selectedCustomer,
+  selectedProduct,
+  stem,
+  status
 }) {
    const [activeFilters, setActiveFilters] = useState([]);
   const navigate = useNavigate();

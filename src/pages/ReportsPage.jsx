@@ -307,6 +307,7 @@ export default function ReportsPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
    const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [stemId, setStemId] = useState(null);
@@ -509,6 +510,8 @@ export default function ReportsPage() {
           filterTable={filterTable}
           setSearchTerm={setSearchTerm}
            selectedCustomer={selectedCustomer}
+           selectedProduct={selectedProduct}
+           
         />
       </div>
       <div className="mt-6">
@@ -518,7 +521,6 @@ export default function ReportsPage() {
             loading={loading}
             selectedCustomerId={selectedCustomerId}
             setSelectedCustomerId={setSelectedCustomerId}
-             
             setSelectedCustomer={setSelectedCustomer}
           />
         )}
@@ -529,6 +531,7 @@ export default function ReportsPage() {
             setSelectedProductId={setSelectedProductId}
             selectedProductId={selectedProductId}
             setSelectedCustomerId={setSelectedCustomerId}
+            setSelectedProduct={setSelectedProduct}
           />
         )}
         {filterTable === "روش تسویه" && (
