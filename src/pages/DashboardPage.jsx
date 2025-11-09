@@ -48,7 +48,7 @@ const parsedUser = JSON.parse(userData);
       items.push(
         `${fullName} در تاریخ ${date} ساعت ${time} عملیات «${base}» را انجام داد.`
       );
-      items.push(`وضعیت: موفق`);
+      items.push(`وضعیت: ${activity?.status_label}`);
       items.push(`مرجع: ${activity?.inty_label}`);
     }
     return items;

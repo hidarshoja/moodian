@@ -76,7 +76,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+          .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
            
             setLineItems(response.data.data);
