@@ -17,7 +17,8 @@ export default function SearchFilterBar({
   startDate,
   endDate,
   filterTable,
-  setSearchTerm
+  setSearchTerm,
+  selectedCustomer
 }) {
   const [activeFilter, setActiveFilter] = useState("مشتری");
   const navigate = useNavigate();
@@ -31,8 +32,7 @@ export default function SearchFilterBar({
   ];
 
   const displayFilterButtons = filterButtons.slice(0, 4);
-  const actionButtons = filterButtons.slice(4);
-
+console.log(`selectedCustomer`, selectedCustomer);
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
     setFilterTable(filter);
@@ -206,7 +206,7 @@ const handleActionClick2 = async () => {
           </button>
           {activeFilter && (
             <button onClick={handleClearFilter} className="btn-custom">
-              {activeFilter} X
+              {activeFilter} - {selectedCustomer?.title} X
             </button>
           )}
         </div>

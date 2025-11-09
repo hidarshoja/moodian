@@ -8,6 +8,8 @@ export default function CustomersRecordsTable({
   loading,
   selectedCustomerId,
   setSelectedCustomerId,
+
+  setSelectedCustomer,
 }) {
   const [openDetail, setOpenDetail] = useState(null);
 
@@ -62,7 +64,10 @@ export default function CustomersRecordsTable({
                   ? "klickBtnTD"
                   : ""
               }`}
-              onClick={() => setSelectedCustomerId(r.customer_id)}
+              onClick={() => {
+                setSelectedCustomer(r);
+                setSelectedCustomerId(r.customer_id);
+              }}
               style={{ cursor: "pointer" }}
             >
               <td
@@ -113,4 +118,5 @@ CustomersRecordsTable.propTypes = {
   loading: PropTypes.bool,
   selectedCustomerId: PropTypes.number,
   setSelectedCustomerId: PropTypes.func,
+  setSelectedCustomer: PropTypes.func,
 };

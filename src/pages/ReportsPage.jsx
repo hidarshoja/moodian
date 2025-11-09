@@ -305,6 +305,7 @@ export default function ReportsPage() {
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
@@ -507,6 +508,7 @@ export default function ReportsPage() {
           endDate={endDate}
           filterTable={filterTable}
           setSearchTerm={setSearchTerm}
+           selectedCustomer={selectedCustomer}
         />
       </div>
       <div className="mt-6">
@@ -516,6 +518,8 @@ export default function ReportsPage() {
             loading={loading}
             selectedCustomerId={selectedCustomerId}
             setSelectedCustomerId={setSelectedCustomerId}
+             
+            setSelectedCustomer={setSelectedCustomer}
           />
         )}
         {filterTable === "کالا/خدمات" && (
