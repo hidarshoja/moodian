@@ -25,7 +25,7 @@ export default function ErrorModal({ open, onClose, errors }) {
           </button>
         </div>
         {(!errors || errors.length === 0) ? (
-          <div className="text-center text-white py-8 text-base">عروری وجود ندارد.</div>
+          <div className="text-center text-white py-8 text-base">اروری وجود ندارد.</div>
         ) : (
           <ul className="rtl space-y-4 p-2 max-h-72 overflow-y-auto scrollbar-thin">
             {errors.map((err, i) => (

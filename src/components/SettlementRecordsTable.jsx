@@ -58,9 +58,7 @@ export default function SettlementRecordsTable({ records, loading , stemId, setS
              }`}
              onClick={() => {
               setStemId(r.setm);
-              setStem(r);
-           //   setSelectedCustomerId(null); 
-            //  setSelectedProductId(null);         
+              setStem(r);         
             }}
              style={{ cursor: "pointer" }}
            >
