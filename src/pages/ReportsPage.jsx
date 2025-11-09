@@ -331,7 +331,7 @@ export default function ReportsPage() {
     });
     return params.length ? "&" + params.join("&") : "";
   };
-console.log(`selectedCustomerId`, selectedCustomerId);
+
   useEffect(() => {
     setLoading(true);
 
