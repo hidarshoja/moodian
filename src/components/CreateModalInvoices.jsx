@@ -17,6 +17,7 @@ export default function CreateModalInvoices({
   onClose2,
   refresh,
   setRefresh,
+  customers
 }) {
   // مقدار اولیه stateها برای ریست راحت
   const initialInvoiceData = {
@@ -45,7 +46,6 @@ export default function CreateModalInvoices({
   const [lineItems, setLineItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
   const [totals, setTotals] = useState(initialTotals);
-  const [dataTable, setDataTable] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [totalDiscount, setTotalDiscount] = useState(0);
@@ -141,17 +141,7 @@ const[totalPrice , setTotalPrice] = useState(0);
     return payload;
   };
 
-  useEffect(() => {
-    axiosClient
-      .get(`/customers`)
-      .then((response) => {
-     
-        setDataTable(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+
 
   const handleInputChange = (field, value) => {
     setInvoiceData((prev) => ({
@@ -441,7 +431,7 @@ const[totalPrice , setTotalPrice] = useState(0);
     }
 
     // Get customer name
-    const selectedCustomer = dataTable.find((c) => c.id == invoiceData.crn);
+    const selectedCustomer = customers?.find((c) => c.id == invoiceData.crn);
     const customerName = selectedCustomer
       ? (selectedCustomer.name || "") +
         (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
@@ -739,7 +729,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                 className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">انتخاب کنید</option>
-                {(dataTable || []).map((c) => (
+                {(customers || []).map((c) => (
                   <option key={c.id} value={c.id}>
                     {(c.name || "") + (c.last_name ? " " + c.last_name : "")}
                   </option>
@@ -1084,4 +1074,5 @@ CreateModalInvoices.propTypes = {
   onClose2: PropTypes.func.isRequired,
   refresh: PropTypes.bool.isRequired,
   setRefresh: PropTypes.func.isRequired,
+  customers: PropTypes.array.isRequired,
 };

@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing , onRefresh , onClose2 }) {
+export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isEditing , onRefresh , customers , products}) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -39,8 +39,6 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
     todam: 0,
     tbill: 0,
   });
-  const [customers, setCustomers] = useState([]);
-  const [products, setProducts] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
   const [totalDiscount2 , setTotalDiscount2] = useState(0);
@@ -210,26 +208,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
     return payload;
   };
 
-  useEffect(() => {
-    axiosClient
-      .get(`/customers`)
-      .then((response) => {
-        setCustomers(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
-    axiosClient
-      .get(`/products`)
-      .then((response) => {
-       
-        setProducts(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  }, []);
+ 
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -322,7 +301,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
                   ? {
                       sstid: itemData.ProductId,
                       title:
-                        products.find((p) => p.id == itemData.ProductId)
+                        products?.find((p) => p.id == itemData.ProductId)
                           ?.title || "",
                       ...item.product,
                     }
@@ -356,7 +335,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
           ? {
               sstid: itemData.ProductId,
               title:
-                products.find((p) => p.id == itemData.ProductId)?.title || "",
+                products?.find((p) => p.id == itemData.ProductId)?.title || "",
             }
           : null,
       };
@@ -585,7 +564,7 @@ export default function EditInvoiceModalNew({ isOpen, onClose, invoiceData , isE
     }
 
     // Get customer name
-    const selectedCustomer = customers.find((c) => c.id == formData.crn);
+    const selectedCustomer = customers?.find((c) => c.id == formData.crn);
     const customerName = selectedCustomer
       ? (selectedCustomer.name || "") +
         (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
@@ -1258,4 +1237,6 @@ EditInvoiceModalNew.propTypes = {
   isEditing :PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onClose2: PropTypes.func.isRequired,
+  customers: PropTypes.array.isRequired,
+  products: PropTypes.array.isRequired,
 };

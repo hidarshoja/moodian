@@ -24,6 +24,8 @@ export default function InvoicesPage() {
   const [excelModalOpen2, setExcelModalOpen2] = useState(false);
   const [groupCheckModalOpen, setGroupCheckModalOpen] = useState(false);
   const [checkGroupCheckModalOpen, setCheckGroupCheckModalOpen] = useState(false);
+   const [customers, setCustomers] = useState([]);
+  const [products, setProducts] = useState([]);
   
   const navigate = useNavigate();
   const buildFilterQuery = (filters) => {
@@ -95,6 +97,27 @@ export default function InvoicesPage() {
       });
 };
 
+ useEffect(() => {
+    axiosClient
+      .get(`/customers`)
+      .then((response) => {
+        setCustomers(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+
+    axiosClient
+      .get(`/products`)
+      .then((response) => {
+       
+        setProducts(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
@@ -159,6 +182,8 @@ export default function InvoicesPage() {
           loading={loading}
           onRefresh={() => setRefresh(!refresh)}
           onClose2={() => setExcelModalOpen2(false)}
+          customers = {customers}
+          products = {products}
         />
       </div>
 
@@ -171,6 +196,7 @@ export default function InvoicesPage() {
         onClose2={() => setExcelModalOpen2(false)}
         refresh = {refresh}
         setRefresh={setRefresh}
+        customers={customers}
       />
       <GroupInvoiceStatusCheckModal
         isOpen={groupCheckModalOpen}

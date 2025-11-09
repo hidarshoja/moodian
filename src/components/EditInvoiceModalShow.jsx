@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) {
+export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , customers , products }) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -39,8 +39,6 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     todam: 0,
     tbill: 0,
   });
-  const [customers, setCustomers] = useState([]);
-  const [products, setProducts] = useState([]);
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
   const [totalDiscount2 , setTotalDiscount2] = useState(0);
@@ -210,27 +208,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  }) 
     return payload;
   };
 
-  useEffect(() => {
-    axiosClient
-      .get(`/customers`)
-      .then((response) => {
-        
-        setCustomers(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
-    axiosClient
-      .get(`/products`)
-      .then((response) => {
-       
-        setProducts(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  }, []);
+ 
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -1221,4 +1199,6 @@ EditInvoiceModalShow.propTypes = {
   onClose: PropTypes.func.isRequired,
   invoiceData: PropTypes.object,
   isEditing :PropTypes.bool.isRequired,
+    customers: PropTypes.array.isRequired,
+    products: PropTypes.array.isRequired,
 };

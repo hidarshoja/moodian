@@ -22,6 +22,8 @@ export default function SendInvoicesTable({
   loading,
   onRefresh,
   onClose2,
+  customers,  
+  products,
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEditModalOpen2, setIsEditModalOpen2] = useState(false);
@@ -418,6 +420,8 @@ export default function SendInvoicesTable({
         isEditing={isInvoice}
         onRefresh={onRefresh}
         onClose2={onClose2}
+        customers={customers}
+        products={products}
       />
 
       {/* EditInvoiceModalShow */}
@@ -426,6 +430,8 @@ export default function SendInvoicesTable({
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
         isEditing={isInvoice}
+        customers={customers}
+        products={products}
       />
 
       <ErrorListModal
@@ -441,6 +447,8 @@ export default function SendInvoicesTable({
         isEditing={isInvoice}
         onRefresh={onRefresh}
         onClose2={closeAllModals}
+          customers={customers}
+        products={products}
       />
     </div>
   );
@@ -451,4 +459,6 @@ SendInvoicesTable.propTypes = {
   loading: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onClose2: PropTypes.func.isRequired,
+  customers: PropTypes.array.isRequired,
+  products: PropTypes.array.isRequired,
 };
