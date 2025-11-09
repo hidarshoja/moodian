@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { route } from "./route.jsx";
 import { addUser } from "./features/user/userSlice";
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       {(() => {
         try {
@@ -26,5 +26,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
       </RouterProvider>
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

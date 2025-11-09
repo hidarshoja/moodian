@@ -121,7 +121,7 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 </td>
               </tr>
             )}
-            {[...records]?.reverse().map((r, i) => (
+            {[...records]?.map((r, i) => (
               <tr
                 key={i}
                 className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"

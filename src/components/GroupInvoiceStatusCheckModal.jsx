@@ -57,8 +57,8 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         <table style="width:100%; text-align:center; border-collapse: collapse;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="padding:8px; border:1px solid #ccc;">Reference Number</th>
-              <th style="padding:8px; border:1px solid #ccc;">Status</th>
+            <th style="padding:8px; border:1px solid #ccc;">Status</th>
+            <th style="padding:8px; border:1px solid #ccc;">Reference Number</th>
             </tr>
           </thead>
           <tbody>
@@ -148,11 +148,12 @@ onClose();
           {/* Table Header */}
           <div className="bg-[#1A2035] text-white px-6 py-3 sticky top-0 z-10">
             <div className="grid grid-cols-6 gap-4 text-sm font-medium text-right">
+              {/* <div>شماره مرجع</div> */}
               <div>وضعیت</div>
-              <div>نوع فاکتور فروش</div>
+              <div>روش تسویه </div>
               <div>شماره منحصر بفرد مالیاتی</div>
               <div>تاریخ صدور</div>
-              <div>موضوع فاکتور فروش</div>
+              <div>نوع فاکتور فروش</div>
               <div>الگوی فاکتور فروش</div>
             </div>
           </div>
@@ -164,6 +165,7 @@ onClose();
                 key={invoice.id}
                 className="grid grid-cols-6 gap-4 px-6 py-4 bg-[#23234a] hover:bg-[#3c3c7d] transition-colors"
               >
+                
                 {/* Status Checkbox */}
                 <div className="flex items-center justify-start gap-1">
                   <label className="flex items-center cursor-pointer">
