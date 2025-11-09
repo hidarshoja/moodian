@@ -297,7 +297,7 @@ export default function SendInvoicesTable({
               </td>
              
               <td className="px-5 py-3  text-sm truncate max-w-[280px]">
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-end gap-2">
                   { r.can_update === true && <>
                     <div className="relative group">
                     <button

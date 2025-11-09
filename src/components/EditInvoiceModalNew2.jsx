@@ -74,7 +74,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+         .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
     
             setLineItems(response.data.data);
@@ -413,7 +413,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+            .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
        
             setLineItems(response.data.data);
@@ -508,7 +508,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-          .get(`/invoice/items?invoice_id=${invoiceData.id}`)
+             .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
         
             setLineItems(response.data.data);
