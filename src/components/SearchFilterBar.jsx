@@ -20,7 +20,7 @@ export default function SearchFilterBar({
   selectedCustomer,
   selectedProduct,
   stem,
-  status
+  statusName
 }) {
    const [activeFilters, setActiveFilters] = useState([]);
   const navigate = useNavigate();
@@ -226,7 +226,7 @@ const handleActionClick2 = async () => {
       filterValue = stem?.title;
       break;
     case "وضعیت ارسال":
-      filterValue = status?.title;
+      filterValue = statusName?.title;
       break;
     default:
       filterValue = "";

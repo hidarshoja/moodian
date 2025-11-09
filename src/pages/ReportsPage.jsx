@@ -311,6 +311,8 @@ export default function ReportsPage() {
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [stemId, setStemId] = useState(null);
+   const [stem, setStem] = useState(null);
+   const [statusName, setStatusName] = useState(null);
   const [statusId, setStatusId] = useState(null);
   const [filterRemove, setFilterRemove] = useState(true);
 
@@ -511,7 +513,8 @@ export default function ReportsPage() {
           setSearchTerm={setSearchTerm}
            selectedCustomer={selectedCustomer}
            selectedProduct={selectedProduct}
-           
+           stem={stem}
+           statusName={statusName}
         />
       </div>
       <div className="mt-6">
@@ -542,6 +545,7 @@ export default function ReportsPage() {
             setStemId={setStemId}
             setSelectedProductId={setSelectedProductId}
             setSelectedCustomerId={setSelectedCustomerId}
+            setStem={setStem}
           />
         )}
         {filterTable === "وضعیت ارسال" && (
@@ -553,6 +557,7 @@ export default function ReportsPage() {
             setSelectedCustomerId={setSelectedCustomerId}
             setStatusId={setStatusId}
             statusId={statusId}
+            setStatusName={setStatusName}
           />
         )}
 

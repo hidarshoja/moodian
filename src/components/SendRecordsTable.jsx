@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import SendStatusDetailsModal from "./SendStatusDetailsModal";
 
-export default function SendRecordsTable({ records, loading , setStemId , setSelectedProductId , setSelectedCustomerId , setStatusId ,statusId }) {
+export default function SendRecordsTable({ records, loading , setStemId , setSelectedProductId , setSelectedCustomerId , setStatusId ,statusId , setStatusName }) {
   const [openDetail, setOpenDetail] = useState(null);
 
   return (
@@ -62,7 +62,8 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
                setStemId(null);
                setSelectedCustomerId(null); 
                setSelectedProductId(null);
-               setStatusId(r.status);         
+               setStatusId(r.status); 
+               setStatusName(r);        
              }}
               style={{ cursor: "pointer" }}
             >

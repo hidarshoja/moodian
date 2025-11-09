@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import SettlementDetailsModal from "./SettlementDetailsModal";
 
-export default function SettlementRecordsTable({ records, loading , stemId, setStemId , setSelectedCustomerId , setSelectedProductId }) {
+export default function SettlementRecordsTable({ records, loading , stemId, setStemId , setSelectedCustomerId , setSelectedProductId , setStem }) {
   const [openDetail, setOpenDetail] = useState(null);
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
@@ -58,6 +58,7 @@ export default function SettlementRecordsTable({ records, loading , stemId, setS
              }`}
              onClick={() => {
               setStemId(r.setm);
+              setStem(r.setm);
               setSelectedCustomerId(null); 
               setSelectedProductId(null);         
             }}
