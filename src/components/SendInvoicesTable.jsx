@@ -225,6 +225,15 @@ export default function SendInvoicesTable({
     setIsErrorModalOpen(true);
   };
 
+  const getStatusColor = (status) => {
+  if (status === -90) return "text-yellow-400"; // زرد
+  if (status === -80  || status === -10) return "text-red-400"; // قرمز
+  if (status === 10 || status === 20 || status === 0) return "text-white"; // سفید
+  if (status === 100) return "text-green-400"; // سبز
+  return "text-gray-300"; // رنگ پیش‌فرض برای مقادیر دیگر
+};
+
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -264,30 +273,30 @@ export default function SendInvoicesTable({
             </tr>
           )}
           {records.map((r, i) => (
-            <tr
-              key={i}
-              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
-            >
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+           <tr
+  key={i}
+  className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${getStatusColor(r.status)}`}
+>
+              <td className="px-4 py-3  text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm whitespace-nowrap">
                 {r.taxid ? r.taxid : "-"}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm whitespace-nowrap">
                 {r?.customer?.name} {r?.customer?.last_name}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm whitespace-nowrap">
                 {convertToPersianDate(r.created_at)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+              <td className="px-4 py-3  text-sm truncate max-w-[200px]">
                 {r.tadis ? r.tadis : "-"}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[240px]">
+              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
                 {r.inty_label}
               </td>
              
-              <td className="px-5 py-3 text-white/90 text-sm truncate max-w-[280px]">
+              <td className="px-5 py-3  text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-center gap-2">
                   { r.can_update === true && <>
                     <div className="relative group">
