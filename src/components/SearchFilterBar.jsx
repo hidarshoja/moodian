@@ -2,7 +2,6 @@ import { useState } from "react";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { GrDocumentExcel } from "react-icons/gr";
 
 // eslint-disable-next-line react/prop-types
 export default function SearchFilterBar({
@@ -20,7 +19,7 @@ export default function SearchFilterBar({
   setSearchTerm,
   selectedCustomer
 }) {
-  const [activeFilter, setActiveFilter] = useState("مشتری");
+   const [activeFilters, setActiveFilters] = useState([]);
   const navigate = useNavigate();
   const filterButtons = [
     "مشتری",
@@ -32,16 +31,22 @@ export default function SearchFilterBar({
   ];
 
   const displayFilterButtons = filterButtons.slice(0, 4);
-console.log(`selectedCustomer`, selectedCustomer);
   const handleFilterClick = (filter) => {
-    setActiveFilter(filter);
-    setFilterTable(filter);
     setSearchTerm("");
+    setFilterTable(filter);
+
+    setActiveFilters((prev) => {
+      if (prev.includes(filter)) {
+        return prev.filter((f) => f !== filter);
+      } else {
+        return [...prev, filter];
+      }
+    });
   };
 
-  const handleClearFilter = () => {
-    setActiveFilter("");
-    setFilterTable("");
+
+   const handleClearFilter = (filterToRemove) => {
+    setActiveFilters((prev) => prev.filter((f) => f !== filterToRemove));
   };
 
   const handleSearch = () => {
@@ -59,7 +64,7 @@ console.log(`selectedCustomer`, selectedCustomer);
     if (!str) return "";
     return str.replace(/[۰-۹]/g, (d) => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
   }
-  console.log(`filterTable`, filterTable);
+ 
 const handleActionClick = async () => {
   let query = "";
   if (selectedCustomerId) {
@@ -204,24 +209,28 @@ const handleActionClick2 = async () => {
           <button onClick={handleSearch} className="btn-custom">
             جستجو
           </button>
-          {activeFilter && (
-            <button onClick={handleClearFilter} className="btn-custom">
-              {activeFilter} - {selectedCustomer?.title} X
+          {activeFilters.map((filter, index) => (
+            <button
+              key={index}
+              onClick={() => handleClearFilter(filter)}
+              className="btn-custom"
+            >
+              {filter} - {selectedCustomer?.title} X
             </button>
-          )}
+          ))}
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 w-full bg-gradient-to-b from-gray-900 to-gray- border border-gray-300 rounded-lg p-4 mb-4">
         <div className="flex flex-col lg:flex-row items-center justify-between w-full gap-3">
           <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-start gap-2">
-            {displayFilterButtons.map((filter, index) => (
+             {displayFilterButtons.map((filter, index) => (
               <button
                 key={index}
                 onClick={() => handleFilterClick(filter)}
-                className={` ${
-                  activeFilter === filter
-                    ? "bg-green-600 text-white px-3 py-1.5 border rounded-lg"
+                className={`px-3 py-1.5 border rounded-lg ${
+                  activeFilters.includes(filter)
+                    ? "bg-green-600 text-white"
                     : "btn-custom"
                 }`}
               >
