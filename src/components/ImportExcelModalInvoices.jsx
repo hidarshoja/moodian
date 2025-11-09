@@ -4,7 +4,7 @@ import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 
-export default function ImportExcelModalInvoices({ isOpen, onClose }) {
+export default function ImportExcelModalInvoices({ isOpen, onClose ,refresh , setRefresh}) {
   const fileInputRef = useRef();
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
@@ -90,7 +90,7 @@ export default function ImportExcelModalInvoices({ isOpen, onClose }) {
         color: "#e5e7eb",
       });
       onClose();
-      // reset state after successful upload
+      setRefresh(!refresh);
       setSelectedFile(null);
       setFileName("");
       setExcelData([]);
@@ -249,4 +249,6 @@ export default function ImportExcelModalInvoices({ isOpen, onClose }) {
 ImportExcelModalInvoices.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
+  setRefresh: PropTypes.func.isRequired,
 };

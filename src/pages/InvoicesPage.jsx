@@ -190,6 +190,8 @@ export default function InvoicesPage() {
       <ImportExcelModalInvoices
         isOpen={excelModalOpen}
         onClose={() => setExcelModalOpen(false)}
+        refresh = {refresh}
+        setRefresh={setRefresh}
       />
       <CreateModalInvoices
         isOpen2={excelModalOpen2}
