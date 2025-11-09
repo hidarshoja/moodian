@@ -45,7 +45,7 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button
-                    onClick={() => onEdit?.(i)}
+                    onClick={() => onEdit?.(i , r)}
                     title="ویرایش"
                     className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
                   >

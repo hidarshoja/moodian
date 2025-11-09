@@ -25,7 +25,7 @@ export default function RolesPage() {
       setRoles(res.data.data);
       setMeta(res.data.meta ?? {});
     } catch (e) {
-      // noop
+      console.error("Error fetching roles:", e);
     } finally {
       setLoading(false);
     }
@@ -39,13 +39,11 @@ export default function RolesPage() {
     const fetchPermissions = async () => {
       try {
         const res = await axiosClientAdmin.get(`/permissions`);
-      
         setPermission(res.data);
       } catch (err) {
         console.error("خطا در دریافت دسترسی‌ها:", err);
       }
     };
-
     fetchPermissions();
   }, []);
 
@@ -55,13 +53,24 @@ export default function RolesPage() {
     setIsModalOpen(true);
   };
 
-  const openEdit = (index) => {
-    setEditingIndex(index);
-    setForm({
-      name: roles[index]?.name || "",
-      permissions: roles[index]?.permissions || [],
-    });
-    setIsModalOpen(true);
+  const openEdit = async (index, r) => {
+    try {
+      const roleResponse = await axiosClientAdmin.get(`/roles/${r.id}`);
+      const roleData = roleResponse.data;
+
+      // گرفتن آیدی permissionهای نقش
+      const rolePermissionIds = roleData.permissions.map((p) => p.id);
+
+      setEditingIndex(index);
+      setForm({
+        name: roleData.name || "",
+        permissions: rolePermissionIds,
+      });
+
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching role:", error);
+    }
   };
 
   const onChange = (e) => {
@@ -150,6 +159,7 @@ export default function RolesPage() {
         onSubmit={onSubmit}
         onClose={() => setIsModalOpen(false)}
         permission={permission}
+        setForm={setForm} // اضافه شده برای مدیریت checkboxها
       />
 
       <ToastContainer
