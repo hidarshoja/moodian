@@ -11,8 +11,6 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
      axiosClient.get("/invoices?f[status]=-80").then((response) => {
-  
-    
       setInvoiceData(response.data.data);
     });
   }, []);
@@ -28,63 +26,94 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
     setSelectedInvoices(newSelected);
   };
 
-  const handleSend = async () => {
+ const handleSend = async () => {
+  let data = {
+    reference_numbers: Array.from(selectedInvoices).map(item => item.toString())
+  };
+
+  try {
+    const res = await axiosClient.post(`/invoices/check-from-moadian`, data);
+
+    // پیام موفقیت
+    await Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "success",
+      title: res?.data?.message || "فاکتورها با موفقیت بررسی شد",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
+
    
-    
-    // تبدیل داده به فرمت مورد نظر
-    let data = {
-      reference_numbers: Array.from(selectedInvoices).map(item => item.toString())
-    };
-    
-   
-    
-    try {
-      const res = await axiosClient.post(`/invoices/check-from-moadian`, data);
-  
-      // Success message
+ 
+    const result = res?.data; 
+    console.log(`result`, result);
+    if (Array.isArray(result) && result.length > 0) {
+      const tableHtml = `
+        <table style="width:100%; text-align:center; border-collapse: collapse;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="padding:8px; border:1px solid #ccc;">Reference Number</th>
+              <th style="padding:8px; border:1px solid #ccc;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${result
+              .map(
+                (item) => `
+                <tr>
+                <td style="padding:8px; border:1px solid #ccc;">${item.status}</td>
+                  <td style="padding:8px; border:1px solid #ccc;">${item.referenceNumber}</td>
+                </tr>`
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+
       Swal.fire({
-        toast: true,
-        position: "top-start",
-        icon: "success",
-        title:res?.data?.message,
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: {
-          popup: "swal2-toast",
-        },
-      });
-      setSelectedInvoices(new Set());
-      onClose();
-    } catch (error) {
-      let errorMessage = "خطا در اضافه کردن محصول";
-  
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.response?.data?.errors) {
-        // Handle validation errors
-        const errors = error.response.data.errors;
-        const errorMessages = Object.values(errors).flat();
-        errorMessage = errorMessages.join("\n");
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-  
-      // Show error message
-      Swal.fire({
-        toast: true,
-        position: "top-start",
-        icon: "error",
-        title: errorMessage,
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        customClass: {
-          popup: "swal2-toast",
-        },
+        title: "نتیجه بررسی فاکتورها",
+        html: tableHtml,
+        width: "600px",
+        confirmButtonText: "باشه",
       });
     }
-  };
+     // بستن مدال
+    setSelectedInvoices(new Set());
+onClose();
+  } catch (error) {
+    let errorMessage = "خطا در اضافه کردن محصول";
+
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.response?.data?.errors) {
+      const errors = error.response.data.errors;
+      const errorMessages = Object.values(errors).flat();
+      errorMessage = errorMessages.join("\n");
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
+    // نمایش پیام خطا
+    Swal.fire({
+      toast: true,
+      position: "top-start",
+      icon: "error",
+      title: errorMessage,
+      showConfirmButton: false,
+      timer: 5000,
+      timerProgressBar: true,
+      customClass: {
+        popup: "swal2-toast",
+      },
+    });
+  }
+};
+
 
   const handleCancel = () => {
     setSelectedInvoices(new Set());
