@@ -1,7 +1,6 @@
 import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import InvoiceAccountTable from "../components/invoiceAccount";
-import Swal from "sweetalert2";
 
 
 export default function ContradictionPage() {
@@ -17,12 +16,7 @@ const [invoiceData , setInvoiceData] = useState([]);
     });
   }, []);
 
- const onAssignFunction = (id) => {
-  axiosClient.get(`/invoices/${id}`).then((response) => {
-    console.log(`response.data.data`, response.data.data);
     
-   });
- }      
  
 
  return (
@@ -55,7 +49,7 @@ const [invoiceData , setInvoiceData] = useState([]);
 </div>
       <div className="px-3">
         {activeBtn === "invoiceAccount" && <div className="mt-6">
-          <InvoiceAccountTable invoiceData={invoiceData}   onAssign ={onAssignFunction}/>
+          <InvoiceAccountTable invoiceData={invoiceData} />
           </div>}
         {activeBtn === "accountInvoice" && <div>حساب با فاکتور</div>}
         {activeBtn === "all" && <div>همه</div>}

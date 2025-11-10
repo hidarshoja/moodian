@@ -5,11 +5,14 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import  { useState } from 'react';
 import TransactionModal from '../components/TransactionModal';
+import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
 
-export default function InvoiceAccount({invoiceData  ,onAssign }) {
+export default function InvoiceAccount({invoiceData  }) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
+  const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
+   const [assignData, setAssignData] = useState(null);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
 axiosClient.get(`/invoices/${r.id}`).then((response) => {
@@ -18,8 +21,21 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
 
   };
 
+   const handleShowAssign = (i, r) => {
+    setAssignModalOpen(true);
+axiosClient.get(`/transactions`).then((response) => {
+  console.log(`response.data`, response.data);
+      setAssignData(response.data);
+    });
+
+  };
+
   const handleCloseTransactionModal = () => {
     setTransactionModalOpen(false);
+  };
+
+  const handleCloseAssignModal = () => {
+    setAssignModalOpen(false);
   };
 
  
@@ -83,7 +99,7 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
                  لیست تراکنش 
                   </button>
                   <button
-                   onClick={() => onAssign?.(i)}
+                   onClick={() => handleShowAssign?.(i , r)}
                    
                     className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                   >
@@ -97,6 +113,9 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
       </table>
        {transactionModalOpen && (
         <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} />
+      )}
+       {assignModalOpen && (
+        <AssignModal transaction={assignData} onClose={handleCloseAssignModal} />
       )}
     </div>
   )
