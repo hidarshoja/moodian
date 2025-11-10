@@ -1,7 +1,7 @@
 import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import InvoiceAccountTable from "../components/invoiceAccount";
-
+import AccountInvois from "../components/AccountInvois";
 
 export default function ContradictionPage() {
  const [activeBtn , setActiveBtn] = useState("invoiceAccount");
@@ -58,8 +58,11 @@ const [transactionData2 , setTransactionData2] = useState([]);
       <div className="px-3">
         {activeBtn === "invoiceAccount" && <div className="mt-6">
           <InvoiceAccountTable invoiceData={invoiceData} />
+      
           </div>}
-        {activeBtn === "accountInvoice" && <div>حساب با فاکتور</div>}
+        {activeBtn === "accountInvoice" && <div>
+          <AccountInvois invoiceData={transactionData2} />
+            </div>}
         {activeBtn === "all" && <div>همه</div>}
       </div>
 </div>

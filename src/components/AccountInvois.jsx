@@ -1,0 +1,131 @@
+import PropTypes from "prop-types";
+import {convertToPersianDate} from "../utils/change-date";
+import { IoMdAlert } from "react-icons/io";
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { IoCloseCircle } from "react-icons/io5";
+import  { useState } from 'react';
+import TransactionModal from './TransactionModal';
+import AssignModal from "./AssignModal";
+import axiosClient from "../axios-client";
+
+export default function AccountInvois({invoiceData  }) {
+  console.log('invoiceData', invoiceData)
+  const [transactionModalOpen, setTransactionModalOpen] = useState(false);
+  const [assignModalOpen, setAssignModalOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState(null);
+   const [assignData, setAssignData] = useState(null);
+  const handleShowTransaction = (i, r) => {
+    setTransactionModalOpen(true);
+axiosClient.get(`/invoices/${r.id}`).then((response) => {
+      setTransactionData(response.data);
+    });
+
+  };
+
+   const handleShowAssign = (i, r) => {
+    setAssignModalOpen(true);
+axiosClient.get(`/transactions`).then((response) => {
+  console.log(`response.data`, response.data);
+      setAssignData(response.data);
+    });
+
+  };
+
+  const handleCloseTransactionModal = () => {
+    setTransactionModalOpen(false);
+  };
+
+  const handleCloseAssignModal = () => {
+    setAssignModalOpen(false);
+  };
+
+ 
+
+  return (
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
+      <table className="min-w-full">
+        <thead>
+          <tr className="text-white/80 text-sm bg-[#181f3a]">
+            <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
+              <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
+                <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
+                   <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
+            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {(!invoiceData || invoiceData.length === 0) && (
+            <tr>
+              <td
+                colSpan={4}
+                className="px-4 py-6 text-center text-white/60 text-sm"
+              >
+                موردی ثبت نشده است.
+              </td>
+            </tr>
+          )}
+          {invoiceData.map((r, i) => (
+            <tr
+              key={r.id ?? i}
+              className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
+            >
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.id}
+              </td>
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {convertToPersianDate(r?.created_at)}
+              </td>
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.customer?.name} -  {r?.customer?.last_name}
+              </td>
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.taxid}
+              </td>
+               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.status_label}
+              </td>
+               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.tadis  == r?.transactions_sum_amount ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
+                {r?.transactions_sum_amount == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
+                {r?.transactions_sum_amount > 0 && r?.tadis > r?.transactions_sum_amount ? <IoMdAlert className="text-yellow-500"/> : ""}
+              </td>
+              <td className="px-2 py-2">
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => handleShowTransaction(i, r)}
+                    className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
+                  >
+                 لیست تراکنش 
+                  </button>
+                  <button
+                   onClick={() => handleShowAssign?.(i , r)}
+                   
+                    className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                  >
+                   اساین کردن 
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+       {transactionModalOpen && (
+        <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} />
+      )}
+       {assignModalOpen && (
+        <AssignModal transaction={assignData} onClose={handleCloseAssignModal} />
+      )}
+    </div>
+  )
+}
+
+
+AccountInvois.propTypes = {
+  invoiceData: PropTypes.array,
+onShow: PropTypes.func,
+onAssign: PropTypes.func
+};
