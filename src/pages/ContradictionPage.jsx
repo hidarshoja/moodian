@@ -1,53 +1,30 @@
-import { useState } from "react";
-import ContradictionFilter from "../components/ContradictionFilter";
-import ContradictionTable from "../components/ContradictionTable";
-import ContradictionTableRight from "../components/ContradictionTableRight";
+import { useState , useEffect } from "react";
+import axiosClient from "../axios-client";
+import InvoiceAccountTable from "../components/invoiceAccount";
+import Swal from "sweetalert2";
+
 
 export default function ContradictionPage() {
-  const [fromYear, setFromYear] = useState(null);
-  const [season, setSeason] = useState("");
+ const [activeBtn , setActiveBtn] = useState("invoiceAccount");
+const [invoiceData , setInvoiceData] = useState([]);
 
-  const [records] = useState([
-    {
-      name: "شرکت الف",
-      factorMain: "13477767",
-      factorCorrective: "TM-17003",
-      factorReturn: "EC-478866",
-      factorCancellation: "CC1111",
-      pure: "11115",
-    },
-    {
-      name: "شرکت ج",
-      factorMain: "134567",
-      factorCorrective: "TM-1003",
-      factorReturn: "EC-445566",
-      factorCancellation: "CCC333",
-      pure: "123455",
-    },
-  ])
 
-  
 
-  const handleFromYearChange = (selectedDate) => {
-    setFromYear(selectedDate);
-  };
+   useEffect(() => {
+     axiosClient.get("/invoices").then((response) => {
+     console.log(`response.data.data`, response.data.data);
+      setInvoiceData(response.data.data);
+    });
+  }, []);
 
+ const onAssignFunction = (id) => {
+  axiosClient.get(`/invoices/${id}`).then((response) => {
+    console.log(`response.data.data`, response.data.data);
+    
+   });
+ }      
  
 
-
-
-  
-
-  const handleSeasonChange = (e) => {
-    setSeason(e.target.value);
-  };
-
- 
-
-
-
- 
- 
  return (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
   <div>
@@ -56,21 +33,33 @@ export default function ContradictionPage() {
       <p className="text-white/60 text-sm mt-1">نمای کلی مغایرت گیری کاربران</p>
     </div>
   </div>
-  <ContradictionFilter
-        fromYear={fromYear}
-        season={season}
-        onFromYearChange={handleFromYearChange}
-        onSeasonChange={handleSeasonChange}
-      />
-      <div className="mt-3 flex flex-col md:flex-row gap-1">
-        <div className="w-full md:w-2/5">
-          <ContradictionTableRight  records={records}/>
-        </div>
-        <div className="w-full md:w-3/5">
-          <ContradictionTable  records={records}/>
-        </div>
+<div className="flex gap-2 mt-6 px-2">
+  <button
+  className="btn-custom4"
+  onClick={() => setActiveBtn("invoiceAccount")}
+  >
+    فاکتور با حساب
+  </button>
+  <button
+  className="btn-custom4"
+  onClick={() => setActiveBtn("accountInvoice")}
+  >
+  حساب با فاکتور
+  </button>
+  <button
+  className="btn-custom4"
+  onClick={() => setActiveBtn("all")}
+    >
+    همه
+  </button>
+</div>
+      <div className="px-3">
+        {activeBtn === "invoiceAccount" && <div className="mt-6">
+          <InvoiceAccountTable invoiceData={invoiceData}   onAssign ={onAssignFunction}/>
+          </div>}
+        {activeBtn === "accountInvoice" && <div>حساب با فاکتور</div>}
+        {activeBtn === "all" && <div>همه</div>}
       </div>
-      
 </div>
 )
 }
