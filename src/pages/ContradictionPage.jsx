@@ -6,7 +6,7 @@ import InvoiceAccountTable from "../components/invoiceAccount";
 export default function ContradictionPage() {
  const [activeBtn , setActiveBtn] = useState("invoiceAccount");
 const [invoiceData , setInvoiceData] = useState([]);
-
+const [transactionData2 , setTransactionData2] = useState([]);
 
 
    useEffect(() => {
@@ -18,6 +18,14 @@ const [invoiceData , setInvoiceData] = useState([]);
 
     
  
+   useEffect(() => {
+     axiosClient.get("/transactions").then((response) => {
+     console.log(`response.data.data`, response.data.data);
+      setTransactionData2(response.data.data);
+    });
+  }, []);
+
+   
 
  return (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
