@@ -76,6 +76,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
                loading={loading}
                setRefresh={setRefresh}
                refresh={refresh}
+               setLoading={setLoading}
                 />
       
           </div>}

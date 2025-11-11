@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {convertToPersianDate} from "../utils/change-date";
 import { IoMdAlert } from "react-icons/io";
@@ -17,16 +17,17 @@ function Spinner() {
 }
 
 
-export default function InvoiceAccount({invoiceData, loading , refresh , setRefresh}) {
+export default function InvoiceAccount({invoiceData, loading , refresh , setRefresh , setLoading}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
    const [assignData, setAssignData] = useState([]);
    const[loading2 , setLoading2] = useState(false);
+   const[loading3 , setLoading3] = useState(false);
 const[idActive , setIdActive] = useState(null);
      const [meta, setMeta] = useState({});
 const[activeAccount , setActiveAccount] = useState([]);
-
+const[pageCount2 , setPageCount2] = useState(1);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
     setLoading2(true);
@@ -41,15 +42,25 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
   };
 
    const handleShowAssign = (i, r) => {
+    if(r){
+      setIdActive(r.id);
+    }
     setAssignModalOpen(true);
-    setIdActive(r.id);
-    // صفحه بندی اضافه شود
-axiosClient.get(`/transactions`).then((response) => {
+   setLoading3(true);
+axiosClient.get(`/transactions?page=${pageCount2}&per_page=2`).then((response) => {
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
-    });
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      setLoading3(false);
+    })
 
   };
+
+  useEffect(() => {
+   handleShowAssign();
+  }, [pageCount2]);
 
   const handleResponse = () => {
     axiosClient.get(`/transactions`).then((response) => {
@@ -185,6 +196,8 @@ useEffect(() => {
         activeAccount={activeAccount}
         refresh={refresh}
         setRefresh={setRefresh}
+        setPageCount2={setPageCount2}
+        pageCount2={pageCount2}
         />
       )}
     </div>
@@ -198,5 +211,6 @@ onShow: PropTypes.func,
 onAssign: PropTypes.func,
 loading :PropTypes.bool,
 refresh :PropTypes.bool,
-setRefresh:PropTypes.func
+setRefresh:PropTypes.func,
+setLoading:PropTypes.func
 };

@@ -12,7 +12,7 @@ function Spinner() {
   );
 }
 
-export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount , refresh , setRefresh}) {
+export default function AssignModal({ transaction , onClose , loading3 , meta , setPageCount2 , pageCount2 , setLoading3 , idActive , activeAccount , refresh , setRefresh}) {
 
   const [selectedTransactions, setSelectedTransactions] = useState([]);
 
@@ -79,14 +79,14 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
              </button>
            </div>
           <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 p-3  relative">
-                 {loading && (
+                 {loading3 && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
                     <Spinner />
                   </div>
                 )}
                 <table 
                   className={`min-w-full text-white ${
-                    loading ? "opacity-30 pointer-events-none" : ""
+                    loading3 ? "opacity-30 pointer-events-none" : ""
                   }`}
                 >
                   <thead>
@@ -153,9 +153,9 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
                  <div className='w-1/5 flex items-center justify-center '>
                              <Pagination
                   meta={meta}
-                  pageCount={pageCount}
-                  setPageCount={setPageCount}
-                  setLoading={setLoading}
+                  pageCount={pageCount2}
+                  setPageCount={setPageCount2}
+                  setLoading={setLoading3}
                 />
                  </div>
                  <div className='w-1/5'></div>
@@ -184,12 +184,12 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
 
 AssignModal.propTypes = {
   transaction : PropTypes.array,
-  loading : PropTypes.bool,
+  loading3 : PropTypes.bool,
   onClose:PropTypes.func,
   meta:PropTypes.object,
-  pageCount:PropTypes.number,
-  setPageCount:PropTypes.func,
-  setLoading:PropTypes.func,
+  pageCount2:PropTypes.number,
+  setPageCount2:PropTypes.func,
+  setLoading3:PropTypes.func,
   idActive:PropTypes.number,
  activeAccount:PropTypes.array,
  refresh:PropTypes.bool,
