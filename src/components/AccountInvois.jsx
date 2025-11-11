@@ -22,12 +22,12 @@ export default function AccountInvois({invoiceData , meta , pageCount ,setPageCo
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
    const [assignData, setAssignData] = useState([]);
+   const[idActive , setIdActive] = useState(null);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
 axiosClient.get(`/transactions/${r.id}`)
 .then((response) => {
-  console.log(`response.data`, response.data);
-      setTransactionData(response?.data);
+      setTransactionData(response?.data?.invoices);
       
     }).catch((error) => {
       console.log(error);
@@ -35,8 +35,9 @@ axiosClient.get(`/transactions/${r.id}`)
 
   };
 
-   const handleShowAssign = () => {
+   const handleShowAssign = (r) => {
     setAssignModalOpen(true);
+     setIdActive(r.id);
 axiosClient.get(`/invoices`).then((response) => {
   console.log(`response.data`, response?.data?.data);
       setAssignData(response?.data?.data);
@@ -126,7 +127,7 @@ axiosClient.get(`/invoices`).then((response) => {
               لیست فاکتور
                   </button>
                   <button
-                   onClick={ handleShowAssign}
+                    onClick={() => handleShowAssign?.( r)}
                    
                     className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                   >
@@ -140,7 +141,7 @@ axiosClient.get(`/invoices`).then((response) => {
       </table>
        {transactionModalOpen && (
         <TransactionModalNew 
-            transaction={Array.isArray(transactionData) ? transactionData : [transactionData]}
+            transaction={transactionData}
          onClose={handleCloseTransactionModal} />
       )}
        {assignModalOpen && (
@@ -151,6 +152,7 @@ axiosClient.get(`/invoices`).then((response) => {
               pageCount={pageCount}
               setPageCount={setPageCount}
               setLoading={setLoading}
+              idActive={idActive}
           />
       )}
         <Pagination

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import {convertToPersianDate} from "../utils/change-date";
 
 function Spinner() {
   return (
@@ -23,7 +24,7 @@ console.log(`transaction`, transaction);
            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
              <div className="flex items-center gap-3">
              
-               <span className="text-white text-lg font-bold">لیست 12فاکتور</span>
+               <span className="text-white text-lg font-bold">لیست فاکتور</span>
              </div>
              <button
                onClick={onClose}
@@ -46,10 +47,10 @@ console.log(`transaction`, transaction);
                  <thead>
                    <tr className="text-white/80 text-sm bg-[#181f3a]">
                      <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
-                              <th className="text-right px-4 py-3 whitespace-nowrap"> نام </th>
+                      <th className="text-right px-4 py-3 whitespace-nowrap"> نوع </th>
                      <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
                      <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
-                     <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
+                     <th className="text-right px-4 py-3 whitespace-nowrap">  taxid   </th>
                        <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
                          <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
                    </tr>
@@ -61,7 +62,7 @@ console.log(`transaction`, transaction);
                          colSpan={4}
                          className="px-4 py-6 text-center text-white/60 text-sm"
                        >
-                         موردی ثبت14 نشده است.
+                         موردی ثبت نشده است.
                        </td>
                      </tr>
                    )}
@@ -74,22 +75,22 @@ console.log(`transaction`, transaction);
                          {r?.id}
                        </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                         {r?.provider_label}
+                         {r?.inp_label}
                        </td>
                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                         {r?.j_date}
+                         {convertToPersianDate(r?.created_at)}
                        </td>
                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                         {r?.tracking_code} 
+                         {r?.serial_number} 
                        </td>
                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                         {r?.bank_label}
+                         {r?.taxid}
                        </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                          {r?.status_label}
                        </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                         {new Intl.NumberFormat('fa-IR').format(r?.amount)}
+                         {new Intl.NumberFormat('fa-IR').format(r?.tadis)}
                        </td>
                       
                       
