@@ -7,6 +7,8 @@ import { IoCloseCircle } from "react-icons/io5";
 import TransactionModal from '../components/TransactionModal';
 import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
+import { MdAssignmentAdd } from "react-icons/md";
+import { FaReceipt } from "react-icons/fa";
 
 function Spinner() {
   return (
@@ -156,25 +158,24 @@ useEffect(() => {
                 {Number(r?.transactions_sum_amount).toLocaleString()}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.tadis  == Number(r?.transactions_sum_amount) ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
-                {Number(r?.transactions_sum_amount) == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
-                {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500"/> : ""}
+                {r?.tadis  == Number(r?.transactions_sum_amount) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> : ""}
+                {Number(r?.transactions_sum_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
+                {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""}
               </td>
               
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}
-                    className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
+                     className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/15 transition-colors"
                   >
-                 لیست تراکنش 
+               <FaReceipt />
                   </button>
                   <button
                    onClick={() => handleShowAssign?.(i , r)}
-                   
-                    className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                    className="p-2 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15"
                   >
-                   اساین کردن 
+                   <MdAssignmentAdd />
                   </button>
                 </div>
               </td>

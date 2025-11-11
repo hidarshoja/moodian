@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { IoMdAlert } from "react-icons/io";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
@@ -7,6 +7,9 @@ import TransactionModalNew from './TransactionModalNew';
 import AssignModalNew from "./AssignModalNew";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
+import { MdAssignmentAdd } from "react-icons/md";
+import { FaReceipt } from "react-icons/fa";
+
 
 function Spinner() {
   return (
@@ -45,7 +48,7 @@ axiosClient.get(`/transactions/${r.id}`)
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/invoices?page=${pageCount2}&per_page=2`)
+axiosClient.get(`/invoices?page=${pageCount2}`)
 .then((response) => {
       setAssignData(response?.data?.data);
         setMeta(response?.data?.meta);
@@ -151,24 +154,23 @@ axiosClient.get(`/invoices?page=${pageCount2}&per_page=2`)
                  {new Intl.NumberFormat('fa-IR').format(r?.invoices_sum_tadis)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.amount  == Number(r?.invoices_sum_tadis) && <IoMdCheckmarkCircle className="text-green-500"/> }
-                {Number(r?.invoices_sum_tadis) == 0 && <IoCloseCircle className="text-red-500"/> }
-                {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500"/>}
+                {r?.amount  == Number(r?.invoices_sum_tadis) && <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> }
+                {Number(r?.invoices_sum_tadis) == 0 && <IoCloseCircle className="text-red-500 w-5 h-5"/> }
+                {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>}
               </td>
                <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}
-                    className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
+                  className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/15 transition-colors"
                   >
-              لیست فاکتور
+               <FaReceipt />
                   </button>
                   <button
                     onClick={() => handleShowAssign?.( r)}
-                   
-                    className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                     className="p-2 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15"
                   >
-                   اساین کردن 
+                  <MdAssignmentAdd />
                   </button>
                 </div>
               </td>
