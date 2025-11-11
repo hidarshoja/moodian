@@ -76,23 +76,26 @@ axiosClient.get(`/transactions`).then((response) => {
                 {r?.id}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {convertToPersianDate(r?.created_at)}
+                {r?.j_date}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.customer?.name} -  {r?.customer?.last_name}
+                {r?.tracking_code} 
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.taxid}
+                {r?.bank_label}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.tadis  == r?.transactions_sum_amount ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
-                {r?.transactions_sum_amount == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
-                {r?.transactions_sum_amount > 0 && r?.tadis > r?.transactions_sum_amount ? <IoMdAlert className="text-yellow-500"/> : ""}
+                {new Intl.NumberFormat('fa-IR').format(r?.amount)}
               </td>
-              <td className="px-2 py-2">
+              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.amount  == r?.sum ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
+                {r?.sum == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
+                {r?.sum > 0 && r?.amount > r?.sum ? <IoMdAlert className="text-yellow-500"/> : ""}
+              </td>
+               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}
