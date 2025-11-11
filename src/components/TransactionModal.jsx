@@ -1,6 +1,16 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
-export default function TransactionModal({ transaction , onClose }) {
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
+export default function TransactionModal({ transaction , onClose , loading }) {
+
 
   return (
     <div
@@ -14,7 +24,7 @@ export default function TransactionModal({ transaction , onClose }) {
            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
              <div className="flex items-center gap-3">
              
-               <span className="text-white text-lg font-bold">جزئیات مشتری</span>
+               <span className="text-white text-lg font-bold">لیست فاکتور</span>
              </div>
              <button
                onClick={onClose}
@@ -23,51 +33,79 @@ export default function TransactionModal({ transaction , onClose }) {
               X
              </button>
            </div>
-          <div className="grid grid-cols-2 gap-4 p-2">
-         
-           
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80">شناسه مشتری:</span>
-               <span className="text-white">{transaction?.customer_id}</span>
+          <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+                {loading && (
+                 <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+                   <Spinner />
+                 </div>
+               )}
+               <table 
+                 className={`min-w-full text-white ${
+                   loading ? "opacity-30 pointer-events-none" : ""
+                 }`}
+               >
+                 <thead>
+                   <tr className="text-white/80 text-sm bg-[#181f3a]">
+                     <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
+                              <th className="text-right px-4 py-3 whitespace-nowrap"> نام </th>
+                     <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
+                     <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
+                     <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
+                       <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
+                         <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {(!transaction || transaction.length === 0) && (
+                     <tr>
+                       <td
+                         colSpan={4}
+                         className="px-4 py-6 text-center text-white/60 text-sm"
+                       >
+                         موردی ثبت نشده است.
+                       </td>
+                     </tr>
+                   )}
+                   {transaction.map((r, i) => (
+                     <tr
+                       key={r.id ?? i}
+                       className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
+                     >
+                       <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.id}
+                       </td>
+                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.provider_label}
+                       </td>
+                       <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.j_date}
+                       </td>
+                       <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.tracking_code} 
+                       </td>
+                       <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.bank_label}
+                       </td>
+                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {r?.status_label}
+                       </td>
+                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                         {new Intl.NumberFormat('fa-IR').format(r?.amount)}
+                       </td>
+                      
+                      
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+            
+                 {/* <Pagination
+                 meta={meta}
+                 pageCount={pageCount}
+                 setPageCount={setPageCount}
+                 setLoading={setLoading}
+               /> */}
              </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80">شماره سریال:</span>
-               <span className="text-white">{transaction?.serial_number}</span>
-             </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80"> شماره اقتصادی فروشنده:</span>
-               <span className="text-white">{transaction?.tins}</span>
-             </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80">وضعیت:</span>
-               <span className="text-white">{transaction?.status_label}</span>
-             </div>
-          
-                {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80"> الگوی صورتحساب:</span>
-               <span className="text-white">{transaction?.inp_label}</span>
-             </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80"> موضوع صورتحساب:</span>
-               <span className="text-white">{transaction?.ins_label}</span>
-             </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80">   نوع صورتحساب:</span>
-               <span className="text-white">{transaction?.inty_label}</span>
-             </div>
-             {/* Row */}
-             <div className="flex items-center gap-3 border border-white/10 p-2 rounded-md">
-               <span className="text-white/80">نوع شخص خریدار:</span>
-               <span className="text-white">{transaction?.tob_label}</span>
-             </div>
-          </div>
            </div>
          
    </div>
@@ -75,3 +113,10 @@ export default function TransactionModal({ transaction , onClose }) {
     
   );
 }
+
+
+TransactionModal.propTypes = {
+  transaction: PropTypes.array,
+onClose: PropTypes.func,
+loading :PropTypes.bool
+};

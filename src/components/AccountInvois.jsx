@@ -118,7 +118,7 @@ axiosClient.get(`/transactions`).then((response) => {
                     onClick={() => handleShowTransaction(i, r)}
                     className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
                   >
-                 لیست تراکنش 
+                 لیست 1 تراکنش 
                   </button>
                   <button
                    onClick={() => handleShowAssign?.(i , r)}

@@ -20,14 +20,21 @@ function Spinner() {
 export default function InvoiceAccount({invoiceData, loading  }) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
-  const [transactionData, setTransactionData] = useState(null);
+  const [transactionData, setTransactionData] = useState([]);
    const [assignData, setAssignData] = useState([]);
+   const[loading2 , setLoading2] = useState(false);
+
      const [meta, setMeta] = useState({});
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
+    setLoading2(true);
 axiosClient.get(`/invoices/${r.id}`).then((response) => {
-      setTransactionData(response.data);
-    });
+      setTransactionData(response?.data?.transactions);
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      setLoading2(false);
+    })
 
   };
 
@@ -132,7 +139,7 @@ axiosClient.get(`/transactions`).then((response) => {
         </tbody>
       </table>
        {transactionModalOpen && (
-        <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} />
+        <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} loading={loading2} />
       )}
        {assignModalOpen && (
         <AssignModal transaction={assignData}
