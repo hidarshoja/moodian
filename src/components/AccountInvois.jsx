@@ -28,6 +28,7 @@ axiosClient.get(`/transactions/${r.id}`)
 .then((response) => {
   console.log(`response.data`, response.data);
       setTransactionData(response?.data);
+      
     }).catch((error) => {
       console.log(error);
     })
@@ -139,7 +140,7 @@ axiosClient.get(`/transactions`).then((response) => {
       </table>
        {transactionModalOpen && (
         <TransactionModalNew 
-          transaction={transactionData?.data || []}
+            transaction={Array.isArray(transactionData) ? transactionData : [transactionData]}
          onClose={handleCloseTransactionModal} />
       )}
        {assignModalOpen && (
