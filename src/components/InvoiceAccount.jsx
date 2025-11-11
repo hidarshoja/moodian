@@ -47,7 +47,7 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/transactions?page=${pageCount2}&per_page=2`).then((response) => {
+axiosClient.get(`/transactions?page=${pageCount2}`).then((response) => {
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
     }).catch((error) => {
@@ -198,6 +198,7 @@ useEffect(() => {
         setRefresh={setRefresh}
         setPageCount2={setPageCount2}
         pageCount2={pageCount2}
+        loading3={loading3}
         />
       )}
     </div>
