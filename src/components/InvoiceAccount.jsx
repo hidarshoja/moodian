@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {convertToPersianDate} from "../utils/change-date";
 import { IoMdAlert } from "react-icons/io";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
-import  { useState } from 'react';
 import TransactionModal from '../components/TransactionModal';
 import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
@@ -25,6 +25,8 @@ export default function InvoiceAccount({invoiceData, loading  }) {
    const[loading2 , setLoading2] = useState(false);
 const[idActive , setIdActive] = useState(null);
      const [meta, setMeta] = useState({});
+const[activeAccount , setActiveAccount] = useState([]);
+
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
     setLoading2(true);
@@ -56,7 +58,15 @@ axiosClient.get(`/transactions`).then((response) => {
   const handleCloseAssignModal = () => {
     setAssignModalOpen(false);
   };
-
+useEffect(() => {
+  if(idActive){
+    axiosClient.get(`/invoices/${idActive}`)
+    .then((response) => {
+      console.log(`response?.data?.transactions`, response?.data?.transactions);
+      setActiveAccount(response?.data?.transactions);
+    });   
+  }
+  }, [idActive]);
  
 
   return (
