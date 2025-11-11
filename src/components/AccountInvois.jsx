@@ -91,6 +91,7 @@ axiosClient.get(`/invoices`).then((response) => {
             <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
               <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
                 <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
+                <th className="text-center px-4 py-3 whitespace-nowrap">مجموع فاکتور  </th>
                    <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
             <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
@@ -129,10 +130,13 @@ axiosClient.get(`/invoices`).then((response) => {
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {new Intl.NumberFormat('fa-IR').format(r?.amount)}
               </td>
+                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                 {new Intl.NumberFormat('fa-IR').format(r?.invoices_sum_tadis)}
+              </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.amount  == r?.sum ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
-                {r?.sum == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
-                {r?.sum > 0 && r?.amount > r?.sum ? <IoMdAlert className="text-yellow-500"/> : ""}
+                {r?.amount  == Number(r?.invoices_sum_tadis) && <IoMdCheckmarkCircle className="text-green-500"/> }
+                {Number(r?.invoices_sum_tadis) == 0 && <IoCloseCircle className="text-red-500"/> }
+                {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500"/>}
               </td>
                <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
