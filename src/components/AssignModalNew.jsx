@@ -3,6 +3,7 @@ import Pagination from "./Pagination";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
+import {convertToPersianDate} from "../utils/change-date";
 
 function Spinner() {
   return (
@@ -118,7 +119,7 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
                           {r?.id}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {r?.indatim}
+                          {convertToPersianDate(r?.indatim)}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {r?.customer?.name} - {r?.customer?.last_name}

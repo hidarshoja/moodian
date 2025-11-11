@@ -78,6 +78,8 @@ axiosClient.get(`/transactions`).then((response) => {
             <th className="text-right px-4 py-3 whitespace-nowrap">نام مشتری</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">شماره فاکتور مودیان</th>
               <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
+                 <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ </th>
+                    <th className="text-center px-4 py-3 whitespace-nowrap">مجموع تراکنش ها </th>
                 <th className="text-center px-4 py-3 whitespace-nowrap">دارای تراکنش</th>
             <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
@@ -89,7 +91,7 @@ axiosClient.get(`/transactions`).then((response) => {
                 colSpan={4}
                 className="px-4 py-6 text-center text-white/60 text-sm"
               >
-                موردی ثبت12 نشده است.
+                موردی ثبت نشده است.
               </td>
             </tr>
           )}
@@ -114,10 +116,18 @@ axiosClient.get(`/transactions`).then((response) => {
                 {r?.status_label}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.tadis  == r?.transactions_sum_amount ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
-                {r?.transactions_sum_amount == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
-                {r?.transactions_sum_amount > 0 && r?.tadis > r?.transactions_sum_amount ? <IoMdAlert className="text-yellow-500"/> : ""}
+             
+                  {Number(r?.tadis).toLocaleString()}
               </td>
+               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {Number(r?.transactions_sum_amount).toLocaleString()}
+              </td>
+               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                {r?.tadis  == Number(r?.transactions_sum_amount) ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
+                {Number(r?.transactions_sum_amount) == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
+                {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500"/> : ""}
+              </td>
+              
               <td className="px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                   <button
