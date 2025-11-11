@@ -373,6 +373,16 @@ body {
   color: #00b894;
 }
 
+.btn-active {
+  background-image: linear-gradient(
+    to top left,
+    #0e0e1c,
+    #242b3f,
+    #202627
+  ) !important;
+  color: #00b894;
+}
+
 @media (max-width: 768px) {
   .btn-custom {
     font-size: 12px !important;

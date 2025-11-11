@@ -37,19 +37,25 @@ const [transactionData2 , setTransactionData2] = useState([]);
   </div>
 <div className="flex gap-2 mt-6 px-2">
   <button
-  className="btn-custom4"
+     className={`btn-custom4 ${
+            activeBtn === "invoiceAccount" ? "btn-active" : ""
+          }`}
   onClick={() => setActiveBtn("invoiceAccount")}
   >
     فاکتور با حساب
   </button>
   <button
-  className="btn-custom4"
+     className={`btn-custom4 ${
+            activeBtn === "accountInvoice" ? "btn-active" : ""
+          }`}
   onClick={() => setActiveBtn("accountInvoice")}
   >
   حساب با فاکتور
   </button>
   <button
-  className="btn-custom4"
+  className={`btn-custom4 ${
+            activeBtn === "all" ? "btn-active" : ""
+          }`}
   onClick={() => setActiveBtn("all")}
     >
     همه
