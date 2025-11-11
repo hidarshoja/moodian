@@ -33,7 +33,7 @@ export default function TransactionModal({ transaction , onClose , loading }) {
               X
              </button>
            </div>
-          <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+          <div className="overflow-x-auto nice-scrollbar rounded-b-2xl border border-white/10 bg-white/5 relative">
                 {loading && (
                  <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
                    <Spinner />
