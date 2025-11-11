@@ -89,7 +89,7 @@ axiosClient.get(`/transactions`).then((response) => {
                 colSpan={4}
                 className="px-4 py-6 text-center text-white/60 text-sm"
               >
-                موردی ثبت نشده است.
+                موردی ثبت12 نشده است.
               </td>
             </tr>
           )}
@@ -140,7 +140,11 @@ axiosClient.get(`/transactions`).then((response) => {
         </tbody>
       </table>
        {transactionModalOpen && (
-        <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} loading={loading2} />
+        <TransactionModal
+         transaction={transactionData}
+          onClose={handleCloseTransactionModal} 
+          loading={loading2}
+           />
       )}
        {assignModalOpen && (
         <AssignModal transaction={assignData}

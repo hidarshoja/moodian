@@ -10,7 +10,7 @@ function Spinner() {
 }
 
 export default function TransactionModal({ transaction , onClose , loading }) {
-
+console.log(`transaction`, transaction);
 
   return (
     <div
@@ -62,7 +62,7 @@ export default function TransactionModal({ transaction , onClose , loading }) {
                          colSpan={4}
                          className="px-4 py-6 text-center text-white/60 text-sm"
                        >
-                         موردی ثبت نشده است.
+                         موردی ثبت13 نشده است.
                        </td>
                      </tr>
                    )}

@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 
 const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
-console.log(`meta`, meta);
+
   const genaratePages = () => {
     const pages = [];
     const totalPages = meta?.last_page;
