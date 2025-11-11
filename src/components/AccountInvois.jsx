@@ -51,7 +51,7 @@ axiosClient.get(`/transactions`).then((response) => {
     setAssignModalOpen(false);
   };
 
- 
+ console.log(`transactionData`, transactionData);
 
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
@@ -138,8 +138,8 @@ axiosClient.get(`/transactions`).then((response) => {
         </tbody>
       </table>
        {transactionModalOpen && (
-        <TransactionModalNew
-         transaction={transactionData} 
+        <TransactionModalNew 
+          transaction={transactionData?.data || []}
          onClose={handleCloseTransactionModal} />
       )}
        {assignModalOpen && (

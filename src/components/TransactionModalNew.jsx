@@ -11,13 +11,12 @@ function Spinner() {
 
 export default function TransactionModalNew({ transaction , onClose , loading }) {
 
-console.log(`transaction`, transaction);
   return (
     <div
          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
        >
          <div
-           className="w-full max-w-2xl flex flex-col rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
+           className="w-full max-w-2xl flex flex-col  rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
            onClick={(e) => e.stopPropagation()}
          >
            {/* Header */}
