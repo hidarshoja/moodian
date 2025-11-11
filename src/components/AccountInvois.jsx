@@ -16,7 +16,7 @@ function Spinner() {
   );
 }
 
-export default function AccountInvois({invoiceData , meta , pageCount ,setPageCount , setLoading , loading }) {
+export default function AccountInvois({invoiceData , meta , pageCount ,setPageCount , setLoading , loading , refresh , setRefresh}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
@@ -54,14 +54,22 @@ axiosClient.get(`/invoices`).then((response) => {
     setAssignModalOpen(false);
   };
 
+   const handleResponse = () => {
+    axiosClient.get(`/invoices`).then((response) => {
+      setAssignData(response?.data?.data);
+    });
+  };
+
  useEffect(() => {
   if(idActive){
     axiosClient.get(`/transactions/${idActive}`)
     .then((response) => {
       setActiveAccount(response?.data?.invoices);
     });   
+  }else{
+    handleResponse();
   }
-  }, [idActive]);
+  }, [idActive,refresh]);
 
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
@@ -162,6 +170,8 @@ axiosClient.get(`/invoices`).then((response) => {
               setLoading={setLoading}
               idActive={idActive}
               activeAccount={activeAccount}
+               refresh={refresh}
+             setRefresh={setRefresh}
           />
       )}
         <Pagination
@@ -183,5 +193,7 @@ meta:PropTypes.object,
 pageCount:PropTypes.number,
 setPageCount:PropTypes.func,
 setLoading:PropTypes.func,
-loading :PropTypes.bool
+loading :PropTypes.bool,
+refresh :PropTypes.bool,
+setRefresh:PropTypes.func
 };

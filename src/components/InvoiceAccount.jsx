@@ -65,6 +65,7 @@ axiosClient.get(`/transactions`).then((response) => {
   const handleCloseAssignModal = () => {
     setAssignModalOpen(false);
   };
+  
 useEffect(() => {
   if(idActive){
     axiosClient.get(`/invoices/${idActive}`)

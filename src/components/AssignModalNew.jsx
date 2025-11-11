@@ -13,7 +13,7 @@ function Spinner() {
   );
 }
 
-export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount}) {
+export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount, refresh , setRefresh}) {
   const [selectedTransactions, setSelectedTransactions] = useState([]);
 
     useEffect(() => {
@@ -38,6 +38,7 @@ export default function AssignModalNew({ transaction , onClose , loading , meta 
 axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
 .then((response) => {
   console.log(`response`, response);
+    setRefresh(!refresh);
   Swal.fire({
     icon: 'success',
     title: 'موفقیت آمیز',
@@ -191,4 +192,6 @@ AssignModalNew.propTypes = {
   setLoading:PropTypes.func,
   idActive:PropTypes.number,
   activeAccount:PropTypes.array,
+   refresh:PropTypes.bool,
+   setRefresh:PropTypes.func
 };

@@ -87,6 +87,8 @@ const [transactionData2 , setTransactionData2] = useState([]);
               setPageCount={setPageCount}
               setLoading={setLoading}
                loading={loading}
+                  setRefresh={setRefresh}
+               refresh={refresh}
              />
             </div>}
         {activeBtn === "all" && <div>همه</div>}
