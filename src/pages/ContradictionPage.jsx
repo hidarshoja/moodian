@@ -10,6 +10,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
   const [meta, setMeta] = useState({});
  const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
+  const[refresh , setRefresh] = useState(false);
 
    useEffect(() => {
      axiosClient.get("/invoices").then((response) => {
@@ -19,7 +20,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [refresh]);
 
     
  
@@ -30,7 +31,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
       setTransactionData2(response.data.data);
        setMeta(response.data.meta);
     });
-  }, [pageCount]);
+  }, [pageCount,refresh]);
 
    
 
@@ -70,7 +71,12 @@ const [transactionData2 , setTransactionData2] = useState([]);
 </div>
       <div className="px-3">
         {activeBtn === "invoiceAccount" && <div className="mt-6">
-          <InvoiceAccountTable invoiceData={invoiceData}  loading={loading} />
+          <InvoiceAccountTable
+             invoiceData={invoiceData}
+               loading={loading}
+               setRefresh={setRefresh}
+               refresh={refresh}
+                />
       
           </div>}
         {activeBtn === "accountInvoice" && <div>

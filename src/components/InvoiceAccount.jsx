@@ -17,7 +17,7 @@ function Spinner() {
 }
 
 
-export default function InvoiceAccount({invoiceData, loading  }) {
+export default function InvoiceAccount({invoiceData, loading , refresh , setRefresh}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
@@ -51,6 +51,13 @@ axiosClient.get(`/transactions`).then((response) => {
 
   };
 
+  const handleResponse = () => {
+    axiosClient.get(`/transactions`).then((response) => {
+      setAssignData(response?.data?.data);
+       setMeta(response.data.meta);
+    });
+  };
+
   const handleCloseTransactionModal = () => {
     setTransactionModalOpen(false);
   };
@@ -62,11 +69,13 @@ useEffect(() => {
   if(idActive){
     axiosClient.get(`/invoices/${idActive}`)
     .then((response) => {
-      console.log(`response?.data?.transactions`, response?.data?.transactions);
+      
       setActiveAccount(response?.data?.transactions);
     });   
+  }else{
+    handleResponse();
   }
-  }, [idActive]);
+  }, [idActive , refresh]);
  
 
   return (
@@ -167,11 +176,14 @@ useEffect(() => {
            />
       )}
        {assignModalOpen && (
-        <AssignModal transaction={assignData}
+        <AssignModal
+         transaction={assignData}
         meta={meta}
         onClose={handleCloseAssignModal}
         idActive={idActive}
         activeAccount={activeAccount}
+        refresh={refresh}
+        setRefresh={setRefresh}
         />
       )}
     </div>
@@ -183,5 +195,7 @@ InvoiceAccount.propTypes = {
   invoiceData: PropTypes.array,
 onShow: PropTypes.func,
 onAssign: PropTypes.func,
-loading :PropTypes.bool
+loading :PropTypes.bool,
+refresh :PropTypes.bool,
+setRefresh:PropTypes.func
 };
