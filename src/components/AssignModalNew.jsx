@@ -13,7 +13,7 @@ function Spinner() {
   );
 }
 
-export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount, refresh , setRefresh}) {
+export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount, refresh , setRefresh, loading3 , setPageCount2 , pageCount2 , setLoading3}) {
   const [selectedTransactions, setSelectedTransactions] = useState([]);
 
     useEffect(() => {
@@ -79,14 +79,14 @@ axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
              </button>
            </div>
           <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 p-3  relative">
-                 {loading && (
+                 {loading3 && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
                     <Spinner />
                   </div>
                 )}
                 <table 
                   className={`min-w-full text-white ${
-                    loading ? "opacity-30 pointer-events-none" : ""
+                    loading3 ? "opacity-30 pointer-events-none" : ""
                   }`}
                 >
                   <thead>
@@ -153,9 +153,9 @@ axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
                  <div className='w-1/5 flex items-center justify-center '>
                              <Pagination
                   meta={meta}
-                  pageCount={pageCount}
-                  setPageCount={setPageCount}
-                  setLoading={setLoading}
+                  pageCount={pageCount2}
+                  setPageCount={setPageCount2}
+                  setLoading={setLoading3}
                 />
                  </div>
                  <div className='w-1/5'></div>
@@ -184,14 +184,18 @@ axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
 
 AssignModalNew.propTypes = {
   transaction : PropTypes.array,
+  loading3 : PropTypes.bool,
   loading : PropTypes.bool,
   onClose:PropTypes.func,
   meta:PropTypes.object,
   pageCount:PropTypes.number,
   setPageCount:PropTypes.func,
+  pageCount2:PropTypes.number,
+  setPageCount2:PropTypes.func,
   setLoading:PropTypes.func,
+  setLoading3:PropTypes.func,
   idActive:PropTypes.number,
   activeAccount:PropTypes.array,
    refresh:PropTypes.bool,
-   setRefresh:PropTypes.func
+   setRefresh:PropTypes.func,
 };

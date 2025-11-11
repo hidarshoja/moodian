@@ -16,14 +16,16 @@ function Spinner() {
   );
 }
 
-export default function AccountInvois({invoiceData , meta , pageCount ,setPageCount , setLoading , loading , refresh , setRefresh}) {
+export default function AccountInvois({invoiceData  , pageCount ,setPageCount , setLoading , loading , refresh , setRefresh}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
    const [assignData, setAssignData] = useState([]);
    const[idActive , setIdActive] = useState(null);
    const[activeAccount , setActiveAccount] = useState([]);
-
+   const[pageCount2 , setPageCount2] = useState(1);
+      const[loading3 , setLoading3] = useState(false);
+       const [meta, setMeta] = useState({});
 
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
@@ -38,11 +40,20 @@ axiosClient.get(`/transactions/${r.id}`)
   };
 
    const handleShowAssign = (r) => {
+    if(r){
+      setIdActive(r.id);
+    }
     setAssignModalOpen(true);
-     setIdActive(r.id);
-axiosClient.get(`/invoices`).then((response) => {
+   setLoading3(true);
+axiosClient.get(`/invoices?page=${pageCount2}&per_page=2`)
+.then((response) => {
       setAssignData(response?.data?.data);
-    });
+        setMeta(response?.data?.meta);
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      setLoading3(false);
+    })
 
   };
 
@@ -53,6 +64,12 @@ axiosClient.get(`/invoices`).then((response) => {
   const handleCloseAssignModal = () => {
     setAssignModalOpen(false);
   };
+
+  useEffect(() => {
+    if(idActive){
+      handleShowAssign();
+    }
+  }, [pageCount2]);
 
    const handleResponse = () => {
     axiosClient.get(`/invoices`).then((response) => {
@@ -176,6 +193,9 @@ axiosClient.get(`/invoices`).then((response) => {
               activeAccount={activeAccount}
                refresh={refresh}
              setRefresh={setRefresh}
+              setPageCount2={setPageCount2}
+        pageCount2={pageCount2}
+        loading3={loading3}
           />
       )}
         <Pagination
