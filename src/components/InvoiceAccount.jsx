@@ -43,7 +43,6 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
     setIdActive(r.id);
     // صفحه بندی اضافه شود
 axiosClient.get(`/transactions`).then((response) => {
-  console.log(`response.data.data`, response?.data?.data);
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
     });
