@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Pagination from "../components/Pagination";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
@@ -15,8 +15,14 @@ function Spinner() {
 export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount}) {
 
   const [selectedTransactions, setSelectedTransactions] = useState([]);
-console.log(`activeAccount`, activeAccount);
-console.log(`transaction`, transaction);
+
+  useEffect(() => {
+    if (activeAccount && activeAccount.length > 0) {
+      const activeIds = activeAccount.map(acc => acc.id);
+      setSelectedTransactions(activeIds);
+    }
+  }, [activeAccount]);
+
   const handleCheckboxChange = (id) => {
     setSelectedTransactions((prev) => {
       if (prev.includes(id)) {
