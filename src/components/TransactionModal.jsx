@@ -61,7 +61,7 @@ export default function TransactionModal({ transaction , onClose , loading }) {
                          colSpan={4}
                          className="px-4 py-6 text-center text-white/60 text-sm"
                        >
-                         موردی ثبت13 نشده است.
+                         موردی ثبت نشده است.
                        </td>
                      </tr>
                    )}
