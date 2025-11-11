@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import {convertToPersianDate} from "../utils/change-date";
+import React, { useEffect, useState } from "react";
 import { IoMdAlert } from "react-icons/io";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
-import  { useState } from 'react';
 import TransactionModalNew from './TransactionModalNew';
 import AssignModalNew from "./AssignModalNew";
 import axiosClient from "../axios-client";
@@ -23,6 +22,9 @@ export default function AccountInvois({invoiceData , meta , pageCount ,setPageCo
   const [transactionData, setTransactionData] = useState([]);
    const [assignData, setAssignData] = useState([]);
    const[idActive , setIdActive] = useState(null);
+   const[activeAccount , setActiveAccount] = useState([]);
+
+
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
 axiosClient.get(`/transactions/${r.id}`)
@@ -39,7 +41,6 @@ axiosClient.get(`/transactions/${r.id}`)
     setAssignModalOpen(true);
      setIdActive(r.id);
 axiosClient.get(`/invoices`).then((response) => {
-  console.log(`response.data`, response?.data?.data);
       setAssignData(response?.data?.data);
     });
 
@@ -53,7 +54,14 @@ axiosClient.get(`/invoices`).then((response) => {
     setAssignModalOpen(false);
   };
 
- console.log(`transactionData`, transactionData);
+ useEffect(() => {
+  if(idActive){
+    axiosClient.get(`/transactions/${idActive}`)
+    .then((response) => {
+      setActiveAccount(response?.data?.invoices);
+    });   
+  }
+  }, [idActive]);
 
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
@@ -153,6 +161,7 @@ axiosClient.get(`/invoices`).then((response) => {
               setPageCount={setPageCount}
               setLoading={setLoading}
               idActive={idActive}
+              activeAccount={activeAccount}
           />
       )}
         <Pagination

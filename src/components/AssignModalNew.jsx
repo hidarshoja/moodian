@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useState , useEffect } from 'react';
 import Pagination from "./Pagination";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
@@ -13,8 +13,15 @@ function Spinner() {
   );
 }
 
-export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive}) {
+export default function AssignModalNew({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount}) {
   const [selectedTransactions, setSelectedTransactions] = useState([]);
+
+    useEffect(() => {
+    if (activeAccount && activeAccount.length > 0) {
+      const activeIds = activeAccount.map(acc => acc.id);
+      setSelectedTransactions(activeIds);
+    }
+  }, [activeAccount]);
 
   const handleCheckboxChange = (id) => {
     setSelectedTransactions((prev) => {
@@ -183,5 +190,5 @@ AssignModalNew.propTypes = {
   setPageCount:PropTypes.func,
   setLoading:PropTypes.func,
   idActive:PropTypes.number,
-
+  activeAccount:PropTypes.array,
 };
