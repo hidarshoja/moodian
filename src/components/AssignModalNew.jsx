@@ -118,19 +118,19 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
                           {r?.id}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {r?.j_date}
+                          {r?.indatim}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {r?.tracking_code} 
+                          {r?.customer?.name} - {r?.customer?.last_name}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {r?.bank_label}
+                          {r?.taxid}
                         </td>
                          <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {r?.status_label}
                         </td>
                          <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {new Intl.NumberFormat('fa-IR').format(r?.amount)}
+                          {new Intl.NumberFormat('fa-IR').format(r?.tadis)}
                         </td>
                         
                         
