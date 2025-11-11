@@ -1,10 +1,8 @@
-import React from 'react';
+import  { useState } from 'react';
 import Pagination from "../components/Pagination";
 import PropTypes from "prop-types";
-import { IoMdAlert } from "react-icons/io";
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { IoCloseCircle } from "react-icons/io5";
 import axiosClient from "../axios-client";
+import Swal from "sweetalert2";
 
 function Spinner() {
   return (
@@ -16,13 +14,38 @@ function Spinner() {
 
 export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive}) {
 
-console.log(`idActive`, idActive);
-  const handleShowAssign = () => {
-    let transactions = [];
-   console.log(`idActive`, idActive);
-axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions}).then((response) => {
-  console.log(`response.data`, response.data);
+  const [selectedTransactions, setSelectedTransactions] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    setSelectedTransactions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        return [...prev, id];
+      }
     });
+  };
+
+  const handleShowAssign = () => {
+     const transactions = selectedTransactions;
+axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
+.then((response) => {
+  console.log(`response`, response);
+  Swal.fire({
+    icon: 'success',
+    title: 'موفقیت آمیز',
+    text: 'عملیات با موفقیت انجام شد',
+  })
+  onClose();
+    })
+      .catch((err) => {
+        console.error("Error assigning transactions:", err);
+        Swal.fire({
+          icon: 'error',
+          title: 'خطا',
+          text: 'عملیات با خطا مواجه شد',
+        })
+      });
 
   };
 
@@ -67,7 +90,6 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions}).t
                       <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
                         <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
                           <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
-                             <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -87,7 +109,11 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions}).t
                         className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
                       >
                            <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          <input type="checkbox" name="" id="" />
+                           <input
+                      type="checkbox"
+                      checked={selectedTransactions.includes(r.id)}
+                      onChange={() => handleCheckboxChange(r.id)}
+                    />
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {r?.id}
@@ -107,11 +133,7 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions}).t
                          <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {new Intl.NumberFormat('fa-IR').format(r?.amount)}
                         </td>
-                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {r?.amount  == r?.sum ? <IoMdCheckmarkCircle className="text-green-500"/> : ""}
-                          {r?.sum == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
-                          {r?.sum > 0 && r?.amount > r?.sum ? <IoMdAlert className="text-yellow-500"/> : ""}
-                        </td>
+                        
                         
                       </tr>
                     ))}
