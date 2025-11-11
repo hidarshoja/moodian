@@ -14,12 +14,13 @@ function Spinner() {
   );
 }
 
-export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading}) {
+export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive}) {
 
-console.log(`meta`, meta);
-  const handleShowAssign = (i, r) => {
-   
-axiosClient.get(`/transactions`).then((response) => {
+console.log(`idActive`, idActive);
+  const handleShowAssign = () => {
+    let transactions = [];
+   console.log(`idActive`, idActive);
+axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions}).then((response) => {
   console.log(`response.data`, response.data);
     });
 
@@ -33,7 +34,20 @@ axiosClient.get(`/transactions`).then((response) => {
            className="w-full max-w-5xl flex flex-col rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
            onClick={(e) => e.stopPropagation()}
          >
-          <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5  relative">
+              {/* Header */}
+           <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
+             <div className="flex items-center gap-3">
+             
+               <span className="text-white text-lg font-bold">اساین فاکتور</span>
+             </div>
+             <button
+               onClick={onClose}
+               className="text-white/80 hover:text-white transition-colors"
+             >
+              X
+             </button>
+           </div>
+          <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 p-3  relative">
                  {loading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
                     <Spinner />
@@ -46,6 +60,7 @@ axiosClient.get(`/transactions`).then((response) => {
                 >
                   <thead>
                     <tr className="text-white/80 text-sm bg-[#181f3a]">
+                    <th className="text-right px-4 py-3 whitespace-nowrap"></th>
                       <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
                       <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
                       <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
@@ -53,7 +68,6 @@ axiosClient.get(`/transactions`).then((response) => {
                         <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
                           <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
                              <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
-                      <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,6 +86,9 @@ axiosClient.get(`/transactions`).then((response) => {
                         key={r.id ?? i}
                         className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
                       >
+                           <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                          <input type="checkbox" name="" id="" />
+                        </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {r?.id}
                         </td>
@@ -95,29 +112,36 @@ axiosClient.get(`/transactions`).then((response) => {
                           {r?.sum == 0 ? <IoCloseCircle className="text-red-500"/> : ""}
                           {r?.sum > 0 && r?.amount > r?.sum ? <IoMdAlert className="text-yellow-500"/> : ""}
                         </td>
-                         <td className="px-2 py-2">
-                          <div className="flex items-center justify-center gap-2">
-                          
-                            <button
-                             onClick={() => handleShowAssign?.(i , r)}
-                             
-                              className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
-                            >
-                             اساین کردن 
-                            </button>
-                          </div>
-                        </td>
+                        
                       </tr>
                     ))}
                   </tbody>
                 </table>
-             
-                  <Pagination
+             <div className='w-full flex items-center justify-end'>
+               <div className="flex items-center  gap-2 w-full">
+                <div className='w-2/5'></div>
+                 <div className='w-1/5 flex items-center justify-center '>
+                             <Pagination
                   meta={meta}
                   pageCount={pageCount}
                   setPageCount={setPageCount}
                   setLoading={setLoading}
                 />
+                 </div>
+                 <div className='w-1/5'></div>
+                 <div className='w-1/5 flex items-center justify-end'>
+                  
+                            <button
+                             onClick={handleShowAssign}
+                             
+                              className="p-2 rounded-lg bg-green-500/10 text-green-400 border border-red-500/20 hover:bg-red-500/15"
+                            >
+                             ذخیره کردن 
+                            </button>
+                 </div>
+                          </div>
+                
+             </div>
               </div>
            </div>
          
@@ -136,5 +160,6 @@ AssignModal.propTypes = {
   pageCount:PropTypes.number,
   setPageCount:PropTypes.func,
   setLoading:PropTypes.func,
+  idActive:PropTypes.number,
 
 };
