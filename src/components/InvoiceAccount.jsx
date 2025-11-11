@@ -59,7 +59,9 @@ axiosClient.get(`/transactions?page=${pageCount2}`).then((response) => {
   };
 
   useEffect(() => {
-   handleShowAssign();
+    if(idActive){
+      handleShowAssign();
+    }
   }, [pageCount2]);
 
   const handleResponse = () => {
