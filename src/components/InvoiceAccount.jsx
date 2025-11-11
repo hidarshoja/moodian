@@ -21,7 +21,7 @@ export default function InvoiceAccount({invoiceData, loading  }) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
-   const [assignData, setAssignData] = useState(null);
+   const [assignData, setAssignData] = useState([]);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
 axiosClient.get(`/invoices/${r.id}`).then((response) => {
@@ -33,8 +33,8 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
    const handleShowAssign = (i, r) => {
     setAssignModalOpen(true);
 axiosClient.get(`/transactions`).then((response) => {
-  console.log(`response.data`, response.data);
-      setAssignData(response.data);
+  console.log(`response.data.data`, response?.data?.data);
+      setAssignData(response?.data?.data);
     });
 
   };
