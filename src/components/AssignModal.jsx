@@ -14,9 +14,9 @@ function Spinner() {
   );
 }
 
-export default function AssignModal({ transaction , onClose , loading}) {
+export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading}) {
 
-console.log(`transaction`, transaction);
+console.log(`meta`, meta);
   const handleShowAssign = (i, r) => {
    
 axiosClient.get(`/transactions`).then((response) => {
@@ -112,12 +112,12 @@ axiosClient.get(`/transactions`).then((response) => {
                   </tbody>
                 </table>
              
-                  {/* <Pagination
+                  <Pagination
                   meta={meta}
                   pageCount={pageCount}
                   setPageCount={setPageCount}
                   setLoading={setLoading}
-                /> */}
+                />
               </div>
            </div>
          
@@ -131,6 +131,10 @@ axiosClient.get(`/transactions`).then((response) => {
 AssignModal.propTypes = {
   transaction : PropTypes.array,
   loading : PropTypes.bool,
-  onClose:PropTypes.func
+  onClose:PropTypes.func,
+  meta:PropTypes.object,
+  pageCount:PropTypes.number,
+  setPageCount:PropTypes.func,
+  setLoading:PropTypes.func,
 
 };

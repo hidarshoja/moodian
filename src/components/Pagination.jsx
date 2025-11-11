@@ -2,11 +2,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 
 const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
-
+console.log(`meta`, meta);
   const genaratePages = () => {
     const pages = [];
-    const totalPages = meta.last_page;
-    const currentPage = meta.current_page;
+    const totalPages = meta?.last_page;
+    const currentPage = meta?.current_page;
   
     const displayPages = [];
    
@@ -79,7 +79,7 @@ const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
                 // navigate(`/bill?page=${pageCount + 1}`)
               }}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-              disabled={pageCount === meta.last_page}
+              disabled={pageCount === meta?.last_page}
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

@@ -13,7 +13,6 @@ const [transactionData2 , setTransactionData2] = useState([]);
 
    useEffect(() => {
      axiosClient.get("/invoices").then((response) => {
-     console.log(`response.data.data`, response.data.data);
       setInvoiceData(response.data.data);
     })
     .catch((error) => {
@@ -27,7 +26,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
    useEffect(() => {
      setLoading(true);
      axiosClient.get(`/transactions?page=${pageCount}`).then((response) => {
-     console.log(`response.data.data`, response.data.data);
+    
       setTransactionData2(response.data.data);
        setMeta(response.data.meta);
     });

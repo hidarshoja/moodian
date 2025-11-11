@@ -18,7 +18,6 @@ function Spinner() {
 }
 
 export default function AccountInvois({invoiceData , meta , pageCount ,setPageCount , setLoading , loading }) {
-  console.log('invoiceData', invoiceData)
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
@@ -138,7 +137,14 @@ axiosClient.get(`/transactions`).then((response) => {
         <TransactionModal transaction={transactionData} onClose={handleCloseTransactionModal} />
       )}
        {assignModalOpen && (
-        <AssignModal transaction={assignData} onClose={handleCloseAssignModal} />
+        <AssignModal
+         transaction={assignData}
+          onClose={handleCloseAssignModal}
+            meta={meta}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+          />
       )}
         <Pagination
         meta={meta}
