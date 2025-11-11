@@ -123,7 +123,7 @@ axiosClient.get(`/invoices`).then((response) => {
                     onClick={() => handleShowTransaction(i, r)}
                     className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
                   >
-              لیست1 فاکتور
+              لیست فاکتور
                   </button>
                   <button
                    onClick={ handleShowAssign}

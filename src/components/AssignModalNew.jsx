@@ -27,8 +27,8 @@ export default function AssignModalNew({ transaction , onClose , loading , meta 
   };
 
   const handleShowAssign = () => {
-     const transactions = selectedTransactions;
-axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
+     const invoices = selectedTransactions;
+axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
 .then((response) => {
   console.log(`response`, response);
   Swal.fire({
