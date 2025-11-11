@@ -7,8 +7,17 @@ import  { useState } from 'react';
 import TransactionModal from './TransactionModal';
 import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
+import Pagination from "../components/Pagination";
 
-export default function AccountInvois({invoiceData  }) {
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
+export default function AccountInvois({invoiceData , meta , pageCount ,setPageCount , setLoading , loading }) {
   console.log('invoiceData', invoiceData)
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
@@ -42,8 +51,17 @@ axiosClient.get(`/transactions`).then((response) => {
  
 
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
-      <table className="min-w-full">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
+       {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+          <Spinner />
+        </div>
+      )}
+      <table 
+        className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}
+      >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
@@ -122,6 +140,12 @@ axiosClient.get(`/transactions`).then((response) => {
        {assignModalOpen && (
         <AssignModal transaction={assignData} onClose={handleCloseAssignModal} />
       )}
+        <Pagination
+        meta={meta}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+        setLoading={setLoading}
+      />
     </div>
   )
 }
@@ -130,5 +154,10 @@ axiosClient.get(`/transactions`).then((response) => {
 AccountInvois.propTypes = {
   invoiceData: PropTypes.array,
 onShow: PropTypes.func,
-onAssign: PropTypes.func
+onAssign: PropTypes.func,
+meta:PropTypes.object,
+pageCount:PropTypes.number,
+setPageCount:PropTypes.func,
+setLoading:PropTypes.func,
+loading :PropTypes.bool
 };

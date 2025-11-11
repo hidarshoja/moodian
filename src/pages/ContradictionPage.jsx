@@ -7,23 +7,31 @@ export default function ContradictionPage() {
  const [activeBtn , setActiveBtn] = useState("invoiceAccount");
 const [invoiceData , setInvoiceData] = useState([]);
 const [transactionData2 , setTransactionData2] = useState([]);
-
+  const [meta, setMeta] = useState({});
+ const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
 
    useEffect(() => {
      axiosClient.get("/invoices").then((response) => {
      console.log(`response.data.data`, response.data.data);
       setInvoiceData(response.data.data);
-    });
+    })
+    .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
     
  
    useEffect(() => {
-     axiosClient.get("/transactions").then((response) => {
+     setLoading(true);
+     axiosClient.get(`/transactions?page=${pageCount}`).then((response) => {
      console.log(`response.data.data`, response.data.data);
       setTransactionData2(response.data.data);
+       setMeta(response.data.meta);
     });
-  }, []);
+  }, [pageCount]);
 
    
 
@@ -67,7 +75,14 @@ const [transactionData2 , setTransactionData2] = useState([]);
       
           </div>}
         {activeBtn === "accountInvoice" && <div>
-          <AccountInvois invoiceData={transactionData2} />
+          <AccountInvois
+             invoiceData={transactionData2} 
+             meta={meta}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+               loading={loading}
+             />
             </div>}
         {activeBtn === "all" && <div>همه</div>}
       </div>
