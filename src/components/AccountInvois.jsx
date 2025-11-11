@@ -5,7 +5,7 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import  { useState } from 'react';
 import TransactionModalNew from './TransactionModalNew';
-import AssignModal from "./AssignModal";
+import AssignModalNew from "./AssignModalNew";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 
@@ -21,7 +21,7 @@ export default function AccountInvois({invoiceData , meta , pageCount ,setPageCo
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
-   const [assignData, setAssignData] = useState(null);
+   const [assignData, setAssignData] = useState([]);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
 axiosClient.get(`/transactions/${r.id}`)
@@ -35,11 +35,11 @@ axiosClient.get(`/transactions/${r.id}`)
 
   };
 
-   const handleShowAssign = (i, r) => {
+   const handleShowAssign = () => {
     setAssignModalOpen(true);
-axiosClient.get(`/transactions`).then((response) => {
-  console.log(`response.data`, response.data);
-      setAssignData(response.data);
+axiosClient.get(`/invoices`).then((response) => {
+  console.log(`response.data`, response?.data?.data);
+      setAssignData(response?.data?.data);
     });
 
   };
@@ -126,7 +126,7 @@ axiosClient.get(`/transactions`).then((response) => {
               لیست فاکتور
                   </button>
                   <button
-                   onClick={() => handleShowAssign?.(i , r)}
+                   onClick={ handleShowAssign}
                    
                     className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                   >
@@ -144,7 +144,7 @@ axiosClient.get(`/transactions`).then((response) => {
          onClose={handleCloseTransactionModal} />
       )}
        {assignModalOpen && (
-        <AssignModal
+        <AssignModalNew
          transaction={assignData}
           onClose={handleCloseAssignModal}
             meta={meta}
