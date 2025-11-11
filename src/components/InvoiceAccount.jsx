@@ -171,6 +171,7 @@ useEffect(() => {
         meta={meta}
         onClose={handleCloseAssignModal}
         idActive={idActive}
+        activeAccount={activeAccount}
         />
       )}
     </div>

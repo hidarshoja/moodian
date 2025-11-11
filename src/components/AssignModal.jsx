@@ -12,10 +12,11 @@ function Spinner() {
   );
 }
 
-export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive}) {
+export default function AssignModal({ transaction , onClose , loading , meta , setPageCount , pageCount , setLoading , idActive , activeAccount}) {
 
   const [selectedTransactions, setSelectedTransactions] = useState([]);
-
+console.log(`activeAccount`, activeAccount);
+console.log(`transaction`, transaction);
   const handleCheckboxChange = (id) => {
     setSelectedTransactions((prev) => {
       if (prev.includes(id)) {
@@ -183,5 +184,5 @@ AssignModal.propTypes = {
   setPageCount:PropTypes.func,
   setLoading:PropTypes.func,
   idActive:PropTypes.number,
-
+ activeAccount:PropTypes.array
 };
