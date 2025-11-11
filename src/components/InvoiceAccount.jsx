@@ -8,7 +8,16 @@ import TransactionModal from '../components/TransactionModal';
 import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
 
-export default function InvoiceAccount({invoiceData  }) {
+function Spinner() {
+  return (
+    <div className="flex justify-center items-center w-full h-60">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400"></div>
+    </div>
+  );
+}
+
+
+export default function InvoiceAccount({invoiceData, loading  }) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
@@ -41,8 +50,17 @@ axiosClient.get(`/transactions`).then((response) => {
  
 
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5">
-      <table className="min-w-full">
+    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-6 relative">
+        {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
+          <Spinner />
+        </div>
+      )}
+      <table 
+       className={`min-w-full text-white ${
+          loading ? "opacity-30 pointer-events-none" : ""
+        }`}
+      >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
@@ -125,5 +143,6 @@ axiosClient.get(`/transactions`).then((response) => {
 InvoiceAccount.propTypes = {
   invoiceData: PropTypes.array,
 onShow: PropTypes.func,
-onAssign: PropTypes.func
+onAssign: PropTypes.func,
+loading :PropTypes.bool
 };

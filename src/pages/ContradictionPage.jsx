@@ -71,7 +71,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
 </div>
       <div className="px-3">
         {activeBtn === "invoiceAccount" && <div className="mt-6">
-          <InvoiceAccountTable invoiceData={invoiceData} />
+          <InvoiceAccountTable invoiceData={invoiceData}  loading={loading} />
       
           </div>}
         {activeBtn === "accountInvoice" && <div>
