@@ -26,7 +26,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}`).then((response) => {
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1`).then((response) => {
     
       setTransactionData2(response.data.data);
        setMeta(response.data.meta);
@@ -66,7 +66,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
           }`}
   onClick={() => setActiveBtn("all")}
     >
-    همه
+    تعیین تکلیف شدها
   </button>
 </div>
       <div className="px-3">

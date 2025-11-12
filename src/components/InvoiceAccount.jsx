@@ -49,7 +49,7 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/transactions?page=${pageCount2}`).then((response) => {
+axiosClient.get(`/transactions?page=${pageCount2}&f[coefficient]=-1`).then((response) => {
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
     }).catch((error) => {
@@ -158,9 +158,12 @@ useEffect(() => {
                 {Number(r?.transactions_sum_amount).toLocaleString()}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {r?.tadis  == Number(r?.transactions_sum_amount) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> : ""}
+               
                 {Number(r?.transactions_sum_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
-                {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""}
+                {r?.tadis  <= Number(r?.transactions_sum_amount) ?
+                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
+                  }
+                {/* {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""} */}
               </td>
               
               <td className="px-2 py-2">
