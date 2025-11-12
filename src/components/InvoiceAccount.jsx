@@ -9,6 +9,7 @@ import AssignModal from "./AssignModal";
 import axiosClient from "../axios-client";
 import { MdAssignmentAdd } from "react-icons/md";
 import { FaReceipt } from "react-icons/fa";
+import Pagination from "../components/Pagination";
 
 function Spinner() {
   return (
@@ -19,7 +20,7 @@ function Spinner() {
 }
 
 
-export default function InvoiceAccount({invoiceData, loading , refresh , setRefresh , setLoading}) {
+export default function InvoiceAccount({invoiceData, loading , refresh , setRefresh , setLoading , meta3 , pageCount3 ,setPageCount3}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
@@ -95,6 +96,8 @@ useEffect(() => {
  
 
   return (
+    <div>
+      <h1 className="text-white text-2xl font-bold mt-6"> فاکتور با حساب</h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-6 relative">
         {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
@@ -186,6 +189,7 @@ useEffect(() => {
           ))}
         </tbody>
       </table>
+    
        {transactionModalOpen && (
         <TransactionModal
          transaction={transactionData}
@@ -208,6 +212,15 @@ useEffect(() => {
         />
       )}
     </div>
+      <div className="w-full flex items-center justify-center">
+      <Pagination
+        meta={meta3}
+        pageCount={pageCount3}
+        setPageCount={setPageCount3}
+        setLoading={setLoading}
+      />
+      </div>
+    </div>
   )
 }
 
@@ -219,5 +232,8 @@ onAssign: PropTypes.func,
 loading :PropTypes.bool,
 refresh :PropTypes.bool,
 setRefresh:PropTypes.func,
-setLoading:PropTypes.func
+setLoading:PropTypes.func,
+meta3:PropTypes.object,
+pageCount3:PropTypes.number,
+setPageCount3:PropTypes.func
 };
