@@ -8,6 +8,7 @@ export default function ContradictionPage() {
 const [invoiceData , setInvoiceData] = useState([]);
 const [transactionData2 , setTransactionData2] = useState([]);
   const [meta, setMeta] = useState({});
+  const [meta2, setMeta2] = useState({});
  const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const[refresh , setRefresh] = useState(false);
@@ -30,6 +31,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
     
       setTransactionData2(response.data.data);
        setMeta(response.data.meta);
+        setMeta2(response.data.meta);
     });
   }, [pageCount,refresh]);
 
@@ -83,7 +85,7 @@ const [transactionData2 , setTransactionData2] = useState([]);
         {activeBtn === "accountInvoice" && <div>
           <AccountInvois
              invoiceData={transactionData2} 
-             meta={meta}
+             meta2={meta2}
               pageCount={pageCount}
               setPageCount={setPageCount}
               setLoading={setLoading}

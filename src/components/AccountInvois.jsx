@@ -19,7 +19,7 @@ function Spinner() {
   );
 }
 
-export default function AccountInvois({invoiceData  , pageCount ,setPageCount , setLoading , loading , refresh , setRefresh}) {
+export default function AccountInvois({invoiceData  , pageCount ,setPageCount , setLoading , loading , refresh , setRefresh , meta2}) {
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
@@ -92,6 +92,8 @@ axiosClient.get(`/invoices?page=${pageCount2}`)
   }, [idActive,refresh]);
 
   return (
+    <div>
+      <h1 className="text-white text-2xl font-bold mt-6"> حساب با فاکتور</h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
        {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
@@ -201,12 +203,16 @@ axiosClient.get(`/invoices?page=${pageCount2}`)
         loading3={loading3}
           />
       )}
-        <Pagination
-        meta={meta}
+     
+    </div>
+    <div className="w-full flex items-center justify-center">
+         <Pagination
+        meta={meta2}
         pageCount={pageCount}
         setPageCount={setPageCount}
         setLoading={setLoading}
       />
+    </div>
     </div>
   )
 }
@@ -222,5 +228,6 @@ setPageCount:PropTypes.func,
 setLoading:PropTypes.func,
 loading :PropTypes.bool,
 refresh :PropTypes.bool,
-setRefresh:PropTypes.func
+setRefresh:PropTypes.func,
+meta2:PropTypes.object
 };
