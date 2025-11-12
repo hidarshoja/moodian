@@ -2,11 +2,13 @@ import { useState , useEffect } from "react";
 import axiosClient from "../axios-client";
 import InvoiceAccountTable from "../components/invoiceAccount";
 import AccountInvois from "../components/AccountInvois";
+import AccountInvoisAll from "../components/AccountInvoisAll";
 
 export default function ContradictionPage() {
  const [activeBtn , setActiveBtn] = useState("invoiceAccount");
 const [invoiceData , setInvoiceData] = useState([]);
 const [transactionData2 , setTransactionData2] = useState([]);
+const [transactionDataAll , setTransactionDataAll] = useState([]);
 const [meta2, setMeta2] = useState({});
 const [pageCount, setPageCount] = useState(1);
 const [loading, setLoading] = useState(true);
@@ -37,6 +39,20 @@ const [pageCount3, setPageCount3] = useState(1);
      axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = <,amount`)
      .then((response) => {
       setTransactionData2(response.data.data);
+        setMeta2(response.data.meta);
+    })
+    .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => setLoading(false));
+   
+  }, [pageCount,refresh]);
+
+   useEffect(() => {
+     setLoading(true);
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = >=,amount`)
+     .then((response) => {
+      setTransactionDataAll(response.data.data);
         setMeta2(response.data.meta);
     })
     .catch((error) => {
@@ -79,7 +95,7 @@ const [pageCount3, setPageCount3] = useState(1);
           }`}
   onClick={() => setActiveBtn("all")}
     >
-    تعیین تکلیف شدها
+    تعیین تکلیف شده ها
   </button>
 </div>
       <div className="px-3">
@@ -108,7 +124,18 @@ const [pageCount3, setPageCount3] = useState(1);
                refresh={refresh}
              />
             </div>}
-        {activeBtn === "all" && <div>همه</div>}
+        {activeBtn === "all" && <div>
+          <AccountInvoisAll
+              invoiceData={transactionDataAll} 
+             meta2={meta2}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+               loading={loading}
+                setRefresh={setRefresh}
+               refresh={refresh}
+            />
+          </div>}
       </div>
 </div>
 )
