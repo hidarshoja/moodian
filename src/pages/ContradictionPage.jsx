@@ -16,7 +16,7 @@ const [pageCount3, setPageCount3] = useState(1);
 
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount3}`)
+     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis`)
      .then((response) => {
       setInvoiceData(response.data.data);
        setMeta3(response.data.meta);
@@ -27,11 +27,14 @@ const [pageCount3, setPageCount3] = useState(1);
       .finally(() => setLoading(false));
   }, [refresh,pageCount3]);
 
-    
+    // 
+
+    // برای صفحه همه
+    // /transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = >=,amount
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1`)
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = <,amount`)
      .then((response) => {
       setTransactionData2(response.data.data);
         setMeta2(response.data.meta);
