@@ -1,14 +1,23 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition, Disclosure } from "@headlessui/react";
 import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { navigation } from "../constant/Menu";
+import { getNavigation } from "../constant/Menu";
+import { useSelector } from "react-redux";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function MobileSidebar({ sidebarOpen, setSidebarOpen }) {
+  const [navigation, setNavigation] = useState([]);
+  const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+    // Update navigation when component mounts or user data changes
+    const nav = getNavigation();
+    setNavigation(nav);
+  }, [user]); // Re-run when user changes
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog

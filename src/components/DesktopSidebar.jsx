@@ -1,12 +1,13 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
-import { navigation } from "../constant/Menu";
+import { getNavigation } from "../constant/Menu";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import LogoDescriptionModal from "./LogoDescriptionModal";
 import PropTypes from "prop-types";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 export default function DesktopSidebar({
   desktopSidebarOpen,
@@ -15,6 +16,14 @@ export default function DesktopSidebar({
   const location = useLocation();
   const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [navigation, setNavigation] = useState([]);
+  const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+    // Update navigation when component mounts or user data changes
+    const nav = getNavigation();
+    setNavigation(nav);
+  }, [user]); // Re-run when user changes
   const handleLogoClick = () => {
     setIsLogoModalOpen(true);
   };

@@ -16,11 +16,7 @@ import { SiAmazonsimpleemailservice } from "react-icons/si";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { PiUsersThreeLight } from "react-icons/pi";
 import { GiCheckedShield } from "react-icons/gi";
-const userData = localStorage.getItem("USER");
-const parsedUser = JSON.parse(userData);
-const permissionNames = parsedUser?.roles?.[0]?.permissions?.map((p) => p.name);
-const roleName = parsedUser?.roles?.[0]?.name;
-console.log(`roleName`, roleName);
+
 const allNavigationItems = [
   {
     name: "داشبورد",
@@ -126,20 +122,34 @@ const allNavigationItems = [
   },
 ];
 
-const isSuperAdmin =
-  roleName &&
-  roleName.trim().replace(/\s+/g, " ").toLowerCase() === "super admin";
-const navigationItems = isSuperAdmin
-  ? allNavigationItems.map((item) => ({ ...item, permission: null }))
-  : allNavigationItems;
+// Function to get navigation based on current user permissions
+export const getNavigation = () => {
+  const userData = localStorage.getItem("USER");
+  const parsedUser = userData ? JSON.parse(userData) : null;
+  const permissionNames = parsedUser?.roles?.[0]?.permissions?.map(
+    (p) => p.name
+  );
+  const roleName = parsedUser?.roles?.[0]?.name;
 
-// Filter navigation based on user permissions
-export const navigation = navigationItems.filter((item) => {
-  // If no permission is required, always show the item
-  if (!item.permission) {
-    return true;
-  }
+  const isSuperAdmin =
+    roleName &&
+    roleName.trim().replace(/\s+/g, " ").toLowerCase() === "super admin";
 
-  // Check if user has the required permission
-  return permissionNames?.includes(item.permission);
-});
+  const navigationItems = isSuperAdmin
+    ? allNavigationItems.map((item) => ({ ...item, permission: null }))
+    : allNavigationItems;
+
+  // Filter navigation based on user permissions
+  return navigationItems.filter((item) => {
+    // If no permission is required, always show the item
+    if (!item.permission) {
+      return true;
+    }
+
+    // Check if user has the required permission
+    return permissionNames?.includes(item.permission);
+  });
+};
+
+// For backward compatibility - but this will be static
+export const navigation = getNavigation();
