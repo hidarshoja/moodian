@@ -119,9 +119,9 @@ export default function ServicesPage() {
       />
       <div>
         <div className="w-full border-b border-white/10 p-6">
-          <h1 className="text-white text-2xl font-bold">کالا و خدمات</h1>
+          <h1 className="text-white text-lg lg:text-2xl font-bold">کالا و خدمات</h1>
           <div className="flex  items-center justify-between mt-1">
-            <p className="text-white/60 text-sm">نمای کلی کالا و خدمات </p>
+            <p className="text-white/60 hidden lg:block text-sm">نمای کلی کالا و خدمات </p>
             <div className="flex gap-3">
               {/* جدید */}
               <button className="btn-custom" onClick={() => setModalOpen(true)}>
@@ -180,7 +180,7 @@ export default function ServicesPage() {
             />
          
           </div>
-        
+        <div className="block lg:hidden"></div>
          
          
           <div className="flex items-end justify-end w-full gap-2">

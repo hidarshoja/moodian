@@ -320,6 +320,8 @@ body {
   outline: none;
 }
 
+
+
 .btn-custom:hover {
   transform: scale(1.1) translateY(-0.25rem); /* hover:scale-110 + hover:-translate-y-1 */
   border-color: #00d4aa;

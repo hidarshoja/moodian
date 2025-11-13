@@ -350,7 +350,7 @@ export default function ProfilePage() {
                           </label>
                           <input
                             type="text"
-                            value={role.created_at || ""}
+                            value={convertToPersianDate(role.created_at) || ""}
                             readOnly
                             className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-3 py-2 focus:outline-none cursor-not-allowed text-sm"
                           />
