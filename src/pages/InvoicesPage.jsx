@@ -124,8 +124,8 @@ export default function InvoicesPage() {
       <div>
         <div className="w-full border-b border-white/10 p-6 flex  items-center justify-between">
           <div>
-            <h1 className="text-white text-2xl font-bold">فاکتور فروش</h1>
-            <p className="text-white/60 text-sm mt-1">
+            <h1 className="text-white text-lg lg:text-2xl font-bold">فاکتور فروش</h1>
+            <p className="text-white/60 hidden lg:block text-sm mt-1">
               نمای کلی فاکتور فروش کاربران
             </p>
           </div>

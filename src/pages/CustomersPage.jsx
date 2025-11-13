@@ -128,9 +128,9 @@ export default function CustomersPage() {
       />
       <div>
         <div className="w-full border-b border-white/10 p-6">
-          <h1 className="text-white text-2xl font-bold">مشتری</h1>
+          <h1 className="text-white text-lg lg:text-2xl font-bold">مشتری</h1>
           <div className="flex  items-center justify-between mt-1">
-            <p className="text-white/60 text-sm mt-1">نمای کلی مشتری ها</p>
+            <p className="text-white/60 hidden lg:block text-sm mt-1">نمای کلی مشتری ها</p>
             <div className="flex gap-3">
               {/* جدید */}
               <button className="btn-custom" onClick={() => setModalOpen(true)}>
