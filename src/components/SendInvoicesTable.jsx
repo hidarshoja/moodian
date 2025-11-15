@@ -125,11 +125,16 @@ export default function SendInvoicesTable({
       });
       if (onRefresh) onRefresh();
     } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "خطا در ارسال فاکتور به مودیان";
       Swal.fire({
         toast: true,
         position: "top-start",
         icon: "error",
-        title: "خطا در ارسال فاکتور به مودیان",
+        title: errorMessage,
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
