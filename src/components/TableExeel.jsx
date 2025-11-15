@@ -180,19 +180,12 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                   {r?.id}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  <div className="relative group inline-block">
-                    {r?.type_label === "ایمپورت" && (
-                      <FaFileImport width={20} height={20} />
-                    )}
-                    {r?.type_label === "اکسپورت" && (
-                      <FaFileExport width={20} height={20} />
-                    )}
-                    {r?.type_label && (
-                      <div className="absolute right-1/2 top-full transform translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                        {r.type_label}
-                      </div>
-                    )}
-                  </div>
+                  {r?.type_label === "ایمپورت" && (
+                    <FaFileImport width={20} height={20} />
+                  )}
+                  {r?.type_label === "اکسپورت" && (
+                    <FaFileExport width={20} height={20} />
+                  )}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm">
                   <div className="flex flex-col gap-2 min-w-[120px]">

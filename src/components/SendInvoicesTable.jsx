@@ -125,17 +125,11 @@ export default function SendInvoicesTable({
       });
       if (onRefresh) onRefresh();
     } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error?.message ||
-        "خطا در ارسال فاکتور به مودیان";
-
       Swal.fire({
         toast: true,
         position: "top-start",
         icon: "error",
-        title: errorMessage,
+        title: "خطا در ارسال فاکتور به مودیان",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -196,19 +190,80 @@ export default function SendInvoicesTable({
         });
         return;
       }
-      await axiosClient.post("/invoices/check-from-moadian", {
+      const response = await axiosClient.post("/invoices/check-from-moadian", {
         reference_numbers: [referenceNumber],
       });
-      Swal.fire({
-        icon: "success",
-        title: "درخواست چک وضعیت ارسال شد.",
-        toast: true,
-        position: "top-start",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: { popup: "swal2-toast" },
-      });
+      console.log("Check Status Response:", response);
+      console.log("Check Status Response Data:", response.data);
+
+      // فرمت کردن اطلاعات response برای نمایش در Swal
+      const responseData = response.data?.data?.[0];
+      console.log(`responseData`, responseData);
+      if (responseData) {
+        let htmlContent = `
+          <div dir="rtl" style="text-align: right; font-family: 'IRANSans', sans-serif;">
+            <div style="margin-bottom: 15px;">
+              <strong>رفرنس نامبر:</strong> ${
+                responseData.referenceNumber || "-"
+              }<br/>
+              <strong>وضعیت:</strong> ${responseData.status || "-"}<br/>
+              <strong>نتیجه:</strong> ${
+                responseData.data?.success ? "موفق" : "ناموفق"
+              }
+            </div>
+        `;
+
+        // نمایش خطاها
+        if (responseData.data?.error && responseData.data.error.length > 0) {
+          htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fee2e2; border-radius: 5px;">
+            <strong style="color: #dc2626;">خطاها:</strong><ul style="margin: 5px 0; padding-right: 20px;">`;
+          responseData.data.error.forEach((err) => {
+            htmlContent += `<li style="margin: 5px 0;">کد: ${err.code} - ${err.message}</li>`;
+          });
+          htmlContent += `</ul></div>`;
+        }
+
+        // نمایش هشدارها
+        if (
+          responseData.data?.warning &&
+          responseData.data.warning.length > 0
+        ) {
+          htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fef3c7; border-radius: 5px;">
+            <strong style="color: #d97706;">هشدارها:</strong><ul style="margin: 5px 0; padding-right: 20px;">`;
+          responseData.data.warning.forEach((warn) => {
+            htmlContent += `<li style="margin: 5px 0;">${warn.code || ""} - ${
+              warn.message || ""
+            }</li>`;
+          });
+          htmlContent += `</ul></div>`;
+        }
+
+        htmlContent += `</div>`;
+
+        Swal.fire({
+          icon: responseData.data?.success ? "success" : "error",
+          title: "نتیجه چک وضعیت",
+          html: htmlContent,
+          showConfirmButton: true,
+          confirmButtonText: "تأیید",
+          confirmButtonColor: "#2563eb",
+          background: "#111827",
+          color: "#e5e7eb",
+          width: "600px",
+        });
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "درخواست چک وضعیت ارسال شد.",
+          text: "اطلاعاتی در response موجود نیست.",
+          showConfirmButton: true,
+          confirmButtonText: "تأیید",
+          confirmButtonColor: "#2563eb",
+          background: "#111827",
+          color: "#e5e7eb",
+        });
+      }
+
       if (onRefresh) onRefresh();
     } catch (error) {
       Swal.fire({
