@@ -5,6 +5,12 @@ import SettlementDetailsModal from "./SettlementDetailsModal";
 
 export default function SettlementRecordsTable({ records, loading , stemId, setStemId , setSelectedCustomerId , setSelectedProductId , setStem }) {
   const [openDetail, setOpenDetail] = useState(null);
+
+  // فیلتر کردن رکوردهایی که setm آنها null است
+  const filteredRecords = Array.isArray(records)
+    ? records.filter((r) => r.setm !== null)
+    : [];
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -38,7 +44,7 @@ export default function SettlementRecordsTable({ records, loading , stemId, setS
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 && (
+          {filteredRecords.length === 0 && (
             <tr>
               <td
                 colSpan={9}
@@ -48,7 +54,7 @@ export default function SettlementRecordsTable({ records, loading , stemId, setS
               </td>
             </tr>
           )}
-          {records?.length > 0 && records?.map((r, i) => (
+          {filteredRecords?.length > 0 && filteredRecords?.map((r, i) => (
              <tr
              key={i}
              className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${

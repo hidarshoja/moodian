@@ -6,6 +6,11 @@ import ProductDetailsModal from "./ProductDetailsModal";
 export default function ServicesRecordsTable({ records, loading , setSelectedProductId, selectedProductId , setSelectedCustomerId , setSelectedProduct}) {
   const [openDetail, setOpenDetail] = useState(null);
 
+  // فیلتر کردن رکوردهایی که product_id آنها null است
+  const filteredRecords = Array.isArray(records)
+    ? records.filter((r) => r.product_id !== null)
+    : [];
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -39,7 +44,7 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 && (
+          {filteredRecords.length === 0 && (
             <tr>
               <td
                 colSpan={9}
@@ -49,8 +54,7 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
               </td>
             </tr>
           )}
-          {records?.length > 0 && records?.map((r, i) => (
-            console.log(r.product_id),
+          {filteredRecords?.length > 0 && filteredRecords?.map((r, i) => (
            <tr
            key={i}
            className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${

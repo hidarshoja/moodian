@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from "react";
 import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
-import RecordsTable from "../components/RecordsTable";
 import CustomersRecordsTable from "../components/CustomersRecordsTable";
 import ServicesRecordsTable from "../components/ServicesRecordsTable";
 import SettlementRecordsTable from "../components/SettlementRecordsTable";
@@ -26,14 +24,14 @@ export default function ReportsPage() {
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const [stemId, setStemId] = useState(null);
-   const [stem, setStem] = useState(null);
-   const [statusName, setStatusName] = useState(null);
+  const [stem, setStem] = useState(null);
+  const [statusName, setStatusName] = useState(null);
   const [statusId, setStatusId] = useState(null);
   const [filterRemove, setFilterRemove] = useState(true);
 
@@ -70,20 +68,20 @@ export default function ReportsPage() {
       default:
         groupByValue = "customer_id";
     }
-    
+
     let query = buildFilterQuery(activeFilters) + `&group_by=${groupByValue}`;
-    if(selectedCustomerId) {
-      query += `&f[customer_id]=${selectedCustomerId}`
+    if (selectedCustomerId) {
+      query += `&f[customer_id]=${selectedCustomerId}`;
     }
-    if(selectedProductId) {
-      query += `&f[items.product_id]=${selectedProductId}`
+    if (selectedProductId) {
+      query += `&f[items.product_id]=${selectedProductId}`;
     }
-    if(stemId) {
-      query += `&f[setm]=${stemId}`
+    if (stemId) {
+      query += `&f[setm]=${stemId}`;
     }
-    if(statusId) {
-      query += `&f[status]=${statusId}`
-    } 
+    if (statusId) {
+      query += `&f[status]=${statusId}`;
+    }
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
@@ -105,8 +103,8 @@ export default function ReportsPage() {
     if (searchTerm.trim() === "") {
       setFilteredData(dataTable);
     } else {
-      const filtered = dataTable.filter(item => 
-        item.title && item.title.includes(searchTerm.trim())
+      const filtered = dataTable.filter(
+        (item) => item.title && item.title.includes(searchTerm.trim())
       );
       setFilteredData(filtered);
     }
@@ -147,10 +145,10 @@ export default function ReportsPage() {
     const end = toEnglishDigits(endDate?.format?.("YYYY/MM/DD") || "");
     const startMonth = toEnglishDigits(fromMonth?.format?.("YYYY/MM/DD") || "");
     const endMonth = toEnglishDigits(toMonth?.format?.("YYYY/MM/DD") || "");
-  
+
     let minDate = "";
     let maxDate = "";
-  
+
     if (start && end) {
       minDate = start;
       maxDate = end;
@@ -158,21 +156,19 @@ export default function ReportsPage() {
       minDate = startMonth;
       maxDate = endMonth;
     }
-  
+
     const newFilters = {
       "f[indatim][min]": minDate,
       "f[indatim][max]": maxDate,
       status: status || "",
     };
-  
+
     setActiveFilters(newFilters);
   };
 
   const handleSearchTermChange = (term) => {
     setSearchTerm(term);
   };
-
-
 
   const handleRequestInvoiceDetails = async () => {
     try {
@@ -189,15 +185,11 @@ export default function ReportsPage() {
         setInvoiceDetails(res.data);
         setIsInvoiceDetailsOpen(true);
       } else if (stemId) {
-        const res = await axiosClient.get(
-          `/invoices?f[setm]=${stemId}`
-        );
+        const res = await axiosClient.get(`/invoices?f[setm]=${stemId}`);
         setInvoiceDetails(res.data);
         setIsInvoiceDetailsOpen(true);
       } else if (statusId) {
-        const res = await axiosClient.get(
-          `/invoices?f[status]=${statusId}`
-        );
+        const res = await axiosClient.get(`/invoices?f[status]=${statusId}`);
         setInvoiceDetails(res.data);
         setIsInvoiceDetailsOpen(true);
       } else {
@@ -249,10 +241,10 @@ export default function ReportsPage() {
           endDate={endDate}
           filterTable={filterTable}
           setSearchTerm={setSearchTerm}
-           selectedCustomer={selectedCustomer}
-           selectedProduct={selectedProduct}
-           stem={stem}
-           statusName={statusName}
+          selectedCustomer={selectedCustomer}
+          selectedProduct={selectedProduct}
+          stem={stem}
+          statusName={statusName}
         />
       </div>
       <div className="mt-6">
@@ -276,9 +268,9 @@ export default function ReportsPage() {
           />
         )}
         {filterTable === "روش تسویه" && (
-          <SettlementRecordsTable 
+          <SettlementRecordsTable
             records={filteredData}
-            loading={loading} 
+            loading={loading}
             stemId={stemId}
             setStemId={setStemId}
             setSelectedProductId={setSelectedProductId}
@@ -287,7 +279,7 @@ export default function ReportsPage() {
           />
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable 
+          <SendRecordsTable
             records={filteredData}
             loading={loading}
             setStemId={setStemId}

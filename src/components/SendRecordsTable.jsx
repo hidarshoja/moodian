@@ -6,6 +6,11 @@ import SendStatusDetailsModal from "./SendStatusDetailsModal";
 export default function SendRecordsTable({ records, loading , setStemId , setSelectedProductId , setSelectedCustomerId , setStatusId ,statusId , setStatusName }) {
   const [openDetail, setOpenDetail] = useState(null);
 
+  // فیلتر کردن رکوردهایی که status آنها null است
+  const filteredRecords = Array.isArray(records)
+    ? records.filter((r) => r.status !== null)
+    : [];
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -40,7 +45,7 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 && (
+          {filteredRecords.length === 0 && (
             <tr>
               <td
                 colSpan={9}
@@ -50,7 +55,7 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
               </td>
             </tr>
           )}
-          {records?.length > 0 && records?.map((r, i) => (
+          {filteredRecords?.length > 0 && filteredRecords?.map((r, i) => (
               <tr
               key={i}
               className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
