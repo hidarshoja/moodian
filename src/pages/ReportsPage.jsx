@@ -21,7 +21,7 @@ export default function ReportsPage() {
   const [meta3, setMeta3] = useState({});
   const [meta4, setMeta4] = useState({});
   const [activeFilters, setActiveFilters] = useState({});
-  const [filterTable, setFilterTable] = useState("مشتری");
+  const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
   const [fromMonth, setFromMonth] = useState(null);
@@ -273,6 +273,17 @@ export default function ReportsPage() {
         />
       </div>
       <div className="mt-6">
+      {filterTable === "" && (<>
+        <div className="text-white/60 text-sm mt-1 flex justify-center items-center h-full border border-white/10 rounded-2xl p-4 ">
+
+
+        <p className="text-white/60 text-sm py-10">لطفا یک فیلتر را انتخاب کنید</p>
+             </div>
+          
+          
+      </>
+      
+        )}
         {filterTable === "مشتری" && (
           <>
             <CustomersRecordsTable
