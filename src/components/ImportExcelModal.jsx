@@ -61,13 +61,14 @@ export default function ImportExcelModal({ isOpen, onClose , refresh , setRefres
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+    
       Swal.fire({
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "فایل با موفقیت بارگذاری شد",
+        title: "فایل شما در حال پردازش در پس زمینه میباشد برای پیگیری وضعیت فایل به صفحه ی <ایمپورت و اکسپورت> بروید",
         showConfirmButton: false,
-        timer: 4000,
+        timer: 5000,
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
         background: "#111827",
