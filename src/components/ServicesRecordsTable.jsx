@@ -49,7 +49,7 @@ export default function ServicesRecordsTable({ records, loading , setSelectedPro
               </td>
             </tr>
           )}
-          {records.map((r, i) => (
+          {records?.length > 0 && records?.map((r, i) => (
             console.log(r.product_id),
            <tr
            key={i}

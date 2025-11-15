@@ -50,7 +50,7 @@ export default function SendRecordsTable({ records, loading , setStemId , setSel
               </td>
             </tr>
           )}
-          {records.map((r, i) => (
+          {records?.length > 0 && records?.map((r, i) => (
               <tr
               key={i}
               className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${

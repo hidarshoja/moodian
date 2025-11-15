@@ -15,6 +15,54 @@ function Spinner() {
   );
 }
 
+// تابع برای محاسبه درصد و رنگ نوار پیشرفت
+const getProgressInfo = (record) => {
+  const status = record?.status;
+  const errorsCount = record?.errors_count || 0;
+
+  // وضعیت جدید (0)
+  if (status === 0) {
+    return {
+      percentage: 10,
+      color: "bg-white/40",
+      textColor: "text-white/80",
+    };
+  }
+
+  // وضعیت در حال پردازش (بین 0 و 100)
+  if (status > 0 && status < 100) {
+    return {
+      percentage: 60,
+      color: "bg-orange-500",
+      textColor: "text-orange-400",
+    };
+  }
+
+  // وضعیت انجام شده (100)
+  if (status === 100) {
+    if (errorsCount > 0) {
+      return {
+        percentage: 100,
+        color: "bg-red-500",
+        textColor: "text-red-400",
+      };
+    } else {
+      return {
+        percentage: 100,
+        color: "bg-green-500",
+        textColor: "text-green-400",
+      };
+    }
+  }
+
+  // حالت پیش‌فرض
+  return {
+    percentage: 0,
+    color: "bg-white/20",
+    textColor: "text-white/60",
+  };
+};
+
 export default function TableExeel({ records, loading, setRefresh, refresh }) {
   const [openErrorModal, setOpenErrorModal] = React.useState(false);
   const [errorsData, setErrorsData] = React.useState([]);
@@ -132,8 +180,30 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                   {r?.type_label}
                 </td>
-                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {r?.status_label ? r?.status_label : "-"}
+                <td className="px-4 py-3 text-white/90 text-sm">
+                  <div className="flex flex-col gap-2 min-w-[120px]">
+                    <span className="whitespace-nowrap">
+                      {r?.status_label ? r?.status_label : "-"}
+                    </span>
+                    {(() => {
+                      const progressInfo = getProgressInfo(r);
+                      return (
+                        <div className="w-full">
+                          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full ${progressInfo.color} transition-all duration-300 ease-out`}
+                              style={{ width: `${progressInfo.percentage}%` }}
+                            ></div>
+                          </div>
+                          <span
+                            className={`text-xs mt-1 block ${progressInfo.textColor}`}
+                          >
+                            {progressInfo.percentage}%
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                   {r?.entity_type_label}
