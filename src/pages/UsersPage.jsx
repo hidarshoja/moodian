@@ -7,11 +7,12 @@ import axiosClientAdmin from "../axios-clientAdmin";
 import { errorMessage, successMessage } from "../utils/Toastiy";
 import { ToastContainer } from "react-toastify";
 import axiosClient from "../axios-client";
+import Pagination from "../components/Pagination";
 
 export default function UsersPage() {
   const [records, setRecords] = useState([]);
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
-  const [pageCount] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   const [keyModalIndex, setKeyModalIndex] = useState(null);
   const [activeFilters] = useState({});
   const [keyModalData, setKeyModalData] = useState({
@@ -21,7 +22,8 @@ export default function UsersPage() {
     moadian_private_key: null,
     moadian_certificate: null,
   });
-
+  const [meta, setMeta] = useState({});
+  const [loading, setLoading] = useState(true);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [editingUserIndex, setEditingUserIndex] = useState(null);
   const buildFilterQuery = (filters) => {
@@ -57,13 +59,16 @@ export default function UsersPage() {
 
   const fetchUsers = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await axiosClientAdmin.get(
         `/users?page=${pageCount}${query}`
       );
-     
+      setMeta(response.data.meta);
       setRecords(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   }, [pageCount, query]);
 
@@ -501,6 +506,11 @@ export default function UsersPage() {
         pauseOnHover
         theme="dark"
       />
+      <Pagination
+       meta={meta}
+        pageCount={pageCount} 
+        setPageCount={setPageCount} 
+        setLoading={setLoading} />
     </div>
   );
 }
