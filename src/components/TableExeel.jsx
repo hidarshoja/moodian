@@ -6,6 +6,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import { BiErrorAlt } from "react-icons/bi";
 import Swal from "sweetalert2";
 import ErrorModal from "./ErrorModal";
+import { FaFileImport } from "react-icons/fa";
+import { FaFileExport } from "react-icons/fa";
 
 function Spinner() {
   return (
@@ -178,7 +180,19 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                   {r?.id}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {r?.type_label}
+                  <div className="relative group inline-block">
+                    {r?.type_label === "ایمپورت" && (
+                      <FaFileImport width={20} height={20} />
+                    )}
+                    {r?.type_label === "اکسپورت" && (
+                      <FaFileExport width={20} height={20} />
+                    )}
+                    {r?.type_label && (
+                      <div className="absolute right-1/2 top-full transform translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {r.type_label}
+                      </div>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm">
                   <div className="flex flex-col gap-2 min-w-[120px]">
@@ -206,7 +220,7 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {r?.entity_type_label}
+                  {r?.entity_type_label === "ایمپورت"}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
                   {convertToPersianDate(r?.created_at)}
@@ -227,16 +241,17 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                     >
                       <MdDeleteOutline width={20} height={20} />
                     </button>
-                    {r?.errors_count > 0  && <>
-                    <button
-                      onClick={() => handleErrors(r.id)}
-                      title="خطا ها"
-                      className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
-                    >
-                      <BiErrorAlt width={20} height={20} />
-                    </button>
-                   
-                    </>}
+                    {r?.errors_count > 0 && (
+                      <>
+                        <button
+                          onClick={() => handleErrors(r.id)}
+                          title="خطا ها"
+                          className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                        >
+                          <BiErrorAlt width={20} height={20} />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
