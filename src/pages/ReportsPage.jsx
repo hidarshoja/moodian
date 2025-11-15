@@ -20,7 +20,6 @@ export default function ReportsPage() {
   const [meta2, setMeta2] = useState({});
   const [meta3, setMeta3] = useState({});
   const [meta4, setMeta4] = useState({});
-  const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
@@ -37,6 +36,8 @@ export default function ReportsPage() {
   const [statusName, setStatusName] = useState(null);
   const [statusId, setStatusId] = useState(null);
   const [filterRemove, setFilterRemove] = useState(true);
+  const [activeFilters, setActiveFilters] = useState({});
+  const [activeFilterButtons, setActiveFilterButtons] = useState([]);
 
   const buildFilterQuery = useCallback(
     (filters) => {
@@ -106,21 +107,8 @@ export default function ReportsPage() {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, [
-    // activeFilters,
-    // pageCount,
-    // filterTable,
-    // filterRemove,
-    // selectedCustomerId,
-    // selectedProductId,
-    // statusId,
-    // stemId,
-    // buildFilterQuery,
-    activeFilters,
-    pageCount,
-    filterTable,
-    filterRemove,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFilters, pageCount, filterTable, filterRemove]);
 
   // فیلتر کردن داده‌ها بر اساس searchTerm
   useEffect(() => {
@@ -228,6 +216,97 @@ export default function ReportsPage() {
     }
   };
 
+  // تابع برای چک کردن اینکه آیا از یک فیلتر آیتمی انتخاب شده یا نه
+  const hasSelectedItemForFilter = (filter) => {
+    switch (filter) {
+      case "مشتری":
+        return selectedCustomerId !== null;
+      case "کالا/خدمات":
+        return selectedProductId !== null;
+      case "روش تسویه":
+        return stemId !== null;
+      case "وضعیت ارسال":
+        return statusId !== null;
+      default:
+        return false;
+    }
+  };
+
+  // تابع برای مدیریت کلیک روی دکمه‌های فیلتر
+  const handleFilterClick = (filter) => {
+    setSearchTerm("");
+
+    // چک کردن که آیا از جدول قبلی آیتمی انتخاب شده یا نه
+    const previousFilter = filterTable;
+
+    // اگر کاربر روی همان دکمه دوباره کلیک کرد
+    if (previousFilter === filter) {
+      // اگر آیتمی انتخاب نشده بود، toggle کن (غیرفعال کن)
+      if (!hasSelectedItemForFilter(filter)) {
+        setFilterTable("");
+        setActiveFilterButtons((prev) => prev.filter((f) => f !== filter));
+        return;
+      }
+      // اگر آیتمی انتخاب شده بود، هیچ کاری نکن (فعال بماند)
+      return;
+    }
+
+    // اگر جدول قبلی وجود داشت و آیتمی انتخاب نشده بود، آن را از activeFilterButtons حذف کن
+    if (previousFilter && previousFilter !== filter) {
+      const hasSelectedItem = hasSelectedItemForFilter(previousFilter);
+
+      // اگر آیتمی انتخاب نشده بود، دکمه قبلی را از activeFilterButtons حذف کن
+      if (!hasSelectedItem) {
+        setActiveFilterButtons((prev) =>
+          prev.filter((f) => f !== previousFilter)
+        );
+      }
+    }
+
+    // تنظیم جدول جدید
+    setFilterTable(filter);
+
+    // اضافه کردن دکمه جدید به activeFilterButtons اگر قبلاً نبود
+    setActiveFilterButtons((prev) => {
+      if (!prev.includes(filter)) {
+        return [...prev, filter];
+      }
+      return prev;
+    });
+  };
+
+  // تابع برای حذف فیلتر
+  const handleClearFilter = (filterToRemove) => {
+    setActiveFilterButtons((prev) => prev.filter((f) => f !== filterToRemove));
+
+    // پاک کردن انتخاب‌های مربوط به آن فیلتر
+    switch (filterToRemove) {
+      case "مشتری":
+        setSelectedCustomerId(null);
+        setSelectedCustomer(null);
+        break;
+      case "کالا/خدمات":
+        setSelectedProductId(null);
+        setSelectedProduct(null);
+        break;
+      case "روش تسویه":
+        setStemId(null);
+        setStem(null);
+        break;
+      case "وضعیت ارسال":
+        setStatusId(null);
+        setStatusName(null);
+        break;
+      default:
+        break;
+    }
+
+    // اگر فیلتر حذف شده همان filterTable فعلی بود، filterTable را خالی کن
+    if (filterTable === filterToRemove) {
+      setFilterTable("");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-2">
       <div>
@@ -273,6 +352,9 @@ export default function ReportsPage() {
           selectedProduct={selectedProduct}
           stem={stem}
           statusName={statusName}
+          activeFilters={activeFilterButtons}
+          onFilterClick={handleFilterClick}
+          onClearFilter={handleClearFilter}
         />
       </div>
       <div className="mt-6">
