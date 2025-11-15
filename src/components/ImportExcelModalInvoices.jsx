@@ -78,14 +78,12 @@ export default function ImportExcelModalInvoices({ isOpen, onClose ,refresh , se
       });
 
       Swal.fire({
-        toast: true,
-        position: "top-start",
         icon: "success",
-        title: "فایل شما در حال پردازش در پس زمینه میباشد برای پیگیری وضعیت فایل به صفحه ی <ایمپورت و اکسپورت> بروید",
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        customClass: { popup: "swal2-toast" },
+        title:
+          "فایل شما در حال پردازش در پس زمینه میباشد برای پیگیری وضعیت فایل به صفحه ی <ایمپورت و اکسپورت> بروید",
+        showConfirmButton: true,
+        confirmButtonText: "تأیید",
+        confirmButtonColor: "#2563eb",
         background: "#111827",
         color: "#e5e7eb",
       });

@@ -3,11 +3,16 @@ import * as XLSX from "xlsx";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 
-export default function ImportExcelModal({ isOpen, onClose , refresh , setRefresh}) {
+export default function ImportExcelModal({
+  isOpen,
+  onClose,
+  refresh,
+  setRefresh,
+}) {
   const fileInputRef = useRef();
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
-   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   if (!isOpen) return null;
 
@@ -61,16 +66,13 @@ export default function ImportExcelModal({ isOpen, onClose , refresh , setRefres
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-    
       Swal.fire({
-        toast: true,
-        position: "top-start",
         icon: "success",
-        title: "فایل شما در حال پردازش در پس زمینه میباشد برای پیگیری وضعیت فایل به صفحه ی <ایمپورت و اکسپورت> بروید",
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        customClass: { popup: "swal2-toast" },
+        title:
+          "فایل شما در حال پردازش در پس زمینه میباشد برای پیگیری وضعیت فایل به صفحه ی <ایمپورت و اکسپورت> بروید",
+        showConfirmButton: true,
+        confirmButtonText: "تأیید",
+        confirmButtonColor: "#2563eb",
         background: "#111827",
         color: "#e5e7eb",
       });
@@ -130,11 +132,12 @@ export default function ImportExcelModal({ isOpen, onClose , refresh , setRefres
             )}
           </div>
           <div className="flex flex-col md:flex-row gap-2 my-1">
-            <button className="btn-custom"
-            onClick={handleImport}>بارگذاری</button>
-            <button className="btn-custom"
-            onClick={handleDownload}
-            >فایل نمونه</button>
+            <button className="btn-custom" onClick={handleImport}>
+              بارگذاری
+            </button>
+            <button className="btn-custom" onClick={handleDownload}>
+              فایل نمونه
+            </button>
           </div>
         </div>
         <div
