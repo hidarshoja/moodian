@@ -94,13 +94,13 @@ export default function ReportsPage() {
       .then((response) => {
         setDataTable(response.data.data || []);
         if (filterTable === "مشتری") {
-          setMeta(response.data.data?.meta || {});
+          setMeta(response.data?.meta || {});
         } else if (filterTable === "کالا/خدمات") {
-          setMeta2(response.data.data?.meta || {});
+          setMeta2(response.data?.meta || {});
         } else if (filterTable === "روش تسویه") {
-          setMeta3(response.data.data?.meta || {});
+          setMeta3(response.data?.meta || {});
         } else if (filterTable === "وضعیت ارسال") {
-          setMeta4(response.data.data?.meta || {});
+          setMeta4(response.data?.meta || {});
         }
       })
       .catch((error) => {
@@ -235,27 +235,19 @@ export default function ReportsPage() {
   // تابع برای مدیریت کلیک روی دکمه‌های فیلتر
   const handleFilterClick = (filter) => {
     setSearchTerm("");
-
-    // چک کردن که آیا از جدول قبلی آیتمی انتخاب شده یا نه
+    setPageCount(1);
     const previousFilter = filterTable;
-
-    // اگر کاربر روی همان دکمه دوباره کلیک کرد
     if (previousFilter === filter) {
-      // اگر آیتمی انتخاب نشده بود، toggle کن (غیرفعال کن)
       if (!hasSelectedItemForFilter(filter)) {
         setFilterTable("");
         setActiveFilterButtons((prev) => prev.filter((f) => f !== filter));
         return;
       }
-      // اگر آیتمی انتخاب شده بود، هیچ کاری نکن (فعال بماند)
       return;
     }
 
-    // اگر جدول قبلی وجود داشت و آیتمی انتخاب نشده بود، آن را از activeFilterButtons حذف کن
     if (previousFilter && previousFilter !== filter) {
       const hasSelectedItem = hasSelectedItemForFilter(previousFilter);
-
-      // اگر آیتمی انتخاب نشده بود، دکمه قبلی را از activeFilterButtons حذف کن
       if (!hasSelectedItem) {
         setActiveFilterButtons((prev) =>
           prev.filter((f) => f !== previousFilter)
@@ -263,10 +255,8 @@ export default function ReportsPage() {
       }
     }
 
-    // تنظیم جدول جدید
     setFilterTable(filter);
 
-    // اضافه کردن دکمه جدید به activeFilterButtons اگر قبلاً نبود
     setActiveFilterButtons((prev) => {
       if (!prev.includes(filter)) {
         return [...prev, filter];
