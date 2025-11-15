@@ -34,8 +34,8 @@ export default function ImportExcelModal({ isOpen, onClose , refresh , setRefres
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "/file/Arz.xlsx"; // مسیر از public شروع می‌شود
-    link.download = "arzFile.xlsx";
+    link.href = "/file/product1.xlsx"; // مسیر از public شروع می‌شود
+    link.download = "product1.xlsx";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
