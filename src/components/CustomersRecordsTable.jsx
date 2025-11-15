@@ -13,6 +13,11 @@ export default function CustomersRecordsTable({
 }) {
   const [openDetail, setOpenDetail] = useState(null);
 
+  // فیلتر کردن رکوردهایی که customer_id آنها null است
+  const filteredRecords = Array.isArray(records)
+    ? records.filter((r) => r.customer_id !== null)
+    : [];
+
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
       {loading && (
@@ -46,7 +51,7 @@ export default function CustomersRecordsTable({
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 && (
+          {filteredRecords.length === 0 && (
             <tr>
               <td
                 colSpan={9}
@@ -56,50 +61,51 @@ export default function CustomersRecordsTable({
               </td>
             </tr>
           )}
-          {records?.length > 0 && records?.map((r, i) => (
-            <tr
-              key={i}
-              className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
-                selectedCustomerId === r.customer_id
-                  ? "klickBtnTD"
-                  : ""
-              }`}
-              onClick={() => {
-                setSelectedCustomer(r);
-                setSelectedCustomerId(r.customer_id);
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <td
-                className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenDetail(r);
+          {filteredRecords?.length > 0 &&
+            filteredRecords?.map((r, i) => (
+              <tr
+                key={i}
+                className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
+                  selectedCustomerId === r.customer_id ? "klickBtnTD" : ""
+                }`}
+                onClick={() => {
+                  setSelectedCustomer(r);
+                  setSelectedCustomerId(r.customer_id);
                 }}
+                style={{ cursor: "pointer" }}
               >
-                {r?.title}
-              </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat("fa-IR").format(r?.original_invoice)}
-              </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat("fa-IR").format(r?.corrective_invoice)}
-              </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {new Intl.NumberFormat("fa-IR").format(r?.returned_invoice)}
-              </td>
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {new Intl.NumberFormat("fa-IR").format(r?.cancellation_invoice)}
-              </td>
-              <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
-                {new Intl.NumberFormat("fa-IR").format(
-                  Number(r?.original_invoice) +
-                    Number(r?.corrective_invoice) +
-                    Number(r?.returned_invoice)
-                )}
-              </td>
-            </tr>
-          ))}
+                <td
+                  className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDetail(r);
+                  }}
+                >
+                  {r?.title}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                  {new Intl.NumberFormat("fa-IR").format(r?.original_invoice)}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                  {new Intl.NumberFormat("fa-IR").format(r?.corrective_invoice)}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                  {new Intl.NumberFormat("fa-IR").format(r?.returned_invoice)}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+                  {new Intl.NumberFormat("fa-IR").format(
+                    r?.cancellation_invoice
+                  )}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+                  {new Intl.NumberFormat("fa-IR").format(
+                    Number(r?.original_invoice) +
+                      Number(r?.corrective_invoice) +
+                      Number(r?.returned_invoice)
+                  )}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       {openDetail && (
