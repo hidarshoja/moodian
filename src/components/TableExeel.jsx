@@ -181,10 +181,20 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                   {r?.type_label === "ایمپورت" && (
-                    <FaFileImport width={20} height={20} />
+                    <div className="relative group inline-block">
+                      <FaFileImport width={25} height={25} />
+                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        ایمپورت
+                      </div>
+                    </div>
                   )}
                   {r?.type_label === "اکسپورت" && (
-                    <FaFileExport width={20} height={20} />
+                    <div className="relative group inline-block">
+                      <FaFileExport width={25} height={25} />
+                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        اکسپورت
+                      </div>
+                    </div>
                   )}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm">
