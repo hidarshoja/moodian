@@ -22,17 +22,35 @@ ChartJS.register(
   Title
 );
 
+const statusColors = {
+  "جدید": "#ffffff",
+  "یافت نشده در مودیان": "#ff0000",
+  "مشکل در تایید توسط مودیان": "#ff0000",
+  "مشکل در ارسال به مودیان": "#ff0000",
+  "در حال ارسال به مودیان": "#ffd166",
+  "تایید شده توسط مودیان": "#06d6a0",
+};
+
+const insColors = {
+  "اصلی": "#4cc9f0",
+  "اصلاحی": "#06d6a0",
+  "برگشت از فروش": "#8b55ff",
+  "ابطالی": "#ff0000",
+};
+
+
 // Maps API status_group to Bar chart data
 function buildBarData(statusGroup) {
   const labels = (statusGroup || []).map((item) => item.status_label);
   const counts = (statusGroup || []).map((item) => Number(item.count) || 0);
+  const colors = labels.map((lbl) => statusColors[lbl] || "#999"); 
   return {
     labels,
     datasets: [
       {
         label: "تعداد",
         data: counts,
-        backgroundColor: "#ff6b5b",
+        backgroundColor: colors,
         borderRadius: 8,
         barThickness: 24,
       },
@@ -44,18 +62,13 @@ function buildBarData(statusGroup) {
 function buildDoughnutData(insGroup) {
   const labels = (insGroup || []).map((item) => item.ins_label);
   const counts = (insGroup || []).map((item) => Number(item.count) || 0);
+  const colors = labels.map((lbl) => insColors[lbl] || "#ccc");
   return {
     labels,
     datasets: [
       {
         data: counts,
-        backgroundColor: [
-          "#ff6b5b",
-          "#8b55ff",
-          "#4cc9f0",
-          "#06d6a0",
-          "#ffd166",
-        ],
+        backgroundColor: colors,
         borderWidth: 0,
         hoverOffset: 4,
       },
