@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SearchFilterBar from "../components/SearchFilterBar";
 import ReportsFilter from "../components/ReportsFilter";
 import CustomersRecordsTable from "../components/CustomersRecordsTable";
@@ -17,6 +17,9 @@ export default function ReportsPage() {
   const [dataTable, setDataTable] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // جدید
   const [meta, setMeta] = useState({});
+  const [meta2, setMeta2] = useState({});
+  const [meta3, setMeta3] = useState({});
+  const [meta4, setMeta4] = useState({});
   const [activeFilters, setActiveFilters] = useState({});
   const [filterTable, setFilterTable] = useState("مشتری");
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,21 +38,24 @@ export default function ReportsPage() {
   const [statusId, setStatusId] = useState(null);
   const [filterRemove, setFilterRemove] = useState(true);
 
-  const buildFilterQuery = (filters) => {
-    const params = [];
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        if (key === "type") {
-          params.push(`${key}=${value}`);
-        } else if (key.startsWith("f[indatim]") && filterRemove) {
-          params.push(`${key}=${encodeURIComponent(value)}`);
-        } else if (filterRemove) {
-          params.push(`f[${key}]=${encodeURIComponent(value)}`);
+  const buildFilterQuery = useCallback(
+    (filters) => {
+      const params = [];
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) {
+          if (key === "type") {
+            params.push(`${key}=${value}`);
+          } else if (key.startsWith("f[indatim]") && filterRemove) {
+            params.push(`${key}=${encodeURIComponent(value)}`);
+          } else if (filterRemove) {
+            params.push(`f[${key}]=${encodeURIComponent(value)}`);
+          }
         }
-      }
-    });
-    return params.length ? "&" + params.join("&") : "";
-  };
+      });
+      return params.length ? "&" + params.join("&") : "";
+    },
+    [filterRemove]
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -86,13 +92,31 @@ export default function ReportsPage() {
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data?.data || []);
-        setMeta(response.data.data?.meta || {});
+        if(filterTable === "مشتری") {
+          setMeta(response.data.data?.meta || {});
+        } else if(filterTable === "کالا/خدمات") {
+          setMeta2(response.data.data?.meta || {});
+        } else if(filterTable === "روش تسویه") {
+          setMeta3(response.data.data?.meta || {});
+        } else if(filterTable === "وضعیت ارسال") {
+          setMeta4(response.data.data?.meta || {});
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => setLoading(false));
-  }, [activeFilters, pageCount, filterTable, filterRemove]);
+  }, [
+    activeFilters,
+    pageCount,
+    filterTable,
+    filterRemove,
+    selectedCustomerId,
+    selectedProductId,
+    statusId,
+    stemId,
+    buildFilterQuery,
+  ]);
 
   // فیلتر کردن داده‌ها بر اساس searchTerm
   useEffect(() => {
@@ -249,46 +273,83 @@ export default function ReportsPage() {
       </div>
       <div className="mt-6">
         {filterTable === "مشتری" && (
-          <CustomersRecordsTable
-            records={filteredData}
-            loading={loading}
-            selectedCustomerId={selectedCustomerId}
-            setSelectedCustomerId={setSelectedCustomerId}
-            setSelectedCustomer={setSelectedCustomer}
-          />
+          <>
+            <CustomersRecordsTable
+              records={filteredData}
+              loading={loading}
+              selectedCustomerId={selectedCustomerId}
+              setSelectedCustomerId={setSelectedCustomerId}
+              setSelectedCustomer={setSelectedCustomer}
+            />
+
+            <Pagination
+              meta={meta}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+            />
+          </>
         )}
         {filterTable === "کالا/خدمات" && (
-          <ServicesRecordsTable
-            records={filteredData}
-            loading={loading}
-            setSelectedProductId={setSelectedProductId}
-            selectedProductId={selectedProductId}
-            setSelectedCustomerId={setSelectedCustomerId}
-            setSelectedProduct={setSelectedProduct}
-          />
+          <>
+            <ServicesRecordsTable
+              records={filteredData}
+              loading={loading}
+              setSelectedProductId={setSelectedProductId}
+              selectedProductId={selectedProductId}
+              setSelectedCustomerId={setSelectedCustomerId}
+              setSelectedProduct={setSelectedProduct}
+            />
+
+            <Pagination
+              meta={meta2}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+            />
+          </>
         )}
         {filterTable === "روش تسویه" && (
-          <SettlementRecordsTable
-            records={filteredData}
-            loading={loading}
-            stemId={stemId}
-            setStemId={setStemId}
-            setSelectedProductId={setSelectedProductId}
-            setSelectedCustomerId={setSelectedCustomerId}
-            setStem={setStem}
-          />
+          <>
+            <SettlementRecordsTable
+              records={filteredData}
+              loading={loading}
+              stemId={stemId}
+              setStemId={setStemId}
+              setSelectedProductId={setSelectedProductId}
+              setSelectedCustomerId={setSelectedCustomerId}
+              setStem={setStem}
+            />
+
+            <Pagination
+              meta={meta3}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+            />
+          </>
         )}
         {filterTable === "وضعیت ارسال" && (
-          <SendRecordsTable
-            records={filteredData}
-            loading={loading}
-            setStemId={setStemId}
-            setSelectedProductId={setSelectedProductId}
-            setSelectedCustomerId={setSelectedCustomerId}
-            setStatusId={setStatusId}
-            statusId={statusId}
-            setStatusName={setStatusName}
-          />
+          <>
+            <SendRecordsTable
+              records={filteredData}
+              loading={loading}
+              setStemId={setStemId}
+              setSelectedProductId={setSelectedProductId}
+              setSelectedCustomerId={setSelectedCustomerId}
+              setStatusId={setStatusId}
+              statusId={statusId}
+              setStatusName={setStatusName}
+            />
+         
+              <Pagination
+                meta={meta4}
+                pageCount={pageCount}
+                setPageCount={setPageCount}
+                setLoading={setLoading}
+              />
+            
+          </>
         )}
 
         {isInvoiceDetailsOpen && invoiceDetails && (

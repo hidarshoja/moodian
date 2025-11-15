@@ -5,17 +5,22 @@ const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
 
   const genaratePages = () => {
     const pages = [];
-    const totalPages = meta?.last_page;
-    const currentPage = meta?.current_page;
+    const totalPages = meta?.last_page || 1;
+    const currentPage = meta?.current_page || pageCount || 1;
   
     const displayPages = [];
    
   
     // Determine which page numbers to display
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || Math.abs(currentPage - i) < 2) {
-        displayPages.push(i);
+    if (totalPages > 0) {
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(currentPage - i) < 2) {
+          displayPages.push(i);
+        }
       }
+    } else {
+      // اگر totalPages وجود نداشت، حداقل صفحه فعلی را نشان بده
+      displayPages.push(currentPage);
     }
   
     // Generate JSX elements for the page numbers
@@ -31,7 +36,7 @@ const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
         <button
           key={page}
           onClick={() => handlePageChange(page)}
-          className={`${page === currentPage  ? '"relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"' : "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-100 ring-1 ring-inset ring-gray-300 hover:text-gray-800 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"}`}
+          className={`${page === currentPage  ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-100 ring-1 ring-inset ring-gray-300 hover:text-gray-800 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"}`}
         >
           {page}
         </button>
