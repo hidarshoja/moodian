@@ -197,7 +197,7 @@ export default function SendInvoicesTable({
       console.log("Check Status Response Data:", response.data);
 
       // فرمت کردن اطلاعات response برای نمایش در Swal
-      const responseData = response.data?.data?.[0];
+      const responseData = response.data?.[0];
       console.log(`responseData`, responseData);
       if (responseData) {
         let htmlContent = `
@@ -216,7 +216,7 @@ export default function SendInvoicesTable({
         // نمایش خطاها
         if (responseData.data?.error && responseData.data.error.length > 0) {
           htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fee2e2; border-radius: 5px;">
-            <strong style="color: #dc2626;">خطاها:</strong><ul style="margin: 5px 0; padding-right: 20px;">`;
+            <strong style="color: #dc2626;">خطاها:</strong><ul style="margin: 5px 0; padding-right: 20px; color: #dc2626;">`;
           responseData.data.error.forEach((err) => {
             htmlContent += `<li style="margin: 5px 0;">کد: ${err.code} - ${err.message}</li>`;
           });
@@ -229,7 +229,7 @@ export default function SendInvoicesTable({
           responseData.data.warning.length > 0
         ) {
           htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fef3c7; border-radius: 5px;">
-            <strong style="color: #d97706;">هشدارها:</strong><ul style="margin: 5px 0; padding-right: 20px;">`;
+            <strong style="color: #d97706;">هشدارها:</strong><ul style="margin: 5px 0; padding-right: 20px; color: #d97706;">`;
           responseData.data.warning.forEach((warn) => {
             htmlContent += `<li style="margin: 5px 0;">${warn.code || ""} - ${
               warn.message || ""
