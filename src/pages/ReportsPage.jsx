@@ -91,7 +91,8 @@ export default function ReportsPage() {
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
-        setDataTable(response.data.data?.data || []);
+       
+        setDataTable(response.data.data || []);
         if(filterTable === "مشتری") {
           setMeta(response.data.data?.meta || {});
         } else if(filterTable === "کالا/خدمات") {
