@@ -107,15 +107,16 @@ export default function ReportsPage() {
       })
       .finally(() => setLoading(false));
   }, [
-    activeFilters,
-    pageCount,
-    filterTable,
-    filterRemove,
-    selectedCustomerId,
-    selectedProductId,
-    statusId,
-    stemId,
-    buildFilterQuery,
+    // activeFilters,
+    // pageCount,
+    // filterTable,
+    // filterRemove,
+    // selectedCustomerId,
+    // selectedProductId,
+    // statusId,
+    // stemId,
+    // buildFilterQuery,
+    activeFilters, pageCount, filterTable, filterRemove
   ]);
 
   // فیلتر کردن داده‌ها بر اساس searchTerm
