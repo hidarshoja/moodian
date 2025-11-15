@@ -91,15 +91,14 @@ export default function ReportsPage() {
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
-       
         setDataTable(response.data.data || []);
-        if(filterTable === "مشتری") {
+        if (filterTable === "مشتری") {
           setMeta(response.data.data?.meta || {});
-        } else if(filterTable === "کالا/خدمات") {
+        } else if (filterTable === "کالا/خدمات") {
           setMeta2(response.data.data?.meta || {});
-        } else if(filterTable === "روش تسویه") {
+        } else if (filterTable === "روش تسویه") {
           setMeta3(response.data.data?.meta || {});
-        } else if(filterTable === "وضعیت ارسال") {
+        } else if (filterTable === "وضعیت ارسال") {
           setMeta4(response.data.data?.meta || {});
         }
       })
@@ -117,7 +116,10 @@ export default function ReportsPage() {
     // statusId,
     // stemId,
     // buildFilterQuery,
-    activeFilters, pageCount, filterTable, filterRemove
+    activeFilters,
+    pageCount,
+    filterTable,
+    filterRemove,
   ]);
 
   // فیلتر کردن داده‌ها بر اساس searchTerm
@@ -274,16 +276,14 @@ export default function ReportsPage() {
         />
       </div>
       <div className="mt-6">
-      {filterTable === "" && (<>
-        <div className="text-white/60 text-sm mt-1 flex justify-center items-center h-full border border-white/10 rounded-2xl p-4 ">
-
-
-        <p className="text-white/60 text-sm py-10">لطفا یک فیلتر را انتخاب کنید</p>
-             </div>
-          
-          
-      </>
-      
+        {filterTable === "" && (
+          <>
+            <div className="text-white/60 text-sm mt-1 flex justify-center items-center h-full border border-white/10 rounded-2xl p-4 ">
+              <p className="text-white/60 text-sm py-10">
+                لطفا یک فیلتر را انتخاب کنید
+              </p>
+            </div>
+          </>
         )}
         {filterTable === "مشتری" && (
           <>
@@ -354,14 +354,13 @@ export default function ReportsPage() {
               statusId={statusId}
               setStatusName={setStatusName}
             />
-         
-              <Pagination
-                meta={meta4}
-                pageCount={pageCount}
-                setPageCount={setPageCount}
-                setLoading={setLoading}
-              />
-            
+
+            <Pagination
+              meta={meta4}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              setLoading={setLoading}
+            />
           </>
         )}
 
