@@ -15,7 +15,7 @@ export default function ErrorListModal({ isOpen, onClose, errors }) {
       >
        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold mb-4 text-center text-red-600">لیست ارورها</h2>
+            <h2 className="text-xl font-bold mb-4 text-center text-red-600">لیست خطاها</h2>
           </div>
           <button
             onClick={onClose}
@@ -38,7 +38,7 @@ export default function ErrorListModal({ isOpen, onClose, errors }) {
               </li>
             ))
           ) : (
-            <li className="text-gray-600">اروری وجود ندارد.</li>
+            <li className="text-gray-600">خطایی وجود ندارد.</li>
           )}
         </ul>
         <button

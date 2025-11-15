@@ -227,13 +227,16 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                     >
                       <MdDeleteOutline width={20} height={20} />
                     </button>
+                    {r?.errors_count > 0  && <>
                     <button
                       onClick={() => handleErrors(r.id)}
-                      title="عرور ها"
+                      title="خطا ها"
                       className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                     >
                       <BiErrorAlt width={20} height={20} />
                     </button>
+                   
+                    </>}
                   </div>
                 </td>
               </tr>
