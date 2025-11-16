@@ -4,14 +4,26 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
   // managa expansion/accordion state for each invoice row
   const [openRow, setOpenRow] = useState(null);
 
+  // map status code to a tailwind text color class
+  const getTextColorByStatus = (status) => {
+    if (status === 100) return "text-green-400";
+    if (status === 0) return "text-white";
+    if (status === 10 || status === 20) return "text-orange-400";
+    if (status === -80 || status === -90 || status === -10)
+      return "text-red-400";
+    return "text-white";
+  };
+
   if (!isOpen || !data) return null;
-  // sample table, customize columns as needed
+  console.log(`data`, data?.data);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <div className="w-full max-w-6xl bg-[#23234a] p-6 rounded-2xl border border-white/10">
         <div className="flex justify-between items-center border-b pb-4">
           <div className="text-white text-lg font-bold">ریز فاکتور فروش ها</div>
-          <button onClick={onClose} className="text-white">×</button>
+          <button onClick={onClose} className="text-white">
+            ×
+          </button>
         </div>
         <table className="w-full ">
           <thead>
@@ -28,14 +40,24 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
           <tbody>
             {data.data?.map((row, i) => (
               <React.Fragment key={i}>
-                <tr className="text-white border-t p-2 border-white/10 odd:bg-white/5 even:bg-white/10">
+                <tr
+                  className={`${getTextColorByStatus(
+                    row?.status
+                  )} border-t p-2 border-white/10 odd:bg-white/5 even:bg-white/10`}
+                >
                   <td className="text-center p-2">{row?.taxid}</td>
                   <td className="text-center p-2">{row?.status_label}</td>
                   <td className="text-center p-2">{row?.inp_label}</td>
-                  <td className="text-center p-2">{row?.customer?.name} - {row?.customer?.last_name}</td>
-                  <td className="text-center p-2">{Number(row?.tadis).toLocaleString("fa-IR")}</td>
+                  <td className="text-center p-2">
+                    {row?.customer?.name} - {row?.customer?.last_name}
+                  </td>
+                  <td className="text-center p-2">
+                    {Number(row?.tadis).toLocaleString("fa-IR")}
+                  </td>
                   <td>
-                    <button onClick={() => setOpenRow(openRow === i ? null : i)}>
+                    <button
+                      onClick={() => setOpenRow(openRow === i ? null : i)}
+                    >
                       {openRow === i ? "−" : "+"}
                     </button>
                   </td>
@@ -50,18 +72,26 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
                           <tr className="text-white bg-[#161636]">
                             <th className="py-4">نام کالا/خدمت</th>
                             <th className="py-4">مقدار / تعداد</th>
+                            <th className="py-4">مبلغ</th>
                           </tr>
                         </thead>
                         <tbody>
-                           {row.items?.map((item, idx) => (
-                              <tr key={idx} className="text-white border-t p-2 border-white/10 bg-white/5">
-                                 <td className="text-center p-2">{item?.product?.title}</td>
-                                 <td className="text-center p-2">
-                                  {Number(item?.am).toLocaleString("fa-IR")}
-                                  /{Number(item?.fee).toLocaleString("fa-IR")}
-                                  </td>
-                              </tr>
-                           ))}
+                          {row.items?.map((item, idx) => (
+                            <tr
+                              key={idx}
+                              className="text-white border-t p-2 border-white/10 bg-white/5"
+                            >
+                              <td className="text-center p-2">
+                                {item?.product?.title}
+                              </td>
+                              <td className="text-center p-2">
+                                {Number(item?.am).toLocaleString("fa-IR")}
+                              </td>
+                              <td className="text-center p-2">
+                                {Number(item?.fee).toLocaleString("fa-IR")}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </td>
@@ -71,7 +101,12 @@ export default function InvoiceDetailsModal({ isOpen, onClose, data }) {
             ))}
           </tbody>
         </table>
-        <button onClick={onClose} className="btn-custom6 text-center w-full mt-4">انصراف</button>
+        <button
+          onClick={onClose}
+          className="btn-custom6 text-center w-full mt-4"
+        >
+          انصراف
+        </button>
       </div>
     </div>
   );
