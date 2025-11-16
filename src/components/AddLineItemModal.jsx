@@ -10,8 +10,8 @@ export default function AddLineItemModal({
   onSave,
   initialData,
   title,
-  selectedProduct,
-  setSelectedProduct,
+  selectedProduct = null,
+  setSelectedProduct = () => {},
 }) {
   const [formData, setFormData] = useState({
     ProductId: "",
