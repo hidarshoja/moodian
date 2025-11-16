@@ -121,10 +121,10 @@ const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
           <div className="bg-[#1A2035] text-white px-6 py-3 sticky top-0 z-10">
             <div className="grid grid-cols-6 gap-4 text-sm font-medium text-right">
               <div>وضعیت</div>
-              <div>نوع فاکتور فروش</div>
+              <div>نام مشتری</div>
               <div>شماره منحصر بفرد مالیاتی</div>
               <div>تاریخ صدور</div>
-              <div>موضوع فاکتور فروش</div>
+              <div>مبلغ</div>
               <div>الگوی فاکتور فروش</div>
             </div>
           </div>
@@ -154,14 +154,14 @@ const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
                 {/* Invoice Type */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.setm_label}
+                    {invoice?.customer?.name} - {invoice?.customer?.last_name}
                   </span>
                 </div>
 
                 {/* Unique Tax ID */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100 font-mono">
-                    {invoice.irtaxid  ? invoice.irtaxid : "-" }
+                    {invoice.taxid  ? invoice.taxid : "-" }
                   </span>
                 </div>
 
@@ -176,7 +176,7 @@ const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
                     
-                    {invoice.inty_label}
+                  {Number(invoice.tadis).toLocaleString()}
                   </span>
                 </div>
 

@@ -121,7 +121,7 @@ onClose();
   };
 
   if (!isOpen) return null;
-
+console.log(`invoiceData`, invoiceData);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/50">
       <div
@@ -150,10 +150,10 @@ onClose();
             <div className="grid grid-cols-6 gap-4 text-sm font-medium text-right">
               {/* <div>شماره مرجع</div> */}
               <div>وضعیت</div>
-              <div>روش تسویه </div>
+              <div>نام مشتری</div>
               <div>شماره منحصر بفرد مالیاتی</div>
               <div>تاریخ صدور</div>
-              <div>نوع فاکتور فروش</div>
+              <div>مبلغ</div>
               <div>الگوی فاکتور فروش</div>
             </div>
           </div>
@@ -182,17 +182,19 @@ onClose();
                   </span>
                 </div>
 
+             
+
                 {/* Invoice Type */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
-                    {invoice.setm_label}
+                    {invoice?.customer?.name} - {invoice?.customer?.last_name}
                   </span>
                 </div>
 
                 {/* Unique Tax ID */}
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100 font-mono">
-                    {invoice.irtaxid  ? invoice.irtaxid : "-" }
+                    {invoice.taxid  ? invoice.taxid : "-" }
                   </span>
                 </div>
 
@@ -207,7 +209,7 @@ onClose();
                 <div className="flex items-center text-right">
                   <span className="text-sm text-gray-100">
                     
-                    {invoice.inty_label}
+                    {Number(invoice.tadis).toLocaleString()}
                   </span>
                 </div>
 
