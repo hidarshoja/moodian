@@ -14,10 +14,10 @@ export default function SettlementDetailsModal({ isOpen, onClose, record }) {
   const visibleFields = [
     { label: "وضعیت ارسال", value: row.title, icon: <FaExchangeAlt /> },
     { label: "وضعیت ", value: row.status, icon: <FaListAlt /> },
-    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaListAlt /> },
-    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور اصلی", value: row?.original_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور ابطالی", value: row?.cancellation_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور برگشتی", value: Number(row.returned_invoice).toLocaleString(), icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: Number(row.corrective_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: Number(row?.original_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: Number(row?.cancellation_invoice).toLocaleString(), icon: <FaIdCard /> },
   ];
 
   return (

@@ -13,10 +13,10 @@ export default function ProductDetailsModal({ isOpen, onClose, record }) {
   const rows = [
     { label: "نام کالا", value: main.title, icon: <FaExchangeAlt /> },
     { label: "وضعیت ", value: main.status, icon: <FaListAlt /> },
-    { label: "فاکتور برگشتی", value: main.returned_invoice, icon: <FaListAlt /> },
-    { label: "فاکتور اصلاحی", value: main.corrective_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور اصلی", value: main?.original_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور ابطالی", value: main?.cancellation_invoice, icon: <FaIdCard /> },
+    { label: "فاکتور برگشتی", value: Number(main.returned_invoice).toLocaleString(), icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: Number(main.corrective_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: Number(main?.original_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: Number(main?.cancellation_invoice).toLocaleString(), icon: <FaIdCard /> },
   ];
 
   return (

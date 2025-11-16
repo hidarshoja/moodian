@@ -23,10 +23,10 @@ export default function CustomerDetailsModal({ isOpen, onClose, record }) {
     { label: "شناسه مالیاتی", value: row.taxid, icon: <FaBuilding /> },
     { label: "نام", value: row?.title, icon: <FaUser /> },
     { label: "نام خانوادگی", value: row?.title, icon: <FaUser /> },
-    { label: "فاکتور اصلی", value: row.original_invoice, icon: <FaAddressCard /> },
-    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaAddressCard /> },
-    { label: "فاکتور ابطالی", value: row.cancellation_invoice, icon: <FaAddressCard /> },
-    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaAddressCard /> },
+    { label: "فاکتور اصلی", value: Number(row.original_invoice).toLocaleString(), icon: <FaAddressCard /> },
+    { label: "فاکتور اصلاحی", value: Number(row.corrective_invoice).toLocaleString(), icon: <FaAddressCard /> },
+    { label: "فاکتور ابطالی", value: Number(row.cancellation_invoice).toLocaleString(), icon: <FaAddressCard /> },
+    { label: "فاکتور برگشتی", value: Number(row.returned_invoice).toLocaleString(), icon: <FaAddressCard /> },
     { label: "خالص", value: null, icon: <FaUser /> },
   ];
 

@@ -13,14 +13,16 @@ export default function SendStatusDetailsModal({ isOpen, onClose, record }) {
   if (!isOpen || !record) return null;
 
   const { customer, user, ...row } = record;
+
+  console.log(`row`, row);
   const visibleFields = [
  
     { label: "وضعیت ارسال", value: row.title, icon: <FaExchangeAlt /> },
-    { label: "وضعیت ", value: row.status, icon: <FaListAlt /> },
-    { label: "فاکتور برگشتی", value: row.returned_invoice, icon: <FaListAlt /> },
-    { label: "فاکتور اصلاحی", value: row.corrective_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور اصلی", value: row?.original_invoice, icon: <FaIdCard /> },
-    { label: "فاکتور ابطالی", value: row?.cancellation_invoice, icon: <FaIdCard /> },
+    // { label: "وضعیت ", value: row.status, icon: <FaListAlt /> },
+    { label: "فاکتور برگشتی", value: Number(row.returned_invoice).toLocaleString(), icon: <FaListAlt /> },
+    { label: "فاکتور اصلاحی", value: Number(row.corrective_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور اصلی", value: Number(row?.original_invoice).toLocaleString(), icon: <FaIdCard /> },
+    { label: "فاکتور ابطالی", value: Number(row?.cancellation_invoice).toLocaleString(), icon: <FaIdCard /> },
   ];
   return (
     <div
