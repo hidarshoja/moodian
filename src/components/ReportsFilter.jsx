@@ -27,9 +27,9 @@ export default function ReportsFilter({
   const statusGroups = [
     { label: "ارسال موفق", values: ["100"] },
     { label: "ارسال شده", values: ["20"] },
-    { label: "ارسال نشده", values: ["0", "10", "-10"] },
+    { label: "ارسال نشده", values: ["0", "-10"] },
     { label: "درانتظار", values: ["10"] },
-    { label: "خطا", values: ["-80", "-90", "-10"] },
+    { label: "خطا", values: ["-80", "-90"] },
   ];
   const ensureArray = (arr) => (Array.isArray(arr) ? arr : []);
   const isGroupChecked = (groupValues) => {
