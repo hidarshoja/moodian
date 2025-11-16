@@ -29,7 +29,7 @@ const Pagination = ({ meta, pageCount, setPageCount, setLoading }) => {
   
    
       if (i > 0 && displayPages[i - 1] !== page - 1) {
-        pages.push(<span key={`ellipsis${page}`} className="px-2">...</span>);
+        pages.push(<span key={`ellipsis${page}`} className="px-2 text-white">...</span>);
       }
   
       pages.push(
