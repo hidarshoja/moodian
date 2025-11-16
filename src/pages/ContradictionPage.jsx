@@ -95,7 +95,15 @@ const [pageCount3, setPageCount3] = useState(1);
           }`}
   onClick={() => setActiveBtn("all")}
     >
-    تعیین تکلیف شده ها
+    تعیین تکلیف شده باحساب
+  </button>
+  <button
+  className={`btn-custom4 ${
+            activeBtn === "all2" ? "btn-active" : ""
+          }`}
+  onClick={() => setActiveBtn("all2")}
+    >
+    تعیین تکلیف شده بافاکتور
   </button>
 </div>
       <div className="px-3">
