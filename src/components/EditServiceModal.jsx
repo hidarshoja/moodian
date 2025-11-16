@@ -2,19 +2,7 @@ import { useState, useEffect } from "react";
 import { GrClose } from "react-icons/gr";
 import PropTypes from "prop-types";
 
-const units = [
-  { id: 0, name: "انتخاب ..." },
-  { id: 1, name: "لنگه" },
-  { id: 2, name: "عدل" },
-  { id: 3, name: "جعبه" },
-  { id: 4, name: "توپ" },
-  { id: 5, name: "ست" },
-  { id: 6, name: "دست" },
-  { id: 7, name: "کارتن" },
-  { id: 8, name: "عدد" },
-  { id: 9, name: "بسته" },
-  { id: 10, name: "پاکت" },
-];
+
 
 export default function EditServiceModal({
   isOpen,
@@ -22,6 +10,7 @@ export default function EditServiceModal({
   onEdit,
   loading,
   initialData = {},
+  units,
 }) {
   const [form, setForm] = useState({
     title: "",
@@ -53,7 +42,6 @@ export default function EditServiceModal({
     e.preventDefault();
     onEdit(form);
   };
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
@@ -114,15 +102,16 @@ export default function EditServiceModal({
               onChange={handleChange}
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              {units.map((u) => (
-                <option
-                  key={u.id}
-                  value={u.id}
-                  className={u.id === 0 ? "text-red-500" : ""}
-                >
-                  {u.name}
-                </option>
-              ))}
+             {units?.length > 0 &&
+                units?.map((u) => (
+                  <option
+                    key={u.id}
+                    value={u.id}
+                    className={u.id === 0 ? "text-red-500" : ""}
+                  >
+                    {u.title}
+                  </option>
+                ))}
             </select>
           </div>
           <div>
@@ -211,4 +200,5 @@ EditServiceModal.propTypes = {
   onEdit: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   initialData: PropTypes.object,
+  units: PropTypes.array.isRequired,
 };

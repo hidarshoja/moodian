@@ -201,6 +201,7 @@ export default function ServicesPage() {
         setRefresh = {setRefresh}
         refresh={refresh}
         loading={loading}
+        units={units} 
         />
       </div>
         <Pagination

@@ -6,19 +6,7 @@ import { CustomToastContainer } from "./CustomToast";
 import EditServiceModal from "./EditServiceModal";
 import PropTypes from "prop-types";
 
-const units = [
-  { id: 0, name: "انتخاب ..." },
-  { id: 1, name: "لنگه" },
-  { id: 2, name: "عدل" },
-  { id: 3, name: "جعبه" },
-  { id: 4, name: "توپ" },
-  { id: 5, name: "ست" },
-  { id: 6, name: "دست" },
-  { id: 7, name: "کارتن" },
-  { id: 8, name: "عدد" },
-  { id: 9, name: "بسته" },
-  { id: 10, name: "پاکت" },
-];
+
 
 function Spinner() {
   return (
@@ -33,6 +21,7 @@ export default function ServicesTable({
   setRefresh,
   refresh,
   loading,
+  units,
 }) {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [row, setRow] = useState({
@@ -293,6 +282,7 @@ export default function ServicesTable({
             setEditRowData(null);
           }}
           onEdit={handleEdit}
+          units={units} 
         />
       )}
     </div>
@@ -305,4 +295,5 @@ ServicesTable.propTypes = {
   setRefresh: PropTypes.func.isRequired,
   refresh: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
+  units: PropTypes.array.isRequired,
 };
