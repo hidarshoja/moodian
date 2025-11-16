@@ -29,7 +29,7 @@ export default function ReportsFilter({
     { label: "ارسال شده", values: ["20"] },
     { label: "ارسال نشده", values: ["0", "10", "-10"] },
     { label: "درانتظار", values: ["10"] },
-    { label: "خطا", values: ["-80", "-90"] },
+    { label: "خطا", values: ["-80", "-90", "-10"] },
   ];
   const ensureArray = (arr) => (Array.isArray(arr) ? arr : []);
   const isGroupChecked = (groupValues) => {
@@ -152,15 +152,18 @@ export default function ReportsFilter({
                       key={grp.label}
                       className="flex items-center gap-2 text-[10px] text-gray-100"
                     >
-                      <input
-                        type="checkbox"
-                        className="accent-blue-500 appearance-none w-10 h-5 bg-gray-300 rounded-full relative outline-none cursor-pointer transition-colors checked:bg-indigo-900"
-                        checked={!!checked}
-                        onChange={() => handleGroupToggle(grp.values)}
-                        style={{
-                          backgroundColor: checked ? "#1e1b4b" : undefined,
-                        }}
-                      />
+                      <span className="inline-flex items-center">
+                        <input
+                          type="checkbox"
+                          className="peer sr-only"
+                          checked={!!checked}
+                          onChange={() => handleGroupToggle(grp.values)}
+                        />
+                        <span
+                          className="relative w-12 h-6 rounded-full bg-gray-300 transition-colors peer-checked:bg-indigo-900 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6"
+                          dir="rtl"
+                        />
+                      </span>
                       <span>{grp.label}</span>
                     </label>
                   );
