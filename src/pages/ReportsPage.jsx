@@ -22,7 +22,7 @@ export default function ReportsPage() {
   const [meta4, setMeta4] = useState({});
   const [filterTable, setFilterTable] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState([]);
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -49,7 +49,9 @@ export default function ReportsPage() {
           } else if (key.startsWith("f[indatim]") && filterRemove) {
             params.push(`${key}=${encodeURIComponent(value)}`);
           } else if (filterRemove) {
-            params.push(`f[${key}]=${encodeURIComponent(value)}`);
+            const encodedValue =
+              key === "status" ? value : encodeURIComponent(value);
+            params.push(`f[${key}]=${encodedValue}`);
           }
         }
       });
@@ -89,6 +91,11 @@ export default function ReportsPage() {
     if (statusId) {
       query += `&f[status]=${statusId}`;
     }
+
+    console.log(
+      `/report/invoice/ins-summery?page=${pageCount}${query}`,
+      `/report/invoice/ins-summery?page=${pageCount}${query}`
+    );
     axiosClient
       .get(`/report/invoice/ins-summery?page=${pageCount}${query}`)
       .then((response) => {
@@ -146,6 +153,7 @@ export default function ReportsPage() {
     setStartDate(null);
     setEndDate(null);
     setFilterRemove(false);
+    setStatus([]);
     setFromMonth(null);
     setToMonth(null);
   };
@@ -176,7 +184,7 @@ export default function ReportsPage() {
     const newFilters = {
       "f[indatim][min]": minDate,
       "f[indatim][max]": maxDate,
-      status: status || "",
+      status: Array.isArray(status) && status.length ? status.join(",") : "",
     };
 
     setActiveFilters(newFilters);

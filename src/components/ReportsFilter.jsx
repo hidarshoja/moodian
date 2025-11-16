@@ -2,6 +2,7 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function ReportsFilter({
   startDate,
@@ -19,18 +20,32 @@ export default function ReportsFilter({
   setStartDate,
   setEndDate,
   setFromMonth,
-  setToMonth
+  setToMonth,
 }) {
   const [activeTab, setActiveTab] = useState("day");
-  const statusOptions = [
-    { label: "یافت نشد", value: -90 },
-    { label: "ناموفق توسط مالیات", value: -80 },
-    { label: "ناموفق ارسال به مالیات", value: -10 },
-    { label: "جدید", value: 0 },
-    { label: "در انتظار ارسال به مالیات", value: 10 },
-    { label: "در انتظار مالیات", value: 20 },
-    { label: "تایید شده", value: 100 },
+  // گروه‌های موردنظر مطابق تصویر
+  const statusGroups = [
+    { label: "ارسال موفق", values: ["100"] },
+    { label: "ارسال شده", values: ["20"] },
+    { label: "ارسال نشده", values: ["0", "10", "-10"] },
+    { label: "درانتظار", values: ["10"] },
+    { label: "خطا", values: ["-80", "-90"] },
   ];
+  const ensureArray = (arr) => (Array.isArray(arr) ? arr : []);
+  const isGroupChecked = (groupValues) => {
+    const current = ensureArray(status);
+    return groupValues.every((v) => current.includes(v));
+  };
+  const handleGroupToggle = (groupValues) => {
+    const current = ensureArray(status);
+    const allSelected = groupValues.every((v) => current.includes(v));
+    if (allSelected) {
+      setStatus(current.filter((v) => !groupValues.includes(v)));
+    } else {
+      const merged = Array.from(new Set([...current, ...groupValues]));
+      setStatus(merged);
+    }
+  };
   return (
     <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
       <div className="border  rounded-md border-white w-full  p-1 flex flex-col gap-1">
@@ -55,7 +70,6 @@ export default function ReportsFilter({
               setActiveTab("month");
               setStartDate(null);
               setEndDate(null);
-              
             }}
           >
             فیلتر براساس ماه
@@ -126,28 +140,42 @@ export default function ReportsFilter({
             </div>
           )}
           <div className="flex gap-2 w-full md:w-1/2">
-            <div className="flex flex-col  gap-2 w-1/3">
-              <span className="text-[10px]  text-gray-100">وضعیت</span>
-              <select
-                className="border rounded px-2 py-[2px] text-[10px] bg-gray-400"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">همه وضعیت‌ها</option>
-                {statusOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+            <div className="flex flex-col gap-2 w-1/2">
+              <span className="text-[10px] text-gray-100">
+                وضعیت (چند انتخابی)
+              </span>
+              <div className="flex flex-wrap gap-3">
+                {statusGroups.map((grp) => {
+                  const checked = isGroupChecked(grp.values);
+                  return (
+                    <label
+                      key={grp.label}
+                      className="flex items-center gap-2 text-[10px] text-gray-100"
+                    >
+                      <input
+                        type="checkbox"
+                        className="accent-blue-500 appearance-none w-10 h-5 bg-gray-300 rounded-full relative outline-none cursor-pointer transition-colors checked:bg-indigo-900"
+                        checked={!!checked}
+                        onChange={() => handleGroupToggle(grp.values)}
+                        style={{
+                          backgroundColor: checked ? "#1e1b4b" : undefined,
+                        }}
+                      />
+                      <span>{grp.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex items-center gap-2 w-1/3 justify-end">
+            <div className="flex items-center gap-2 w-1/4 justify-end">
               <button onClick={onClearAll} className="btn-custom">
                 پاک کردن فیلترها
               </button>
             </div>
-            <div className="flex items-center gap-2 w-1/3 justify-end">
-              <button onClick={onSendAll} className="btn-custom">اعمال فیلترها</button>
+            <div className="flex items-center gap-2 w-1/4 justify-end">
+              <button onClick={onSendAll} className="btn-custom">
+                اعمال فیلترها
+              </button>
             </div>
           </div>
         </div>
@@ -155,3 +183,22 @@ export default function ReportsFilter({
     </div>
   );
 }
+
+ReportsFilter.propTypes = {
+  startDate: PropTypes.any,
+  endDate: PropTypes.any,
+  fromMonth: PropTypes.any,
+  toMonth: PropTypes.any,
+  onStartDateChange: PropTypes.func.isRequired,
+  onEndDateChange: PropTypes.func.isRequired,
+  onFromMonthChange: PropTypes.func.isRequired,
+  onToMonthChange: PropTypes.func.isRequired,
+  onClearAll: PropTypes.func.isRequired,
+  status: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setStatus: PropTypes.func.isRequired,
+  onSendAll: PropTypes.func.isRequired,
+  setStartDate: PropTypes.func.isRequired,
+  setEndDate: PropTypes.func.isRequired,
+  setFromMonth: PropTypes.func.isRequired,
+  setToMonth: PropTypes.func.isRequired,
+};
