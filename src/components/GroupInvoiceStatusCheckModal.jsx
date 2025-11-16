@@ -2,6 +2,7 @@ import  { useState , useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import axiosClient from "../axios-client";
 import {convertToPersianDate} from "../utils/change-date";
+
 import Swal from "sweetalert2";
 
 const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
@@ -57,8 +58,11 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         <table style="width:100%; text-align:center; border-collapse: collapse;">
           <thead>
             <tr style="background:#f0f0f0;">
-            <th style="padding:8px; border:1px solid #ccc;">Status</th>
-            <th style="padding:8px; border:1px solid #ccc;">Reference Number</th>
+            <th style="padding:8px; border:1px solid #ccc;">وضعیت</th>
+            <th style="padding:8px; border:1px solid #ccc;">شماره پیگیری</th>
+               <th style="padding:8px; border:1px solid #ccc;">نام مشتری</th>
+               <th style="padding:8px; border:1px solid #ccc;">تاریخ </th>
+               <th style="padding:8px; border:1px solid #ccc;">مبلغ</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +72,9 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
                 <tr>
                 <td style="padding:8px; border:1px solid #ccc;">${item.status}</td>
                   <td style="padding:8px; border:1px solid #ccc;">${item.referenceNumber}</td>
+                  <td style="padding:8px; border:1px solid #ccc;">${item?.invoice?.customer?.name} - ${item?.invoice?.customer?.last_name}</td>
+                  <td style="padding:8px; border:1px solid #ccc;">${convertToPersianDate(item?.invoice?.indatim)}</td>
+                  <td style="padding:8px; border:1px solid #ccc;">${Number(item?.invoice?.tadis).toLocaleString()}</td>
                 </tr>`
               )
               .join("")}
@@ -122,6 +129,7 @@ onClose();
 
   if (!isOpen) return null;
 console.log(`invoiceData`, invoiceData);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/50">
       <div
@@ -172,8 +180,8 @@ console.log(`invoiceData`, invoiceData);
                     <input
                       type="checkbox"
                       // بعدا در این دو خط به جای سریال نامبر رفرنس نامبر باید بزارم
-                      checked={selectedInvoices.has(invoice.serial_number)}
-                      onChange={() => handleCheckboxChange(invoice.serial_number)}
+                      checked={selectedInvoices.has(invoice.reference_number)}
+                      onChange={() => handleCheckboxChange(invoice.reference_number)}
                       className="w-5 h-5 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
                     />
                   </label>
