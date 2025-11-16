@@ -23,27 +23,22 @@ export default function ReportsFilter({
   setToMonth,
 }) {
   const [activeTab, setActiveTab] = useState("day");
-  // گروه‌های موردنظر مطابق تصویر
-  const statusGroups = [
-    { label: "ارسال موفق", values: ["100"] },
-    { label: "ارسال شده", values: ["20"] },
-    { label: "ارسال نشده", values: ["0", "-10"] },
-    { label: "درانتظار", values: ["10"] },
-    { label: "خطا", values: ["-80", "-90"] },
+  // گزینه‌های وضعیت دقیق مطابق خواسته شما
+  const statusOptions = [
+    { label: "یافت نشد", value: "-90" },
+    { label: "ناموفق توسط مالیات", value: "-80" },
+    { label: "ناموفق ارسال به مالیات", value: "-10" },
+    { label: "جدید", value: "0" },
+    { label: "در انتظار ارسال به مالیات", value: "10" },
+    { label: "در انتظار مالیات", value: "20" },
+    { label: "تایید شده", value: "100" },
   ];
-  const ensureArray = (arr) => (Array.isArray(arr) ? arr : []);
-  const isGroupChecked = (groupValues) => {
-    const current = ensureArray(status);
-    return groupValues.every((v) => current.includes(v));
-  };
-  const handleGroupToggle = (groupValues) => {
-    const current = ensureArray(status);
-    const allSelected = groupValues.every((v) => current.includes(v));
-    if (allSelected) {
-      setStatus(current.filter((v) => !groupValues.includes(v)));
+  const handleStatusToggle = (value) => {
+    const current = Array.isArray(status) ? status : [];
+    if (current.includes(value)) {
+      setStatus(current.filter((v) => v !== value));
     } else {
-      const merged = Array.from(new Set([...current, ...groupValues]));
-      setStatus(merged);
+      setStatus([...current, value]);
     }
   };
   return (
@@ -145,11 +140,12 @@ export default function ReportsFilter({
                 وضعیت (چند انتخابی)
               </span>
               <div className="flex flex-wrap gap-3">
-                {statusGroups.map((grp) => {
-                  const checked = isGroupChecked(grp.values);
+                {statusOptions.map((opt) => {
+                  const checked =
+                    Array.isArray(status) && status.includes(opt.value);
                   return (
                     <label
-                      key={grp.label}
+                      key={opt.value}
                       className="flex items-center gap-2 text-[10px] text-gray-100"
                     >
                       <span className="inline-flex items-center">
@@ -157,14 +153,14 @@ export default function ReportsFilter({
                           type="checkbox"
                           className="peer sr-only"
                           checked={!!checked}
-                          onChange={() => handleGroupToggle(grp.values)}
+                          onChange={() => handleStatusToggle(opt.value)}
                         />
                         <span
                           className="relative w-12 h-6 rounded-full bg-gray-300 transition-colors peer-checked:bg-indigo-900 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6"
                           dir="rtl"
                         />
                       </span>
-                      <span>{grp.label}</span>
+                      <span>{opt.label}</span>
                     </label>
                   );
                 })}
