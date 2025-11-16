@@ -58,11 +58,11 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
         <table style="width:100%; text-align:center; border-collapse: collapse;">
           <thead>
             <tr style="background:#f0f0f0;">
-            <th style="padding:8px; border:1px solid #ccc;">وضعیت</th>
-            <th style="padding:8px; border:1px solid #ccc;">شماره پیگیری</th>
-               <th style="padding:8px; border:1px solid #ccc;">نام مشتری</th>
-               <th style="padding:8px; border:1px solid #ccc;">تاریخ </th>
-               <th style="padding:8px; border:1px solid #ccc;">مبلغ</th>
+            <th style="padding:4px; border:1px solid #ccc;">وضعیت</th>
+            <th style="padding:4px; border:1px solid #ccc;">شماره پیگیری</th>
+               <th style="padding:4px; border:1px solid #ccc;">نام مشتری</th>
+               <th style="padding:4px; border:1px solid #ccc;">تاریخ </th>
+               <th style="padding:4px; border:1px solid #ccc;">مبلغ</th>
             </tr>
           </thead>
           <tbody>
@@ -70,11 +70,11 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
               .map(
                 (item) => `
                 <tr>
-                <td style="padding:8px; border:1px solid #ccc;">${item.status}</td>
-                  <td style="padding:8px; border:1px solid #ccc;">${item.referenceNumber}</td>
-                  <td style="padding:8px; border:1px solid #ccc;">${item?.invoice?.customer?.name} - ${item?.invoice?.customer?.last_name}</td>
-                  <td style="padding:8px; border:1px solid #ccc;">${convertToPersianDate(item?.invoice?.indatim)}</td>
-                  <td style="padding:8px; border:1px solid #ccc;">${Number(item?.invoice?.tadis).toLocaleString()}</td>
+                <td style="padding:4px; border:1px solid #ccc; font-size:12px">${item.status}</td>
+                  <td style="padding:4px; border:1px solid #ccc; font-size:12px">${item.referenceNumber}</td>
+                  <td style="padding:4px; border:1px solid #ccc; font-size:12px">${item?.invoice?.customer?.name} - ${item?.invoice?.customer?.last_name}</td>
+                  <td style="padding:4px; border:1px solid #ccc; font-size:12px">${convertToPersianDate(item?.invoice?.indatim)}</td>
+                  <td style="padding:4px; border:1px solid #ccc; font-size:12px">${Number(item?.invoice?.tadis).toLocaleString()}</td>
                 </tr>`
               )
               .join("")}
