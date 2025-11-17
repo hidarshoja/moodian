@@ -20,9 +20,7 @@ export default function BillPage() {
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
-  const [invoiceDetails, setInvoiceDetails] = useState(null);
-  
-  const [statusId, setStatusId] = useState(null);
+ 
   const [filterRemove, setFilterRemove] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
 
@@ -57,10 +55,7 @@ export default function BillPage() {
       query += `&f[customer_id]=${selectedCustomerId}`;
     }
    
-  
-    if (statusId) {
-      query += `&f[status]=${statusId}`;
-    }
+ 
 
    
     axiosClient
@@ -143,16 +138,6 @@ export default function BillPage() {
     setActiveFilters(newFilters);
   };
 
-  const handleSearchTermChange = (term) => {
-    setSearchTerm(term);
-  };
-
-
-
-
-
-
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
@@ -178,10 +163,6 @@ export default function BillPage() {
       />
      
       <div className="mt-6">
-       
-      
-       
-        
           <>
             <BillRecordsTable
               records={filteredData}
@@ -198,13 +179,11 @@ export default function BillPage() {
             />
           </>
        
-        
-
-        {isInvoiceDetailsOpen && invoiceDetails && (
+        {isInvoiceDetailsOpen &&  (
           <InvoiceDetailsModal
             isOpen={isInvoiceDetailsOpen}
             onClose={() => setIsInvoiceDetailsOpen(false)}
-            data={invoiceDetails}
+          //  data={invoiceDetails}
           />
         )}
       </div>

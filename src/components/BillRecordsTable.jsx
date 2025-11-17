@@ -9,8 +9,6 @@ export default function BillRecordsTable({
   loading,
   selectedCustomerId,
   setSelectedCustomerId,
-
-  setSelectedCustomer,
 }) {
   const [openDetail, setOpenDetail] = useState(null);
 
