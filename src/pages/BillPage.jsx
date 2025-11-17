@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SearchFilterBarBill from "../components/SearchFilterBarBill";
 import ReportsFilterBill from "../components/ReportsFilterBill";
-import CustomersRecordsTable from "../components/CustomersRecordsTable";
+import BillRecordsTable from "../components/BillRecordsTable";
 import axiosClient from "../axios-client";
 import Pagination from "../components/Pagination";
 import InvoiceDetailsModal from "../components/InvoiceDetailsModal";
@@ -15,17 +15,14 @@ export default function BillPage() {
   const [dataTable, setDataTable] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // جدید
   const [meta, setMeta] = useState({});
-  const [filterTable, setFilterTable] = useState("مشتری");
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState([]);
   const [fromMonth, setFromMonth] = useState(null);
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [selectedProductId, setSelectedProductId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
-  const [stemId, setStemId] = useState(null);
+  
   const [statusId, setStatusId] = useState(null);
   const [filterRemove, setFilterRemove] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
@@ -60,12 +57,8 @@ export default function BillPage() {
     if (selectedCustomerId) {
       query += `&f[customer_id]=${selectedCustomerId}`;
     }
-    if (selectedProductId) {
-      query += `&f[items.product_id]=${selectedProductId}`;
-    }
-    if (stemId) {
-      query += `&f[setm]=${stemId}`;
-    }
+   
+  
     if (statusId) {
       query += `&f[status]=${statusId}`;
     }
@@ -83,7 +76,7 @@ export default function BillPage() {
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFilters, pageCount, filterTable, filterRemove]);
+  }, [activeFilters, pageCount, filterRemove]);
 
   // فیلتر کردن داده‌ها بر اساس searchTerm
   useEffect(() => {
@@ -109,13 +102,6 @@ export default function BillPage() {
     setEndDate(selectedDate);
   };
 
-  const handleFromMonthChange = (selectedDate) => {
-    setFromMonth(selectedDate);
-  };
-
-  const handleToMonthChange = (selectedDate) => {
-    setToMonth(selectedDate);
-  };
 
   const handleClearAll = () => {
     setStartDate(null);
@@ -177,24 +163,19 @@ export default function BillPage() {
           <p className="text-white/60 text-sm mt-1">نمای کلی صورتحساب کاربران</p>
         </div>
       </div>
-      <div>
+      <div className="p-2">
       <ReportsFilterBill
         startDate={startDate}
         endDate={endDate}
-        fromMonth={fromMonth}
-        toMonth={toMonth}
+        
         onStartDateChange={handleStartDateChange}
         onEndDateChange={handleEndDateChange}
-        onFromMonthChange={handleFromMonthChange}
-        onToMonthChange={handleToMonthChange}
+       
         onClearAll={handleClearAll}
         setStatus={setStatus}
         status={status}
         onSendAll={handleSendAll}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        setFromMonth={setFromMonth}
-        setToMonth={setToMonth}
+        
       />
       <div className="mt-3">
         <SearchFilterBarBill
@@ -204,23 +185,16 @@ export default function BillPage() {
         />
       </div>
       <div className="mt-6">
-        {filterTable === "" && (
+       
+      
+       
+        
           <>
-            <div className="text-white/60 text-sm mt-1 flex justify-center items-center h-full border border-white/10 rounded-2xl p-4 ">
-              <p className="text-white/60 text-sm py-10">
-                لطفا یک فیلتر را انتخاب کنید
-              </p>
-            </div>
-          </>
-        )}
-        {filterTable === "مشتری" && (
-          <>
-            <CustomersRecordsTable
+            <BillRecordsTable
               records={filteredData}
               loading={loading}
               selectedCustomerId={selectedCustomerId}
               setSelectedCustomerId={setSelectedCustomerId}
-              setSelectedCustomer={setSelectedCustomer}
             />
 
             <Pagination
@@ -230,7 +204,7 @@ export default function BillPage() {
               setLoading={setLoading}
             />
           </>
-        )}
+       
         
 
         {isInvoiceDetailsOpen && invoiceDetails && (

@@ -1,29 +1,23 @@
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { useState } from "react";
+
 import PropTypes from "prop-types";
 
 export default function ReportsFilterBill({
   startDate,
   endDate,
-  fromMonth,
-  toMonth,
+ 
   onStartDateChange,
   onEndDateChange,
-  onFromMonthChange,
-  onToMonthChange,
+
   onClearAll,
   status,
   setStatus,
   onSendAll,
-  setStartDate,
-  setEndDate,
-  setFromMonth,
-  setToMonth,
+
 }) {
-  const [activeTab, setActiveTab] = useState("day");
-  // گزینه‌های وضعیت دقیق مطابق خواسته شما
+
   const statusOptions = [
     { label: "یافت نشد", value: "-90" },
     { label: "ناموفق توسط مالیات", value: "-80" },
@@ -47,7 +41,7 @@ export default function ReportsFilterBill({
       
         <div className="flex flex-col md:flex-row gap-2 w-full p-2">
           {/* فیلتر براساس روز */}
-          {activeTab === "day" && (
+          
             <div className="flex gap-2 w-full md:w-1/2">
               <div className="input_date w-full md:w-1/2">
                 <span className="block text-gray-100 text-[10px] mb-2">
@@ -76,7 +70,7 @@ export default function ReportsFilterBill({
                 />
               </div>
             </div>
-          )}
+         
       
           <div className="flex gap-2 w-full ">
             <div className="flex flex-col gap-2 ">
