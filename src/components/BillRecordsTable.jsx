@@ -31,7 +31,7 @@ export default function BillRecordsTable({
       >
         <thead>
           <tr className="text-white/80 text-sm">
-            <th className="text-right px-4 py-3 whitespace-nowrap">
+            <th className="text-right px-4 py-4 whitespace-nowrap">
               #
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
@@ -68,6 +68,8 @@ export default function BillRecordsTable({
                 key={i}
                 className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
                   selectedCustomerId === r.id ? "klickBtnTD" : ""
+                } ${
+                  r?.coefficient === 1 ? "text-emerald-600" : "text-rose-600"
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -77,34 +79,32 @@ export default function BillRecordsTable({
                 style={{ cursor: "pointer" }}
               >
                 <td
-                  className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer  hover:text-blue-300"
+                  className="px-4 py-3  text-sm whitespace-nowrap cursor-pointer "
               
                 >
                   {r?.id}
                 </td>
-                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                <td className="px-4 py-3  text-sm whitespace-nowrap">
                   {r?.provider_label}
                 </td>
                 <td
-  className={`px-4 py-3 text-sm whitespace-nowrap ${
-    r?.coefficient === 1 ? "text-green-500" : "text-red-500"
-  }`}
+  className={`px-4 py-3 text-sm whitespace-nowrap `}
 >
   {r?.coefficient === 1 ? "واریز" : "برداشت"}
 </td>
-                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                <td className="px-4 py-3  text-sm whitespace-nowrap">
                   {r?.bank_label}
                 </td>
-                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+                <td className="px-4 py-3  text-sm truncate max-w-[200px]">
                   {new Intl.NumberFormat("fa-IR").format(
                     r?.amount
                   )}
                 </td>
-                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
+                <td className="px-4 py-3  text-sm truncate max-w-[200px]">
                   {convertToPersianDate(r?.date)}
                 </td>
-                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">{r?.status_label}  </td>
-                <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">{r?.tracking_code}</td>
+                <td className="px-4 py-3  text-sm truncate max-w-[200px]">{r?.status_label}  </td>
+                <td className="px-4 py-3  text-sm truncate max-w-[200px]">{r?.tracking_code}</td>
               </tr>
             ))}
         </tbody>
