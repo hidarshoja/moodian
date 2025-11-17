@@ -34,15 +34,15 @@ export default function ReportsFilterBill({
     }
   };
   return (
-    <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-2 mt-2 flex flex-col lg:flex-row gap-1 ">
-      <div className="border  rounded-md border-white w-full  p-1 flex flex-col gap-1">
-        <div className="flex flex-col md:flex-row gap-2 w-full p-2">
-          {/* فیلتر براساس روز */}
-
-          <div className="flex gap-2 w-full md:w-1/2">
-            <div className="input_date w-full md:w-1/2">
-              <span className="block text-gray-100 text-[10px] mb-2">
-                تاریخ شروع{" "}
+    <div className="w-full rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all p-3 sm:p-4 mt-2">
+      <div className="border rounded-lg border-white/20 w-full p-3 sm:p-4 flex flex-col gap-4">
+        {/* ردیف اول: تاریخ‌ها و نوع تراکنش */}
+        <div className="flex flex-col lg:flex-row gap-3 w-full">
+          {/* تاریخ شروع و پایان */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-1/2">
+            <div className="input_date w-full sm:w-1/2">
+              <span className="block text-gray-100 text-xs sm:text-sm mb-2 font-medium">
+                تاریخ شروع
               </span>
               <DatePicker
                 calendar={persian}
@@ -53,9 +53,9 @@ export default function ReportsFilterBill({
                 inputClass="custom-input"
               />
             </div>
-            <div className="input_date w-full md:w-1/2">
-              <span className="block text-gray-100 text-[10px] mb-2">
-                تاریخ پایان{" "}
+            <div className="input_date w-full sm:w-1/2">
+              <span className="block text-gray-100 text-xs sm:text-sm mb-2 font-medium">
+                تاریخ پایان
               </span>
               <DatePicker
                 calendar={persian}
@@ -67,9 +67,10 @@ export default function ReportsFilterBill({
               />
             </div>
           </div>
-          <div className="flex gap-2 w-full md:w-1/2">
+          {/* نوع تراکنش */}
+          <div className="flex gap-3 w-full lg:w-1/2">
             <div className="w-full">
-              <span className="block text-gray-100 text-[10px] mb-2">
+              <span className="block text-gray-100 text-xs sm:text-sm mb-2 font-medium">
                 نوع تراکنش
               </span>
               <select
@@ -83,52 +84,57 @@ export default function ReportsFilterBill({
               </select>
             </div>
           </div>
+        </div>
 
-          <div className="flex gap-2 w-full ">
-            <div className="flex flex-col gap-2 ">
-              <span className="text-[10px] text-gray-100">
-                وضعیت (چند انتخابی)
-              </span>
-              <div className="flex flex-wrap gap-3">
-                {statusOptions.map((opt) => {
-                  const checked =
-                    Array.isArray(status) && status.includes(opt.value);
-                  return (
-                    <label
-                      key={opt.value}
-                      className="flex items-center gap-2 text-[10px] text-gray-100"
-                    >
-                      <span className="inline-flex items-center">
-                        <input
-                          type="checkbox"
-                          className="peer sr-only"
-                          checked={!!checked}
-                          onChange={() => handleStatusToggle(opt.value)}
-                        />
-                        <span
-                          className="relative w-12 h-6 rounded-full bg-gray-300 transition-colors peer-checked:bg-indigo-900 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6"
-                          dir="rtl"
-                        />
-                      </span>
-                      <span>{opt.label}</span>
-                    </label>
-                  );
-                })}
-              </div>
+        {/* ردیف دوم: وضعیت */}
+        <div className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-3">
+            <span className="text-xs sm:text-sm text-gray-100 font-medium">
+              وضعیت (چند انتخابی)
+            </span>
+            <div className="flex flex-wrap gap-3 sm:gap-4">
+              {statusOptions.map((opt) => {
+                const checked =
+                  Array.isArray(status) && status.includes(opt.value);
+                return (
+                  <label
+                    key={opt.value}
+                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-100 cursor-pointer hover:text-white transition-colors"
+                  >
+                    <span className="inline-flex items-center">
+                      <input
+                        type="checkbox"
+                        className="peer sr-only"
+                        checked={!!checked}
+                        onChange={() => handleStatusToggle(opt.value)}
+                      />
+                      <span
+                        className="relative w-12 h-6 rounded-full bg-gray-300 transition-colors peer-checked:bg-indigo-900 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6"
+                        dir="rtl"
+                      />
+                    </span>
+                    <span className="whitespace-nowrap">{opt.label}</span>
+                  </label>
+                );
+              })}
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center justify-end mt-6 gap-2 p-2">
-          <div className="flex items-center gap-2 justify-end">
-            <button onClick={onClearAll} className="btn-custom">
-              پاک کردن فیلترها
-            </button>
-          </div>
-          <div className="flex items-center gap-2  justify-end">
-            <button onClick={onSendAll} className="btn-custom">
-              اعمال فیلترها
-            </button>
-          </div>
+
+        {/* دکمه‌های عملیات */}
+        <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-2 border-t border-white/10">
+          <button
+            onClick={onClearAll}
+            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium"
+          >
+            پاک کردن فیلترها
+          </button>
+          <button
+            onClick={onSendAll}
+            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium"
+          >
+            اعمال فیلترها
+          </button>
         </div>
       </div>
     </div>
