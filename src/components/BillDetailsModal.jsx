@@ -1,39 +1,87 @@
+import { useMemo } from "react";
+import PropTypes from "prop-types";
 import { GrClose } from "react-icons/gr";
-import { FaUniversity } from "react-icons/fa";
-import { BiMoneyWithdraw } from "react-icons/bi";
+import {
+  FaUniversity,
+  FaCalendarAlt,
+  FaMoneyBillAlt,
+  FaAddressCard,
+  FaBuilding,
+} from "react-icons/fa";
+import { BiMoneyWithdraw, BiWalletAlt } from "react-icons/bi";
 import { AiOutlineBank } from "react-icons/ai";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaMoneyBillAlt } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { FiHash } from "react-icons/fi";
 import { MdAccountBalanceWallet } from "react-icons/md";
-import { FaAddressCard } from "react-icons/fa";
-import { FaBuilding } from "react-icons/fa";
-import { BiWalletAlt } from "react-icons/bi";
-import {
-  convertToPersianDate
-} from "../utils/change-date";
+import { convertToPersianDate } from "../utils/change-date";
 
 export default function BillDetailsModal({ isOpen, onClose, record }) {
-  if (!isOpen || !record) return null;
+  const visibleFields = useMemo(() => {
+    if (!record) return [];
 
-  const { customer, user, ...row } = record;
-console.log(`row`, row);
-  const visibleFields = [
-    { label: "سرویس دهنده", value: row.provider_label, icon: <FaUniversity /> },
-    { label: "واریز/برداشت", value: row.coefficient === 1 ? "واریز" : "برداشت", icon: <BiMoneyWithdraw /> },
-    { label: "بانک", value: row?.bank_label, icon: <AiOutlineBank /> },
-    { label: "تاریخ تراکنش", value: convertToPersianDate(row?.date), icon: <FaCalendarAlt /> },
-    { label: "مبلغ", value: Number(row.amount).toLocaleString(), icon: <FaMoneyBillAlt /> },
-    { label: "توضیحات", value: row?.description, icon: <IoDocumentTextOutline  /> },
-    { label: "وضعیت", value: row?.status_label, icon: <HiOutlineStatusOnline  /> },
-    { label: "کدپیگیری", value: row?.tracking_code, icon: <FiHash /> },
-    { label: "اکانت مبدا", value: row?.source_account, icon: <MdAccountBalanceWallet /> },
-    { label: "اکانت مقصد", value: row?.destination_account, icon: <FaAddressCard /> },
-    { label: "کدشعبه", value: row?.branch_code, icon: <FaBuilding /> },
-    { label: "موجودی بعد از تراکنش", value: Number(row?.balance).toLocaleString(), icon: <BiWalletAlt /> },
-  ];
+    const row = record;
+    const isDeposit = row.coefficient === 1;
+    const transactionType = isDeposit ? "واریز" : "برداشت";
+
+    const fields = [
+      {
+        label: "سرویس دهنده",
+        value: row.provider_label,
+        icon: <FaUniversity />,
+      },
+      {
+        label: "واریز/برداشت",
+        value: transactionType,
+        icon: <BiMoneyWithdraw />,
+        color: isDeposit ? "text-green-400" : "text-red-400",
+      },
+      { label: "بانک", value: row?.bank_label, icon: <AiOutlineBank /> },
+      {
+        label: "تاریخ تراکنش",
+        value: convertToPersianDate(row?.date),
+        icon: <FaCalendarAlt />,
+      },
+      {
+        label: "مبلغ",
+        value: Number(row.amount).toLocaleString(),
+        icon: <FaMoneyBillAlt />,
+      },
+      {
+        label: "توضیحات",
+        value: row?.description,
+        icon: <IoDocumentTextOutline />,
+      },
+      {
+        label: "وضعیت",
+        value: row?.status_label,
+        icon: <HiOutlineStatusOnline />,
+      },
+      { label: "کدپیگیری", value: row?.tracking_code, icon: <FiHash /> },
+      {
+        label: "اکانت مبدا",
+        value: row?.source_account,
+        icon: <MdAccountBalanceWallet />,
+      },
+      {
+        label: "اکانت مقصد",
+        value: row?.destination_account,
+        icon: <FaAddressCard />,
+      },
+      { label: "کدشعبه", value: row?.branch_code, icon: <FaBuilding /> },
+      {
+        label: "موجودی بعد از تراکنش",
+        value: Number(row?.balance).toLocaleString(),
+        icon: <BiWalletAlt />,
+      },
+    ];
+
+    return fields.filter(
+      (f) => f.value !== null && f.value !== undefined && f.value !== ""
+    );
+  }, [record]);
+
+  if (!isOpen || !record) return null;
 
   return (
     <div
@@ -48,7 +96,9 @@ console.log(`row`, row);
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <div className="flex items-center gap-3">
             <FaUniversity className="text-blue-400 w-5 h-5" />
-            <span className="text-white text-lg font-bold">جزئیات صورتحساب</span>
+            <span className="text-white text-lg font-bold">
+              جزئیات صورتحساب
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -57,30 +107,32 @@ console.log(`row`, row);
             <GrClose className="w-5 h-5" />
           </button>
         </div>
+
         {/* Content */}
         <div className="px-6 py-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {visibleFields
-              .filter(
-                (f) =>
-                  f.value !== null && f.value !== undefined && f.value !== ""
-              )
-              .map((field, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+            {visibleFields.map((field, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+              >
+                <span className="flex items-center gap-2 text-white/70 text-sm">
+                  {field.icon}
+                  {field.label}:
+                </span>
+                <span
+                  className={`font-medium text-left text-sm ${
+                    field.color || "text-white"
+                  }`}
+                  dir="auto"
                 >
-                  <span className="flex items-center gap-2 text-white/70 text-sm">
-                    {field.icon}
-                    {field.label}:
-                  </span>
-                  <span className="text-white font-medium text-left text-sm" dir="auto">
-                    {field.value}
-                  </span>
-                </div>
-              ))}
+                  {field.value}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
+
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 px-6 pb-6 pt-4 border-t border-white/10">
           <button
@@ -94,3 +146,9 @@ console.log(`row`, row);
     </div>
   );
 }
+
+BillDetailsModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  record: PropTypes.object,
+};
