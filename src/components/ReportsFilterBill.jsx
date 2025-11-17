@@ -19,13 +19,9 @@ export default function ReportsFilterBill({
   onTrackingCodeChange,
 }) {
   const statusOptions = [
-    { label: "یافت نشد", value: "-90" },
-    { label: "ناموفق توسط مالیات", value: "-80" },
-    { label: "ناموفق ارسال به مالیات", value: "-10" },
-    { label: "جدید", value: "0" },
-    { label: "در انتظار ارسال به مالیات", value: "10" },
-    { label: "در انتظار مالیات", value: "20" },
-    { label: "تایید شده", value: "100" },
+    { label: "ناموفق", value: "-100" },
+    { label: "در انتظار", value: "30" },
+    { label: "موفق", value: "100" },
   ];
   const handleStatusToggle = (value) => {
     const current = Array.isArray(status) ? status : [];
