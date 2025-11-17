@@ -47,17 +47,7 @@ export default function BillPage() {
 
   useEffect(() => {
     setLoading(true);
-
-   
-
     let query = buildFilterQuery(activeFilters) ;
-    if (selectedCustomerId) {
-      query += `&f[customer_id]=${selectedCustomerId}`;
-    }
-   
- 
-
-   
     axiosClient
       .get(`/transactions?page=${pageCount}${query}`)
       .then((response) => {
