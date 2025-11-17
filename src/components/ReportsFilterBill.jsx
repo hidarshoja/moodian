@@ -15,6 +15,8 @@ export default function ReportsFilterBill({
   onSendAll,
   transactionType,
   onTransactionTypeChange,
+  trackingCode,
+  onTrackingCodeChange,
 }) {
   const statusOptions = [
     { label: "یافت نشد", value: "-90" },
@@ -67,21 +69,33 @@ export default function ReportsFilterBill({
               />
             </div>
           </div>
-          {/* نوع تراکنش */}
-          <div className="flex gap-3 w-full lg:w-1/2">
-            <div className="w-full">
+          {/* نوع تراکنش و کد رهگیری */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-1/2">
+            <div className="w-full sm:w-1/2">
               <span className="block text-gray-100 text-xs sm:text-sm mb-2 font-medium">
                 نوع تراکنش
               </span>
               <select
                 value={transactionType}
                 onChange={(e) => onTransactionTypeChange(e.target.value)}
-                className="custom-input w-full"
+                className="custom-input"
               >
                 <option value="all">همه</option>
                 <option value="deposit">واریز</option>
                 <option value="withdrawal">برداشت</option>
               </select>
+            </div>
+            <div className="w-full sm:w-1/2">
+              <span className="block text-gray-100 text-xs sm:text-sm mb-2 font-medium">
+                کد رهگیری
+              </span>
+              <input
+                type="text"
+                value={trackingCode}
+                onChange={(e) => onTrackingCodeChange(e.target.value)}
+                placeholder="کد رهگیری را وارد کنید"
+                className="custom-input"
+              />
             </div>
           </div>
         </div>
@@ -122,7 +136,7 @@ export default function ReportsFilterBill({
         </div>
 
         {/* دکمه‌های عملیات */}
-        <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-2 border-t border-white/10">
+        <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-white/10">
           <button
             onClick={onClearAll}
             className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium"
@@ -160,4 +174,6 @@ ReportsFilterBill.propTypes = {
   setToMonth: PropTypes.func,
   transactionType: PropTypes.string.isRequired,
   onTransactionTypeChange: PropTypes.func.isRequired,
+  trackingCode: PropTypes.string.isRequired,
+  onTrackingCodeChange: PropTypes.func.isRequired,
 };

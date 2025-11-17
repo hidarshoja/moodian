@@ -337,6 +337,22 @@ body {
 .input_date .rmdp-container .custom-input {
   width: 100% !important;
   background-color: rgb(170, 170, 170);
+  padding: 0.5rem !important;
+}
+.custom-input {
+  width: 100% !important;
+  background-color: rgb(170, 170, 170);
+  padding: 0.5rem  !important;
+  
+}
+.custom-input::placeholder {
+  color: #454545 !important;
+  font-size: 12px !important;
+}
+select.custom-input {
+  width: 100% !important;
+  background-color: rgb(170, 170, 170);
+  padding: 0.35rem  !important;
 }
 
 .activeTr {

@@ -20,6 +20,7 @@ export default function BillPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
   const [transactionType, setTransactionType] = useState("all"); // همه، واریز، برداشت
+  const [trackingCode, setTrackingCode] = useState(""); // کد رهگیری
 
   const [filterRemove, setFilterRemove] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
@@ -35,6 +36,8 @@ export default function BillPage() {
             params.push(`${key}=${encodeURIComponent(value)}`);
           } else if (key === "coefficient" && filterRemove) {
             params.push(`f[coefficient]=${value}`);
+          } else if (key === "tracking_code" && filterRemove) {
+            params.push(`f[tracking_code]=${encodeURIComponent(value)}`);
           } else if (filterRemove) {
             const encodedValue =
               key === "status" ? value : encodeURIComponent(value);
@@ -95,6 +98,7 @@ export default function BillPage() {
     setFromMonth(null);
     setToMonth(null);
     setTransactionType("all");
+    setTrackingCode("");
   };
 
   function toEnglishDigits(str) {
@@ -131,6 +135,11 @@ export default function BillPage() {
       newFilters.coefficient = transactionType === "deposit" ? "1" : "-1";
     }
 
+    // اضافه کردن فیلتر کد رهگیری فقط اگر مقدار داشته باشد
+    if (trackingCode && trackingCode.trim() !== "") {
+      newFilters.tracking_code = trackingCode.trim();
+    }
+
     setActiveFilters(newFilters);
   };
 
@@ -156,6 +165,8 @@ export default function BillPage() {
           onSendAll={handleSendAll}
           transactionType={transactionType}
           onTransactionTypeChange={setTransactionType}
+          trackingCode={trackingCode}
+          onTrackingCodeChange={setTrackingCode}
         />
 
         <div className="mt-6">
