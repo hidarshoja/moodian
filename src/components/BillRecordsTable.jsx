@@ -71,18 +71,16 @@ export default function BillRecordsTable({
                 className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
                   selectedCustomerId === r.id ? "klickBtnTD" : ""
                 }`}
-                onClick={() => {
-               
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenDetail(r);
                   setSelectedCustomerId(r.id);
                 }}
                 style={{ cursor: "pointer" }}
               >
                 <td
-                  className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer underline hover:text-blue-300"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenDetail(r);
-                  }}
+                  className="px-4 py-3 text-white/90 text-sm whitespace-nowrap cursor-pointer  hover:text-blue-300"
+              
                 >
                   {r?.id}
                 </td>
