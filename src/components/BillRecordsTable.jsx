@@ -69,11 +69,11 @@ export default function BillRecordsTable({
               <tr
                 key={i}
                 className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 ${
-                  selectedCustomerId === r.customer_id ? "klickBtnTD" : ""
+                  selectedCustomerId === r.id ? "klickBtnTD" : ""
                 }`}
                 onClick={() => {
-                  setSelectedCustomer(r);
-                  setSelectedCustomerId(r.customer_id);
+               
+                  setSelectedCustomerId(r.id);
                 }}
                 style={{ cursor: "pointer" }}
               >
