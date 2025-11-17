@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import SearchFilterBarBill from "../components/SearchFilterBarBill";
 import ReportsFilterBill from "../components/ReportsFilterBill";
 import BillRecordsTable from "../components/BillRecordsTable";
 import axiosClient from "../axios-client";
@@ -34,7 +33,7 @@ export default function BillPage() {
         if (value) {
           if (key === "type") {
             params.push(`${key}=${value}`);
-          } else if (key.startsWith("f[indatim]") && filterRemove) {
+          } else if (key.startsWith("f[date]") && filterRemove) {
             params.push(`${key}=${encodeURIComponent(value)}`);
           } else if (filterRemove) {
             const encodedValue =
@@ -136,8 +135,8 @@ export default function BillPage() {
     }
 
     const newFilters = {
-      "f[indatim][min]": minDate,
-      "f[indatim][max]": maxDate,
+      "f[date][min]": minDate,
+      "f[date][max]": maxDate,
       status: Array.isArray(status) && status.length ? status.join(",") : "",
     };
 
@@ -177,13 +176,7 @@ export default function BillPage() {
         onSendAll={handleSendAll}
         
       />
-      <div className="mt-3">
-        <SearchFilterBarBill
-          searchTerm={searchTerm}
-          onSearchTermChange={handleSearchTermChange}
-        
-        />
-      </div>
+     
       <div className="mt-6">
        
       
