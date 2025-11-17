@@ -6,7 +6,6 @@ import Pagination from "../components/Pagination";
 import InvoiceDetailsModal from "../components/InvoiceDetailsModal";
 
 export default function BillPage() {
-
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [pageCount, setPageCount] = useState(1);
@@ -20,7 +19,8 @@ export default function BillPage() {
   const [toMonth, setToMonth] = useState(null);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [isInvoiceDetailsOpen, setIsInvoiceDetailsOpen] = useState(false);
- 
+  const [transactionType, setTransactionType] = useState("all"); // همه، واریز، برداشت
+
   const [filterRemove, setFilterRemove] = useState(true);
   const [activeFilters, setActiveFilters] = useState({});
 
@@ -33,6 +33,8 @@ export default function BillPage() {
             params.push(`${key}=${value}`);
           } else if (key.startsWith("f[date]") && filterRemove) {
             params.push(`${key}=${encodeURIComponent(value)}`);
+          } else if (key === "coefficient" && filterRemove) {
+            params.push(`f[coefficient]=${value}`);
           } else if (filterRemove) {
             const encodedValue =
               key === "status" ? value : encodeURIComponent(value);
@@ -47,13 +49,12 @@ export default function BillPage() {
 
   useEffect(() => {
     setLoading(true);
-    let query = buildFilterQuery(activeFilters) ;
+    let query = buildFilterQuery(activeFilters);
     axiosClient
       .get(`/transactions?page=${pageCount}${query}`)
       .then((response) => {
         setDataTable(response.data.data || []);
-          setMeta(response.data?.meta || {});
-       
+        setMeta(response.data?.meta || {});
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -86,7 +87,6 @@ export default function BillPage() {
     setEndDate(selectedDate);
   };
 
-
   const handleClearAll = () => {
     setStartDate(null);
     setEndDate(null);
@@ -94,6 +94,7 @@ export default function BillPage() {
     setStatus([]);
     setFromMonth(null);
     setToMonth(null);
+    setTransactionType("all");
   };
 
   function toEnglishDigits(str) {
@@ -125,34 +126,39 @@ export default function BillPage() {
       status: Array.isArray(status) && status.length ? status.join(",") : "",
     };
 
+    // اضافه کردن فیلتر نوع تراکنش فقط اگر "همه" انتخاب نشده باشد
+    if (transactionType !== "all") {
+      newFilters.coefficient = transactionType === "deposit" ? "1" : "-1";
+    }
+
     setActiveFilters(newFilters);
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div>
         <div className="w-full border-b border-white/10 p-6">
           <h1 className="text-white text-2xl font-bold">صورت حساب بانکی</h1>
-          <p className="text-white/60 text-sm mt-1">نمای کلی صورتحساب کاربران</p>
+          <p className="text-white/60 text-sm mt-1">
+            نمای کلی صورتحساب کاربران
+          </p>
         </div>
       </div>
       <div className="p-2">
-      <ReportsFilterBill
-        startDate={startDate}
-        endDate={endDate}
-        
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
-       
-        onClearAll={handleClearAll}
-        setStatus={setStatus}
-        status={status}
-        onSendAll={handleSendAll}
-        
-      />
-     
-      <div className="mt-6">
+        <ReportsFilterBill
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          onClearAll={handleClearAll}
+          setStatus={setStatus}
+          status={status}
+          onSendAll={handleSendAll}
+          transactionType={transactionType}
+          onTransactionTypeChange={setTransactionType}
+        />
+
+        <div className="mt-6">
           <>
             <BillRecordsTable
               records={filteredData}
@@ -168,16 +174,15 @@ export default function BillPage() {
               setLoading={setLoading}
             />
           </>
-       
-        {isInvoiceDetailsOpen &&  (
-          <InvoiceDetailsModal
-            isOpen={isInvoiceDetailsOpen}
-            onClose={() => setIsInvoiceDetailsOpen(false)}
-          //  data={invoiceDetails}
-          />
-        )}
-      </div>
-       
+
+          {isInvoiceDetailsOpen && (
+            <InvoiceDetailsModal
+              isOpen={isInvoiceDetailsOpen}
+              onClose={() => setIsInvoiceDetailsOpen(false)}
+              //  data={invoiceDetails}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
