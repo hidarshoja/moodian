@@ -1,7 +1,7 @@
 import Spinner from "../utils/Spinner";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import CustomerDetailsModal from "./CustomerDetailsModal";
+import BillDetailsModal from "./BillDetailsModal";
 import { convertToPersianDate } from "../utils/change-date";
 
 export default function BillRecordsTable({
@@ -112,7 +112,7 @@ export default function BillRecordsTable({
         </tbody>
       </table>
       {openDetail && (
-        <CustomerDetailsModal
+        <BillDetailsModal
           isOpen={!!openDetail}
           record={openDetail}
           onClose={() => setOpenDetail(null)}
