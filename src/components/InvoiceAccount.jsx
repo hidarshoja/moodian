@@ -70,10 +70,10 @@ axiosClient.get(`/transactions?page=${pageCount2}&f[coefficient]=1&f[sum_invoice
   }, [pageCount2]);
 
   const handleResponse = () => {
-    axiosClient.get(`/transactions`).then((response) => {
-      setAssignData(response?.data?.data);
-       setMeta(response.data.meta);
-    });
+    // axiosClient.get(`/transactions`).then((response) => {
+    //   setAssignData(response?.data?.data);
+    //    setMeta(response.data.meta);
+    // });
   };
 
   const handleCloseTransactionModal = () => {

@@ -36,7 +36,7 @@ const [pageCount3, setPageCount3] = useState(1);
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = <,amount`)
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = <,amount`)
      .then((response) => {
       setTransactionData2(response.data.data);
         setMeta2(response.data.meta);
@@ -50,7 +50,7 @@ const [pageCount3, setPageCount3] = useState(1);
 
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = >=,amount`)
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = >=,amount`)
      .then((response) => {
       setTransactionDataAll(response.data.data);
         setMeta2(response.data.meta);
