@@ -50,7 +50,8 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/transactions?page=${pageCount2}&f[coefficient]=-1`).then((response) => {
+axiosClient.get(`/transactions?page=${pageCount2}&f[coefficient]=-1&f[sum_invoices] = <,amount,${r.id}`)
+.then((response) => {
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
     }).catch((error) => {
