@@ -217,6 +217,7 @@ export default function AssignModal({
                 </tr>
               )}
               {transaction.map((r, i) => (
+                console.log(`r`, r),
                 <tr
                   key={r.id ?? i}
                   className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
@@ -251,7 +252,8 @@ export default function AssignModal({
                   </td>
 
                   <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {convertToPersianDate(r?.indatim)}
+                  {r.indatim ? convertToPersianDate(r?.indatim) : convertToPersianDate(r?.date)}
+           
                   </td>
                   <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                     {r?.tracking_code}

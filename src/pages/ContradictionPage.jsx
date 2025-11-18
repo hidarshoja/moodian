@@ -3,6 +3,7 @@ import axiosClient from "../axios-client";
 import InvoiceAccountTable from "../components/invoiceAccount";
 import AccountInvois from "../components/AccountInvois";
 import AccountInvoisAll from "../components/AccountInvoisAll";
+import FactorInvoice from "../components/FactorInvoice";
 
 export default function ContradictionPage() {
  const [activeBtn , setActiveBtn] = useState("invoiceAccount");
@@ -15,6 +16,7 @@ const [loading, setLoading] = useState(true);
 const[refresh , setRefresh] = useState(false);
 const [meta3, setMeta3] = useState({});
 const [pageCount3, setPageCount3] = useState(1);
+const [factorData, setFactorData] = useState([]);
 // فاکتور با حساب
    useEffect(() => {
      setLoading(true);
@@ -65,7 +67,8 @@ const [pageCount3, setPageCount3] = useState(1);
     setLoading(true);
     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis`)
     .then((response) => {
-     console.log(`response`, response.data.data);
+     setFactorData(response.data.data);
+     setMeta3(response.data.meta);
    })
    .catch((error) => {
        console.error("Error fetching data:", error);
@@ -154,6 +157,18 @@ const [pageCount3, setPageCount3] = useState(1);
                loading={loading}
                 setRefresh={setRefresh}
                refresh={refresh}
+            />
+          </div>}
+          {activeBtn === "all2" && <div>
+            <FactorInvoice
+               invoiceData={factorData}
+               loading={loading}
+               setRefresh={setRefresh}
+               refresh={refresh}
+               setLoading={setLoading}
+               meta3={meta3}
+               pageCount3={pageCount3}
+               setPageCount3={setPageCount3}
             />
           </div>}
       </div>
