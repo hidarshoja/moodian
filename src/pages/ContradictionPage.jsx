@@ -15,7 +15,7 @@ const [loading, setLoading] = useState(true);
 const[refresh , setRefresh] = useState(false);
 const [meta3, setMeta3] = useState({});
 const [pageCount3, setPageCount3] = useState(1);
-
+// فاکتور با حساب
    useEffect(() => {
      setLoading(true);
      axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis`)
@@ -29,10 +29,7 @@ const [pageCount3, setPageCount3] = useState(1);
       .finally(() => setLoading(false));
   }, [refresh,pageCount3]);
 
-    // 
-
-    // برای صفحه همه
-    // /transactions?page=${pageCount}&f[coefficient]=-1&f[sum_invoices] = >=,amount
+  //  حساب با فاکتور
  
    useEffect(() => {
      setLoading(true);
@@ -47,7 +44,8 @@ const [pageCount3, setPageCount3] = useState(1);
       .finally(() => setLoading(false));
    
   }, [pageCount,refresh]);
-
+  
+// تعیین تکلیف شده حساب
    useEffect(() => {
      setLoading(true);
      axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = >=,amount`)
@@ -61,6 +59,20 @@ const [pageCount3, setPageCount3] = useState(1);
       .finally(() => setLoading(false));
    
   }, [pageCount,refresh]);
+
+// تعیین تکلیف شده فاکتور
+  useEffect(() => {
+    setLoading(true);
+    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis`)
+    .then((response) => {
+     console.log(`response`, response.data.data);
+   })
+   .catch((error) => {
+       console.error("Error fetching data:", error);
+     })
+     .finally(() => setLoading(false));
+  
+ }, [pageCount,refresh]);
 
    
 
@@ -95,7 +107,7 @@ const [pageCount3, setPageCount3] = useState(1);
           }`}
   onClick={() => setActiveBtn("all")}
     >
-    تعیین تکلیف شده باحساب
+    تعیین تکلیف شده حساب
   </button>
   <button
   className={`btn-custom4 ${
@@ -103,7 +115,7 @@ const [pageCount3, setPageCount3] = useState(1);
           }`}
   onClick={() => setActiveBtn("all2")}
     >
-    تعیین تکلیف شده بافاکتور
+    تعیین تکلیف شده فاکتور
   </button>
 </div>
       <div className="px-3">
