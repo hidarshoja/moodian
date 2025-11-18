@@ -28,6 +28,8 @@ export default function AssignModal({
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [activeAccountIds, setActiveAccountIds] = useState([]);
   const [activeAccountAmountMap, setActiveAccountAmountMap] = useState({});
+  const [inputValues, setInputValues] = useState({});
+
   useEffect(() => {
     if (activeAccount && activeAccount.length > 0) {
       const activeIds = activeAccount.map((acc) => acc.id);
@@ -35,23 +37,82 @@ export default function AssignModal({
       setActiveAccountIds(activeIds);
       // ایجاد Map از id به invoice_transaction_pivot.amount
       const amountMap = {};
+      const initialValues = {};
       activeAccount.forEach((acc) => {
         if (acc.id && acc.invoice_transaction_pivot?.amount !== undefined) {
           amountMap[acc.id] = acc.invoice_transaction_pivot.amount;
+          initialValues[acc.id] = acc.invoice_transaction_pivot.amount;
         }
       });
       setActiveAccountAmountMap(amountMap);
+      setInputValues((prev) => ({ ...prev, ...initialValues }));
     }
   }, [activeAccount]);
+
+  // مقداردهی اولیه input ها بر اساس transaction
+  useEffect(() => {
+    if (transaction && transaction.length > 0) {
+      const initialValues = {};
+      transaction.forEach((t) => {
+        if (t.id) {
+          if (activeAccountIds.includes(t.id)) {
+            initialValues[t.id] = activeAccountAmountMap[t.id] || 0;
+          } else {
+            initialValues[t.id] =
+              t?.amount - (t?.sum_invoices_assigned_amount || 0);
+          }
+        }
+      });
+      setInputValues((prev) => {
+        // فقط مقادیری که قبلا تنظیم نشده‌اند را اضافه کنیم
+        const newValues = { ...prev };
+        Object.keys(initialValues).forEach((id) => {
+          if (newValues[id] === undefined) {
+            newValues[id] = initialValues[id];
+          }
+        });
+        return newValues;
+      });
+    }
+  }, [transaction, activeAccountIds, activeAccountAmountMap]);
 
   const handleCheckboxChange = (id) => {
     setSelectedTransactions((prev) => {
       if (prev.includes(id)) {
+        // اگر checkbox untick شد، مقدار را به مقدار پیش‌فرض برگردان
+        const currentTransaction = transaction?.find((t) => t.id === id);
+        if (currentTransaction) {
+          setInputValues((prevValues) => ({
+            ...prevValues,
+            [id]:
+              currentTransaction?.amount -
+              (currentTransaction?.sum_invoices_assigned_amount || 0),
+          }));
+        }
         return prev.filter((item) => item !== id);
       } else {
+        // اگر checkbox tick شد، مقدار را از activeAccount بگیر یا مقدار پیش‌فرض
+        const currentTransaction = transaction?.find((t) => t.id === id);
+        if (currentTransaction) {
+          const newValue =
+            activeAccountAmountMap[id] ||
+            currentTransaction?.amount -
+              (currentTransaction?.sum_invoices_assigned_amount || 0);
+          setInputValues((prevValues) => ({
+            ...prevValues,
+            [id]: newValue,
+          }));
+        }
         return [...prev, id];
       }
     });
+  };
+
+  const handleInputChange = (id, value) => {
+    setInputValues((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
 
   const handleShowAssign = () => {
@@ -111,6 +172,9 @@ export default function AssignModal({
               <tr className="text-white/80 text-sm bg-[#181f3a]">
                 <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
                 <th className="text-right px-4 py-3 whitespace-nowrap">
+                  شماره
+                </th>
+                <th className="text-right px-4 py-3 whitespace-nowrap">
                   مقدار
                 </th>
                 <th className="text-right px-4 py-3 whitespace-nowrap">
@@ -159,20 +223,27 @@ export default function AssignModal({
                     />
                   </td>
                   <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                    {r?.id}
+                  </td>
+                  <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                     <input
                       type="text"
                       value={
-                        activeAccountIds.includes(r.id)
+                        inputValues[r.id] ??
+                        (activeAccountIds.includes(r.id)
                           ? activeAccountAmountMap[r.id] || 0
-                          : r?.amount - (r?.sum_invoices_assigned_amount || 0)
+                          : r?.amount - (r?.sum_invoices_assigned_amount || 0))
                       }
-                      readOnly
-                      className="w-full px-2 py-1 bg-white/5 border border-white/10 rounded text-white/90 text-sm"
+                      onChange={(e) => handleInputChange(r.id, e.target.value)}
+                      disabled={!selectedTransactions.includes(r.id)}
+                      className={`w-full px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
+                        selectedTransactions.includes(r.id)
+                          ? "text-white/90 cursor-text"
+                          : "text-white/40 cursor-not-allowed opacity-50"
+                      }`}
                     />
                   </td>
-                  <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                    {r?.id}
-                  </td>
+                  
                   <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                     {r?.j_date}
                   </td>
