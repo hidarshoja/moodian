@@ -160,13 +160,13 @@ useEffect(() => {
                   {Number(r?.tadis).toLocaleString()}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                {Number(r?.transactions_sum_amount).toLocaleString()}
+                {Number(r?.sum_transactions_assigned_amount).toLocaleString()}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                
-                {Number(r?.transactions_sum_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
-                {r?.tadis  <= Number(r?.transactions_sum_amount) ?
-                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
+                {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
+                {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
+                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
                   }
                 {/* {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""} */}
               </td>
