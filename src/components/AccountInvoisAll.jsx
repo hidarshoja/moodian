@@ -48,7 +48,7 @@ axiosClient.get(`/transactions/${r.id}`)
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/invoices?page=${pageCount2}`)
+axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.id}`)
 .then((response) => {
       setAssignData(response?.data?.data);
         setMeta(response?.data?.meta);
@@ -75,9 +75,9 @@ axiosClient.get(`/invoices?page=${pageCount2}`)
   }, [pageCount2]);
 
    const handleResponse = () => {
-    axiosClient.get(`/invoices`).then((response) => {
-      setAssignData(response?.data?.data);
-    });
+    // axiosClient.get(`/invoices`).then((response) => {
+    //   setAssignData(response?.data?.data);
+    // });
   };
 
  useEffect(() => {
@@ -93,7 +93,7 @@ axiosClient.get(`/invoices?page=${pageCount2}`)
 
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold mt-6">تعیین تکلیف شده ها</h1>
+      <h1 className="text-white text-2xl font-bold mt-6">تعیین تکلیف شده های حساب</h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
        {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
@@ -153,11 +153,11 @@ axiosClient.get(`/invoices?page=${pageCount2}`)
                 {new Intl.NumberFormat('fa-IR').format(r?.amount)}
               </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                 {new Intl.NumberFormat('fa-IR').format(r?.invoices_sum_tadis)}
+                 {new Intl.NumberFormat('fa-IR').format(r?.sum_invoices_assigned_amount)}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-               {Number(r?.invoices_sum_tadis) == 0 && <IoCloseCircle className="text-red-500 w-5 h-5"/> }
-                {r?.amount  <= Number(r?.invoices_sum_tadis) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>) }
+               {Number(r?.sum_invoices_assigned_amount) == 0 && <IoCloseCircle className="text-red-500 w-5 h-5"/> }
+                {r?.amount  <= Number(r?.sum_invoices_assigned_amount) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_invoices_assigned_amount) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>) }
                
                 {/* {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>} */}
               </td>

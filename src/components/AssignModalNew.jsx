@@ -56,7 +56,7 @@ axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
       });
 
   };
-
+console.log(`transaction`, transaction);
   return (
     <div
          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
@@ -143,7 +143,8 @@ axiosClient.post(`/transactions/${idActive}/assign-invoices` , {invoices})
                           {new Intl.NumberFormat('fa-IR').format(r?.tadis)}
                         </td>
                         <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                          {new Intl.NumberFormat('fa-IR').format(r?.amount - r?.sum_invoices_assigned_amount)}
+                        {r.amount && new Intl.NumberFormat('fa-IR').format(r?.amount - r?.sum_invoices_assigned_amount) }
+                        {r.tadis && new Intl.NumberFormat('fa-IR').format(r?.tadis - r?.sum_transactions_assigned_amount) }
                         </td>
                         
                       </tr>
