@@ -69,7 +69,7 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
              <div className="flex items-center gap-3">
              
-               <span className="text-white text-lg font-bold">اساین فاکتور</span>
+               <span className="text-white text-lg font-bold">اساین1 فاکتور</span>
              </div>
              <button
                onClick={onClose}
@@ -98,6 +98,7 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
                       <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
                         <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
                           <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
+                          <th className="text-center px-4 py-3 whitespace-nowrap"> مبلغ باقیمانده  </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -141,7 +142,9 @@ axiosClient.post(`/invoices/${idActive}/assign-transactions` , {transactions})
                          <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                           {new Intl.NumberFormat('fa-IR').format(r?.amount)}
                         </td>
-                        
+                        <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
+                          {new Intl.NumberFormat('fa-IR').format(r?.amount - r?.sum_invoices_assigned_amount)}
+                        </td>
                         
                       </tr>
                     ))}
