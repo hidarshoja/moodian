@@ -116,7 +116,12 @@ export default function AssignModal({
   };
 
   const handleShowAssign = () => {
-    const transactions = selectedTransactions;
+    // ساخت آرایه از objectها با id و amount
+    const transactions = selectedTransactions.map((id) => ({
+      id: id,
+      amount: inputValues[id] ?? 0,
+    }));
+
     axiosClient
       .post(`/invoices/${idActive}/assign-transactions`, { transactions })
       .then((response) => {
@@ -243,7 +248,7 @@ export default function AssignModal({
                       }`}
                     />
                   </td>
-                  
+
                   <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                     {r?.j_date}
                   </td>
