@@ -23,7 +23,7 @@ export default function CancelPage() {
     setLoading(true);
     // &f[ins]=3
     axiosClient
-      .get(`/invoices?page=${pageCount}`)
+      .get(`/invoices?page=${pageCount}&f[ins]=3&f[inty]=-1`)
       .then((response) => {
         setCancelRecords(response.data.data);
         setMeta(response.data.meta);

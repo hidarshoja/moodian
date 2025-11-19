@@ -771,13 +771,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , c
               <MdClose className="w-4 h-4" />
             </button>
           </div>
-            <SlPrinter onClick={handlePrint} className="cursor-pointer" />
-            <button
-              onClick={handleCancel}
-              className="text-white/80 hover:text-white p-1"
-            >
-              <MdClose className="w-4 h-4" />
-            </button>
+          
           </div>
         </div>
 
