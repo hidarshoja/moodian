@@ -353,7 +353,7 @@ export default function SendInvoicesTable({
                 {r?.customer?.name} {r?.customer?.last_name}
               </td>
               <td className="px-4 py-3  text-sm whitespace-nowrap">
-                {convertToPersianDate(r.created_at)}
+                {convertToPersianDate(r.indatim)}
               </td>
               <td className="px-4 py-3  text-sm truncate max-w-[200px]">
                 {r.tadis ? Number(r.tadis).toLocaleString() : "-"}
