@@ -113,6 +113,7 @@ useEffect(() => {
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ صدور</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نام مشتری</th>
@@ -121,7 +122,16 @@ useEffect(() => {
                  <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ </th>
                     <th className="text-center px-4 py-3 whitespace-nowrap">مجموع تراکنش ها </th>
                 <th className="text-center px-4 py-3 whitespace-nowrap">دارای تراکنش</th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
+                <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -140,38 +150,48 @@ useEffect(() => {
               key={r.id ?? i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="p-2 text-center"></td>
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.id}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {convertToPersianDate(r?.created_at)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.customer?.name} -  {r?.customer?.last_name}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.taxid}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
              
                   {Number(r?.tadis).toLocaleString()}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {Number(r?.sum_transactions_assigned_amount).toLocaleString()}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-white/90 text-sm flex items-center justify-center whitespace-nowrap">
                
                 {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
                 {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
                  <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
                   }
-                {/* {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""} */}
-              </td>
               
-              <td className="px-2 py-2">
+              </td>
+              <td className="p-2 text-center"></td>
+              <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}

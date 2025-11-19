@@ -107,6 +107,7 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
@@ -115,7 +116,16 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.
                 <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
                 <th className="text-center px-4 py-3 whitespace-nowrap">مجموع فاکتور  </th>
                    <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
+                   <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -134,34 +144,45 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.
               key={r.id ?? i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="p-2 text-center"></td>
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.id}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.j_date}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.tracking_code} 
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.bank_label}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {new Intl.NumberFormat('fa-IR').format(r?.amount)}
               </td>
-                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                  {new Intl.NumberFormat('fa-IR').format(r?.sum_invoices_assigned_amount)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="px-4 py-3 flex items-center justify-center text-white/90 text-sm whitespace-nowrap">
                {Number(r?.sum_invoices_assigned_amount) == 0 && <IoCloseCircle className="text-red-500 w-5 h-5"/> }
                 {r?.amount  <= Number(r?.sum_invoices_assigned_amount) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_invoices_assigned_amount) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>) }
                
-                {/* {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>} */}
+               
               </td>
-               <td className="px-2 py-2">
+              <td className="p-2  text-center"></td>
+                <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}

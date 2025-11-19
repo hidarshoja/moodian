@@ -104,7 +104,6 @@ export default function CustomersTable({
     setRow({ ...item });
     setSelectedRowId(item.id);
   };
-
   return (
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
       <CustomToastContainer />
