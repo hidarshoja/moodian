@@ -49,6 +49,7 @@ export default function ReportsFilterBill({
                 onChange={onStartDateChange}
                 calendarPosition="bottom-right"
                 inputClass="custom-input"
+                placeholder="تاریخ شروع"
               />
             </div>
             <div className="input_date w-full sm:w-1/2">
@@ -62,6 +63,7 @@ export default function ReportsFilterBill({
                 onChange={onEndDateChange}
                 calendarPosition="bottom-right"
                 inputClass="custom-input"
+                placeholder="تاریخ پایان"
               />
             </div>
           </div>
@@ -74,7 +76,8 @@ export default function ReportsFilterBill({
               <select
                 value={transactionType}
                 onChange={(e) => onTransactionTypeChange(e.target.value)}
-                className="custom-input"
+                className="custom-input "
+                placeholder="نوع تراکنش"
               >
                 <option value="all">همه</option>
                 <option value="deposit">واریز</option>
@@ -109,7 +112,7 @@ export default function ReportsFilterBill({
                 return (
                   <label
                     key={opt.value}
-                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-100 cursor-pointer hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-100 cursor-pointer hover:text-white transition-colors border border-white/10 rounded-md p-2"
                   >
                     <span className="inline-flex items-center">
                       <input

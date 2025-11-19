@@ -343,23 +343,27 @@ body {
   border: 1px solid #6ec6ca !important;
 }
 .input_date .rmdp-container .custom-input::placeholder {
-  color: #00b894 !important;
+  color: #a4b5b1 !important;
   font-size: 12px !important;
 }
 .custom-input {
   width: 100% !important;
-  background-color: rgb(170, 170, 170);
+  background-image: linear-gradient(to top left, #0e0e1c, #242b3f, #202627) !important;
+  color: #fafafa;
   padding: 0.5rem  !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid #6ec6ca !important;
   
 }
 .custom-input::placeholder {
-  color: #454545 !important;
+  color: #a69e9e;
   font-size: 12px !important;
 }
 select.custom-input {
   width: 100% !important;
-  background-color: rgb(170, 170, 170);
+  background-color: #0e0e1c !important;
   padding: 0.35rem  !important;
+  color: #fafafa;
 }
 
 .activeTr {
