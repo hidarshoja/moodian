@@ -775,6 +775,17 @@ export default function EditInvoiceModalNew2({
           تکثیر فاکتور
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
+          <div>
+            <span className="text-sm">
+                {invoiceData?.taxid}{" "}
+                {invoiceData?.ancestors && invoiceData?.ancestors.length > 0
+                  ? invoiceData.ancestors
+                      .map((ancestor) => `:: [${ancestor?.taxid}]`)
+                      .filter(Boolean)
+                      .join(" , ")
+                  : ""}
+              </span>
+            </div>
             <SlPrinter onClick={handlePrint} className="cursor-pointer" />
             <button
               onClick={handleCancel}
