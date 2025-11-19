@@ -22,6 +22,7 @@ export default function EditInvoiceModalNew({
   customers,
   products,
 }) {
+  console.log(`invoiceData`, invoiceData);
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -779,6 +780,11 @@ export default function EditInvoiceModalNew({
           {isEditing === "edit" ? "ویرایش فاکتور" : "اصلاح فاکتور"}
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
+            <div>
+              <span className="text-sm">
+                {invoiceData?.taxid} {invoiceData?.ancestors ? invoiceData?.ancestors.join(" , ") : ""}
+              </span>
+            </div>
             <SlPrinter onClick={handlePrint} className="cursor-pointer" />
             <button
               onClick={handleCancel}
