@@ -37,7 +37,6 @@ export default function SendInvoicesTable({
     try {
       const res = await axiosClient.delete(`/invoices/${row.id}`);
 
-      //  setRefresh(!refresh);
       Swal.fire({
         toast: true,
         position: "top-start",

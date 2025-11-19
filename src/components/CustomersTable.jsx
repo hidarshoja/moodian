@@ -98,70 +98,7 @@ export default function CustomersTable({
     }
   };
 
-  // ارسال داده به API تستی هنگام ویرایش
-  const handleEdit = async () => {
-    if (row.id) {
-      try {
-        const payload = { id: row.id, ...row };
-        await axiosClient.put(`/customers/${payload.id}`, payload);
-        setRefresh(!refresh);
-        Swal.fire({
-          toast: true,
-          position: "top-start",
-          icon: "success", // یا 'error'
-          title: "کاربر با موفقیت ویرایش شد",
-          showConfirmButton: false,
-          timer: 4000,
-          timerProgressBar: true,
-          customClass: {
-            popup: "swal2-toast",
-          },
-        });
-        setRow((prev) => ({
-          ...prev,
-          name: "",
-          address: "",
-          branch_code: "",
-          description: "",
-          economic_code: "",
-          id: "",
-          last_name: "",
-          national_code: "",
-          passport_number: "",
-          postal_code: "",
-          tel: "",
-          type: "انتخاب ...",
-        }));
-      } catch (error) {
-        console.log(`error`, error);
-        Swal.fire({
-          toast: true,
-          position: "top-start",
-          icon: "error",
-          title: "خطا در ویرایش کاربر",
-          showConfirmButton: false,
-          timer: 4000,
-          timerProgressBar: true,
-          customClass: {
-            popup: "swal2-toast",
-          },
-        });
-      }
-    } else {
-      Swal.fire({
-        toast: true,
-        position: "top-start",
-        icon: "error",
-        title: "از قسمت نام، نام کاربر را وارد کنید!",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: {
-          popup: "swal2-toast",
-        },
-      });
-    }
-  };
+ 
 
   const handleRowDoubleClick = (item) => {
     setRow({ ...item });
@@ -183,6 +120,8 @@ export default function CustomersTable({
       >
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="p-2">#</th>
             <th className="p-2">نام</th>
             <th className="p-2">نوع</th>
             <th className="p-2">کد اقتصادی</th>
@@ -190,7 +129,17 @@ export default function CustomersTable({
             <th className="p-2">کدپستی</th>
             <th className="p-2">تلفن</th>
             <th className="p-2">کدمشتری در سامانه مشتری</th>
-            <th className="p-2">عملیات</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -206,7 +155,9 @@ export default function CustomersTable({
                 className={`odd:bg-white/5 even:bg-white/10 border-t border-white/5 select-none cursor-pointer 
               ${selectedRowId === item.id ? "activeTr" : ""}`}
               >
-                <td className="p-2 ">
+                <td className="p-2 text-center"></td>
+                <td className="p-2 text-center">{item?.id}</td>
+                <td className="p-2 text-center text-sm truncate min-w-[200px] max-w-[240px]">
                   {item?.name}&nbsp;&nbsp;{item?.last_name}
                 </td>
                 <td className="p-2  text-center">{unitName}</td>
@@ -219,7 +170,18 @@ export default function CustomersTable({
                 <td className="p-2  text-center">{item?.postal_code || "-"}</td>
                 <td className="p-2  text-center">{item?.tel || "-"}</td>
                 <td className="p-2  text-center">{item?.branch_code || "-"}</td>
-                <td className="p-2  text-center">
+                <td className="p-2  text-center"></td>
+                <td className="p-2  text-center"></td>
+                <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                   <button
                     className="p-1 rounded hover:bg-blue-500/20 text-blue-500 mx-1"
                     title="ویرایش"
