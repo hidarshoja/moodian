@@ -193,7 +193,7 @@ export default function AssignModalNew({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
           <div className="flex items-center gap-3">
-            <span className="text-white text-lg font-bold">اساین 2فاکتور</span>
+            <span className="text-white text-lg font-bold">اساین فاکتور</span>
           </div>
           <button
             onClick={onClose}
