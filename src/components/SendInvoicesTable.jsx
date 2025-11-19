@@ -299,16 +299,34 @@ export default function SendInvoicesTable({
   };
 
   return (
-    <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative">
+    <div
+      className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 relative"
+      style={{ position: "relative", overflowX: "auto", overflowY: "visible" }}
+    >
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
           <Spinner />
         </div>
       )}
+      {/* Overlay برای پوشاندن محتوای زیر ستون عملیات */}
+      <div
+        style={{
+          position: "sticky",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: "200px",
+          pointerEvents: "none",
+          zIndex: 9,
+          background:
+            "linear-gradient(to right, transparent 0%, rgba(24, 31, 58, 0.5) 30%, rgba(24, 31, 58, 0.95) 70%, rgba(24, 31, 58, 1) 100%)",
+        }}
+      />
       <table
         className={`min-w-full text-white ${
           loading ? "opacity-30 pointer-events-none" : ""
         }`}
+        style={{ tableLayout: "auto", position: "relative" }}
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
@@ -323,7 +341,31 @@ export default function SendInvoicesTable({
             <th className="text-right px-4 py-3 whitespace-nowrap">مبلغ کل</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">موضوع</th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
+            <th
+              className="text-center px-4 py-3 whitespace-nowrap border-r border-white/10 relative"
+              style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "200px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  right: "-200px",
+                  top: 0,
+                  bottom: 0,
+                  width: "200px",
+                  background: "#181f3a",
+                  pointerEvents: "none",
+                  zIndex: 11,
+                }}
+              />
+              عملیات
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -365,7 +407,31 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3  text-sm truncate max-w-[240px]">
                 {r.ins_label}
               </td>
-              <td className="px-5 py-3  text-sm truncate max-w-[280px]">
+              <td
+                className="px-5 py-3 text-sm border-r border-white/5 relative"
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 10,
+                  minWidth: "80px",
+                  backgroundColor:
+                    i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
+                  boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "-80px",
+                    top: 0,
+                    bottom: 0,
+                    width: "80px",
+                    background:
+                      i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
+                    pointerEvents: "none",
+                    zIndex: 11,
+                  }}
+                />
                 <div className="flex items-center justify-end gap-2">
                   {r.can_update === true && (
                     <>
