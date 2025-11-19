@@ -348,17 +348,17 @@ export default function SendInvoicesTable({
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
-                minWidth: "200px",
+                minWidth: "100px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
               }}
             >
               <div
                 style={{
                   position: "absolute",
-                  right: "-200px",
+                  right: "-100px",
                   top: 0,
                   bottom: 0,
-                  width: "200px",
+                  width: "100px",
                   background: "#181f3a",
                   pointerEvents: "none",
                   zIndex: 11,
