@@ -427,26 +427,14 @@ export default function SendInvoicesTable({
                   position: "sticky",
                   left: 0,
                   zIndex: 10,
-                  minWidth: "70px",
+                  minWidth: "160px",
                   backgroundColor:
                     i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                 }}
               >
-                <div
-                  style={{
-                    position: "absolute",
-                    right: "-60px",
-                    top: 0,
-                    bottom: 0,
-                    width: "60px",
-                    background:
-                      i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
-                    pointerEvents: "none",
-                    zIndex: 11,
-                  }}
-                />
-                <div className="grid grid-cols-4 gap-1 justify-items-center">
+             
+                <div className="grid grid-cols-4 sm:gap-4 lg:gap-1 justify-items-center">
                   {r.can_update === true && (
                     <>
                       <div className="relative group">
