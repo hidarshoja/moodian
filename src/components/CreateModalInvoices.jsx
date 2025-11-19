@@ -17,7 +17,7 @@ export default function CreateModalInvoices({
   onClose2,
   refresh,
   setRefresh,
-  customers
+  customers,
 }) {
   // مقدار اولیه stateها برای ریست راحت
   const initialInvoiceData = {
@@ -49,10 +49,10 @@ export default function CreateModalInvoices({
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [totalDiscount, setTotalDiscount] = useState(0);
-const[tax , setTax] = useState(0);
-const[totalOdam, setTotalOdam] = useState(0);
-const [olamTotal, setOlamTotal] = useState(0);
-const[totalPrice , setTotalPrice] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [totalOdam, setTotalOdam] = useState(0);
+  const [olamTotal, setOlamTotal] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const formatDateTime = (value) => {
     if (!value) return null;
@@ -97,7 +97,7 @@ const[totalPrice , setTotalPrice] = useState(0);
       cdcn: null,
       cdcd: null,
       billid: null,
-      setm: toNumberOrNull(invoiceData.setm),
+      setm: toNumberOrNull(invoiceData.setm) ?? 1,
       cap: toNumberOrNull(totals.cap) ?? null,
       insp: toNumberOrNull(totals.insp) ?? null,
       tax17: null,
@@ -141,8 +141,6 @@ const[totalPrice , setTotalPrice] = useState(0);
     return payload;
   };
 
-
-
   const handleInputChange = (field, value) => {
     setInvoiceData((prev) => ({
       ...prev,
@@ -177,11 +175,19 @@ const[totalPrice , setTotalPrice] = useState(0);
 
     setTotals(calculatedTotals);
 
-
-    const sumDiscount = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
+    const sumDiscount = lineItems?.reduce(
+      (sum, item) => sum + (item?.dis || 0),
+      0
+    );
     const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
-    const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
-    const sumOlam = lineItems?.reduce((sum, item) => sum + (item?.olam || 0), 0);
+    const sumOdam = lineItems?.reduce(
+      (sum, item) => sum + (item?.odam || 0),
+      0
+    );
+    const sumOlam = lineItems?.reduce(
+      (sum, item) => sum + (item?.olam || 0),
+      0
+    );
     const total = lineItems?.reduce((sum, item) => {
       const adis = item?.adis || 0;
       const vam = item?.vam || 0;
@@ -189,13 +195,12 @@ const[totalPrice , setTotalPrice] = useState(0);
       const olam = item?.olam || 0;
       return sum + (adis + vam + odam + olam);
     }, 0);
-   
+
     setOlamTotal(sumOlam);
     setTotalPrice(total);
     setTotalDiscount(sumDiscount);
     setTax(sumTax);
     setTotalOdam(sumOdam);
-
   }, [lineItems]);
 
   const resetForm = () => {
@@ -213,7 +218,6 @@ const[totalPrice , setTotalPrice] = useState(0);
   };
 
   const handleSaveLineItem = (itemData) => {
-
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -229,15 +233,15 @@ const[totalPrice , setTotalPrice] = useState(0);
                 adis: itemData.adis,
                 name: itemData.name,
                 sstid: itemData.sstid,
-                vam : itemData?.vam,
-                odam : itemData?.odam,
-                olam : itemData?.olam,
-                cop : itemData?.cop,
-                vop : itemData?.vop,
-                tsstam : itemData?.tsstam,
-                Show : itemData?.Show,
-                exr : itemData?.exr,
-                cfee : itemData?.cfee,
+                vam: itemData?.vam,
+                odam: itemData?.odam,
+                olam: itemData?.olam,
+                cop: itemData?.cop,
+                vop: itemData?.vop,
+                tsstam: itemData?.tsstam,
+                Show: itemData?.Show,
+                exr: itemData?.exr,
+                cfee: itemData?.cfee,
               }
             : item
         )
@@ -257,15 +261,15 @@ const[totalPrice , setTotalPrice] = useState(0);
         adis: itemData.adis,
         name: itemData.name,
         sstid: itemData.sstid,
-        vam : itemData?.vam,
-        odam : itemData?.odam,
-        olam : itemData?.olam,
-        cop : itemData?.cop,
-        vop : itemData?.vop,
-        tsstam : itemData?.tsstam,
-        Show : itemData?.Show,
-        exr : itemData?.exr,
-        cfee : itemData?.cfee,
+        vam: itemData?.vam,
+        odam: itemData?.odam,
+        olam: itemData?.olam,
+        cop: itemData?.cop,
+        vop: itemData?.vop,
+        tsstam: itemData?.tsstam,
+        Show: itemData?.Show,
+        exr: itemData?.exr,
+        cfee: itemData?.cfee,
       };
       setLineItems((prev) => [...prev, newItem]);
     }
@@ -289,7 +293,7 @@ const[totalPrice , setTotalPrice] = useState(0);
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
         acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = item.adis  - item.fee || 0;
+        acc.tdis = item.adis - item.fee || 0;
         acc.tdis = item.adis - item.fee || 0;
         acc.tadis += item.adis || 0;
         return acc;
@@ -307,7 +311,7 @@ const[totalPrice , setTotalPrice] = useState(0);
     );
 
     calculatedTotals.tbill =
-      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam ;
+      calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
   };
@@ -647,6 +651,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                   onChange={(e) => handleInputChange("inty", e.target.value)}
                   className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="">انتخاب کنید</option>
                   <option value="1">نوع اول</option>
                   <option value="2">نوع دوم</option>
                   <option value="3">نوع سوم</option>
@@ -665,6 +670,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                   onChange={(e) => handleInputChange("inp", e.target.value)}
                   className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="">انتخاب کنید</option>
                   <option value="">انتخاب الگوی صورتحساب</option>
                   <option value="1">الگوی اول (فروش)</option>
                   <option value="2">الگوی دوم (فروش ارزی)</option>
@@ -763,6 +769,7 @@ const[totalPrice , setTotalPrice] = useState(0);
                 onChange={(e) => handleInputChange("setm", e.target.value)}
                 className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                <option value="">انتخاب کنید</option>
                 <option value="1">نقدی</option>
                 <option value="2">نسیه</option>
                 <option value="3">نسیه/نقدی</option>
@@ -863,23 +870,24 @@ const[totalPrice , setTotalPrice] = useState(0);
                       {item.name}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.am)}
-
+                      {new Intl.NumberFormat("fa-IR").format(item.am)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.fee)}
+                      {new Intl.NumberFormat("fa-IR").format(item.fee)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.exchangeRate)}
+                      {new Intl.NumberFormat("fa-IR").format(item.exchangeRate)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.currencyAmount)}
+                      {new Intl.NumberFormat("fa-IR").format(
+                        item.currencyAmount
+                      )}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.dis)}
+                      {new Intl.NumberFormat("fa-IR").format(item.dis)}
                     </span>
                     <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat('fa-IR').format(item.adis) }
+                      {new Intl.NumberFormat("fa-IR").format(item.adis)}
                     </span>
 
                     <div className="flex items-center justify-center gap-3">
@@ -902,7 +910,7 @@ const[totalPrice , setTotalPrice] = useState(0);
             )}
           </div>
         </div>
-     
+
         {/* Financial Summary Section */}
         <div className="px-6 py-4 border-t border-gray-200">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -934,7 +942,11 @@ const[totalPrice , setTotalPrice] = useState(0);
               </label>
               <input
                 type="text"
-                value={ totals.tadis ? Number(totals.tadis).toLocaleString("fa-IR") : ""}
+                value={
+                  totals.tadis
+                    ? Number(totals.tadis).toLocaleString("fa-IR")
+                    : ""
+                }
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1013,7 +1025,9 @@ const[totalPrice , setTotalPrice] = useState(0);
               </label>
               <input
                 type="text"
-                value={totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""}
+                value={
+                  totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""
+                }
                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />

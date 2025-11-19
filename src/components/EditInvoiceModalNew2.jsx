@@ -780,6 +780,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                   onChange={(e) => handleInputChange("inty", e.target.value)}
                   className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="">انتخاب کنید</option>
                   <option value="1">نوع اول</option>
                   <option value="2">نوع دوم</option>
                   <option value="3">نوع سوم</option>
@@ -798,6 +799,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                   onChange={(e) => handleInputChange("inp", e.target.value)}
                   className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="">انتخاب کنید</option>
                   <option value="">انتخاب الگوی صورتحساب</option>
                   <option value="1">الگوی اول (فروش)</option>
                   <option value="2">الگوی دوم (فروش ارزی)</option>
@@ -895,6 +897,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 onChange={(e) => handleInputChange("setm", e.target.value)}
                 className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                <option value="">انتخاب کنید</option>
                 <option value="1">نقدی</option>
                 <option value="2">نسیه</option>
                 <option value="3">نسیه/نقدی</option>
