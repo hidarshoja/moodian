@@ -14,7 +14,7 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
  
   if (!isOpen || !record) return null;
 
-
+console.log(`record`, record);
 
   return (
     <div
@@ -89,14 +89,14 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <span className="text-white/70 text-sm">تاریخ فاکتور:</span>
                   <span className="text-white font-medium">
-                    {record.invoiceDate}
+                    {record?.j_indatim}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <span className="text-white/70 text-sm">مبلغ فاکتور:</span>
                   <span className="text-white font-medium">
-                    {record.amount?.toLocaleString()} ریال
+                    {record?.tadis.toLocaleString()} ریال
                   </span>
                 </div>
               </div>
