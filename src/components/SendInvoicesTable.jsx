@@ -322,6 +322,7 @@ export default function SendInvoicesTable({
             </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">مبلغ کل</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">موضوع</th>
             <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
           </tr>
         </thead>
@@ -361,7 +362,9 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3  text-sm truncate max-w-[240px]">
                 {r.inty_label}
               </td>
-
+              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+                {r.ins_label}
+              </td>
               <td className="px-5 py-3  text-sm truncate max-w-[280px]">
                 <div className="flex items-center justify-end gap-2">
                   {r.can_update === true && (
