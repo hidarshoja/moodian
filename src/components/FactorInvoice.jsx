@@ -129,7 +129,7 @@ useEffect(() => {
           {(!invoiceData || invoiceData.length === 0) && (
             <tr>
               <td
-                colSpan={4}
+                colSpan={8}
                 className="px-4 py-6 text-center text-white/60 text-sm"
               >
                 موردی ثبت نشده است.
