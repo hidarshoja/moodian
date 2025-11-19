@@ -152,12 +152,23 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
         >
           <thead>
             <tr className="text-white/80 text-sm bg-[#181f3a]">
+              <th className="text-right px-4 py-3 whitespace-nowrap"></th>
               <th className="text-right px-4 py-3 whitespace-nowrap">آیدی</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">وضعیت</th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">وضعیت انجام</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">از محل</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ</th>
-              <th className="text-right px-4 py-3 whitespace-nowrap">دانلود</th>
+              <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+              <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>دانلود</th>
             </tr>
           </thead>
           <tbody>
@@ -176,6 +187,7 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 key={i}
                 className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
               >
+                <td className="p-2 text-center"></td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                   {r?.id}
                 </td>
@@ -202,6 +214,12 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                     <span className="whitespace-nowrap">
                       {r?.status_label ? r?.status_label : "-"}
                     </span>
+                  
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                <div className="flex flex-col gap-2 min-w-[120px]">
+                   
                     {(() => {
                       const progressInfo = getProgressInfo(r);
                       return (
@@ -223,12 +241,22 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {r?.entity_type_label === "ایمپورت"}
+                  {r?.entity_type_label }
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
                   {convertToPersianDate(r?.created_at)}
                 </td>
-                <td className="px-2 py-2">
+                <td className="p-2  text-center"></td>
+                <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                   <div className="flex items-center justify-start gap-2">
                     <button
                       onClick={() => handleDownload(r.id)}

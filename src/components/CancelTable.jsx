@@ -23,6 +23,7 @@ export default function CancelTable({
         }`}>
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap">ردیف</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               نام مشتری
@@ -43,7 +44,16 @@ export default function CancelTable({
             <th className="text-right px-4 py-3 whitespace-nowrap">
               تاریخ درخواست
             </th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">عملیات</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -62,6 +72,7 @@ export default function CancelTable({
               key={index}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
+              <td className="p-2 text-center"></td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {index + 1}
               </td>
@@ -90,7 +101,17 @@ export default function CancelTable({
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {convertToPersianDate(record.indatim)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+              <td className="p-2 text-center"></td>
+                <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => onView && onView(record)}
