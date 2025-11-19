@@ -70,11 +70,13 @@ export default function ReportsFilter({
             فیلتر براساس ماه
           </button>
         </div>
+        <div className="w-full border border-white/10 rounded-md h-[1px] mt-3"></div>
         <div className="flex flex-col md:flex-row gap-2 w-full p-2">
+        <div className="flex gap-2 w-1/2 border border-white/10 rounded-md p-2">
           {/* فیلتر براساس روز */}
           {activeTab === "day" && (
-            <div className="flex gap-2 w-full md:w-1/2">
-              <div className="input_date w-full md:w-1/2">
+            <div className="flex flex-col gap-4 w-full">
+              <div className="input_date w-full">
                 <span className="block text-gray-100 text-[10px] md:text-sm  mb-2">
                   تاریخ شروع{" "}
                 </span>
@@ -88,7 +90,7 @@ export default function ReportsFilter({
                   placeholder="تاریخ شروع"
                 />
               </div>
-              <div className="input_date w-full md:w-1/2">
+              <div className="input_date w-full">
                 <span className="block text-gray-100 text-[10px] md:text-sm mb-2">
                   تاریخ پایان{" "}
                 </span>
@@ -105,7 +107,7 @@ export default function ReportsFilter({
             </div>
           )}
           {activeTab === "month" && (
-            <div className="flex gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-4 w-full">
               <div className="input_date w-full md:w-w-1/2">
                 <span className="block text-gray-100 text-[10px] md:text-sm mb-2">
                   از ماه
@@ -138,7 +140,8 @@ export default function ReportsFilter({
               </div>
             </div>
           )}
-          <div className="flex gap-2 w-1/2">
+        </div>
+          <div className="flex gap-2 w-1/2 border border-white/10 rounded-md p-2">
             <div className="flex flex-col gap-2 ">
               <span className="text-[10px] md:text-sm text-gray-100">
                 وضعیت (چند انتخابی)
@@ -173,6 +176,7 @@ export default function ReportsFilter({
           
           </div>
         </div>
+        <div className="w-full border border-white/10 rounded-md h-[1px] mt-3"></div>
         <div className="w-full flex items-center justify-end mt-6 gap-2 p-2">
         <div className="flex items-center gap-2 justify-end">
               <button onClick={onClearAll} className="btn-custom">
