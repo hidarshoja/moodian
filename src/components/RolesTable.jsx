@@ -7,11 +7,21 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
       <table className="min-w-full">
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نام نقش</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">محافظ</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ ایجاد</th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">عملیات</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
+                position: "sticky",
+                left: 0,
+                backgroundColor: "#181f3a",
+                zIndex: 10,
+                minWidth: "70px",
+                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +40,7 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
               key={r.id ?? i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
+              <td className="p-2 text-center"></td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {r?.id}
               </td>
@@ -42,7 +53,17 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                 {convertToPersianDate(r?.created_at)}
               </td>
-              <td className="px-2 py-2">
+              <td className="p-2  text-center"></td>
+                <td 
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 style={{
+                   position: "sticky",
+                   left: 0,
+                   zIndex: 10,
+                   minWidth: "160px",
+                   backgroundColor: "rgb(27, 33, 60)",
+                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                 }}>
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => onEdit?.(i , r)}
