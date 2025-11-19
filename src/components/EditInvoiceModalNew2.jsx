@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
+import DateObject from "react-date-object";
 import persian from "react-date-object/calendars/persian";
+import gregorian from "react-date-object/calendars/gregorian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
@@ -11,9 +13,16 @@ import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
-import { convertJalaliDatetimeToGregorian } from "../utils/change-date";
 
-export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , onRefresh , onClose2, customers , products }) {
+export default function EditInvoiceModalNew2({
+  isOpen,
+  onClose,
+  invoiceData,
+  onRefresh,
+  onClose2,
+  customers,
+  products,
+}) {
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -41,13 +50,13 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
   });
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
-  const [totalDiscount2 , setTotalDiscount2] = useState(0);
+  const [totalDiscount2, setTotalDiscount2] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [totalDiscount3 , setTotalDiscount3] = useState(0);
-  const[tax , setTax] = useState(0);
-  const[totalOdam, setTotalOdam] = useState(0);
+  const [totalDiscount3, setTotalDiscount3] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [totalOdam, setTotalOdam] = useState(0);
   const [olamTotal, setOlamTotal] = useState(0);
-  const[totalPrice , setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   // Initialize form data when invoiceData changes
   useEffect(() => {
@@ -74,11 +83,9 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-         .get(`/invoice/${invoiceData.id}/items`)
+          .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
-    
             setLineItems(response.data.data);
-   
           })
           .catch((error) => {
             console.error("Error fetching line items:", error);
@@ -112,22 +119,40 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     return Number.isNaN(n) ? null : n;
   };
 
-  const formatDateTime = (date) => {
-    if (!date) return null;
+  const convertToDateTimeString = (dateValue) => {
+    if (!dateValue) return null;
     try {
-      const d = date instanceof Date ? date : new Date(date);
-      if (Number.isNaN(d.getTime())) return null;
-
-      // Format as YYYY-MM-DD HH:MM:SS
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const hours = String(d.getHours()).padStart(2, "0");
-      const minutes = String(d.getMinutes()).padStart(2, "0");
-      const seconds = String(d.getSeconds()).padStart(2, "0");
-
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    } catch {
+      // اگر DateObject است (از react-date-object)
+      if (
+        dateValue &&
+        typeof dateValue === "object" &&
+        typeof dateValue.format === "function" &&
+        dateValue.calendar
+      ) {
+        // همیشه به میلادی تبدیل کن (حتی اگر از قبل میلادی باشد، مشکلی نیست)
+        const gregorianDate = dateValue.convert(gregorian);
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+      // اگر Date است - باید آن را به DateObject میلادی تبدیل کنیم
+      else if (dateValue instanceof Date) {
+        const gregorianDate = new DateObject({
+          date: dateValue,
+          calendar: gregorian,
+        });
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+      // اگر string یا number است
+      else {
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) return null;
+        const gregorianDate = new DateObject({
+          date: date,
+          calendar: gregorian,
+        });
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+    } catch (error) {
+      console.error("Error converting date to string:", error);
       return null;
     }
   };
@@ -138,12 +163,8 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       customer_id: toNumberOrNull(formData.crn) ?? null,
       inty: toNumberOrNull(formData.inty),
       irtaxid: null,
-      indatim: convertJalaliDatetimeToGregorian(
-        formatDateTime(formData.indatim)
-      ),
-      indati2m: convertJalaliDatetimeToGregorian(
-        formatDateTime(formData.indati2m)
-      ),
+      indatim: convertToDateTimeString(formData.indatim),
+      indati2m: convertToDateTimeString(formData.indati2m),
       inp: toNumberOrNull(formData.inp),
       ins: 1,
       sbc: formData.sbc?.trim() || null,
@@ -208,8 +229,6 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     return payload;
   };
 
-
-
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -244,15 +263,26 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
 
     setTotals(calculatedTotals);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const sumDiscount = lineItems?.reduce((sum, item) => sum + ((item?.am * item?.fee) || 0), 0);
-    const sumDiscount2 = lineItems?.reduce((sum, item) => sum + (item?.dis || 0), 0);
+    const sumDiscount = lineItems?.reduce(
+      (sum, item) => sum + (item?.am * item?.fee || 0),
+      0
+    );
+    const sumDiscount2 = lineItems?.reduce(
+      (sum, item) => sum + (item?.dis || 0),
+      0
+    );
     const sumTax = lineItems?.reduce((sum, item) => sum + (item?.vam || 0), 0);
-    const sumOdam = lineItems?.reduce((sum, item) => sum + (item?.odam || 0), 0);
-    const sumOlam = lineItems?.reduce((sum, item) => sum + (item?.olam || 0), 0);
+    const sumOdam = lineItems?.reduce(
+      (sum, item) => sum + (item?.odam || 0),
+      0
+    );
+    const sumOlam = lineItems?.reduce(
+      (sum, item) => sum + (item?.olam || 0),
+      0
+    );
 
-   
     setOlamTotal(sumOlam);
-    setTotalPrice((totalDiscount3 + olamTotal + tax + totalOdam));
+    setTotalPrice(totalDiscount3 + olamTotal + tax + totalOdam);
     setTotalDiscount(sumDiscount);
     setTotalDiscount2(sumDiscount2);
     setTotalDiscount3(sumDiscount - sumDiscount2);
@@ -385,7 +415,6 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = buildPayload();
-    
 
     try {
       const res = await axiosClient.post(`/invoices`, payload, {
@@ -397,7 +426,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
         toast: true,
         position: "top-start",
         icon: "success",
-        title:"کپی فاکتور با موفقیت انجام شد!",
+        title: "کپی فاکتور با موفقیت انجام شد!",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -413,9 +442,8 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-            .get(`/invoice/${invoiceData.id}/items`)
+          .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
-       
             setLineItems(response.data.data);
           })
           .catch((error) => {
@@ -464,23 +492,15 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     try {
       // First, save the invoice
       const payload = buildPayload();
-     
 
-      const saveRes = await axiosClient.post(
-        `/invoices`,
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-     
+      const saveRes = await axiosClient.post(`/invoices`, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       // Then, send to moadian
       const sendData = {
         ids: [formData.id.toString()],
       };
-     
 
       const sendRes = await axiosClient.post(
         `/invoices/send-to-moadian`,
@@ -508,9 +528,8 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       if (invoiceData.id) {
         setLoadingItems(true);
         axiosClient
-             .get(`/invoice/${invoiceData.id}/items`)
+          .get(`/invoice/${invoiceData.id}/items`)
           .then((response) => {
-        
             setLineItems(response.data.data);
           })
           .catch((error) => {
@@ -523,7 +542,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       handleCancel();
     } catch (error) {
       handleCancel();
-    
+
       console.error("خطا در کپی فاکتور:", error);
       let errorMessage = "خطا در کپی فاکتور";
       if (error.response?.data?.message) {
@@ -744,7 +763,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
     printWindow.print();
     printWindow.close();
   };
-  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -753,7 +772,7 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
       >
         {/* Header */}
         <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between">
-        تکثیر فاکتور
+          تکثیر فاکتور
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
             <SlPrinter onClick={handlePrint} className="cursor-pointer" />
@@ -1051,9 +1070,9 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 م مبلغ قبل از تخفیف
               </label>
               <input
-                  type="text"
-                  value={Number(totalDiscount).toLocaleString("fa-IR")}
-                   readOnly
+                type="text"
+                value={Number(totalDiscount).toLocaleString("fa-IR")}
+                readOnly
                 className="w-full px-3 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
@@ -1062,9 +1081,9 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 م تخفیفات
               </label>
               <input
-                   type="text"
-                   value={Number(totalDiscount2).toLocaleString("fa-IR")}
-                 readOnly
+                type="text"
+                value={Number(totalDiscount2).toLocaleString("fa-IR")}
+                readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
@@ -1073,9 +1092,9 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 م مبلغ پس از کسر تخفیف
               </label>
               <input
-                  type="text"
-                  value={Number(totalDiscount3).toLocaleString("fa-IR")}
-                   readOnly
+                type="text"
+                value={Number(totalDiscount3).toLocaleString("fa-IR")}
+                readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
@@ -1098,12 +1117,12 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
             </div> */}
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
-              مبلغ سایر وجوه قانونی
+                مبلغ سایر وجوه قانونی
               </label>
               <input
-                 type="text"
-                 value={Number(olamTotal).toLocaleString("fa-IR")}
-                 readOnly
+                type="text"
+                value={Number(olamTotal).toLocaleString("fa-IR")}
+                readOnly
                 // onChange={(e) =>
                 //   setTotals((prev) => ({
                 //     ...prev,
@@ -1129,9 +1148,9 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 م سایر مالیات
               </label>
               <input
-               type="text"
-               value={Number(totalOdam).toLocaleString("fa-IR")}
-               readOnly
+                type="text"
+                value={Number(totalOdam).toLocaleString("fa-IR")}
+                readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1140,9 +1159,11 @@ export default function EditInvoiceModalNew2({ isOpen, onClose, invoiceData  , o
                 مبلغ کل
               </label>
               <input
-                      type="text"
-                      value={totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""}
-                      readOnly
+                type="text"
+                value={
+                  totalPrice ? Number(totalPrice).toLocaleString("fa-IR") : ""
+                }
+                readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90  border border-gray-300 rounded  font-bold text-[12px]"
               />
             </div>
@@ -1231,9 +1252,9 @@ EditInvoiceModalNew2.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   invoiceData: PropTypes.object,
-  isEditing :PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onClose2: PropTypes.func.isRequired,
-    customers: PropTypes.array.isRequired,
-    products: PropTypes.array.isRequired,
+  customers: PropTypes.array.isRequired,
+  products: PropTypes.array.isRequired,
 };
