@@ -330,6 +330,7 @@ export default function SendInvoicesTable({
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
+          <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap"> وضعیت </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               شماره منحصر به فرد مالیاتی
@@ -341,24 +342,27 @@ export default function SendInvoicesTable({
             <th className="text-right px-4 py-3 whitespace-nowrap">مبلغ کل</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
             <th className="text-right px-4 py-3 whitespace-nowrap">موضوع</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th
-              className="text-center px-4 py-3 whitespace-nowrap border-r border-white/10 relative"
+              className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
               style={{
                 position: "sticky",
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
-                minWidth: "100px",
+                minWidth: "70px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
               }}
             >
               <div
                 style={{
                   position: "absolute",
-                  right: "-100px",
+                  right: "-60px",
                   top: 0,
                   bottom: 0,
-                  width: "100px",
+                  width: "60px",
                   background: "#181f3a",
                   pointerEvents: "none",
                   zIndex: 11,
@@ -387,6 +391,9 @@ export default function SendInvoicesTable({
               )}`}
             >
               <td className="px-4 py-3  text-sm whitespace-nowrap">
+                {r?.id}
+              </td>
+              <td className="px-4 py-3  text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
               <td className="px-4 py-3  text-sm whitespace-nowrap">
@@ -407,13 +414,20 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3  text-sm truncate max-w-[240px]">
                 {r.ins_label}
               </td>
+              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              
+              </td>
+              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              
+              </td>
+              <td className="px-4 py-3  text-sm truncate max-w-[240px]">  </td>
               <td
-                className="px-5 py-3 text-sm border-r border-white/5 relative"
+                className="px-2 py-3 text-sm border-r border-white/5 relative"
                 style={{
                   position: "sticky",
                   left: 0,
                   zIndex: 10,
-                  minWidth: "80px",
+                  minWidth: "70px",
                   backgroundColor:
                     i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
@@ -422,17 +436,17 @@ export default function SendInvoicesTable({
                 <div
                   style={{
                     position: "absolute",
-                    right: "-80px",
+                    right: "-60px",
                     top: 0,
                     bottom: 0,
-                    width: "80px",
+                    width: "60px",
                     background:
                       i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
                     pointerEvents: "none",
                     zIndex: 11,
                   }}
                 />
-                <div className="flex items-center justify-end gap-2">
+                <div className="grid grid-cols-4 gap-1 justify-items-center">
                   {r.can_update === true && (
                     <>
                       <div className="relative group">
