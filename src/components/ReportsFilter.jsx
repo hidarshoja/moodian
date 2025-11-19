@@ -75,7 +75,7 @@ export default function ReportsFilter({
           {activeTab === "day" && (
             <div className="flex gap-2 w-full md:w-1/2">
               <div className="input_date w-full md:w-1/2">
-                <span className="block text-gray-100 text-[10px] mb-2">
+                <span className="block text-gray-100 text-[10px] md:text-sm  mb-2">
                   تاریخ شروع{" "}
                 </span>
                 <DatePicker
@@ -85,10 +85,11 @@ export default function ReportsFilter({
                   onChange={onStartDateChange}
                   calendarPosition="bottom-right"
                   inputClass="custom-input"
+                  placeholder="تاریخ شروع"
                 />
               </div>
               <div className="input_date w-full md:w-1/2">
-                <span className="block text-gray-100 text-[10px] mb-2">
+                <span className="block text-gray-100 text-[10px] md:text-sm mb-2">
                   تاریخ پایان{" "}
                 </span>
                 <DatePicker
@@ -98,6 +99,7 @@ export default function ReportsFilter({
                   onChange={onEndDateChange}
                   calendarPosition="bottom-right"
                   inputClass="custom-input"
+                  placeholder="تاریخ پایان"
                 />
               </div>
             </div>
@@ -105,7 +107,7 @@ export default function ReportsFilter({
           {activeTab === "month" && (
             <div className="flex gap-2 w-full md:w-1/2">
               <div className="input_date w-full md:w-w-1/2">
-                <span className="block text-gray-100 text-[10px] mb-2">
+                <span className="block text-gray-100 text-[10px] md:text-sm mb-2">
                   از ماه
                 </span>
                 <DatePicker
@@ -116,10 +118,11 @@ export default function ReportsFilter({
                   calendarPosition="bottom-right"
                   inputClass="custom-input"
                   onlyMonthPicker={true}
+                  placeholder="انتخاب ماه"
                 />
               </div>
               <div className="input_date w-full md:w-w-1/2">
-                <span className="block text-gray-100 text-[10px] mb-2">
+                <span className="block text-gray-100 text-[10px] md:text-sm mb-2">
                   تا ماه
                 </span>
                 <DatePicker
@@ -130,23 +133,24 @@ export default function ReportsFilter({
                   calendarPosition="bottom-right"
                   inputClass="custom-input"
                   onlyMonthPicker={true}
+                  placeholder="انتخاب ماه"
                 />
               </div>
             </div>
           )}
-          <div className="flex gap-2 w-full ">
+          <div className="flex gap-2 w-1/2">
             <div className="flex flex-col gap-2 ">
-              <span className="text-[10px] text-gray-100">
+              <span className="text-[10px] md:text-sm text-gray-100">
                 وضعیت (چند انتخابی)
               </span>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-3 gap-1 w-full">
                 {statusOptions.map((opt) => {
                   const checked =
                     Array.isArray(status) && status.includes(opt.value);
                   return (
                     <label
                       key={opt.value}
-                      className="flex items-center gap-2 text-[10px] text-gray-100"
+                      className="flex items-center w-full border bg-slate-800 border-white/10 rounded-md p-2 gap-1 text-[10px] text-gray-100"
                     >
                       <span className="inline-flex items-center">
                         <input
