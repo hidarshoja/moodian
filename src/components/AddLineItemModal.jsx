@@ -32,6 +32,9 @@ export default function AddLineItemModal({
     comment: "",
     name: null,
     sstid: null,
+    exr: null,
+    cfee: null,
+    cut:null
   });
   const [feeInputValue, setFeeInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ واحد
   const [disInputValue, setDisInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ تخفیف
@@ -280,6 +283,7 @@ export default function AddLineItemModal({
   };
 
   const handleSave = () => {
+    console.log(`formData`, formData);
     if (onSave) {
       onSave(formData);
     }
