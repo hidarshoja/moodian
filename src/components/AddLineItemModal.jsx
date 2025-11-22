@@ -410,10 +410,22 @@ export default function AddLineItemModal({
               </label>
               <input
                 type="text"
-                value={formData.am}
-                onChange={(e) =>
-                  handleInputChange("am", parseFloat(e.target.value))
+                value={
+                  formData.am === null ||
+                  formData.am === undefined ||
+                  isNaN(formData.am)
+                    ? ""
+                    : formData.am
                 }
+                onChange={(e) => {
+                  const value = e.target.value.trim();
+                  if (value === "") {
+                    handleInputChange("am", null);
+                  } else {
+                    const numValue = parseFloat(value);
+                    handleInputChange("am", isNaN(numValue) ? null : numValue);
+                  }
+                }}
                 step="0.001"
                 className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
