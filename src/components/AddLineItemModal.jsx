@@ -54,6 +54,7 @@ export default function AddLineItemModal({
   }, []);
 
   useEffect(() => {
+    console.log(`initialData`, initialData);
     if (isOpen) {
       if (initialData) {
         setFormData({
@@ -73,7 +74,7 @@ export default function AddLineItemModal({
           odam: initialData.odam ?? 0,
           olam: initialData.olam ?? 0,
           comment: initialData.comment ?? "",
-          name: initialData.name ?? "",
+          name: initialData.title ?? "",
           sstid: initialData.sstid ?? "",
         });
         // Find and set the selected product based on ProductId
@@ -287,7 +288,7 @@ export default function AddLineItemModal({
     setIsDropdownOpen(false);
     onClose();
   };
-
+console.log(`formData`, formData);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"

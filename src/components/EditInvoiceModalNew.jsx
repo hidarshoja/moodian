@@ -22,7 +22,7 @@ export default function EditInvoiceModalNew({
   customers,
   products,
 }) {
-  console.log(`invoiceData`, invoiceData);
+
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -381,8 +381,10 @@ export default function EditInvoiceModalNew({
     calculateTotals();
   };
 
-  const handleEditLineItem = (id) => {
-    setEditItemId(id);
+  const handleEditLineItem = (item) => {
+    console.log(`item`, item);
+    console.log(`id`, item?.id);
+    setEditItemId(item?.id);
     setAddItemModalOpen(true);
   };
 
@@ -768,7 +770,7 @@ export default function EditInvoiceModalNew({
     printWindow.print();
     printWindow.close();
   };
-
+console.log(`lineItems`, lineItems);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
@@ -997,7 +999,7 @@ export default function EditInvoiceModalNew({
           {/* Table Header */}
           <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg">
             <div className="grid grid-cols-9 gap-2 text-sm font-medium text-right">
-              <div>شناسه خدمت/کالا</div>
+              <div>شناسه1 خدمت/کالا</div>
               <div>نام خدمت/کالا</div>
               <div>تعداد/مقدار</div>
               <div>مبلغ واحد</div>
@@ -1064,7 +1066,7 @@ export default function EditInvoiceModalNew({
                         <MdDelete className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleEditLineItem(item.id)}
+                        onClick={() => handleEditLineItem(item )}
                         className="text-white hover:text-green-600"
                       >
                         <FiEdit className="w-4 h-4" />
@@ -1113,23 +1115,7 @@ export default function EditInvoiceModalNew({
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
-            {/* <div>
-              <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                م مبلغ پرداختی نقدی
-              </label>
-              <input
-                type="number"
-                value={totals.cap}
-                readOnly
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     cap: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
-              />
-            </div> */}
+         
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 مبلغ سایر وجوه قانونی
@@ -1138,12 +1124,7 @@ export default function EditInvoiceModalNew({
                 type="text"
                 value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     insp: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
+                
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1155,12 +1136,7 @@ export default function EditInvoiceModalNew({
                 type="text"
                 value={Number(tax).toLocaleString("fa-IR")}
                 readOnly
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     tvam: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
+               
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1211,59 +1187,32 @@ export default function EditInvoiceModalNew({
 
         {/* Add Line Item Modal */}
         <AddLineItemModal
-          isOpen={addItemModalOpen}
-          onClose={() => {
-            setAddItemModalOpen(false);
-            setEditItemId(null);
-          }}
-          onSave={handleSaveLineItem}
-          initialData={
-            editItemId
-              ? {
-                  ProductId: lineItems.find((x) => x.id === editItemId)
-                    ?.serviceName,
-                  am: lineItems.find((x) => x.id === editItemId)?.am,
-                  fee: lineItems.find((x) => x.id === editItemId)?.fee,
-                  prdis: lineItems.find((x) => x.id === editItemId)?.prdis,
-                  dis: lineItems.find((x) => x.id === editItemId)?.dis,
-                  adis: lineItems.find((x) => x.id === editItemId)?.adis,
-                }
-              : null
-          }
-          // initialData={
-          //   editItemId
-          //     ? (() => {
-          //         const item = lineItems.find((x) => x.id === editItemId);
-          //         if (!item) return null;
+  isOpen={addItemModalOpen}
+  onClose={() => {
+    setAddItemModalOpen(false);
+    setEditItemId(null);
+  }}
+  onSave={handleSaveLineItem}
+  initialData={
+    editItemId
+      ? (() => {
+          const item = lineItems.find((x) => x.id === editItemId);
 
-          //         const prdis = (item.am || 0) * (item.fee || 0);
-          //         const adis = prdis - (item.dis || 0);
+          return {
+            ProductId: item?.product_id,
+            title: item?.product?.title, 
+            am: item?.am,
+            fee: item?.fee,
+            prdis: item?.prdis,
+            dis: item?.dis,
+            adis: item?.adis,
+          };
+        })()
+      : null
+  }
+  title={editItemId ? "ویرایش" : "جدید"}
+/>
 
-          //         return {
-          //           ProductId: item.product_id,
-          //           am: item.am,
-          //           fee: item.fee,
-          //           prdis: prdis,
-          //           dis: item.dis,
-          //           adis: adis,
-          //           bsrn: item.bsrn || "",
-          //           comment: item.comment || "",
-          //           vra: item.vra || 0,
-          //           vam: item.vam || 0,
-          //           odam: item.odam || 0,
-          //           olam: item.olam || 0,
-          //           cop: item.cop || 0,
-          //           vop: item.vop || 0,
-          //           tsstam: item.tsstam || 0,
-          //           Show: item.Show || false,
-          //           exr: item.exr || 0,
-          //           cfee: item.cfee || 0,
-          //         };
-          //       })()
-          //     : null
-          // }
-          title={editItemId ? "ویرایش" : "جدید"}
-        />
       </div>
     </div>
   );
