@@ -38,6 +38,7 @@ export default function AddLineItemModal({
   const [dataTable, setDataTable] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const lastProductIdRef = useRef(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -74,12 +75,11 @@ export default function AddLineItemModal({
           odam: initialData.odam ?? 0,
           olam: initialData.olam ?? 0,
           comment: initialData.comment ?? "",
-          name: initialData.title ?? "",
+          name: initialData.name ?? initialData.title ?? "",
           sstid: initialData.sstid ?? "",
         });
-        // Find and set the selected product based on ProductId
-        const product = dataTable.find((p) => p.id == initialData.ProductId);
-        setSelectedProduct(product || null);
+        // Reset ref when initialData changes
+        lastProductIdRef.current = null;
       } else {
         setFormData({
           ProductId: "",
@@ -102,10 +102,33 @@ export default function AddLineItemModal({
           sstid: null,
         });
         setSelectedProduct(null);
+        lastProductIdRef.current = null;
       }
       setIsDropdownOpen(false);
+    } else {
+      // Reset ref when modal closes
+      lastProductIdRef.current = null;
     }
-  }, [isOpen, initialData, dataTable]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialData]);
+
+  // Find and set selected product when dataTable is loaded and initialData exists
+  useEffect(() => {
+    const productId = initialData?.ProductId;
+    if (
+      isOpen &&
+      productId &&
+      dataTable.length > 0 &&
+      lastProductIdRef.current !== productId
+    ) {
+      const product = dataTable.find((p) => p.id == productId);
+      if (product) {
+        lastProductIdRef.current = productId;
+        setSelectedProduct(product);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialData?.ProductId, dataTable]);
 
   // مقدار اولیه نمایش مبلغ واحد را طبق مقدار اولیه fee ست کن
   useEffect(() => {
@@ -249,6 +272,7 @@ export default function AddLineItemModal({
     handleInputChange("ProductId", product.id);
     handleInputChange("name", product.title);
     handleInputChange("sstid", product.sstid);
+    lastProductIdRef.current = product.id; // Update ref to prevent useEffect from overriding
     setIsDropdownOpen(false);
   };
 
@@ -288,7 +312,7 @@ export default function AddLineItemModal({
     setIsDropdownOpen(false);
     onClose();
   };
-console.log(`formData`, formData);
+  console.log(`formData`, formData);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"
@@ -326,7 +350,11 @@ console.log(`formData`, formData);
                 className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right flex items-center justify-between"
               >
                 <span className="truncate">
-                  {selectedProduct ? selectedProduct.title : "انتخاب کنید"}
+                  {selectedProduct
+                    ? selectedProduct.title
+                    : formData.name
+                    ? formData.name
+                    : "انتخاب کنید"}
                 </span>
                 <FaChevronDown
                   className={`text-sm text-white/70 transition-transform duration-200 ${
