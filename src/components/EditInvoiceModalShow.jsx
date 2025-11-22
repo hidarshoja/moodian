@@ -349,8 +349,8 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , c
     calculateTotals();
   };
 
-  const handleEditLineItem = (id) => {
-    setEditItemId(id);
+  const handleEditLineItem = (item) => {
+    setEditItemId(item?.id);
     setAddItemModalOpen(true);
   };
 
@@ -1031,7 +1031,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , c
                         <MdDelete className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleEditLineItem(item.id)}
+                        onClick={() => handleEditLineItem(item)}
                         className="text-white hover:text-green-600"
                       >
                         <FiEdit className="w-4 h-4" />
@@ -1183,6 +1183,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , c
 
                   return {
                     ProductId: item.product_id,
+                    title: item?.product?.title,
                     am: item.am,
                     fee: item.fee,
                     prdis: prdis,

@@ -217,7 +217,6 @@ export default function AssignModal({
                 </tr>
               )}
               {transaction.map((r, i) => (
-                console.log(`r`, r),
                 <tr
                   key={r.id ?? i}
                   className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"

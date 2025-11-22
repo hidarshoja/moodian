@@ -197,12 +197,11 @@ export default function SendInvoicesTable({
       const response = await axiosClient.post("/invoices/check-from-moadian", {
         reference_numbers: [referenceNumber],
       });
-      console.log("Check Status Response:", response);
-      console.log("Check Status Response Data:", response.data);
+      
 
       // فرمت کردن اطلاعات response برای نمایش در Swal
       const responseData = response.data?.[0];
-      console.log(`responseData`, responseData);
+   
       if (responseData) {
         let htmlContent = `
           <div dir="rtl" style="text-align: right; font-family: 'IRANSans', sans-serif;">

@@ -52,7 +52,6 @@ const GroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
    
  
     const result = res?.data; 
-    console.log(`result`, result);
     if (Array.isArray(result) && result.length > 0) {
       const tableHtml = `
         <table style="width:100%; text-align:center; border-collapse: collapse;">
@@ -128,7 +127,6 @@ onClose();
   };
 
   if (!isOpen) return null;
-console.log(`invoiceData`, invoiceData);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/50">

@@ -257,7 +257,6 @@ export default function AssignModalNew({
               )}
               {transaction.map(
                 (r, i) => (
-                  console.log(`r`, r),
                   (
                     <tr
                       key={r.id ?? i}

@@ -14,7 +14,7 @@ export default function ViewCancelModal({ isOpen, onClose, record }) {
  
   if (!isOpen || !record) return null;
 
-console.log(`record`, record);
+
 
   return (
     <div

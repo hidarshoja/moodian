@@ -53,7 +53,6 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
    setLoading3(true);
 axiosClient.get(`/transactions?page=${pageCount2}&f[coefficient]=1&f[sum_invoices] = <,amount,${r.id}`)
 .then((response) => {
-  console.log(`response?.data?.data`, response?.data?.data);
       setAssignData(response?.data?.data);
        setMeta(response.data.meta);
     }).catch((error) => {
@@ -89,7 +88,6 @@ useEffect(() => {
   if(idActive){
     axiosClient.get(`/invoices/${idActive}`)
     .then((response) => {
-      console.log(`response?.data?.transactions`, response?.data?.transactions);
       setActiveAccount(response?.data?.transactions);
     });   
   }else{

@@ -14,7 +14,7 @@ export default function SendStatusDetailsModal({ isOpen, onClose, record }) {
 
   const { customer, user, ...row } = record;
 
-  console.log(`row`, row);
+  
   const visibleFields = [
  
     { label: "وضعیت ارسال", value: row.title, icon: <FaExchangeAlt /> },

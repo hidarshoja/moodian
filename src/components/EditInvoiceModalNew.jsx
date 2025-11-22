@@ -382,8 +382,6 @@ export default function EditInvoiceModalNew({
   };
 
   const handleEditLineItem = (item) => {
-    console.log(`item`, item);
-    console.log(`id`, item?.id);
     setEditItemId(item?.id);
     setAddItemModalOpen(true);
   };
@@ -770,7 +768,7 @@ export default function EditInvoiceModalNew({
     printWindow.print();
     printWindow.close();
   };
-console.log(`lineItems`, lineItems);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
