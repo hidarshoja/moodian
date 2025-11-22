@@ -123,19 +123,29 @@ export default function CreateModalInvoices({
         am: toNumberOrNull(it.am),
         nw: null,
         fee: toNumberOrNull(it.fee),
-        cfee: null,
-        cut: null,
-        exr: null,
+        cfee: toNumberOrNull(it.cfee),
+        cut: it.cut || null,
+        exr: toNumberOrNull(it.exr),
         ssrv: null,
         sscv: null,
         dis: toNumberOrNull(it.dis) ?? 0,
         consfee: null,
         spro: null,
         bros: null,
-        bsrn: null,
+        bsrn: it.bsrn || null,
         cui: null,
         cpr: null,
         sovat: null,
+        // Additional fields from AddLineItemModal
+        vra: toNumberOrNull(it.vra),
+        vam: toNumberOrNull(it.vam),
+        odam: toNumberOrNull(it.odam),
+        olam: toNumberOrNull(it.olam),
+        cop: toNumberOrNull(it.cop),
+        vop: toNumberOrNull(it.vop),
+        tsstam: toNumberOrNull(it.tsstam),
+        comment: it.comment || null,
+        Show: it.Show || false,
       })),
     };
     return payload;
@@ -239,9 +249,12 @@ export default function CreateModalInvoices({
                 cop: itemData?.cop,
                 vop: itemData?.vop,
                 tsstam: itemData?.tsstam,
-                Show: itemData?.Show,
-                exr: itemData?.exr,
-                cfee: itemData?.cfee,
+                Show: itemData?.Show || false,
+                exr: itemData?.exr || null,
+                cfee: itemData?.cfee || null,
+                cut: itemData?.cut || null,
+                bsrn: itemData?.bsrn || "",
+                comment: itemData?.comment || "",
               }
             : item
         )
@@ -267,9 +280,12 @@ export default function CreateModalInvoices({
         cop: itemData?.cop,
         vop: itemData?.vop,
         tsstam: itemData?.tsstam,
-        Show: itemData?.Show,
-        exr: itemData?.exr,
-        cfee: itemData?.cfee,
+        Show: itemData?.Show || false,
+        exr: itemData?.exr || null,
+        cfee: itemData?.cfee || null,
+        cut: itemData?.cut || null,
+        bsrn: itemData?.bsrn || "",
+        comment: itemData?.comment || "",
       };
       setLineItems((prev) => [...prev, newItem]);
     }
@@ -670,7 +686,6 @@ export default function CreateModalInvoices({
                   onChange={(e) => handleInputChange("inp", e.target.value)}
                   className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                
                   <option value="">انتخاب الگوی صورتحساب</option>
                   <option value="1">الگوی اول (فروش)</option>
                   <option value="2">الگوی دوم (فروش ارزی)</option>
@@ -1065,15 +1080,31 @@ export default function CreateModalInvoices({
           onSave={handleSaveLineItem}
           initialData={
             editItemId
-              ? {
-                  ProductId: lineItems.find((x) => x.id === editItemId)
-                    ?.serviceName,
-                  am: lineItems.find((x) => x.id === editItemId)?.am,
-                  fee: lineItems.find((x) => x.id === editItemId)?.fee,
-                  prdis: lineItems.find((x) => x.id === editItemId)?.prdis,
-                  dis: lineItems.find((x) => x.id === editItemId)?.dis,
-                  adis: lineItems.find((x) => x.id === editItemId)?.adis,
-                }
+              ? (() => {
+                  const item = lineItems.find((x) => x.id === editItemId);
+                  return {
+                    ProductId: item?.serviceName,
+                    title: item?.name,
+                    am: item?.am,
+                    fee: item?.fee,
+                    prdis: item?.prdis,
+                    dis: item?.dis,
+                    adis: item?.adis,
+                    exr: item?.exr,
+                    cfee: item?.cfee,
+                    cut: item?.cut,
+                    Show: item?.Show || false,
+                    bsrn: item?.bsrn,
+                    comment: item?.comment,
+                    vra: item?.vra,
+                    vam: item?.vam,
+                    odam: item?.odam,
+                    olam: item?.olam,
+                    cop: item?.cop,
+                    vop: item?.vop,
+                    tsstam: item?.tsstam,
+                  };
+                })()
               : null
           }
           title={editItemId ? "ویرایش" : "جدید"}

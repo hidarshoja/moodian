@@ -22,7 +22,6 @@ export default function EditInvoiceModalNew({
   customers,
   products,
 }) {
-
   const [formData, setFormData] = useState({
     id: "",
     inty: "1",
@@ -204,7 +203,7 @@ export default function EditInvoiceModalNew({
         nw: null,
         fee: toNumberOrNull(it.fee),
         cfee: toNumberOrNull(it.cfee),
-        cut: null,
+        cut: it.cut || null,
         exr: toNumberOrNull(it.exr),
         ssrv: null,
         sscv: null,
@@ -316,8 +315,9 @@ export default function EditInvoiceModalNew({
                 fee: itemData.fee,
                 dis: itemData.dis,
                 adis: calculatedAdis,
-                exr: itemData.exr || item.exr || 0,
-                cfee: itemData.cfee || item.cfee || 0,
+                exr: itemData.exr || item.exr || null,
+                cfee: itemData.cfee || item.cfee || null,
+                cut: itemData.cut || item.cut || null,
                 bsrn: itemData.bsrn || "",
                 comment: itemData.comment || "",
                 vra: itemData.vra || 0,
@@ -349,8 +349,9 @@ export default function EditInvoiceModalNew({
         product_id: itemData.ProductId,
         am: itemData.am,
         fee: itemData.fee,
-        exr: itemData.exr || 0,
-        cfee: itemData.cfee || 0,
+        exr: itemData.exr || null,
+        cfee: itemData.cfee || null,
+        cut: itemData.cut || null,
         dis: itemData.dis,
         adis: calculatedAdis,
         bsrn: itemData.bsrn || "",
@@ -781,7 +782,7 @@ export default function EditInvoiceModalNew({
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
             <div>
-            <span className="text-sm">
+              <span className="text-sm">
                 {invoiceData?.taxid}{" "}
                 {invoiceData?.ancestors && invoiceData?.ancestors.length > 0
                   ? invoiceData.ancestors
@@ -1064,7 +1065,7 @@ export default function EditInvoiceModalNew({
                         <MdDelete className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleEditLineItem(item )}
+                        onClick={() => handleEditLineItem(item)}
                         className="text-white hover:text-green-600"
                       >
                         <FiEdit className="w-4 h-4" />
@@ -1113,7 +1114,7 @@ export default function EditInvoiceModalNew({
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
-         
+
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 مبلغ سایر وجوه قانونی
@@ -1122,7 +1123,6 @@ export default function EditInvoiceModalNew({
                 type="text"
                 value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
-                
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1134,7 +1134,6 @@ export default function EditInvoiceModalNew({
                 type="text"
                 value={Number(tax).toLocaleString("fa-IR")}
                 readOnly
-               
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1185,32 +1184,44 @@ export default function EditInvoiceModalNew({
 
         {/* Add Line Item Modal */}
         <AddLineItemModal
-  isOpen={addItemModalOpen}
-  onClose={() => {
-    setAddItemModalOpen(false);
-    setEditItemId(null);
-  }}
-  onSave={handleSaveLineItem}
-  initialData={
-    editItemId
-      ? (() => {
-          const item = lineItems.find((x) => x.id === editItemId);
+          isOpen={addItemModalOpen}
+          onClose={() => {
+            setAddItemModalOpen(false);
+            setEditItemId(null);
+          }}
+          onSave={handleSaveLineItem}
+          initialData={
+            editItemId
+              ? (() => {
+                  const item = lineItems.find((x) => x.id === editItemId);
 
-          return {
-            ProductId: item?.product_id,
-            title: item?.product?.title, 
-            am: item?.am,
-            fee: item?.fee,
-            prdis: item?.prdis,
-            dis: item?.dis,
-            adis: item?.adis,
-          };
-        })()
-      : null
-  }
-  title={editItemId ? "ویرایش" : "جدید"}
-/>
-
+                  return {
+                    ProductId: item?.product_id,
+                    title: item?.product?.title,
+                    am: item?.am,
+                    fee: item?.fee,
+                    prdis: item?.prdis,
+                    dis: item?.dis,
+                    adis: item?.adis,
+                    exr: item?.exr,
+                    cfee: item?.cfee,
+                    cut: item?.cut,
+                    Show: item?.Show || false,
+                    bsrn: item?.bsrn,
+                    comment: item?.comment,
+                    vra: item?.vra,
+                    vam: item?.vam,
+                    odam: item?.odam,
+                    olam: item?.olam,
+                    cop: item?.cop,
+                    vop: item?.vop,
+                    tsstam: item?.tsstam,
+                  };
+                })()
+              : null
+          }
+          title={editItemId ? "ویرایش" : "جدید"}
+        />
       </div>
     </div>
   );
