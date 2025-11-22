@@ -81,17 +81,17 @@ export default function AddLineItemModal({
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
-        console.log(`initialData`, initialData);
         setFormData({
           ProductId: initialData.ProductId ?? "",
           am: initialData.am,
           fee: initialData.fee ?? 0,
           bsrn: initialData.bsrn ?? "",
           Show:
-            initialData.Show ??
-            (initialData.cut !== null
+            initialData.cut !== null &&
+            initialData.cut !== undefined &&
+            initialData.cut !== ""
               ? true
-              : false),
+              : initialData.Show ?? false,
           prdis: initialData.prdis ?? 0,
           dis: initialData.dis ?? 0,
           adis: initialData.adis ?? 0,
@@ -112,8 +112,6 @@ export default function AddLineItemModal({
         // Reset ref when initialData changes
         lastProductIdRef.current = null;
       } else {
-        console.log(`else`);
-        
         setFormData({
           ProductId: "",
           am: null,
@@ -377,7 +375,7 @@ export default function AddLineItemModal({
     setIsCurrencyDropdownOpen(false);
     onClose();
   };
-console.log(`formData`, formData);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur"
