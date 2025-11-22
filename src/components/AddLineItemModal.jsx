@@ -34,7 +34,7 @@ export default function AddLineItemModal({
     sstid: null,
     exr: null,
     cfee: null,
-    cut:null
+    cut: null,
   });
   const [feeInputValue, setFeeInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ واحد
   const [disInputValue, setDisInputValue] = useState(""); // مقدار فرمت‌شده برای نمایش مبلغ تخفیف
@@ -43,11 +43,32 @@ export default function AddLineItemModal({
   const dropdownRef = useRef(null);
   const lastProductIdRef = useRef(null);
 
+  // Currency dropdown states
+  const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
+  const currencyDropdownRef = useRef(null);
+  const currencies = [
+    { name: "Euro", code: "EUR" },
+    { name: "US Dollar", code: "USD" },
+    { name: "Yuan Renminbi", code: "CNY" },
+    { name: "Russian Ruble", code: "RUB" },
+    { name: "Australian Dollar", code: "AUD" },
+    { name: "Azerbaijan Manat", code: "AZN" },
+    { name: "Bahraini Dinar", code: "BHD" },
+    { name: "Afghani", code: "AFN" },
+    { name: "UAE Dirham", code: "AED" },
+  ];
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
+      }
+      if (
+        currencyDropdownRef.current &&
+        !currencyDropdownRef.current.contains(event.target)
+      ) {
+        setIsCurrencyDropdownOpen(false);
       }
     };
 
@@ -79,6 +100,9 @@ export default function AddLineItemModal({
           comment: initialData.comment ?? "",
           name: initialData.name ?? initialData.title ?? "",
           sstid: initialData.sstid ?? "",
+          exr: initialData.exr ?? 0,
+          cfee: initialData.cfee ?? 0,
+          cut: initialData.cut ?? null,
         });
         // Reset ref when initialData changes
         lastProductIdRef.current = null;
@@ -102,11 +126,15 @@ export default function AddLineItemModal({
           comment: "",
           name: null,
           sstid: null,
+          exr: null,
+          cfee: null,
+          cut: null,
         });
         setSelectedProduct(null);
         lastProductIdRef.current = null;
       }
       setIsDropdownOpen(false);
+      setIsCurrencyDropdownOpen(false);
     } else {
       // Reset ref when modal closes
       lastProductIdRef.current = null;
@@ -263,10 +291,24 @@ export default function AddLineItemModal({
   };
 
   const handleToggleChange = (field) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
+    setFormData((prev) => {
+      const newValue = !prev[field];
+      // اگر Show به false تغییر کرد، فیلدهای ارز را reset کن
+      if (field === "Show" && !newValue) {
+        setIsCurrencyDropdownOpen(false);
+        return {
+          ...prev,
+          [field]: newValue,
+          exr: null,
+          cfee: null,
+          cut: null,
+        };
+      }
+      return {
+        ...prev,
+        [field]: newValue,
+      };
+    });
   };
 
   const handleProductSelect = (product) => {
@@ -280,6 +322,15 @@ export default function AddLineItemModal({
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleCurrencyDropdown = () => {
+    setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen);
+  };
+
+  const handleCurrencySelect = (currency) => {
+    handleInputChange("cut", currency.code);
+    setIsCurrencyDropdownOpen(false);
   };
 
   const handleSave = () => {
@@ -310,9 +361,13 @@ export default function AddLineItemModal({
       comment: "",
       name: null,
       sstid: null,
+      exr: null,
+      cfee: null,
+      cut: null,
     });
     setSelectedProduct(null);
     setIsDropdownOpen(false);
+    setIsCurrencyDropdownOpen(false);
     onClose();
   };
 
@@ -704,6 +759,120 @@ export default function AddLineItemModal({
                 </button>
               </div>
             </div>
+            {formData.Show && (
+             <div></div>
+            )}
+
+            {/* نوع ارز (Currency Type) - Only shown when Show is true */}
+            {formData.Show && (
+              <div className="relative" ref={currencyDropdownRef}>
+                <label className="block mb-1 text-gray-100 text-xs font-medium">
+                  نوع ارز
+                </label>
+                <button
+                  type="button"
+                  onClick={toggleCurrencyDropdown}
+                  className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right flex items-center justify-between"
+                >
+                  <span className="truncate">
+                    {formData.cut
+                      ? currencies.find((c) => c.code === formData.cut)?.name ||
+                        "انتخاب کنید"
+                      : "انتخاب کنید"}
+                  </span>
+                  <FaChevronDown
+                    className={`text-sm text-white/70 transition-transform duration-200 ${
+                      isCurrencyDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Currency Dropdown List */}
+                {isCurrencyDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl max-h-80 overflow-hidden">
+                    <div className="max-h-64 overflow-y-auto">
+                      {currencies.map((currency) => (
+                        <button
+                          key={currency.code}
+                          type="button"
+                          onClick={() => handleCurrencySelect(currency)}
+                          className="w-full px-3 py-2 hover:bg-gray-700 transition-colors duration-150 border-b border-gray-700/50 last:border-b-0 text-right"
+                        >
+                          <span className="text-sm text-white/90">
+                            {currency.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          
+
+            {/* میزان ارز (Currency Amount) - Only shown when Show is true */}
+            {formData.Show && (
+              <div>
+                <label className="block mb-1 text-gray-100 text-xs font-medium">
+                  میزان ارز
+                </label>
+                <input
+                  type="text"
+                  value={
+                    formData.cfee === null ||
+                    formData.cfee === undefined ||
+                    isNaN(formData.cfee)
+                      ? ""
+                      : formData.cfee
+                  }
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    if (value === "") {
+                      handleInputChange("cfee", null);
+                    } else {
+                      const numValue = parseFloat(value);
+                      handleInputChange(
+                        "cfee",
+                        isNaN(numValue) ? null : numValue
+                      );
+                    }
+                  }}
+                  className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+            )}
+
+            {/* میزان ارز نرخ برابری با ریال (Currency Exchange Rate) - Only shown when Show is true */}
+            {formData.Show && (
+              <div>
+                <label className="block mb-1 text-gray-100 text-xs font-medium">
+                  میزان ارز نرخ برابری با ریال
+                </label>
+                <input
+                  type="text"
+                  value={
+                    formData.exr === null ||
+                    formData.exr === undefined ||
+                    isNaN(formData.exr)
+                      ? ""
+                      : formData.exr
+                  }
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    if (value === "") {
+                      handleInputChange("exr", null);
+                    } else {
+                      const numValue = parseFloat(value);
+                      handleInputChange(
+                        "exr",
+                        isNaN(numValue) ? null : numValue
+                      );
+                    }
+                  }}
+                  className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+            )}
 
             {/* توضیحات (comment) - Full width */}
             <div className="col-span-2 lg:col-span-3">
