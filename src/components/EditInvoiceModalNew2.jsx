@@ -196,14 +196,16 @@ export default function EditInvoiceModalNew2({
       asd: null,
       in: null,
       an: null,
-      items: (lineItems || []).map((it) => ({
+      items: (lineItems || []).map((it) => {
+        const isShowFalse = !it.Show;
+        return {
         product_id: toNumberOrNull(it.product_id),
         am: toNumberOrNull(it.am),
         nw: null,
         fee: toNumberOrNull(it.fee),
-        cfee: toNumberOrNull(it.cfee),
-        cut: null,
-        exr: toNumberOrNull(it.exr),
+        cfee: isShowFalse ? null : toNumberOrNull(it.cfee),
+        cut: isShowFalse ? null : it.cut || null,
+        exr: isShowFalse ? null : toNumberOrNull(it.exr),
         ssrv: null,
         sscv: null,
         dis: toNumberOrNull(it.dis) ?? 0,
@@ -224,7 +226,8 @@ export default function EditInvoiceModalNew2({
         tsstam: toNumberOrNull(it.tsstam),
         comment: it.comment || null,
         Show: it.Show || false,
-      })),
+      };
+      }),
     };
     return payload;
   };
@@ -302,7 +305,10 @@ export default function EditInvoiceModalNew2({
     const calculatedAdis =
       itemData.adis ||
       (itemData.am || 0) * (itemData.fee || 0) - (itemData.dis || 0);
-
+      const isShowFalse = !itemData.Show;
+      const exrValue = isShowFalse ? null : itemData.exr || null;
+      const cfeeValue = isShowFalse ? null : itemData.cfee || null;
+      const cutValue = isShowFalse ? null : itemData.cut || null;
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -314,8 +320,9 @@ export default function EditInvoiceModalNew2({
                 fee: itemData.fee,
                 dis: itemData.dis,
                 adis: calculatedAdis,
-                exr: itemData.exr || item.exr || 0,
-                cfee: itemData.cfee || item.cfee || 0,
+                exr: exrValue,
+                cfee: cfeeValue,
+                cut: cutValue,
                 bsrn: itemData.bsrn || "",
                 comment: itemData.comment || "",
                 vra: itemData.vra || 0,
@@ -347,8 +354,9 @@ export default function EditInvoiceModalNew2({
         product_id: itemData.ProductId,
         am: itemData.am,
         fee: itemData.fee,
-        exr: itemData.exr || 0,
-        cfee: itemData.cfee || 0,
+        exr: exrValue,
+        cfee: cfeeValue,
+        cut: cutValue,
         dis: itemData.dis,
         adis: calculatedAdis,
         bsrn: itemData.bsrn || "",
@@ -1190,15 +1198,28 @@ export default function EditInvoiceModalNew2({
             editItemId
               ? (() => {
                   const item = lineItems.find((x) => x.id === editItemId);
-        
+
                   return {
                     ProductId: item?.product_id,
-                    name: item?.product?.title, 
+                    title: item?.product?.title,
                     am: item?.am,
                     fee: item?.fee,
                     prdis: item?.prdis,
                     dis: item?.dis,
                     adis: item?.adis,
+                    exr: item?.exr,
+                    cfee: item?.cfee,
+                    cut: item?.cut,
+                    Show: item?.Show || false,
+                    bsrn: item?.bsrn,
+                    comment: item?.comment,
+                    vra: item?.vra,
+                    vam: item?.vam,
+                    odam: item?.odam,
+                    olam: item?.olam,
+                    cop: item?.cop,
+                    vop: item?.vop,
+                    tsstam: item?.tsstam,
                   };
                 })()
               : null
