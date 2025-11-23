@@ -341,7 +341,16 @@ export default function AddLineItemModal({
   const handleSave = () => {
     console.log(`formData`, formData);
     if (onSave) {
-      onSave(formData);
+      // اگر Show فالس باشد، مقادیر ارز باید null باشند
+      const dataToSave = {
+        ...formData,
+        ...(formData.Show === false && {
+          exr: null,
+          cfee: null,
+          cut: null,
+        }),
+      };
+      onSave(dataToSave);
     }
     handleCancel();
   };

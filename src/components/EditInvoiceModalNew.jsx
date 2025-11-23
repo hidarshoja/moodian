@@ -197,35 +197,39 @@ export default function EditInvoiceModalNew({
       asd: null,
       in: null,
       an: null,
-      items: (lineItems || []).map((it) => ({
-        product_id: toNumberOrNull(it.product_id),
-        am: toNumberOrNull(it.am),
-        nw: null,
-        fee: toNumberOrNull(it.fee),
-        cfee: toNumberOrNull(it.cfee),
-        cut: it.cut || null,
-        exr: toNumberOrNull(it.exr),
-        ssrv: null,
-        sscv: null,
-        dis: toNumberOrNull(it.dis) ?? 0,
-        consfee: null,
-        spro: null,
-        bros: null,
-        bsrn: it.bsrn || null,
-        cui: null,
-        cpr: null,
-        sovat: null,
-        // Additional fields from AddLineItemModal
-        vra: toNumberOrNull(it.vra),
-        vam: toNumberOrNull(it.vam),
-        odam: toNumberOrNull(it.odam),
-        olam: toNumberOrNull(it.olam),
-        cop: toNumberOrNull(it.cop),
-        vop: toNumberOrNull(it.vop),
-        tsstam: toNumberOrNull(it.tsstam),
-        comment: it.comment || null,
-        Show: it.Show || false,
-      })),
+      items: (lineItems || []).map((it) => {
+        // اگر Show فالس باشد، مقادیر ارز باید null باشند
+        const isShowFalse = !it.Show;
+        return {
+          product_id: toNumberOrNull(it.product_id),
+          am: toNumberOrNull(it.am),
+          nw: null,
+          fee: toNumberOrNull(it.fee),
+          cfee: isShowFalse ? null : toNumberOrNull(it.cfee),
+          cut: isShowFalse ? null : it.cut || null,
+          exr: isShowFalse ? null : toNumberOrNull(it.exr),
+          ssrv: null,
+          sscv: null,
+          dis: toNumberOrNull(it.dis) ?? 0,
+          consfee: null,
+          spro: null,
+          bros: null,
+          bsrn: it.bsrn || null,
+          cui: null,
+          cpr: null,
+          sovat: null,
+          // Additional fields from AddLineItemModal
+          vra: toNumberOrNull(it.vra),
+          vam: toNumberOrNull(it.vam),
+          odam: toNumberOrNull(it.odam),
+          olam: toNumberOrNull(it.olam),
+          cop: toNumberOrNull(it.cop),
+          vop: toNumberOrNull(it.vop),
+          tsstam: toNumberOrNull(it.tsstam),
+          comment: it.comment || null,
+          Show: it.Show || false,
+        };
+      }),
     };
     return payload;
   };
@@ -304,6 +308,12 @@ export default function EditInvoiceModalNew({
       itemData.adis ||
       (itemData.am || 0) * (itemData.fee || 0) - (itemData.dis || 0);
 
+    // اگر Show فالس باشد، مقادیر ارز باید null باشند
+    const isShowFalse = !itemData.Show;
+    const exrValue = isShowFalse ? null : itemData.exr || null;
+    const cfeeValue = isShowFalse ? null : itemData.cfee || null;
+    const cutValue = isShowFalse ? null : itemData.cut || null;
+
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
@@ -315,9 +325,9 @@ export default function EditInvoiceModalNew({
                 fee: itemData.fee,
                 dis: itemData.dis,
                 adis: calculatedAdis,
-                exr: itemData.exr || item.exr || null,
-                cfee: itemData.cfee || item.cfee || null,
-                cut: itemData.cut || item.cut || null,
+                exr: exrValue,
+                cfee: cfeeValue,
+                cut: cutValue,
                 bsrn: itemData.bsrn || "",
                 comment: itemData.comment || "",
                 vra: itemData.vra || 0,
@@ -349,9 +359,9 @@ export default function EditInvoiceModalNew({
         product_id: itemData.ProductId,
         am: itemData.am,
         fee: itemData.fee,
-        exr: itemData.exr || null,
-        cfee: itemData.cfee || null,
-        cut: itemData.cut || null,
+        exr: exrValue,
+        cfee: cfeeValue,
+        cut: cutValue,
         dis: itemData.dis,
         adis: calculatedAdis,
         bsrn: itemData.bsrn || "",
