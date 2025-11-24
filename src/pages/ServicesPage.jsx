@@ -185,7 +185,7 @@ export default function ServicesPage() {
          
           <div className="flex items-end justify-end w-full gap-2">
           <button 
-          className="btn-custom"
+          className=" btn-custom"
             onClick={() => {
           setFilterInputs(initialFilters); 
              setActiveFilters({});         
