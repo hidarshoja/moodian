@@ -185,12 +185,12 @@ export default function ServicesPage() {
          
           <div className="flex items-end justify-end w-full gap-2">
           <button 
-          className=" btn-custom"
+          className="btn-custom3-small2 lg:btn-custom3 cursor-pointer"
             onClick={() => {
           setFilterInputs(initialFilters); 
              setActiveFilters({});         
          }}>پاک کردین فیلترها</button>
-          <button className="btn-custom"  onClick={() => setActiveFilters({ ...filterInputs })}>ارسال فیلتر</button>
+          <button className="btn-custom3-small2 lg:btn-custom3 cursor-pointer"  onClick={() => setActiveFilters({ ...filterInputs })}>ارسال فیلتر</button>
           </div>
         </div> 
       </div>
