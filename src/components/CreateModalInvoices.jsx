@@ -848,8 +848,8 @@ export default function CreateModalInvoices({
 
         {/* Line Items Section */}
         <div className="flex-1  px-6 pb-4">
-          {/* Table Header */}
-          <div className="bg-[#1A2035] text-white px-4 py-3 rounded-t-lg">
+          {/* Table Header - Desktop Only */}
+          <div className="hidden md:block bg-[#1A2035] text-white px-4 py-3 rounded-t-lg">
             <div className="grid grid-cols-9 gap-2 text-sm font-medium text-right">
               <div>شناسه خدمت/کالا</div>
               <div>نام خدمت/کالا</div>
@@ -864,7 +864,7 @@ export default function CreateModalInvoices({
           </div>
 
           {/* Table Content */}
-          <div className=" rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
+          <div className="rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
             {lineItems.length === 0 ? (
               <div className="flex items-center justify-center h-32 text-gray-100">
                 رکوردی وجود ندارد
@@ -872,52 +872,147 @@ export default function CreateModalInvoices({
             ) : (
               <div>
                 {lineItems.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className={`grid grid-cols-9 gap-2 p-2 text-white  ${
-                      index % 2 === 0 ? "bg-gray-600" : "bg-gray-500"
-                    }`}
-                  >
-                    <span className="px-2 py-1  text-sm text-right">
-                      {item.sstid}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {item.name}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(item.am)}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(item.fee)}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(item.exchangeRate)}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(
-                        item.currencyAmount
-                      )}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(item.dis)}
-                    </span>
-                    <span className="px-2 py-1  text-sm text-right">
-                      {new Intl.NumberFormat("fa-IR").format(item.adis)}
-                    </span>
+                  <div key={item.id}>
+                    {/* Mobile/Tablet Card View */}
+                    <div
+                      className={`md:hidden mb-3 p-4 rounded-lg text-white ${
+                        index % 2 === 0 ? "bg-gray-600" : "bg-gray-500"
+                      }`}
+                    >
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            شناسه خدمت/کالا:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {item.sstid}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            نام خدمت/کالا:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {item.name}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            تعداد/مقدار:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(item.am)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            مبلغ واحد:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(item.fee)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            نرخ برابری ارز با ریال:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(
+                              item.exchangeRate
+                            )}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            میزان ارز:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(
+                              item.currencyAmount
+                            )}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            مبلغ تخفیف:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(item.dis)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                          <span className="text-xs text-white/70">
+                            مبلغ بعد از تخفیف:
+                          </span>
+                          <span className="text-sm font-medium">
+                            {new Intl.NumberFormat("fa-IR").format(item.adis)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-center gap-3 pt-2">
+                          <button
+                            onClick={() => handleDeleteLineItem(item.id)}
+                            className="text-red-500 hover:text-red-600 p-2"
+                          >
+                            <MdDelete className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleEditLineItem(item.id)}
+                            className="text-white hover:text-green-600 p-2"
+                          >
+                            <FiEdit className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-                    <div className="flex items-center justify-center gap-3">
-                      <button
-                        onClick={() => handleDeleteLineItem(item.id)}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        <MdDelete className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleEditLineItem(item.id)}
-                        className="text-white hover:text-green-600"
-                      >
-                        <FiEdit className="w-4 h-4" />
-                      </button>
+                    {/* Desktop Table View */}
+                    <div
+                      className={`hidden md:grid grid-cols-9 gap-2 p-2 text-white ${
+                        index % 2 === 0 ? "bg-gray-600" : "bg-gray-500"
+                      }`}
+                    >
+                      <span className="px-2 py-1 text-sm text-right">
+                        {item.sstid}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {item.name}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(item.am)}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(item.fee)}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(
+                          item.exchangeRate
+                        )}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(
+                          item.currencyAmount
+                        )}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(item.dis)}
+                      </span>
+                      <span className="px-2 py-1 text-sm text-right">
+                        {new Intl.NumberFormat("fa-IR").format(item.adis)}
+                      </span>
+                      <div className="flex items-center justify-center gap-3">
+                        <button
+                          onClick={() => handleDeleteLineItem(item.id)}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          <MdDelete className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleEditLineItem(item.id)}
+                          className="text-white hover:text-green-600"
+                        >
+                          <FiEdit className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
