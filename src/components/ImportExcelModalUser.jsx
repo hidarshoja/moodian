@@ -123,7 +123,7 @@ export default function ImportExcelModalUser({ isOpen, onClose }) {
         >
           ×
         </button>
-        <h2 className="text-2xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
+        <h2 className="text-lg lg:text-xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
           دریافت لیست مشتری از اکسل
         </h2>
         <div className="flex items-center mb-3 justify-between">
