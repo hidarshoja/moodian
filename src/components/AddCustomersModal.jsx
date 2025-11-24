@@ -151,27 +151,27 @@ export default function AddCustomersModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger overflow-hidden md:overflow-auto"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
+        className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn my-5 md:my-0 max-h-[calc(100vh-40px)] md:max-h-none flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
-          <span className="text-white text-lg font-bold">مشتری جدید</span>
+        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl gap-1 flex-shrink-0">
+          <span className="text-white text-sm lg:text-lg font-bold">مشتری جدید</span>
           <span
-            className="btn-custom3 cursor-pointer"
+            className="btn-custom3-small2 lg:btn-custom3 cursor-pointer"
             onClick={() => setOrgInquiryModalOpen(true)}
           >
             <span>
               <CiSearch />
             </span>
-            <span className="text-[10px]"> استعلام از سازمان</span>
+            <span className="text-[10px] whitespace-nowrap lg:text-sm"> استعلام از سازمان</span>
           </span>
           <span
-            className="btn-custom3 cursor-pointer"
+            className="btn-custom3-small2 lg:btn-custom3 cursor-pointer"
             onClick={() =>
               window.open(
                 "https://tax.gov.ir/action/do/InquiryNationalID",
@@ -182,7 +182,7 @@ export default function AddCustomersModal({
             <span>
               <CiSearch />
             </span>
-            <span className="text-[10px]">
+            <span className="text-[10px] whitespace-nowrap lg:text-sm">
               {" "}
               استعلام وجود یا عدم وجود پرونده مالیاتی{" "}
             </span>
@@ -193,9 +193,11 @@ export default function AddCustomersModal({
         </div>
         {/* Form */}
         <form
-          className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="flex flex-col flex-1 min-h-0"
           onSubmit={handleSave}
         >
+            <div className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto flex-1">
+            
           <div>
             <label className="block mb-1 text-white text-sm"> نوع مشتری</label>
             <select
@@ -261,25 +263,7 @@ export default function AddCustomersModal({
               </span>
             )}
           </div>
-          {/* <div>
-            <label className="block mb-1 text-white text-sm">
-              شماره پاسپورت
-            </label>
-            <input
-              name="passport_number"
-              value={form.passport_number}
-              onChange={handleChange}
-              maxLength={9}
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20 ${
-                errors.passport_number ? "border-red-500" : ""
-              }`}
-            />
-            {errors.passport_number && (
-              <span className="text-xs text-red-500 mt-1 block">
-                {errors.passport_number}
-              </span>
-            )}
-          </div> */}
+        
           <div>
             <label className="block mb-1 text-white text-sm">کدملی/شناسه</label>
             <input
@@ -336,7 +320,9 @@ export default function AddCustomersModal({
               className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
           </div>
-          <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
+            </div>
+
+            <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2 px-6 pb-6 bg-[#23234a] border-t border-white/10 flex-shrink-0">
             <button
               type="button"
               onClick={onClose}
