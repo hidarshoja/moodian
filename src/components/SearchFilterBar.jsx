@@ -178,8 +178,9 @@ export default function SearchFilterBar({
     <div className="w-full mb-4">
       {/* Search Bar */}
       <div className="w-full bg-gradient-to-b from-gray-900 to-gray- border border-gray-300 rounded-lg p-4 mb-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
+        <div className="flex flex-col md:flex-row  items-center gap-4">
+        <div className="w-full lg:w-1/4 flex items-center justify-center gap-2">
+        <div className="flex-1">
             <input
               type="text"
               value={searchTerm}
@@ -191,6 +192,8 @@ export default function SearchFilterBar({
           <button onClick={handleSearch} className="btn-custom">
             جستجو
           </button>
+        </div>
+        <div className="w-full lg:w-3/4 flex flex-wrap lg:flex-nowrap items-center justify-center gap-2">
           {activeFilters &&
             activeFilters.map((filter, index) => {
               // تابع کمکی برای برگردوندن مقدار مناسب هر فیلتر
@@ -216,12 +219,13 @@ export default function SearchFilterBar({
                 <button
                   key={index}
                   onClick={() => onClearFilter && onClearFilter(filter)}
-                  className="btn-custom"
+                  className="w-full flex items-center justify-center md:w-auto btn-custom"
                 >
                   {filter} {filterValue && ` [ ${filterValue} ] `} X
                 </button>
               );
             })}
+        </div>
         </div>
       </div>
 
@@ -232,7 +236,7 @@ export default function SearchFilterBar({
               <button
                 key={index}
                 onClick={() => onFilterClick && onFilterClick(filter)}
-                className={`px-3 py-1.5 border rounded-lg ${
+                className={`px-2 lg:px-3 text-[12px] lg:text-base py-1.5 border rounded-lg ${
                   activeFilters && activeFilters.includes(filter)
                     ? "bg-green-600 text-white"
                     : "btn-custom"

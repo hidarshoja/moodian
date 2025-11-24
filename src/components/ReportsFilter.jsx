@@ -72,7 +72,7 @@ export default function ReportsFilter({
         </div>
         <div className="w-full border border-white/10 rounded-md h-[1px] mt-3"></div>
         <div className="flex flex-col md:flex-row gap-2 w-full p-2">
-        <div className="flex gap-2 w-1/2 border border-white/10 rounded-md p-2">
+        <div className="flex gap-2 w-full md:w-1/2 border border-white/10 rounded-md p-2">
           {/* فیلتر براساس روز */}
           {activeTab === "day" && (
             <div className="flex flex-col gap-4 w-full">
@@ -141,7 +141,7 @@ export default function ReportsFilter({
             </div>
           )}
         </div>
-          <div className="flex gap-2 w-1/2 border border-white/10 rounded-md p-2">
+          <div className="flex gap-2 w-full md:w-1/2 border border-white/10 rounded-md p-2">
             <div className="flex flex-col gap-2 ">
               <span className="text-[10px] md:text-sm text-gray-100">
                 وضعیت (چند انتخابی)
