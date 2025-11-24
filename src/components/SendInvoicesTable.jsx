@@ -306,20 +306,7 @@ export default function SendInvoicesTable({
           <Spinner />
         </div>
       )}
-      {/* Overlay برای پوشاندن محتوای زیر ستون عملیات */}
-      <div
-        style={{
-          position: "sticky",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: "200px",
-          pointerEvents: "none",
-          zIndex: 9,
-          background:
-            "linear-gradient(to right, transparent 0%, rgba(24, 31, 58, 0.5) 30%, rgba(24, 31, 58, 0.95) 70%, rgba(24, 31, 58, 1) 100%)",
-        }}
-      />
+  
       <table
         className={`min-w-full text-white ${
           loading ? "opacity-30 pointer-events-none" : ""
@@ -342,32 +329,16 @@ export default function SendInvoicesTable({
             <th className="text-right px-4 py-3 whitespace-nowrap">موضوع</th>
             <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-            <th
-              className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
-              style={{
+           
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+               style={{
                 position: "sticky",
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
                 minWidth: "70px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  right: "-60px",
-                  top: 0,
-                  bottom: 0,
-                  width: "60px",
-                  background: "#181f3a",
-                  pointerEvents: "none",
-                  zIndex: 11,
-                }}
-              />
-              عملیات
-            </th>
+              }}>عملیات</th>
           </tr>
         </thead>
         <tbody>
@@ -388,51 +359,49 @@ export default function SendInvoicesTable({
                 r.status
               )}`}
             >
-              <td className="px-4 py-3  text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm max-w-[100px] lg:max-w-[200px]">
                 {r?.id}
               </td>
-              <td className="px-4 py-3  text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[200px]">
                 {r?.status_label}
               </td>
-              <td className="px-4 py-3  text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm max-w-[100px] lg:max-w-[200px]">
                 {r.taxid ? r.taxid : "-"}
               </td>
-              <td className="px-4 py-3  text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[200px]">
                 {r?.customer?.name} {r?.customer?.last_name}
               </td>
-              <td className="px-4 py-3  text-sm whitespace-nowrap">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[200px]">
                 {convertToPersianDate(r.indatim)}
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[200px]">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[200px]">
                 {r.tadis ? Number(r.tadis).toLocaleString() : "-"}
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
                 {r.inty_label}
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
                 {r.ins_label}
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
               
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[240px]">
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
               
               </td>
-              <td className="px-4 py-3  text-sm truncate max-w-[240px]">  </td>
+             
               <td
-                className="px-2 py-3 text-sm border-r border-white/5 relative"
+                   className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px] min-h-[125px] lg:min-h-[100px] max-h-[260px]"
                 style={{
                   position: "sticky",
                   left: 0,
                   zIndex: 10,
-                  minWidth: "160px",
-                  backgroundColor:
-                    i % 2 === 0 ? "rgb(27, 33, 60)" : "rgb(30, 35, 62)",
+                  backgroundColor: "rgb(27, 33, 60)",
                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                 }}
               >
              
-                <div className="grid grid-cols-4 sm:gap-4 lg:gap-1 justify-items-center">
+                <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-4 lg:gap-1 justify-items-center">
                   {r.can_update === true && (
                     <>
                       <div className="relative group">
