@@ -127,7 +127,7 @@ export default function ImportExcelModalInvoices({ isOpen, onClose ,refresh , se
         >
           ×
         </button>
-        <h2 className="text-2xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
+        <h2 className=" text-base lg:text-xl font-bold text-white mb-6 text-right border-b border-white/10 pb-3 pr-2">
           دریافت لیست فاکتور فروش از اکسل
         </h2>
         <div className="flex items-center mb-3 justify-between">
@@ -158,7 +158,7 @@ export default function ImportExcelModalInvoices({ isOpen, onClose ,refresh , se
               name="inp"
               value={inpData || ""}
               onChange={handelInpChange}
-              className={`w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-1 focus:outline-none focus:ring-2 `}
+              className={`w-[90%] lg:w-full rounded-xl bg-gray-800/70 text-white/90 border px-4 py-1 focus:outline-none focus:ring-2 `}
             >
               <option value="">انتخاب الگوی صورتحساب(inp)</option>
               <option value="1">الگوی اول (فروش)</option>
