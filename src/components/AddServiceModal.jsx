@@ -222,18 +222,18 @@ export default function AddServiceModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger overflow-hidden md:overflow-auto"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn"
+        className="w-full max-w-xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn my-5 md:my-0 max-h-[calc(100vh-40px)] md:max-h-none flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl">
-          <span className="text-white text-lg font-bold">کالا/خدمت جدید</span>
+        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl flex-shrink-0">
+          <span className="text-white text-sm lg:text-lg font-bold">کالا/خدمت جدید</span>
           <span
-            className="btn-custom3 cursor-pointer"
+            className="btn-custom3-small lg:btn-custom3 cursor-pointer"
             onClick={() => setSearchModalOpen(true)}
           >
             <span>
@@ -242,7 +242,7 @@ export default function AddServiceModal({
             <span>درج از شناسه های عمومی</span>
           </span>
           <span
-            className="btn-custom3 cursor-pointer"
+            className="btn-custom3-small lg:btn-custom3 cursor-pointer"
             onClick={() => window.open("https://stuffid.tax.gov.ir/", "_blank")}
           >
             StuffId
@@ -252,153 +252,152 @@ export default function AddServiceModal({
           </button>
         </div>
         {/* Form */}
-        <form
-          className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4"
-          onSubmit={handleSave}
-        >
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              نام کالا/خدمت
-            </label>
-            <input
-              name="title"
-              value={form.title}
-              onChange={handleChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">شناسه</label>
-            <input
-              name="sstid"
-              value={form.sstid}
-              onChange={handleChange}
-              maxLength={13}
-              minLength={13}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              کد کالا در سامانه مشتری
-            </label>
-            <input
-              name="customCode"
-              value={form.customCode}
-              onChange={handleChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">واحد سنجش</label>
-            <div className="relative" ref={unitDropdownRef}>
+        <form className="flex flex-col flex-1 min-h-0" onSubmit={handleSave}>
+          <div className="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto flex-1">
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                نام کالا/خدمت
+              </label>
               <input
-                type="text"
-                value={unitSearch}
-                onChange={(e) => {
-                  setUnitSearch(e.target.value);
-                  setIsUnitOpen(true);
-                }}
-                onFocus={() => setIsUnitOpen(true)}
-                placeholder="جستجو در واحدها..."
-                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 pr-4 pl-10 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
               />
-              {(unitSearch || form.unit_id !== null) && (
-                <button
-                  type="button"
-                  onClick={handleClearUnit}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 text-white"
-                  aria-label="پاک کردن انتخاب"
-                  title="پاک کردن"
-                >
-                  ×
-                </button>
-              )}
-              {isUnitOpen && (
-                <div className="absolute z-50 mt-2 w-full max-h-56 overflow-auto rounded-xl border border-white/10 bg-[#23234a] shadow-xl">
-                  {filteredUnits.length === 0 ? (
-                    <div className="px-3 py-2 text-white/60 text-sm">
-                      موردی یافت نشد
-                    </div>
-                  ) : (
-                    filteredUnits.map((u) => (
-                      <button
-                        key={u.id}
-                        type="button"
-                        onClick={() => handleSelectUnit(u)}
-                        className={`w-full text-right px-4 py-2 text-white hover:bg-white/10 transition ${
-                          String(form.unit_id) === String(u.id)
-                            ? "bg-white/5"
-                            : ""
-                        }`}
-                      >
-                        {u.title}
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">شناسه</label>
+              <input
+                name="sstid"
+                value={form.sstid}
+                onChange={handleChange}
+                maxLength={13}
+                minLength={13}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                کد کالا در سامانه مشتری
+              </label>
+              <input
+                name="customCode"
+                value={form.customCode}
+                onChange={handleChange}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">واحد سنجش</label>
+              <div className="relative" ref={unitDropdownRef}>
+                <input
+                  type="text"
+                  value={unitSearch}
+                  onChange={(e) => {
+                    setUnitSearch(e.target.value);
+                    setIsUnitOpen(true);
+                  }}
+                  onFocus={() => setIsUnitOpen(true)}
+                  placeholder="جستجو در واحدها..."
+                  className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 pr-4 pl-10 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+                />
+                {(unitSearch || form.unit_id !== null) && (
+                  <button
+                    type="button"
+                    onClick={handleClearUnit}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 text-white"
+                    aria-label="پاک کردن انتخاب"
+                    title="پاک کردن"
+                  >
+                    ×
+                  </button>
+                )}
+                {isUnitOpen && (
+                  <div className="absolute z-50 mt-2 w-full max-h-56 overflow-auto rounded-xl border border-white/10 bg-[#23234a] shadow-xl">
+                    {filteredUnits.length === 0 ? (
+                      <div className="px-3 py-2 text-white/60 text-sm">
+                        موردی یافت نشد
+                      </div>
+                    ) : (
+                      filteredUnits.map((u) => (
+                        <button
+                          key={u.id}
+                          type="button"
+                          onClick={() => handleSelectUnit(u)}
+                          className={`w-full text-right px-4 py-2 text-white hover:bg-white/10 transition ${
+                            String(form.unit_id) === String(u.id)
+                              ? "bg-white/5"
+                              : ""
+                          }`}
+                        >
+                          {u.title}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                نرخ ارزش افزوده
+              </label>
+              <input
+                name="vra"
+                value={form.vra}
+                onChange={handleChange}
+                type="number"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                موضوع سایر مالیات و عوارض
+              </label>
+              <input
+                name="odt"
+                value={form.odt}
+                onChange={handleChange}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                نرخ سایر مالیات و عوارض
+              </label>
+              <input
+                name="odr"
+                value={form.odr}
+                onChange={handleChange}
+                type="number"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                موضوع سایر وجوه قانونی
+              </label>
+              <input
+                name="olt"
+                value={form.olt}
+                onChange={handleChange}
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-white text-sm">
+                نرخ سایر وجوه قانونی
+              </label>
+              <input
+                name="olr"
+                value={form.olr}
+                onChange={handleChange}
+                type="number"
+                className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
             </div>
           </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              نرخ ارزش افزوده
-            </label>
-            <input
-              name="vra"
-              value={form.vra}
-              onChange={handleChange}
-              type="number"
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              موضوع سایر مالیات و عوارض
-            </label>
-            <input
-              name="odt"
-              value={form.odt}
-              onChange={handleChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              نرخ سایر مالیات و عوارض
-            </label>
-            <input
-              name="odr"
-              value={form.odr}
-              onChange={handleChange}
-              type="number"
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              موضوع سایر وجوه قانونی
-            </label>
-            <input
-              name="olt"
-              value={form.olt}
-              onChange={handleChange}
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 text-white text-sm">
-              نرخ سایر وجوه قانونی
-            </label>
-            <input
-              name="olr"
-              value={form.olr}
-              onChange={handleChange}
-              type="number"
-              className="w-full rounded-xl bg-gray-800/70 text-white/90 border border-white/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/20"
-            />
-          </div>
-          <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2">
+          <div className="md:col-span-2 flex items-center justify-end gap-2 pt-2 px-6 pb-6 bg-[#23234a] border-t border-white/10 flex-shrink-0">
             <button
               type="button"
               onClick={onClose}
