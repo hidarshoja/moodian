@@ -639,7 +639,7 @@ export default function CreateModalInvoices({
         dir="rtl"
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between">
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[900px] md:mt-[180px] lg:mt-0">
           <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
