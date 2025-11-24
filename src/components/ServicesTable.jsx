@@ -6,8 +6,6 @@ import { CustomToastContainer } from "./CustomToast";
 import EditServiceModal from "./EditServiceModal";
 import PropTypes from "prop-types";
 
-
-
 function Spinner() {
   return (
     <div className="flex justify-center items-center w-full h-60">
@@ -37,13 +35,10 @@ export default function ServicesTable({
   const [showEditModal, setShowEditModal] = useState(false);
   const [editRowData, setEditRowData] = useState(null);
 
-
-
   // حذف ردیف با کد فعلی
   const handleDelete = async (row) => {
     try {
       const res = await axiosClient.delete(`/products/${row.id}`);
-      
 
       setRefresh(!refresh);
       Swal.fire({
@@ -169,8 +164,8 @@ export default function ServicesTable({
       >
         <thead>
           <tr className="text-white/80 text-xs bg-[#181f3a]">
-          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-          <th className="p-2">#</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="p-2">#</th>
             <th className="p-2">نام</th>
             <th className="p-2">شناسه</th>
             <th className="p-2">واحد</th>
@@ -181,19 +176,22 @@ export default function ServicesTable({
             <th className="p-2">نرخ سایر وجوه قانونی</th>
             <th className="p-2">کد کالا در سامانه مشتری</th>
             <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
-               style={{
+            <th
+              className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+              style={{
                 position: "sticky",
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
                 minWidth: "70px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
-              }}>عملیات</th>
+              }}
+            >
+              عملیات
+            </th>
           </tr>
         </thead>
         <tbody>
-        
           {/* نمایش همه داده‌های جدول */}
           {dataTable.map((item) => (
             <tr
@@ -205,34 +203,45 @@ export default function ServicesTable({
               <td className="p-2 text-center"></td>
               <td className="p-2 text-center">{item?.id}</td>
               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
-               
                 {item?.title ? item.title : "-"}
               </td>
               <td className="p-2">{item?.sstid ? item.sstid : "-"}</td>
 
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
                 {item?.unit?.title ? item.unit.title : "-"}
               </td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.vra ? item.vra : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.odt ? item.odt : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.odr ? item.odr : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.olt ? item.olt : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.olr ? item.olr : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">{item?.olr ? item.olr : "-"}</td>
-               <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]"></td>
-            
-              <td 
-                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
-                 style={{
-                   position: "sticky",
-                   left: 0,
-                   zIndex: 10,
-                   minWidth: "160px",
-                   backgroundColor: "rgb(27, 33, 60)",
-                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
-                 }}>
-               {/* Delete icon */}
-               <button
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.vra ? item.vra : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.odt ? item.odt : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.odr ? item.odr : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.olt ? item.olt : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.olr ? item.olr : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]">
+                {item?.olr ? item.olr : "-"}
+              </td>
+              <td className="p-2 text-center text-sm truncate min-w-[100px] max-w-[140px]"></td>
+
+              <td
+                className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px]"
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 10,
+                  backgroundColor: "rgb(27, 33, 60)",
+                  boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                {/* Delete icon */}
+                <button
                   className="p-1 rounded hover:bg-red-500/20 text-red-500 mr-1"
                   title="حذف این ردیف"
                   onClick={(e) => {
@@ -269,7 +278,7 @@ export default function ServicesTable({
             setEditRowData(null);
           }}
           onEdit={handleEdit}
-          units={units} 
+          units={units}
         />
       )}
     </div>
