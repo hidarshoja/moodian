@@ -1150,14 +1150,14 @@ export default function CreateModalInvoices({
           <div className="flex justify-center gap-4 w-full">
             <button
               onClick={handleCancel}
-              className="bg-red-500 w-1/3 text-white px-8 py-3 rounded-lg font-medium  hover:bg-red-600 transition-colors"
+              className="bg-red-500 text-sm lg:text-base w-1/3 text-white px-8 py-2 rounded-lg font-medium  hover:bg-red-600 transition-colors"
             >
               انصراف
             </button>
-            <button onClick={handleSaveAndSend} className="btn-custom4">
+            <button onClick={handleSaveAndSend} className="btn-custom4 text-sm lg:text-base">
               ذخیره و ارسال
             </button>
-            <button onClick={handleSave} className="btn-custom4">
+            <button onClick={handleSave} className="btn-custom4 text-sm lg:text-base">
               ذخیره
             </button>
           </div>
