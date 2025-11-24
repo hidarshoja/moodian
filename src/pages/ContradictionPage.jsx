@@ -87,9 +87,9 @@ const [factorData, setFactorData] = useState([]);
       <p className="text-white/60 text-sm mt-1">نمای کلی مغایرت گیری کاربران</p>
     </div>
   </div>
-<div className="flex gap-2 mt-6 px-2">
+<div className="flex flex-col lg:flex-row gap-2 mt-6 px-2">
   <button
-     className={`btn-custom4 ${
+     className={`btn-custom6 lg:btn-custom4 ${
             activeBtn === "invoiceAccount" ? "btn-active" : ""
           }`}
   onClick={() => setActiveBtn("invoiceAccount")}
@@ -97,7 +97,7 @@ const [factorData, setFactorData] = useState([]);
     فاکتور با حساب
   </button>
   <button
-     className={`btn-custom4 ${
+     className={`btn-custom6 lg:btn-custom4 ${
             activeBtn === "accountInvoice" ? "btn-active" : ""
           }`}
   onClick={() => setActiveBtn("accountInvoice")}
@@ -105,7 +105,7 @@ const [factorData, setFactorData] = useState([]);
   حساب با فاکتور
   </button>
   <button
-  className={`btn-custom4 ${
+  className={`btn-custom6 lg:btn-custom4 ${
             activeBtn === "all" ? "btn-active" : ""
           }`}
   onClick={() => setActiveBtn("all")}
@@ -113,7 +113,7 @@ const [factorData, setFactorData] = useState([]);
     تعیین تکلیف شده حساب
   </button>
   <button
-  className={`btn-custom4 ${
+  className={`btn-custom6 lg:btn-custom4 ${
             activeBtn === "all2" ? "btn-active" : ""
           }`}
   onClick={() => setActiveBtn("all2")}

@@ -181,12 +181,11 @@ useEffect(() => {
               </td>
               <td className="p-2 text-center"></td>
               <td 
-                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+              className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px]"
                  style={{
                    position: "sticky",
                    left: 0,
                    zIndex: 10,
-                   minWidth: "160px",
                    backgroundColor: "rgb(27, 33, 60)",
                    boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                  }}>
