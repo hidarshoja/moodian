@@ -28,7 +28,7 @@ const Pagination2 = ({
   };
 
   return (
-    <div className="bg-[#1A2035] text-white px-6 py-3 flex items-center justify-between">
+    <div className="bg-[#1A2035] text-white px-6 py-1 md:py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
       <div className="relative group">
   <button

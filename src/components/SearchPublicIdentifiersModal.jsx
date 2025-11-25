@@ -130,7 +130,7 @@ export default function SearchPublicIdentifiersModal({
       >
         {/* Header */}
         <div className="bg-[#1A2035] text-white px-6 py-4 rounded-t-2xl flex items-center justify-between flex-shrink-0">
-          <h2 className="text-sm lg:text-lg font-bold">
+          <h2 className="text-xs md:text-sm lg:text-lg font-bold">
             جستجو در شناسه های عمومی بر اساس نام کالا و یا شناسه
           </h2>
           <button
@@ -142,8 +142,8 @@ export default function SearchPublicIdentifiersModal({
         </div>
 
         {/* Search and Filter Section */}
-        <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
-          <div className="flex items-center flex-col gap-4 mb-4">
+        <div className="px-2 md:px-6 py-1 md:py-4 border-b border-gray-200 flex-shrink-0">
+          <div className="flex items-center flex-col gap-4 mb-1 md:mb-4">
             {/* Search Input */}
             <div className="w-full flex flex-col md:flex-row gap-2">
               <div className="w-full md:w-2/4">
@@ -152,40 +152,40 @@ export default function SearchPublicIdentifiersModal({
                   placeholder="جستجو ..."
                   value={searchParams.term}
                   onChange={(e) => updateSearchField(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right text-xs md:text-sm"
                   dir="rtl"
                 />
               </div>
-            <div className="w-full md:w-2/4 flex flex-row gap-2">
+              <div className="w-full md:w-2/4 flex flex-row gap-2">
                 {/* Search by ID */}
                 <button
-                onClick={() => handleSearchBy("id")}
-                className={`bg-[#1A2035] w-1/2  text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
-                  searchParams.type === "id" ? "ring-2 ring-blue-500" : ""
-                }`}
-              >
-                <CiSearch className="w-5 h-5" />
-                <span>جسجو براساس شناسه</span>
-              </button>
-              {/* Search by Name */}
-              <button
-                onClick={() => handleSearchBy("name")}
-                className={`bg-[#1A2035] w-1/2  text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
-                  searchParams.type === "name" ? "ring-2 ring-blue-500" : ""
-                }`}
-              >
-                <CiSearch className="w-5 h-5" />
-                <span>جسجو براساس نام</span>
-              </button>
-            </div>
+                  onClick={() => handleSearchBy("id")}
+                  className={`bg-[#1A2035] w-1/2  text-white px-1 py-1 md:py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors  text-xs md:text-sm ${
+                    searchParams.type === "id" ? "ring-2 ring-blue-500" : ""
+                  }`}
+                >
+                  <CiSearch className=" w-5 h-5" />
+                  <span>جستجو با شناسه</span>
+                </button>
+                {/* Search by Name */}
+                <button
+                  onClick={() => handleSearchBy("name")}
+                  className={`bg-[#1A2035] w-1/2  text-white px-1 py-1 md:py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-xs md:text-sm ${
+                    searchParams.type === "name" ? "ring-2 ring-blue-500" : ""
+                  }`}
+                >
+                  <CiSearch className="w-5 h-5" />
+                  <span>جستجو با نام</span>
+                </button>
+              </div>
             </div>
             {/* Tab Buttons */}
-            <div className="flex flex-row gap-2 w-full">
+            <div className="flex flex-row gap-1 md:gap-2 w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => handleTabChange(tab.key)}
-                  className={`w-1/4 md:w-full lg:w-auto px-1 text-xs md:text-sm md:px-4 py-1 md:py-2 rounded-lg  font-medium transition-colors ${
+                  className={`flex-1 md:w-full lg:w-auto px-1 md:px-4 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-colors whitespace-nowrap ${
                     searchParams.tab === tab.key
                       ? "bg-[#4A90E2] text-white"
                       : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
@@ -196,7 +196,7 @@ export default function SearchPublicIdentifiersModal({
               ))}
               <button
                 onClick={handleClearFilters}
-                className="w-1/4 md:w-full lg:w-auto px-1 md:px-4 py-1 md:py-2  rounded-lg  text-xs md:text-sm font-medium transition-colors bg-red-500 text-gray-100 border border-gray-300 hover:bg-red-600"
+                className="flex-1 md:w-full lg:w-auto px-1 md:px-4 py-1 md:py-2 rounded-lg text-[10px] md:text-sm font-medium transition-colors bg-red-500 text-gray-100 border border-gray-300 hover:bg-red-600 whitespace-nowrap"
               >
                 پاک کردن فیلترها
               </button>
@@ -353,10 +353,10 @@ export default function SearchPublicIdentifiersModal({
           />
 
           {/* Cancel Button */}
-          <div className="py-4 flex justify-center">
+          <div className="py-1 md:py-4 flex justify-center">
             <button
               onClick={onClose}
-              className="bg-[#8A4DAB] w-full text-white px-8 py-3 font-medium hover:bg-[#7a4299] transition-colors"
+              className="bg-[#8A4DAB] w-full text-white px-8 py-1 md:py-3 font-medium hover:bg-[#7a4299] transition-colors"
             >
               انصراف
             </button>
