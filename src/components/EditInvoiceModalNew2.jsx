@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState , useRef} from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
@@ -38,6 +38,7 @@ export default function EditInvoiceModalNew2({
   });
   const [lineItems, setLineItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
+  const modalContainerRef = useRef(null);
   const [totals, setTotals] = useState({
     tprdis: 0,
     tdis: 0,
@@ -296,6 +297,9 @@ export default function EditInvoiceModalNew2({
   if (!isOpen) return null;
 
   const handleAddLineItem = () => {
+    if (modalContainerRef.current) {
+      modalContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
     setEditItemId(null);
     setAddItemModalOpen(true);
   };
@@ -773,13 +777,13 @@ export default function EditInvoiceModalNew2({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
+    <div ref={modalContainerRef} className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
         className="w-[95%] min-h-[95%] max-w-7xl bg-[#23234a] rounded-lg shadow-2xl relative flex flex-col my-4"
         dir="rtl"
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[890px] md:mt-[180px] lg:mt-0">
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[850px] md:mt-[180px] lg:mt-0">
           تکثیر فاکتور
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
