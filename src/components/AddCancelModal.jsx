@@ -70,7 +70,7 @@ export default function AddCancelModal({ isOpen, onClose, setRefresh , refresh }
       <div className="w-full max-w-2xl rounded-2xl bg-[#23234a] border border-white/10 shadow-2xl relative animate-slideIn min-h-96 max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl flex-shrink-0">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-sm md:text-lg font-semibold text-white">
             ابطال فاکتور فروشهای ارسال شده ی خارج از تجربه
           </h2>
           <button

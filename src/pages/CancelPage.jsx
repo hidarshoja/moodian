@@ -21,7 +21,7 @@ export default function CancelPage() {
 
   useEffect(() => {
     setLoading(true);
-    // &f[ins]=3
+   
     axiosClient
       .get(`/invoices?page=${pageCount}&f[ins]=3&f[inty]=-1`)
       .then((response) => {

@@ -51,7 +51,7 @@ export default function CancelTable({
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
-                minWidth: "70px",
+                minWidth: "50px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
               }}>عملیات</th>
           </tr>
@@ -103,12 +103,11 @@ export default function CancelTable({
               </td>
               <td className="p-2 text-center"></td>
                 <td 
-                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[40px] md:min-w-[160px]"
                  style={{
                    position: "sticky",
                    left: 0,
                    zIndex: 10,
-                   minWidth: "160px",
                    backgroundColor: "rgb(27, 33, 60)",
                    boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                  }}>
@@ -118,7 +117,7 @@ export default function CancelTable({
                     className="p-1 text-blue-400 hover:text-blue-300 transition-colors"
                     title="مشاهده"
                   >
-                    <FaEye className="w-4 h-4" />
+                    <FaEye   className="w-4 md:w-5 h-4 md:h-5" />
                   </button>
                   {record.status === "در انتظار تایید" && (
                     <>
@@ -127,30 +126,24 @@ export default function CancelTable({
                         className="p-1 text-green-400 hover:text-green-300 transition-colors"
                         title="تایید"
                       >
-                        <FaCheck className="w-4 h-4" />
+                        <FaCheck className="w-4 md:w-5 h-4 md:h-5" />
                       </button>
                       <button
                         onClick={() => onReject && onReject(record)}
                         className="p-1 text-red-400 hover:text-red-300 transition-colors"
                         title="رد"
                       >
-                        <FaTimes className="w-4 h-4" />
+                        <FaTimes   className="w-4 md:w-5 h-4 md:h-5" />
                       </button>
                     </>
                   )}
-                  {/* <button
-                    onClick={() => onEdit && onEdit(record)}
-                    className="p-1 text-yellow-400 hover:text-yellow-300 transition-colors"
-                    title="ویرایش"
-                  >
-                    <FaEdit className="w-4 h-4" />
-                  </button> */}
+                
                   <button
                     onClick={() => onDelete && onDelete(record)}
                     className="p-1 text-red-400 hover:text-red-300 transition-colors"
                     title="حذف"
                   >
-                    <FaTrash className="w-4 h-4" />
+                    <FaTrash className="w-4 md:w-5 h-4 md:h-5" />
                   </button>
                 </div>
               </td>

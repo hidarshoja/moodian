@@ -166,7 +166,7 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
-                minWidth: "70px",
+                minWidth: "50px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
               }}>دانلود</th>
             </tr>
@@ -248,38 +248,37 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                 </td>
                 <td className="p-2  text-center"></td>
                 <td 
-                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                  className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[40px] md:min-w-[160px]"
                  style={{
                    position: "sticky",
                    left: 0,
                    zIndex: 10,
-                   minWidth: "160px",
                    backgroundColor: "rgb(27, 33, 60)",
                    boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                  }}>
-                  <div className="flex items-center justify-start gap-2">
+                  <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                     <button
                       onClick={() => handleDownload(r.id)}
                       title="دانلود"
-                      className="p-2 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/15"
+                      className="p-1 md:p-2 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/15"
                     >
-                      <GrDocumentExcel width={20} height={20} />
+                      <GrDocumentExcel className="w-4 md:w-5 h-4 md:h-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(r.id)}
                       title="حذف"
-                      className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                      className="p-1 md:p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                     >
-                      <MdDeleteOutline width={20} height={20} />
+                      <MdDeleteOutline className="w-4 md:w-5 h-4 md:h-5" />
                     </button>
                     {r?.errors_count > 0 && (
                       <>
                         <button
                           onClick={() => handleErrors(r.id)}
                           title="خطا ها"
-                          className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                          className="p-1 md:p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                         >
-                          <BiErrorAlt width={20} height={20} />
+                          <BiErrorAlt className="w-4 md:w-5 h-4 md:h-5" />
                         </button>
                       </>
                     )}

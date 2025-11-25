@@ -19,7 +19,7 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
-                minWidth: "70px",
+                minWidth: "50px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
               }}>عملیات</th>
           </tr>
@@ -55,26 +55,25 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
               </td>
               <td className="p-2  text-center"></td>
                 <td 
-                 className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center"
+                    className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[40px] md:min-w-[160px]"
                  style={{
                    position: "sticky",
                    left: 0,
                    zIndex: 10,
-                   minWidth: "160px",
                    backgroundColor: "rgb(27, 33, 60)",
                    boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                  }}>
-                <div className="flex items-center justify-center gap-2">
+                      <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                   <button
                     onClick={() => onEdit?.(i , r)}
                     title="ویرایش"
-                    className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
+                    className="p-1 md:p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/15"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="w-5 h-5"
+                     className="w-4 md:w-5 h-4 md:h-5"
                     >
                       <path d="M18.375 2.625a3.182 3.182 0 0 1 4.5 4.5L8.81 21.19a3 3 0 0 1-1.27.75l-4.09 1.17a1 1 0 0 1-1.24-1.24l1.17-4.09a3 3 0 0 1 .75-1.27L18.375 2.625Zm-2.12 2.12-12.02 12.02a1 1 0 0 0-.25.42l-.65 2.28 2.28-.65a1 1 0 0 0 .42-.25l12.02-12.02-1.75-1.8Z" />
                     </svg>
@@ -82,13 +81,13 @@ export default function RolesTable({ roles, onEdit, onDelete }) {
                   <button
                     onClick={() => onDelete?.(i)}
                     title="حذف"
-                    className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
+                    className="p-1 md:p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="w-5 h-5"
+                       className="w-4 md:w-5 h-4 md:h-5"
                     >
                       <path d="M9 3a1 1 0 0 0-1 1v1H5.5a1 1 0 1 0 0 2H6v12a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm2 4a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0V7Zm4 0a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0V7Z" />
                     </svg>

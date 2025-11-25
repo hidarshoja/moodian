@@ -138,13 +138,13 @@ export default function ReportsFilterBill({
         <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-white/10">
           <button
             onClick={onClearAll}
-            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium"
+            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium flex items-center justify-center"
           >
             پاک کردن فیلترها
           </button>
           <button
             onClick={onSendAll}
-            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium"
+            className="btn-custom w-full sm:w-auto px-6 py-2.5 text-sm font-medium flex items-center justify-center"
           >
             اعمال فیلترها
           </button>

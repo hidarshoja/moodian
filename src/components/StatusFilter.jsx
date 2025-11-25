@@ -52,7 +52,7 @@ export default function StatusFilter({
               value={searchTerm}
               onChange={(e) => onSearchTermChange(e.target.value)}
               placeholder="جستجو بر اساس نام، کد فاکتور، وضعیت..."
-              className="px-3 py-2 text-sm bg-white/10 border border-white rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[300px]"
+              className="px-3 py-2 text-sm bg-white/10 border border-white rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[200px]"
             />
             <button onClick={handleSearch} className="btn-custom">
               <HiOutlineSearch className="w-4 h-4" />
