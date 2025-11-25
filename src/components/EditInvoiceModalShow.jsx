@@ -747,7 +747,7 @@ export default function EditInvoiceModalShow({ isOpen, onClose, invoiceData  , c
         dir="rtl"
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[900px] md:mt-[180px] lg:mt-0">
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[930px] md:mt-[180px] lg:mt-0">
         نمایش فاکتور
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
