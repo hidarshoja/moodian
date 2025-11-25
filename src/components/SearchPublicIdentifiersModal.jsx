@@ -121,16 +121,16 @@ export default function SearchPublicIdentifiersModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur animate-fadeInStagger"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur animate-fadeInStagger"
       onClick={onClose}
     >
       <div
-        className="w-[90%] h-[90%] max-w-6xl bg-[#23234a] rounded-2xl shadow-2xl relative flex flex-col animate-slideIn"
+        className="w-[90%] h-[90%] max-w-6xl bg-[#23234a] rounded-2xl shadow-2xl relative flex flex-col animate-slideIn max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-4 rounded-t-2xl flex items-center justify-between">
-          <h2 className="text-lg font-bold">
+        <div className="bg-[#1A2035] text-white px-6 py-4 rounded-t-2xl flex items-center justify-between flex-shrink-0">
+          <h2 className="text-sm lg:text-lg font-bold">
             جستجو در شناسه های عمومی بر اساس نام کالا و یا شناسه
           </h2>
           <button
@@ -142,11 +142,11 @@ export default function SearchPublicIdentifiersModal({
         </div>
 
         {/* Search and Filter Section */}
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center flex-col gap-4 mb-4">
             {/* Search Input */}
-            <div className="w-full flex gap-2">
-              <div className="w-2/4">
+            <div className="w-full flex flex-col md:flex-row gap-2">
+              <div className="w-full md:w-2/4">
                 <input
                   type="text"
                   placeholder="جستجو ..."
@@ -159,31 +159,31 @@ export default function SearchPublicIdentifiersModal({
               {/* Search by ID */}
               <button
                 onClick={() => handleSearchBy("id")}
-                className={`bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors ${
+                className={`bg-[#1A2035] w-full md:w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
                   searchParams.type === "id" ? "ring-2 ring-blue-500" : ""
                 }`}
               >
-                <CiSearch className="w-5 h-5 text-[10px]" />
+                <CiSearch className="w-5 h-5" />
                 <span>جسجو براساس شناسه</span>
               </button>
               {/* Search by Name */}
               <button
                 onClick={() => handleSearchBy("name")}
-                className={`bg-[#1A2035] w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors ${
+                className={`bg-[#1A2035] w-full md:w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
                   searchParams.type === "name" ? "ring-2 ring-blue-500" : ""
                 }`}
               >
-                <CiSearch className="w-5 h-5 text-[10px]" />
+                <CiSearch className="w-5 h-5" />
                 <span>جسجو براساس نام</span>
               </button>
             </div>
             {/* Tab Buttons */}
-            <div className="flex gap-2 w-full">
+            <div className="flex flex-wrap gap-2 w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => handleTabChange(tab.key)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full lg:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     searchParams.tab === tab.key
                       ? "bg-[#4A90E2] text-white"
                       : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
@@ -194,22 +194,21 @@ export default function SearchPublicIdentifiersModal({
               ))}
               <button
                 onClick={handleClearFilters}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
+                className="w-full lg:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500 text-gray-100 border border-gray-300 hover:bg-red-600"
               >
                 پاک کردن فیلترها
               </button>
             </div>
           </div>
 
-          {/* Table Headers */}
-          <div className="grid grid-cols-5 gap-4 bg-gray-100 p-3 rounded-lg">
+          {/* Table Headers - Desktop Only */}
+          <div className="hidden md:grid grid-cols-5 gap-4 bg-gray-100 p-3 rounded-lg">
             <div className="text-center font-medium text-gray-700">شناسه</div>
             <div className="text-center font-medium text-gray-700">نام</div>
             <div className="text-center font-medium text-gray-700">نوع</div>
             <div className="text-center font-medium text-gray-700">
               نرخ ارزش افزوده
             </div>
-
             <div className="text-center font-medium text-gray-700">
               نرخ سایر مالیات و عوارض
             </div>
@@ -217,7 +216,7 @@ export default function SearchPublicIdentifiersModal({
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-6 overflow-auto">
+        <div className="flex-1 p-6 overflow-y-auto min-h-0">
           {loading ? (
             <Spinner />
           ) : dataTable.length === 0 ? (
@@ -225,26 +224,83 @@ export default function SearchPublicIdentifiersModal({
               <p className="text-gray-500 text-lg">رکوردی وجود ندارد</p>
             </div>
           ) : (
-            <div className="space-y-2">
-              {dataTable.map((item, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-5 gap-4 p-3 border text-white border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-800 cursor-pointer"
-                  onClick={() => handleSelectItem(item)}
-                >
-                  <div className="text-center">{item?.sstid}</div>
-                  <div className="text-center">{item?.description}</div>
-                  <div className="text-center">{item?.type}</div>
-                  <div className="text-center">{item?.vat}</div>
-                  <div className="text-center">{item?.vat_custom_purposes}</div>
-                </div>
-              ))}
-            </div>
+            <>
+              {/* Desktop Grid View */}
+              <div className="hidden md:block space-y-2">
+                {dataTable.map((item, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-5 gap-4 p-3 border text-white border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-800 cursor-pointer"
+                    onClick={() => handleSelectItem(item)}
+                  >
+                    <div className="text-center">{item?.sstid}</div>
+                    <div className="text-center">{item?.description}</div>
+                    <div className="text-center">{item?.type}</div>
+                    <div className="text-center">{item?.vat}</div>
+                    <div className="text-center">
+                      {item?.vat_custom_purposes}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-3">
+                {dataTable.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`rounded-lg p-4 text-white cursor-pointer transition-colors ${
+                      index % 2 === 0
+                        ? "bg-gray-600 hover:bg-gray-700"
+                        : "bg-gray-500 hover:bg-gray-600"
+                    }`}
+                    onClick={() => handleSelectItem(item)}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                        <span className="text-xs text-white/70">شناسه:</span>
+                        <span className="text-sm font-medium text-white/90">
+                          {item?.sstid}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                        <span className="text-xs text-white/70">نام:</span>
+                        <span className="text-sm font-medium text-white/90">
+                          {item?.description}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                        <span className="text-xs text-white/70">نوع:</span>
+                        <span className="text-sm font-medium text-white/90">
+                          {item?.type}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center border-b border-white/20 pb-2">
+                        <span className="text-xs text-white/70">
+                          نرخ ارزش افزوده:
+                        </span>
+                        <span className="text-sm font-medium text-white/90">
+                          {item?.vat}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pb-2">
+                        <span className="text-xs text-white/70">
+                          نرخ سایر مالیات و عوارض:
+                        </span>
+                        <span className="text-sm font-medium text-white/90">
+                          {item?.vat_custom_purposes}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200">
+        <div className="border-t border-gray-200 flex-shrink-0">
           {/* Pagination Bar */}
           {/* <div className="bg-[#1A2035] text-white px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -298,7 +354,7 @@ export default function SearchPublicIdentifiersModal({
           <div className="py-4 flex justify-center">
             <button
               onClick={onClose}
-              className="bg-[#8A4DAB] w-full text-white px-8 py-3  font-medium hover:bg-[#7a4299] transition-colors"
+              className="bg-[#8A4DAB] w-full text-white px-8 py-3 font-medium hover:bg-[#7a4299] transition-colors"
             >
               انصراف
             </button>
