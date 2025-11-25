@@ -156,10 +156,11 @@ export default function SearchPublicIdentifiersModal({
                   dir="rtl"
                 />
               </div>
-              {/* Search by ID */}
-              <button
+            <div className="w-full md:w-2/4 flex flex-row gap-2">
+                {/* Search by ID */}
+                <button
                 onClick={() => handleSearchBy("id")}
-                className={`bg-[#1A2035] w-full md:w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
+                className={`bg-[#1A2035] w-1/2  text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
                   searchParams.type === "id" ? "ring-2 ring-blue-500" : ""
                 }`}
               >
@@ -169,7 +170,7 @@ export default function SearchPublicIdentifiersModal({
               {/* Search by Name */}
               <button
                 onClick={() => handleSearchBy("name")}
-                className={`bg-[#1A2035] w-full md:w-1/4 text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
+                className={`bg-[#1A2035] w-1/2  text-white px-1 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#2a3155] transition-colors text-sm ${
                   searchParams.type === "name" ? "ring-2 ring-blue-500" : ""
                 }`}
               >
@@ -177,13 +178,14 @@ export default function SearchPublicIdentifiersModal({
                 <span>جسجو براساس نام</span>
               </button>
             </div>
+            </div>
             {/* Tab Buttons */}
-            <div className="flex flex-wrap gap-2 w-full">
+            <div className="flex flex-row gap-2 w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => handleTabChange(tab.key)}
-                  className={`w-full lg:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-1/4 md:w-full lg:w-auto px-1 text-xs md:text-sm md:px-4 py-1 md:py-2 rounded-lg  font-medium transition-colors ${
                     searchParams.tab === tab.key
                       ? "bg-[#4A90E2] text-white"
                       : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
@@ -194,7 +196,7 @@ export default function SearchPublicIdentifiersModal({
               ))}
               <button
                 onClick={handleClearFilters}
-                className="w-full lg:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500 text-gray-100 border border-gray-300 hover:bg-red-600"
+                className="w-1/4 md:w-full lg:w-auto px-1 md:px-4 py-1 md:py-2  rounded-lg  text-xs md:text-sm font-medium transition-colors bg-red-500 text-gray-100 border border-gray-300 hover:bg-red-600"
               >
                 پاک کردن فیلترها
               </button>
