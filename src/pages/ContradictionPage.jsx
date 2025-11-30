@@ -20,7 +20,7 @@ const [factorData, setFactorData] = useState([]);
 // فاکتور با حساب
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis`)
+     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis&include=sum_transactions`)
      .then((response) => {
       setInvoiceData(response.data.data);
        setMeta3(response.data.meta);
@@ -35,7 +35,7 @@ const [factorData, setFactorData] = useState([]);
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = <,amount`)
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = <,amount&include=sum_invoices`)
      .then((response) => {
       setTransactionData2(response.data.data);
         setMeta2(response.data.meta);
@@ -50,7 +50,7 @@ const [factorData, setFactorData] = useState([]);
 // تعیین تکلیف شده حساب
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = >=,amount`)
+     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = >=,amount&include=sum_invoices`)
      .then((response) => {
       setTransactionDataAll(response.data.data);
         setMeta2(response.data.meta);
@@ -65,7 +65,7 @@ const [factorData, setFactorData] = useState([]);
 // تعیین تکلیف شده فاکتور
   useEffect(() => {
     setLoading(true);
-    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis`)
+    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis&include=sum_transactions`)
     .then((response) => {
      setFactorData(response.data.data);
      setMeta3(response.data.meta);
