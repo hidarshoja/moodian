@@ -16,6 +16,7 @@ import { SiAmazonsimpleemailservice } from "react-icons/si";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { PiUsersThreeLight } from "react-icons/pi";
 import { GiCheckedShield } from "react-icons/gi";
+import { TbArrowsLeftRight } from "react-icons/tb";
 
 const allNavigationItems = [
   {
@@ -118,6 +119,12 @@ const allNavigationItems = [
     name: "ایمپورت و اکسپورت",
     icon: <LuImport className="w-5 h-5 ml-2" />,
     href: "/downloadExcel",
+    permission: null, // Add appropriate permission if needed
+  },
+  {
+    name: "تطبیق فاکتور فروش و خرید",
+    icon: <TbArrowsLeftRight className="w-5 h-5 ml-2" />,
+    href: "/compareInvoices",
     permission: null, // Add appropriate permission if needed
   },
 ];

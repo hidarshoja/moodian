@@ -25,6 +25,7 @@ import DownloadExcel from "./pages/DownloadExcel";
 import CreateToken from "./pages/CreateToken";
 import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
+import CompareInvoices from "./pages/CompareInvoices";
 
 
 export const route = createBrowserRouter([
@@ -115,7 +116,11 @@ export const route = createBrowserRouter([
             {
                 path: '/roles',
                 element: <RolesPage />
-            }  
+            }  ,
+            {
+                path: '/compareInvoices',
+                element: <CompareInvoices />
+            }
         ]
     },
     // ConnectionsPage 
