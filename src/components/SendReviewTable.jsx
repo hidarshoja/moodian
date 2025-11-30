@@ -4,7 +4,7 @@ import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
 import EditReviewModalNew from "./EditReviewModalNew";
-import EditInvoiceModalShow from "./EditInvoiceModalShow";
+import EditReviewModalShow from "./EditReviewModalShow";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -15,7 +15,7 @@ import { GrStatusGood } from "react-icons/gr";
 import { FiEdit } from "react-icons/fi";
 import { BsSendArrowUp } from "react-icons/bs";
 import ErrorListModal from "./ErrorListModal";
-import EditInvoiceModalNew2 from "./EditInvoiceModalNew2";
+import EditReviewModalNew2 from "./EditReviewModalNew2";
 
 export default function SendReviewTable({
   records,
@@ -547,7 +547,7 @@ export default function SendReviewTable({
       />
 
       {/* EditInvoiceModalShow */}
-      <EditInvoiceModalShow
+      <EditReviewModalShow
         isOpen={isEditModalOpen2}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
@@ -562,7 +562,7 @@ export default function SendReviewTable({
         errors={errorList}
       />
 
-      <EditInvoiceModalNew2
+      <EditReviewModalNew2
         isOpen={isEditModalOpen3}
         onClose={closeAllModals}
         invoiceData={selectedInvoice}

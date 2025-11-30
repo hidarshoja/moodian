@@ -1,10 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState , useRef} from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
+import DateObject from "react-date-object";
 import persian from "react-date-object/calendars/persian";
+import gregorian from "react-date-object/calendars/gregorian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import AddLineItemModalReveiw from "./AddLineItemModalReveiw";
+import AddLineItemModal from "./AddLineItemModal";
 import PropTypes from "prop-types";
 import { SlPrinter } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
@@ -12,15 +14,17 @@ import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
 
-export default function CreateModalReview({
-  isOpen2,
+export default function EditReviewModalNew2({
+  isOpen,
+  onClose,
+  invoiceData,
+  onRefresh,
   onClose2,
-  refresh,
-  setRefresh,
   customers,
+  products,
 }) {
-  // مقدار اولیه stateها برای ریست راحت
-  const initialInvoiceData = {
+  const [formData, setFormData] = useState({
+    id: "",
     inty: "1",
     inp: "",
     indatim: new Date(),
@@ -31,8 +35,11 @@ export default function CreateModalReview({
     setm: "نقدی",
     MyInvoiceId: "",
     sbc: "",
-  };
-  const initialTotals = {
+  });
+  const [lineItems, setLineItems] = useState([]);
+  const [editItemId, setEditItemId] = useState(null);
+  const modalContainerRef = useRef(null);
+  const [totals, setTotals] = useState({
     tprdis: 0,
     tdis: 0,
     tadis: 0,
@@ -41,37 +48,71 @@ export default function CreateModalReview({
     tvam: 0,
     todam: 0,
     tbill: 0,
-  };
-  const [invoiceData, setInvoiceData] = useState(initialInvoiceData);
-  const [lineItems, setLineItems] = useState([]);
-  const [editItemId, setEditItemId] = useState(null);
-  const [totals, setTotals] = useState(initialTotals);
+  });
   const [addItemModalOpen, setAddItemModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loadingItems, setLoadingItems] = useState(false);
+  const [totalDiscount2, setTotalDiscount2] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalDiscount3, setTotalDiscount3] = useState(0);
   const [tax, setTax] = useState(0);
   const [totalOdam, setTotalOdam] = useState(0);
   const [olamTotal, setOlamTotal] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const modalContainerRef = useRef(null);
 
-  const formatDateTime = (value) => {
-    if (!value) return null;
-    try {
-      const d = value instanceof Date ? value : new Date(value);
-      if (Number.isNaN(d.getTime())) return null;
-      const pad = (n) => String(n).padStart(2, "0");
-      const yyyy = d.getFullYear();
-      const MM = pad(d.getMonth() + 1);
-      const dd = pad(d.getDate());
-      const HH = pad(d.getHours());
-      const mm = pad(d.getMinutes());
-      const ss = pad(d.getSeconds());
-      return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
-    } catch {
-      return null;
+  // Initialize form data when invoiceData changes
+  useEffect(() => {
+    if (invoiceData && isOpen) {
+      setFormData({
+        id: invoiceData.id || "",
+        inty: invoiceData.inty || "1",
+        inp: invoiceData.inp || "",
+        indatim: invoiceData.indatim
+          ? new Date(invoiceData.indatim)
+          : new Date(),
+        indati2m: invoiceData.indati2m
+          ? new Date(invoiceData.indati2m)
+          : new Date(),
+        comment: invoiceData.comment || "",
+        crn: invoiceData.customer?.id || "",
+        bbc: invoiceData.bbc || "",
+        setm: invoiceData.setm || "نقدی",
+        MyInvoiceId: invoiceData.MyInvoiceId || "",
+        sbc: invoiceData.sbc || "",
+      });
+
+      // Fetch line items from API
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/${invoiceData.id}/items`)
+          .then((response) => {
+            setLineItems(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching line items:", error);
+            // Fallback to existing items if API fails
+            if (invoiceData.items && Array.isArray(invoiceData.items)) {
+              const formattedItems = invoiceData.items.map((item, index) => ({
+                id: Date.now() + index,
+                serviceId: item.product_id || "",
+                serviceName: item.product_id || "",
+                am: item.am || 0,
+                fee: item.fee || 0,
+                exchangeRate: item.exr || 0,
+                currencyAmount: item.cfee || 0,
+                prdis: item.dis || 0,
+                dis: item.dis || 0,
+                adis: item.am * item.fee - (item.dis || 0),
+              }));
+              setLineItems(formattedItems);
+            }
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
+      }
     }
-  };
+  }, [invoiceData, isOpen]);
 
   const toNumberOrNull = (val) => {
     if (val === undefined || val === null || val === "") return null;
@@ -79,18 +120,55 @@ export default function CreateModalReview({
     return Number.isNaN(n) ? null : n;
   };
 
+  const convertToDateTimeString = (dateValue) => {
+    if (!dateValue) return null;
+    try {
+      // اگر DateObject است (از react-date-object)
+      if (
+        dateValue &&
+        typeof dateValue === "object" &&
+        typeof dateValue.format === "function" &&
+        dateValue.calendar
+      ) {
+        // همیشه به میلادی تبدیل کن (حتی اگر از قبل میلادی باشد، مشکلی نیست)
+        const gregorianDate = dateValue.convert(gregorian);
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+      // اگر Date است - باید آن را به DateObject میلادی تبدیل کنیم
+      else if (dateValue instanceof Date) {
+        const gregorianDate = new DateObject({
+          date: dateValue,
+          calendar: gregorian,
+        });
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+      // اگر string یا number است
+      else {
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) return null;
+        const gregorianDate = new DateObject({
+          date: date,
+          calendar: gregorian,
+        });
+        return gregorianDate.setLocale("en").format("YYYY-MM-DD HH:mm:ss");
+      }
+    } catch (error) {
+      console.error("Error converting date to string:", error);
+      return null;
+    }
+  };
+
   const buildPayload = () => {
     const payload = {
-      send_to_moadian: false,
-      customer_id: toNumberOrNull(invoiceData.crn) ?? null,
-      // user_reference: null,
-      inty: toNumberOrNull(invoiceData.inty),
+      id: formData.id,
+      customer_id: toNumberOrNull(formData.crn) ?? null,
+      inty: toNumberOrNull(formData.inty),
       irtaxid: null,
-      indatim: formatDateTime(invoiceData.indatim),
-      indati2m: formatDateTime(invoiceData.indati2m),
-      inp: toNumberOrNull(invoiceData.inp),
+      indatim: convertToDateTimeString(formData.indatim),
+      indati2m: convertToDateTimeString(formData.indati2m),
+      inp: toNumberOrNull(formData.inp),
       ins: 1,
-      sbc: invoiceData.sbc?.trim() || null,
+      sbc: formData.sbc?.trim() || null,
       ft: null,
       scln: null,
       scc: null,
@@ -98,7 +176,7 @@ export default function CreateModalReview({
       cdcn: null,
       cdcd: null,
       billid: null,
-      setm: toNumberOrNull(invoiceData.setm) ?? 1,
+      setm: toNumberOrNull(formData.setm),
       cap: toNumberOrNull(totals.cap) ?? null,
       insp: toNumberOrNull(totals.insp) ?? null,
       tax17: null,
@@ -114,19 +192,21 @@ export default function CreateModalReview({
       lt: null,
       cno: null,
       did: null,
-      sg: null, // exm: [{"sgid":null,"sgt":"asd"}]
+      sg: null,
       asn: null,
       asd: null,
       in: null,
       an: null,
-      items: (lineItems || []).map((it) => ({
-        product_id: toNumberOrNull(it.serviceId),
+      items: (lineItems || []).map((it) => {
+        const isShowFalse = !it.Show;
+        return {
+        product_id: toNumberOrNull(it.product_id),
         am: toNumberOrNull(it.am),
         nw: null,
         fee: toNumberOrNull(it.fee),
-        cfee: toNumberOrNull(it.cfee),
-        cut: it.cut || null,
-        exr: toNumberOrNull(it.exr),
+        cfee: isShowFalse ? null : toNumberOrNull(it.cfee),
+        cut: isShowFalse ? null : it.cut || null,
+        exr: isShowFalse ? null : toNumberOrNull(it.exr),
         ssrv: null,
         sscv: null,
         dis: toNumberOrNull(it.dis) ?? 0,
@@ -147,13 +227,14 @@ export default function CreateModalReview({
         tsstam: toNumberOrNull(it.tsstam),
         comment: it.comment || null,
         Show: it.Show || false,
-      })),
+      };
+      }),
     };
     return payload;
   };
 
   const handleInputChange = (field, value) => {
-    setInvoiceData((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -163,10 +244,10 @@ export default function CreateModalReview({
   useEffect(() => {
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
-        acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = item.adis - item.fee || 0;
-        acc.tdis = item.adis - item.fee || 0;
-        acc.tadis += item.adis || 0;
+        const itemTotal = (item.am || 0) * (item.fee || 0);
+        acc.tprdis += itemTotal;
+        acc.tdis += item.dis || 0;
+        acc.tadis += itemTotal - (item.dis || 0);
         return acc;
       },
       {
@@ -185,8 +266,12 @@ export default function CreateModalReview({
       calculatedTotals.tadis + calculatedTotals.tvam + calculatedTotals.todam;
 
     setTotals(calculatedTotals);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const sumDiscount = lineItems?.reduce(
+      (sum, item) => sum + (item?.am * item?.fee || 0),
+      0
+    );
+    const sumDiscount2 = lineItems?.reduce(
       (sum, item) => sum + (item?.dis || 0),
       0
     );
@@ -199,67 +284,69 @@ export default function CreateModalReview({
       (sum, item) => sum + (item?.olam || 0),
       0
     );
-    const total = lineItems?.reduce((sum, item) => {
-      const adis = item?.adis || 0;
-      const vam = item?.vam || 0;
-      const odam = item?.odam || 0;
-      const olam = item?.olam || 0;
-      return sum + (adis + vam + odam + olam);
-    }, 0);
 
     setOlamTotal(sumOlam);
-    setTotalPrice(total);
+    setTotalPrice(totalDiscount3 + olamTotal + tax + totalOdam);
     setTotalDiscount(sumDiscount);
+    setTotalDiscount2(sumDiscount2);
+    setTotalDiscount3(sumDiscount - sumDiscount2);
     setTax(sumTax);
     setTotalOdam(sumOdam);
   }, [lineItems]);
 
-  const resetForm = () => {
-    setInvoiceData(initialInvoiceData);
-    setLineItems([]);
-    setTotals(initialTotals);
-    setEditItemId(null);
-  };
-
-  if (!isOpen2) return null;
+  if (!isOpen) return null;
 
   const handleAddLineItem = () => {
-    setEditItemId(null);
-    setAddItemModalOpen(true);
-    // Scroll to top of modal
     if (modalContainerRef.current) {
       modalContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
+    setEditItemId(null);
+    setAddItemModalOpen(true);
   };
 
   const handleSaveLineItem = (itemData) => {
+    // Calculate adis if not provided
+    const calculatedAdis =
+      itemData.adis ||
+      (itemData.am || 0) * (itemData.fee || 0) - (itemData.dis || 0);
+      const isShowFalse = !itemData.Show;
+      const exrValue = isShowFalse ? null : itemData.exr || null;
+      const cfeeValue = isShowFalse ? null : itemData.cfee || null;
+      const cutValue = isShowFalse ? null : itemData.cut || null;
     if (editItemId) {
       setLineItems((prev) =>
         prev.map((item) =>
           item.id === editItemId
             ? {
                 ...item,
-                serviceId: itemData.ProductId,
-                serviceName: itemData.ProductId,
+                product_id: itemData.ProductId,
                 am: itemData.am,
                 fee: itemData.fee,
-                prdis: itemData.prdis,
                 dis: itemData.dis,
-                adis: itemData.adis,
-                name: itemData.name,
-                sstid: itemData.sstid,
-                vam: itemData?.vam,
-                odam: itemData?.odam,
-                olam: itemData?.olam,
-                cop: itemData?.cop,
-                vop: itemData?.vop,
-                tsstam: itemData?.tsstam,
-                Show: itemData?.Show || false,
-                exr: itemData?.exr || null,
-                cfee: itemData?.cfee || null,
-                cut: itemData?.cut || null,
-                bsrn: itemData?.bsrn || "",
-                comment: itemData?.comment || "",
+                adis: calculatedAdis,
+                exr: exrValue,
+                cfee: cfeeValue,
+                cut: cutValue,
+                bsrn: itemData.bsrn || "",
+                comment: itemData.comment || "",
+                vra: itemData.vra || 0,
+                vam: itemData.vam || 0,
+                odam: itemData.odam || 0,
+                olam: itemData.olam || 0,
+                cop: itemData.cop || 0,
+                vop: itemData.vop || 0,
+                tsstam: itemData.tsstam || 0,
+                Show: itemData.Show || false,
+                // Update product info if available
+                product: itemData.ProductId
+                  ? {
+                      sstid: itemData.ProductId,
+                      title:
+                        products.find((p) => p.id == itemData.ProductId)
+                          ?.title || "",
+                      ...item.product,
+                    }
+                  : item.product,
               }
             : item
         )
@@ -268,44 +355,44 @@ export default function CreateModalReview({
     } else {
       const newItem = {
         id: Date.now(),
-        serviceId: itemData.ProductId,
-        serviceName: itemData.ProductId,
+        product_id: itemData.ProductId,
         am: itemData.am,
         fee: itemData.fee,
-        exchangeRate: 0,
-        currencyAmount: 0,
-        prdis: itemData.prdis,
+        exr: exrValue,
+        cfee: cfeeValue,
+        cut: cutValue,
         dis: itemData.dis,
-        adis: itemData.adis,
-        name: itemData.name,
-        sstid: itemData.sstid,
-        vam: itemData?.vam,
-        odam: itemData?.odam,
-        olam: itemData?.olam,
-        cop: itemData?.cop,
-        vop: itemData?.vop,
-        tsstam: itemData?.tsstam,
-        Show: itemData?.Show || false,
-        exr: itemData?.exr || null,
-        cfee: itemData?.cfee || null,
-        cut: itemData?.cut || null,
-        bsrn: itemData?.bsrn || "",
-        comment: itemData?.comment || "",
+        adis: calculatedAdis,
+        bsrn: itemData.bsrn || "",
+        comment: itemData.comment || "",
+        vra: itemData.vra || 0,
+        vam: itemData.vam || 0,
+        odam: itemData.odam || 0,
+        olam: itemData.olam || 0,
+        cop: itemData.cop || 0,
+        vop: itemData.vop || 0,
+        tsstam: itemData.tsstam || 0,
+        Show: itemData.Show || false,
+        product: itemData.ProductId
+          ? {
+              sstid: itemData.ProductId,
+              title:
+                products.find((p) => p.id == itemData.ProductId)?.title || "",
+            }
+          : null,
       };
       setLineItems((prev) => [...prev, newItem]);
     }
     calculateTotals();
   };
 
-  // removed unused inline edit handler; we edit via modal
-
   const handleDeleteLineItem = (id) => {
     setLineItems((prev) => prev.filter((item) => item.id !== id));
     calculateTotals();
   };
 
-  const handleEditLineItem = (id) => {
-    setEditItemId(id);
+  const handleEditLineItem = (item) => {
+    setEditItemId(item?.id);
     setAddItemModalOpen(true);
   };
 
@@ -313,20 +400,20 @@ export default function CreateModalReview({
     // Calculate totals based on line items
     const calculatedTotals = lineItems.reduce(
       (acc, item) => {
-        acc.tprdis += item.am * item.fee || 0;
-        acc.tdis = item.adis - item.fee || 0;
-        acc.tdis = item.adis - item.fee || 0;
-        acc.tadis += item.adis || 0;
+        const itemTotal = (item.am || 0) * (item.fee || 0);
+        acc.tprdis += itemTotal;
+        acc.tdis += item.dis || 0;
+        acc.tadis += itemTotal - (item.dis || 0);
         return acc;
       },
       {
         tprdis: 0,
         tdis: 0,
         tadis: 0,
-        cap: 0,
-        insp: 0,
-        tvam: 0,
-        todam: 0,
+        cap: totals.cap || 0,
+        insp: totals.insp || 0,
+        tvam: totals.tvam || 0,
+        todam: totals.todam || 0,
         tbill: 0,
       }
     );
@@ -351,7 +438,7 @@ export default function CreateModalReview({
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "فاکتور فروش  با موفقیت اضافه شد",
+        title: "کپی فاکتور با موفقیت انجام شد!",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -359,12 +446,30 @@ export default function CreateModalReview({
           popup: "swal2-toast",
         },
       });
-      setRefresh(!refresh);
-      onClose2();
-      resetForm();
+      if (onRefresh) {
+        onRefresh();
+      }
+      handleCancel();
+      // Refresh the data after successful save
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/${invoiceData.id}/items`)
+          .then((response) => {
+            setLineItems(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error refreshing line items:", error);
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
+      }
+      handleCancel();
     } catch (error) {
-      console.error("خطا در اضافه کردن محصول:", error);
-      let errorMessage = "خطا در اضافه کردن محصول";
+      handleCancel();
+      console.error("خطا در کپی فاکتور:", error);
+      let errorMessage = "خطا در کپی فاکتور";
 
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
@@ -395,28 +500,63 @@ export default function CreateModalReview({
 
   const handleSaveAndSend = async (e) => {
     e?.preventDefault?.();
-    const payload = { ...buildPayload(), send_to_moadian: true };
 
     try {
-      const res = await axiosClient.post(`/invoices`, payload, {
+      // First, save the invoice
+      const payload = buildPayload();
+
+      const saveRes = await axiosClient.post(`/invoices`, payload, {
         headers: { "Content-Type": "application/json" },
       });
+
+      // Then, send to moadian
+      const sendData = {
+        ids: [formData.id.toString()],
+      };
+
+      const sendRes = await axiosClient.post(
+        `/invoices/send-to-moadian`,
+        sendData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       Swal.fire({
         toast: true,
         position: "top-start",
         icon: "success",
-        title: "صورتحساب ذخیره و ارسال شد",
+        title: "کپی فاکتور با موفقیت انجام شد!",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
         customClass: { popup: "swal2-toast" },
       });
-      setRefresh(!refresh);
-      onClose2();
-      resetForm();
+      if (onRefresh) {
+        onRefresh();
+      }
+      handleCancel();
+      // Refresh the data after successful save and send
+      if (invoiceData.id) {
+        setLoadingItems(true);
+        axiosClient
+          .get(`/invoice/${invoiceData.id}/items`)
+          .then((response) => {
+            setLineItems(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error refreshing line items:", error);
+          })
+          .finally(() => {
+            setLoadingItems(false);
+          });
+      }
+      handleCancel();
     } catch (error) {
-      console.error("خطا در ذخیره و ارسال:", error);
-      let errorMessage = "خطا در ذخیره و ارسال";
+      handleCancel();
+
+      console.error("خطا در کپی فاکتور:", error);
+      let errorMessage = "خطا در کپی فاکتور";
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.errors) {
@@ -440,7 +580,6 @@ export default function CreateModalReview({
   };
 
   const handleCancel = () => {
-    resetForm();
     onClose2();
   };
 
@@ -456,7 +595,7 @@ export default function CreateModalReview({
     }
 
     // Get customer name
-    const selectedCustomer = customers?.find((c) => c.id == invoiceData.crn);
+    const selectedCustomer = customers.find((c) => c.id == formData.crn);
     const customerName = selectedCustomer
       ? (selectedCustomer.name || "") +
         (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
@@ -574,33 +713,33 @@ export default function CreateModalReview({
             <table class="info-table">
               <tr>
                 <td class="label">نوع:</td>
-                <td>${getIntyText(invoiceData.inty)}</td>
+                <td>${getIntyText(formData.inty)}</td>
                 <td class="label">الگوی فروش:</td>
-                <td>${getInpText(invoiceData.inp)}</td>
+                <td>${getInpText(formData.inp)}</td>
               </tr>
               <tr>
                 <td class="label">تاریخ صدور:</td>
-                <td>${formatDateForPrint(invoiceData.indatim)}</td>
+                <td>${formatDateForPrint(formData.indatim)}</td>
                 <td class="label">تاریخ ایجاد:</td>
-                <td>${formatDateForPrint(invoiceData.indati2m)}</td>
+                <td>${formatDateForPrint(formData.indati2m)}</td>
               </tr>
               <tr>
                 <td class="label">مشتری:</td>
                 <td>${customerName}</td>
                 <td class="label">کد شعبه خریدار:</td>
-                <td>${invoiceData.bbc || "نامشخص"}</td>
+                <td>${formData.bbc || "نامشخص"}</td>
               </tr>
               <tr>
                 <td class="label">روش تسویه:</td>
-                <td>${getSetmText(invoiceData.setm)}</td>
+                <td>${getSetmText(formData.setm)}</td>
                 <td class="label">کد شعبه فروشنده:</td>
-                <td>${invoiceData.sbc || "نامشخص"}</td>
+                <td>${formData.sbc || "نامشخص"}</td>
               </tr>
               <tr>
                 <td class="label">ش ف در سامانه مشتری:</td>
-                <td>${invoiceData.MyInvoiceId || "نامشخص"}</td>
+                <td>${formData.MyInvoiceId || "نامشخص"}</td>
                 <td class="label">توضیحات:</td>
-                <td>${invoiceData.comment || "ندارد"}</td>
+                <td>${formData.comment || "ندارد"}</td>
               </tr>
             </table>
           </div>
@@ -638,19 +777,27 @@ export default function CreateModalReview({
   };
 
   return (
-    <div
-      ref={modalContainerRef}
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto"
-    >
+    <div ref={modalContainerRef} className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur overflow-y-auto">
       <div
         className="w-[95%] min-h-[95%] max-w-7xl bg-[#23234a] rounded-lg shadow-2xl relative flex flex-col my-4"
         dir="rtl"
       >
         {/* Header */}
-        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[900px] md:mt-[180px] lg:mt-0">
-          <h2 className="text-lg font-bold">فاکتور فروش جدید</h2>
+        <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[990px] md:mt-[180px] lg:mt-0">
+          تکثیر فاکتور
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
+          <div>
+            <span className="text-sm">
+                {invoiceData?.taxid}{" "}
+                {invoiceData?.ancestors && invoiceData?.ancestors.length > 0
+                  ? invoiceData.ancestors
+                      .map((ancestor) => `:: [${ancestor?.taxid}]`)
+                      .filter(Boolean)
+                      .join(" , ")
+                  : ""}
+              </span>
+            </div>
             <SlPrinter onClick={handlePrint} className="cursor-pointer" />
             <button
               onClick={handleCancel}
@@ -671,7 +818,7 @@ export default function CreateModalReview({
               </label>
               <div className="relative">
                 <select
-                  value={invoiceData.inty}
+                  value={formData.inty}
                   onChange={(e) => handleInputChange("inty", e.target.value)}
                   className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
@@ -690,10 +837,11 @@ export default function CreateModalReview({
               </label>
               <div className="relative">
                 <select
-                  value={invoiceData.inp}
+                  value={formData.inp}
                   onChange={(e) => handleInputChange("inp", e.target.value)}
                   className="w-full px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                
                   <option value="">انتخاب الگوی صورتحساب</option>
                   <option value="1">الگوی اول (فروش)</option>
                   <option value="2">الگوی دوم (فروش ارزی)</option>
@@ -721,7 +869,7 @@ export default function CreateModalReview({
               <DatePicker
                 calendar={persian}
                 locale={persian_fa}
-                value={invoiceData.indatim}
+                value={formData.indatim}
                 onChange={(date) => handleInputChange("indatim", date)}
                 calendarPosition="bottom-right"
                 inputClass="w-full bg-gray-800/70 text-white/90 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
@@ -738,7 +886,7 @@ export default function CreateModalReview({
               <DatePicker
                 calendar={persian}
                 locale={persian_fa}
-                value={invoiceData.indati2m}
+                value={formData.indati2m}
                 onChange={(date) => handleInputChange("indati2m", date)}
                 calendarPosition="bottom-right"
                 inputClass="w-full bg-gray-800/70 text-white/90 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
@@ -753,7 +901,7 @@ export default function CreateModalReview({
                 مشتری جدید
               </label>
               <select
-                value={invoiceData.crn}
+                value={formData.crn}
                 onChange={(e) => handleInputChange("crn", e.target.value)}
                 className="w-full px-2 py-[5px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -767,14 +915,13 @@ export default function CreateModalReview({
             </div>
 
             {/* کد شعبه خریدار (Buyer Branch Code) */}
-
             <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
                 کد شعبه خریدار
               </label>
               <input
                 type="text"
-                value={invoiceData.bbc}
+                value={formData.bbc}
                 onChange={(e) => handleInputChange("bbc", e.target.value)}
                 placeholder="0"
                 className="w-full px-4 bg-gray-800/70 text-white/90 py-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -788,7 +935,7 @@ export default function CreateModalReview({
                 روش تسویه
               </label>
               <select
-                value={invoiceData.setm}
+                value={formData.setm}
                 onChange={(e) => handleInputChange("setm", e.target.value)}
                 className="w-full  px-2 py-[7px] border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -800,14 +947,13 @@ export default function CreateModalReview({
             </div>
 
             {/* کد شعبه فروشنده (Seller Branch Code) */}
-
             <div>
               <label className="block mb-2 text-gray-100 text-sm font-medium">
                 کد شعبه فروشنده
               </label>
               <input
                 type="text"
-                value={invoiceData.sbc}
+                value={formData.sbc}
                 placeholder="4 رقم باشد"
                 onChange={(e) => handleInputChange("sbc", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -821,7 +967,7 @@ export default function CreateModalReview({
               </label>
               <input
                 type="text"
-                value={invoiceData.MyInvoiceId}
+                value={formData.MyInvoiceId}
                 onChange={(e) =>
                   handleInputChange("MyInvoiceId", e.target.value)
                 }
@@ -836,7 +982,7 @@ export default function CreateModalReview({
               </label>
               <input
                 type="text"
-                value={invoiceData.comment}
+                value={formData.comment}
                 onChange={(e) => handleInputChange("comment", e.target.value)}
                 className="w-full px-4 py-2 border bg-gray-800/70 text-white/90 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -859,7 +1005,7 @@ export default function CreateModalReview({
           {/* Table Header - Desktop Only */}
           <div className="hidden md:block bg-[#1A2035] text-white px-4 py-3 rounded-t-lg">
             <div className="grid grid-cols-9 gap-2 text-sm font-medium text-right">
-              <div>شناسه خدمت/کالا</div>
+              <div>شناسه1 خدمت/کالا</div>
               <div>نام خدمت/کالا</div>
               <div>تعداد/مقدار</div>
               <div>مبلغ واحد</div>
@@ -872,8 +1018,15 @@ export default function CreateModalReview({
           </div>
 
           {/* Table Content */}
-          <div className="rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
-            {lineItems.length === 0 ? (
+          <div className=" rounded-b-lg min-h-[200px] max-h-[300px] overflow-y-auto">
+            {loadingItems ? (
+              <div className="flex items-center justify-center h-32 text-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                  در حال بارگذاری اقلام...
+                </div>
+              </div>
+            ) : lineItems.length === 0 ? (
               <div className="flex items-center justify-center h-32 text-gray-100">
                 رکوردی وجود ندارد
               </div>
@@ -884,7 +1037,9 @@ export default function CreateModalReview({
                     {/* Mobile/Tablet Card View */}
                     <div
                       className={`md:hidden mb-3 p-4 rounded-lg text-white ${
-                        index % 2 === 0 ? "bg-gray-600" : "bg-gray-500"
+                        index % 2 === 0
+                          ? "bg-gray-600 hover:bg-gray-700"
+                          : "bg-gray-500 hover:bg-gray-600"
                       }`}
                     >
                       <div className="space-y-2">
@@ -893,7 +1048,7 @@ export default function CreateModalReview({
                             شناسه خدمت/کالا:
                           </span>
                           <span className="text-sm font-medium">
-                            {item.sstid}
+                            {item?.product?.sstid || item?.product_id}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -901,7 +1056,7 @@ export default function CreateModalReview({
                             نام خدمت/کالا:
                           </span>
                           <span className="text-sm font-medium">
-                            {item.name}
+                            {item?.product?.title || ""}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -909,7 +1064,7 @@ export default function CreateModalReview({
                             تعداد/مقدار:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(item.am)}
+                            {item.am || 0}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -917,7 +1072,9 @@ export default function CreateModalReview({
                             مبلغ واحد:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(item.fee)}
+                            {new Intl.NumberFormat("fa-IR").format(
+                              item?.fee || 0
+                            )}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -925,9 +1082,7 @@ export default function CreateModalReview({
                             نرخ برابری ارز با ریال:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(
-                              item.exchangeRate
-                            )}
+                            {item?.exr || 0}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -935,9 +1090,7 @@ export default function CreateModalReview({
                             میزان ارز:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(
-                              item.currencyAmount
-                            )}
+                            {item?.cfee || 0}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -945,7 +1098,9 @@ export default function CreateModalReview({
                             مبلغ تخفیف:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(item.dis)}
+                            {new Intl.NumberFormat("fa-IR").format(
+                              item?.dis || 0
+                            )}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -953,7 +1108,9 @@ export default function CreateModalReview({
                             مبلغ بعد از تخفیف:
                           </span>
                           <span className="text-sm font-medium">
-                            {new Intl.NumberFormat("fa-IR").format(item.adis)}
+                            {new Intl.NumberFormat("fa-IR").format(
+                              item?.adis || 0
+                            )}
                           </span>
                         </div>
                         <div className="flex items-center justify-center gap-3 pt-2">
@@ -964,7 +1121,7 @@ export default function CreateModalReview({
                             <MdDelete className="w-5 h-5" />
                           </button>
                           <button
-                            onClick={() => handleEditLineItem(item.id)}
+                            onClick={() => handleEditLineItem(item)}
                             className="text-white hover:text-green-600 p-2"
                           >
                             <FiEdit className="w-5 h-5" />
@@ -980,32 +1137,28 @@ export default function CreateModalReview({
                       }`}
                     >
                       <span className="px-2 py-1 text-sm text-right">
-                        {item.sstid}
+                        {item?.product?.sstid || item?.product_id}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {item.name}
+                        {item?.product?.title || ""}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(item.am)}
+                        {item.am || 0}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(item.fee)}
+                        {new Intl.NumberFormat("fa-IR").format(item?.fee || 0)}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(
-                          item.exchangeRate
-                        )}
+                        {item?.exr || 0}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(
-                          item.currencyAmount
-                        )}
+                        {item?.cfee || 0}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(item.dis)}
+                        {new Intl.NumberFormat("fa-IR").format(item?.dis || 0)}
                       </span>
                       <span className="px-2 py-1 text-sm text-right">
-                        {new Intl.NumberFormat("fa-IR").format(item.adis)}
+                        {new Intl.NumberFormat("fa-IR").format(item?.adis || 0)}
                       </span>
                       <div className="flex items-center justify-center gap-3">
                         <button
@@ -1015,7 +1168,7 @@ export default function CreateModalReview({
                           <MdDelete className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleEditLineItem(item.id)}
+                          onClick={() => handleEditLineItem(item)}
                           className="text-white hover:text-green-600"
                         >
                           <FiEdit className="w-4 h-4" />
@@ -1049,7 +1202,7 @@ export default function CreateModalReview({
               </label>
               <input
                 type="text"
-                value={Number(totalDiscount).toLocaleString("fa-IR")}
+                value={Number(totalDiscount2).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 py-2  bg-gray-800/70 text-white/90 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
@@ -1060,32 +1213,12 @@ export default function CreateModalReview({
               </label>
               <input
                 type="text"
-                value={
-                  totals.tadis
-                    ? Number(totals.tadis).toLocaleString("fa-IR")
-                    : ""
-                }
+                value={Number(totalDiscount3).toLocaleString("fa-IR")}
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded bg-gray-100 text-[12px]"
               />
             </div>
-            {/* <div>
-              <label className="block text-gray-100 text-[10px] font-medium mb-1">
-                م مبلغ پرداختی نقدی
-              </label>
-              <input
-                type="number"
-                value={totals.cap}
-                readOnly
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     cap: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
-                className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
-              />
-            </div> */}
+      
             <div>
               <label className="block text-gray-100 text-[10px] font-medium mb-1">
                 مبلغ سایر وجوه قانونی
@@ -1094,12 +1227,7 @@ export default function CreateModalReview({
                 type="text"
                 value={Number(olamTotal).toLocaleString("fa-IR")}
                 readOnly
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     insp: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
+              
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
             </div>
@@ -1110,12 +1238,6 @@ export default function CreateModalReview({
               <input
                 type="text"
                 value={Number(tax).toLocaleString("fa-IR")}
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     tvam: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
                 readOnly
                 className="w-full px-3 bg-gray-800/70 text-white/90 py-2 border border-gray-300 rounded text-[12px]"
               />
@@ -1127,12 +1249,6 @@ export default function CreateModalReview({
               <input
                 type="text"
                 value={Number(totalOdam).toLocaleString("fa-IR")}
-                // onChange={(e) =>
-                //   setTotals((prev) => ({
-                //     ...prev,
-                //     todam: parseFloat(e.target.value) || 0,
-                //   }))
-                // }
                 readOnly
                 className="w-full px-3 py-2 bg-gray-800/70 text-white/90 border border-gray-300 rounded text-[12px]"
               />
@@ -1158,30 +1274,22 @@ export default function CreateModalReview({
           <div className="flex justify-center gap-4 w-full">
             <button
               onClick={handleCancel}
-              className="bg-red-500 text-sm lg:text-base w-1/3 text-white px-8 py-2 rounded-lg font-medium  hover:bg-red-600 transition-colors"
+              className="bg-red-500 w-1/3 text-white px-8 py-3 rounded-lg font-medium  hover:bg-red-600 transition-colors"
             >
               انصراف
             </button>
-            <button
-              onClick={handleSaveAndSend}
-              className="btn-custom4 text-sm lg:text-base"
-            >
+            <button onClick={handleSaveAndSend} className="btn-custom4">
               ذخیره و ارسال
             </button>
-            <button
-              onClick={handleSave}
-              className="btn-custom4 text-sm lg:text-base"
-            >
+            <button onClick={handleSave} className="btn-custom4">
               ذخیره
             </button>
           </div>
         </div>
 
         {/* Add Line Item Modal */}
-        <AddLineItemModalReveiw
+        <AddLineItemModal
           isOpen={addItemModalOpen}
-          setSelectedProduct={setSelectedProduct}
-          selectedProduct={selectedProduct}
           onClose={() => {
             setAddItemModalOpen(false);
             setEditItemId(null);
@@ -1191,9 +1299,10 @@ export default function CreateModalReview({
             editItemId
               ? (() => {
                   const item = lineItems.find((x) => x.id === editItemId);
+
                   return {
-                    ProductId: item?.serviceName,
-                    title: item?.name,
+                    ProductId: item?.product_id,
+                    title: item?.product?.title,
                     am: item?.am,
                     fee: item?.fee,
                     prdis: item?.prdis,
@@ -1223,10 +1332,13 @@ export default function CreateModalReview({
   );
 }
 
-CreateModalReview.propTypes = {
-  isOpen2: PropTypes.bool.isRequired,
+EditReviewModalNew2.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  invoiceData: PropTypes.object,
+  isEditing: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
   onClose2: PropTypes.func.isRequired,
-  refresh: PropTypes.bool.isRequired,
-  setRefresh: PropTypes.func.isRequired,
   customers: PropTypes.array.isRequired,
+  products: PropTypes.array.isRequired,
 };
