@@ -748,7 +748,7 @@ export default function EditReviewModalShow({ isOpen, onClose, invoiceData  , cu
       >
         {/* Header */}
         <div className="bg-[#1A2035] text-white px-6 py-3 rounded-t-lg flex items-center justify-between mt-[930px] md:mt-[180px] lg:mt-0">
-        نمایش فاکتور
+        نمایش بررسی ۱۶۹
           <div className="text-sm">تاریخ مجاز ارسال از : ۱۴۰۴/۰۷/۰۸</div>
           <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">

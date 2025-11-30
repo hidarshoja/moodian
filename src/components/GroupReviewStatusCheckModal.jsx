@@ -146,7 +146,7 @@ const GroupReviewStatusCheckModal = ({ isOpen, onClose }) => {
         <div className="bg-[#1A2035] text-white px-6 py-4 rounded-t-lg flex items-center justify-between">
           <div className="flex-1 text-center">
             <h2 className="text-base lg:text-lg font-bold">
-              چک وضعیت فاکتور فروش بصورت گروهی
+              چک وضعیت بررسی ۱۶۹ بصورت گروهی
             </h2>
           </div>
           <button
