@@ -3,7 +3,7 @@ import { convertToPersianDate } from "../utils/change-date";
 import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import axiosClient from "../axios-client";
 import Swal from "sweetalert2";
-import EditInvoiceModalNew from "./EditInvoiceModalNew";
+import EditReviewModalNew from "./EditReviewModalNew";
 import EditInvoiceModalShow from "./EditInvoiceModalShow";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -535,7 +535,7 @@ export default function SendReviewTable({
         </tbody>
       </table>
 
-      <EditInvoiceModalNew
+      <EditReviewModalNew
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         invoiceData={selectedInvoice}
