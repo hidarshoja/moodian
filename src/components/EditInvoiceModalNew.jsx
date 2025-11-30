@@ -161,6 +161,7 @@ export default function EditInvoiceModalNew({
 
   const buildPayload = () => {
     const payload = {
+      type :-1,
       id: formData.id,
       customer_id: toNumberOrNull(formData.crn) ?? null,
       inty: toNumberOrNull(formData.inty),
