@@ -163,12 +163,12 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purcha
                {Number(r?.tadis).toLocaleString()}
               </td>
                 <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {Number(r?.sum_transactions_assigned_amount).toLocaleString()}
+                {Number(r?.sum_associated_sales_amount).toLocaleString()}
               </td>
               <td className="px-4 py-3 flex items-center justify-center text-white/90 text-sm whitespace-nowrap">
-              {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
-                {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
-                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
+              {Number(r?.sum_associated_sales_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
+                {r?.tadis  <= Number(r?.sum_associated_sales_amount) ?
+                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_associated_sales_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
                   }
                
                
