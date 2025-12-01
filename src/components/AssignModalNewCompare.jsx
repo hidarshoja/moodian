@@ -16,11 +16,7 @@ function Spinner() {
 export default function AssignModalNewCompare({
   transaction,
   onClose,
-  loading,
   meta,
-  setPageCount,
-  pageCount,
-  setLoading,
   idActive,
   activeAccount,
   refresh,
@@ -29,27 +25,40 @@ export default function AssignModalNewCompare({
   setPageCount2,
   pageCount2,
   setLoading3,
+  selectedTransactions,
+  setSelectedTransactions,
 }) {
-  const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [activeAccountIds, setActiveAccountIds] = useState([]);
   const [activeAccountAmountMap, setActiveAccountAmountMap] = useState({});
   const [inputValues, setInputValues] = useState({});
+  const currentSelectedTransactions = selectedTransactions ?? [];
 
   useEffect(() => {
     if (activeAccount && activeAccount.length > 0) {
-      const activeIds = activeAccount.map((acc) => acc.id);
-      setSelectedTransactions(activeIds);
+      const activeIds = activeAccount
+        .map((acc) => acc?.id)
+        .filter((id) => id !== undefined && id !== null);
       setActiveAccountIds(activeIds);
-      // ایجاد Map از id به invoice_transaction_pivot.amount
+
       const amountMap = {};
       const initialValues = {};
       activeAccount.forEach((acc) => {
-        if (acc.id && acc.invoice_transaction_pivot?.amount !== undefined) {
-          const amount = Number(acc.invoice_transaction_pivot.amount) || 0;
-          amountMap[acc.id] = amount;
-          initialValues[acc.id] = amount;
+        if (!acc?.id) {
+          return;
         }
+
+        const rawAmount =
+          acc?.invoice_transaction_pivot?.amount ?? acc?.pivot?.amount ?? null;
+
+        if (rawAmount === undefined || rawAmount === null) {
+          return;
+        }
+
+        const amount = Number(rawAmount) || 0;
+        amountMap[acc.id] = amount;
+        initialValues[acc.id] = amount;
       });
+
       setActiveAccountAmountMap(amountMap);
       setInputValues((prev) => ({ ...prev, ...initialValues }));
     }
@@ -91,7 +100,7 @@ export default function AssignModalNewCompare({
   }, [transaction, activeAccountIds, activeAccountAmountMap]);
 
   const handleCheckboxChange = (id) => {
-    setSelectedTransactions((prev) => {
+    setSelectedTransactions((prev = []) => {
       if (prev.includes(id)) {
         // اگر checkbox untick شد، مقدار را به مقدار پیش‌فرض برگردان
         const currentTransaction = transaction?.find((t) => t.id === id);
@@ -157,7 +166,7 @@ export default function AssignModalNewCompare({
   };
 
   const handleShowAssign = () => {
-    const invoices = selectedTransactions.map((id) => ({
+    const invoices = currentSelectedTransactions.map((id) => ({
       id: id,
       amount: inputValues[id] ?? 0,
     }));
@@ -266,7 +275,7 @@ export default function AssignModalNewCompare({
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       <input
                         type="checkbox"
-                        checked={selectedTransactions.includes(r.id)}
+                        checked={currentSelectedTransactions.includes(r.id)}
                         onChange={() => handleCheckboxChange(r.id)}
                       />
                     </td>
@@ -303,9 +312,9 @@ export default function AssignModalNewCompare({
                         onChange={(e) =>
                           handleInputChange(r.id, e.target.value)
                         }
-                        disabled={!selectedTransactions.includes(r.id)}
+                        disabled={!currentSelectedTransactions.includes(r.id)}
                         className={`px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
-                          selectedTransactions.includes(r.id)
+                          currentSelectedTransactions.includes(r.id)
                             ? "text-white/90 cursor-text"
                             : "text-white/40 cursor-not-allowed opacity-50"
                         }`}
@@ -327,16 +336,7 @@ export default function AssignModalNewCompare({
                       {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r.amount
-                        ? new Intl.NumberFormat("fa-IR").format(
-                            r?.amount - (r?.sum_invoices_assigned_amount || 0)
-                          )
-                        : r.tadis
-                        ? new Intl.NumberFormat("fa-IR").format(
-                            r?.tadis -
-                              (r?.sum_transactions_assigned_amount || 0)
-                          )
-                        : 0}
+                      {(Number(r?.tadis) - Number(r?.sum_associated_sales_amount)).toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -369,7 +369,7 @@ export default function AssignModalNewCompare({
                     <span className="text-xs text-white/70">انتخاب:</span>
                     <input
                       type="checkbox"
-                      checked={selectedTransactions.includes(r.id)}
+                      checked={currentSelectedTransactions.includes(r.id)}
                       onChange={() => handleCheckboxChange(r.id)}
                       className="w-5 h-5"
                     />
@@ -409,9 +409,9 @@ export default function AssignModalNewCompare({
                         return 0;
                       })()}
                       onChange={(e) => handleInputChange(r.id, e.target.value)}
-                      disabled={!selectedTransactions.includes(r.id)}
+                      disabled={!currentSelectedTransactions.includes(r.id)}
                       className={`w-32 px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
-                        selectedTransactions.includes(r.id)
+                        currentSelectedTransactions.includes(r.id)
                           ? "text-white/90 cursor-text"
                           : "text-white/40 cursor-not-allowed opacity-50"
                       }`}
@@ -499,17 +499,15 @@ export default function AssignModalNewCompare({
 AssignModalNewCompare.propTypes = {
   transaction: PropTypes.array,
   loading3: PropTypes.bool,
-  loading: PropTypes.bool,
   onClose: PropTypes.func,
   meta: PropTypes.object,
-  pageCount: PropTypes.number,
-  setPageCount: PropTypes.func,
   pageCount2: PropTypes.number,
   setPageCount2: PropTypes.func,
-  setLoading: PropTypes.func,
   setLoading3: PropTypes.func,
   idActive: PropTypes.number,
   activeAccount: PropTypes.array,
   refresh: PropTypes.bool,
   setRefresh: PropTypes.func,
+  selectedTransactions: PropTypes.array,
+  setSelectedTransactions: PropTypes.func,
 };
