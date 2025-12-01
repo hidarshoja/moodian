@@ -29,6 +29,7 @@ export default function AccountInvoisAllCompare({invoiceData  , pageCount ,setPa
    const[pageCount2 , setPageCount2] = useState(1);
       const[loading3 , setLoading3] = useState(false);
        const [meta, setMeta] = useState({});
+       const [selectedTransactions, setSelectedTransactions] = useState([]);
 
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
@@ -84,6 +85,14 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purcha
     axiosClient.get(`/invoices/${idActive}`)
     .then((response) => {
       setActiveAccount(response?.data?.invoices);
+      const associatedInvoices = response?.data?.associated_sales ?? [];
+      setActiveAccount(associatedInvoices);
+      console.log(`associatedInvoices`, associatedInvoices);
+      const selectedIds = associatedInvoices
+        .map((invoice) => invoice?.id)
+        .filter((invoiceId) => invoiceId !== undefined && invoiceId !== null);
+        console.log(`selectedIds`, selectedIds);
+      setSelectedTransactions(selectedIds);
     });   
   }else{
     handleResponse();
@@ -222,6 +231,8 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purcha
               setPageCount2={setPageCount2}
         pageCount2={pageCount2}
         loading3={loading3}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
           />
       )}
      
