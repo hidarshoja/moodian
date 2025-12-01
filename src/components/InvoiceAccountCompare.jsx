@@ -97,7 +97,7 @@ useEffect(() => {
 
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold mt-6"> فاکتور با فاکتور</h1>
+      <h1 className="text-white text-2xl font-bold mt-6">خرید با فروش</h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-6 relative">
         {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">

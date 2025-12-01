@@ -9,7 +9,7 @@ import axiosClient from "../axios-client";
 import Pagination from "./Pagination";
 import { MdAssignmentAdd } from "react-icons/md";
 import { FaReceipt } from "react-icons/fa";
-
+import {convertToPersianDate} from "../utils/change-date";
 
 function Spinner() {
   return (
@@ -93,31 +93,31 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
 
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold mt-6"> خرید با فروش </h1>
+      <h1 className="text-white text-2xl font-bold mt-6">   فروش با خرید </h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-8 relative">
        {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">
           <Spinner />
         </div>
       )}
-      <table 
-        className={`min-w-full text-white ${
+        <table 
+       className={`min-w-full text-white ${
           loading ? "opacity-30 pointer-events-none" : ""
         }`}
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
-          <td className="p-2 text-center"></td>
-            <th className=" px-4 text-center py-3 whitespace-nowrap">#</th>
-            <th className=" px-4 text-center py-3 whitespace-nowrap">تاریخ تراکنش </th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">کد پیگیری </th>
-            <th className="text-center px-4 py-3 whitespace-nowrap">  بانک   </th>
+          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ صدور</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">نام مشتری</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">شماره فاکتور مودیان</th>
               <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
-                <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
-                <th className="text-center px-4 py-3 whitespace-nowrap">مجموع فاکتور  </th>
-                   <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
-                   <td className="p-2 text-center"></td>
-                   <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+                 <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ </th>
+                    <th className="text-center px-4 py-3 whitespace-nowrap">مجموع تراکنش ها </th>
+                <th className="text-center px-4 py-3 whitespace-nowrap">دارای تراکنش</th>
+                <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
                style={{
                 position: "sticky",
                 left: 0,
@@ -144,37 +144,40 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
               key={r.id ?? i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="p-2 text-center"></td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
+               <td className="p-2 text-center"></td>
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.id}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                {r?.j_date}
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                {convertToPersianDate(r?.created_at)}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                {r?.tracking_code} 
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                {r?.customer?.name} -  {r?.customer?.last_name}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                {r?.bank_label}
+              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                {r?.taxid}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {r?.status_label}
               </td>
-               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-               {Number(r?.tadis).toLocaleString()}
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+             
+                  {Number(r?.tadis).toLocaleString()}
               </td>
-                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
+               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
                 {Number(r?.sum_transactions_assigned_amount).toLocaleString()}
               </td>
-              <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap flex items-center justify-center">
-              {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
+               <td className="px-4 py-3 text-white/90 text-sm flex items-center justify-center whitespace-nowrap">
+               
+                {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
                 {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
                  <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
                   }
+              
               </td>
               <td className="p-2 text-center"></td>
               <td 
-                  className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px]"
+              className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px]"
                  style={{
                    position: "sticky",
                    left: 0,
@@ -185,15 +188,15 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleShowTransaction(i, r)}
-                  className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/15 transition-colors"
+                     className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/15 transition-colors"
                   >
                <FaReceipt />
                   </button>
                   <button
-                    onClick={() => handleShowAssign?.( r)}
-                     className="p-2 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15"
+                   onClick={() => handleShowAssign?.(i , r)}
+                    className="p-2 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15"
                   >
-                  <MdAssignmentAdd />
+                   <MdAssignmentAdd />
                   </button>
                 </div>
               </td>
