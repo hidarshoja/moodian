@@ -32,6 +32,7 @@ const[idActive , setIdActive] = useState(null);
      const [meta, setMeta] = useState({});
 const[activeAccount , setActiveAccount] = useState([]);
 const[pageCount2 , setPageCount2] = useState(1);
+const [selectedTransactions, setSelectedTransactions] = useState([]);
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
     setLoading2(true);
@@ -44,7 +45,6 @@ axiosClient.get(`/invoices/${r.id}`).then((response) => {
     })
 
   };
-
    const handleShowAssign = (i, r) => {
     if(r){
       setIdActive(r.id);
@@ -84,16 +84,22 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
     setAssignModalOpen(false);
   };
   
-useEffect(() => {
-  if(idActive){
-    axiosClient.get(`/invoices/${idActive}`)
-    .then((response) => {
-      setActiveAccount(response?.data?.transactions);
-    });   
-  }else{
-    handleResponse();
-  }
-  }, [idActive , refresh]);
+  useEffect(() => {
+    if (idActive) {
+      axiosClient.get(`/invoices/${idActive}`).then((response) => {
+        const associatedInvoices = response?.data?.associated_purchases ?? [];
+        setActiveAccount(associatedInvoices);
+        console.log(`associatedInvoices`, associatedInvoices);
+        const selectedIds = associatedInvoices
+          .map((invoice) => invoice?.id)
+          .filter((invoiceId) => invoiceId !== undefined && invoiceId !== null);
+          console.log(`selectedIds`, selectedIds);
+        setSelectedTransactions(selectedIds);
+      });
+    } else {
+      handleResponse();
+    }
+  }, [idActive, refresh]);
  
 
   return (
@@ -229,6 +235,8 @@ useEffect(() => {
         setPageCount2={setPageCount2}
         pageCount2={pageCount2}
         loading3={loading3}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
         />
       )}
     </div>
