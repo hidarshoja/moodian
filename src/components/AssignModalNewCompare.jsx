@@ -297,16 +297,17 @@ export default function AssignModalNewCompare({
                           }
                           if (r.amount !== undefined && r.amount !== null) {
                             const calculated =
-                              Number(r.amount || 0) -
-                              Number(r.sum_invoices_assigned_amount || 0);
+                              Number(r.tadis || 0) -
+                              Number(r.sum_associated_sales_amount || 0);
                             return isNaN(calculated) ? 0 : calculated;
                           }
                           if (r.tadis !== undefined && r.tadis !== null) {
                             const calculated =
                               Number(r.tadis || 0) -
-                              Number(r.sum_transactions_assigned_amount || 0);
+                              Number(r.sum_associated_sales_amount || 0);
                             return isNaN(calculated) ? 0 : calculated;
                           }
+                          
                           return 0;
                         })()}
                         onChange={(e) =>
