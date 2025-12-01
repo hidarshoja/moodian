@@ -21,7 +21,7 @@ const [factorData, setFactorData] = useState([]);
 //خرید با فروش
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_sales]=<,tadis&f[type]=1`)
+     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_sales]=<,tadis&f[type]=1&include=sum_associated_sales`)
      .then((response) => {
       setInvoiceData(response.data.data);
        setMeta3(response.data.meta);
@@ -36,7 +36,7 @@ const [factorData, setFactorData] = useState([]);
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_purchases]=<,tadis&f[type]=-1`)
+     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_purchases]=<,tadis&f[type]=-1&include=sum_associated_purchases`)
      .then((response) => {
       setTransactionData2(response.data.data);
         setMeta2(response.data.meta);
@@ -51,7 +51,7 @@ const [factorData, setFactorData] = useState([]);
 // تعیین تکلیف شده خرید
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_sales]=>=,tadis&f[type]=1`)
+     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_sales]=>=,tadis&f[type]=1&include=sum_associated_sales`)
      .then((response) => {
       setTransactionDataAll(response.data.data);
         setMeta2(response.data.meta);
@@ -66,7 +66,7 @@ const [factorData, setFactorData] = useState([]);
 // تعیین تکلیف شده فروش
   useEffect(() => {
     setLoading(true);
-    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_purchases]=>=,tadis&f[type]=-1`)
+    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_purchases]=>=,tadis&f[type]=-1&include=sum_associated_purchases`)
     .then((response) => {
      setFactorData(response.data.data);
      setMeta3(response.data.meta);
