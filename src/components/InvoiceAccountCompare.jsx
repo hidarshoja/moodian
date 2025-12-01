@@ -81,12 +81,10 @@ export default function InvoiceAccountCompare({
   );
 
   const handleShowAssign = (i, r) => {
-    const targetId = r?.id ?? idActive;
     if (r && r.id) {
       setIdActive(r.id);
     }
     setAssignModalOpen(true);
-    fetchAssignableInvoices(targetId);
   };
 
   useEffect(() => {
