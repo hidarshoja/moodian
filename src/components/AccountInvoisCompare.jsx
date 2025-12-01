@@ -43,6 +43,7 @@ axiosClient.get(`/transactions/${r.id}`)
   };
 // فروش با خرید
    const handleShowAssign = (r) => {
+    console.log(`r`, r);
     if(r){
       setIdActive(r.id);
     }
@@ -193,7 +194,7 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
                <FaReceipt />
                   </button>
                   <button
-                   onClick={() => handleShowAssign?.(i , r)}
+                   onClick={() => handleShowAssign?.( r)}
                     className="p-2 rounded-lg bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/15"
                   >
                    <MdAssignmentAdd />
