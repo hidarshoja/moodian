@@ -161,16 +161,16 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.
                 {r?.status_label}
               </td>
                <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                {new Intl.NumberFormat('fa-IR').format(r?.amount)}
+               {Number(r?.tadis).toLocaleString()}
               </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                 {new Intl.NumberFormat('fa-IR').format(r?.sum_invoices_assigned_amount)}
+                {Number(r?.sum_transactions_assigned_amount).toLocaleString()}
               </td>
               <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap flex items-center justify-center">
-               {Number(r?.sum_invoices_assigned_amount) == 0 && <IoCloseCircle className="text-red-500 w-5 h-5"/> }
-                {r?.amount  <= Number(r?.sum_invoices_assigned_amount) ? <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_invoices_assigned_amount) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>) }
-               
-                {/* {Number(r?.invoices_sum_tadis) > 0 && <IoMdAlert className="text-yellow-500 w-5 h-5"/>} */}
+              {Number(r?.sum_transactions_assigned_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
+                {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
+                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
+                  }
               </td>
               <td className="p-2 text-center"></td>
               <td 

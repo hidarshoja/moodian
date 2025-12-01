@@ -178,7 +178,7 @@ useEffect(() => {
                 {r?.tadis  <= Number(r?.sum_transactions_assigned_amount) ?
                  <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_transactions_assigned_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
                   }
-                {/* {Number(r?.transactions_sum_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : ""} */}
+               
               </td>
               <td className="p-2  text-center"></td>
                 <td 
