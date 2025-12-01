@@ -20,7 +20,7 @@ const [factorData, setFactorData] = useState([]);
 // فاکتور با حساب
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis&include=sum_transactions`)
+     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis&include=sum_transactions&f[type]=-1`)
      .then((response) => {
       setInvoiceData(response.data.data);
        setMeta3(response.data.meta);
@@ -65,7 +65,7 @@ const [factorData, setFactorData] = useState([]);
 // تعیین تکلیف شده فاکتور
   useEffect(() => {
     setLoading(true);
-    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis&include=sum_transactions`)
+    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis&include=sum_transactions&f[type]=-1`)
     .then((response) => {
      setFactorData(response.data.data);
      setMeta3(response.data.meta);
