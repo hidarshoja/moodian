@@ -45,7 +45,7 @@ export default function ReviewPage() {
     setLoading(true);
     const query = buildFilterQuery(activeFilters);
     axiosClient
-      .get(`/invoices?page=${pageCount}${query}`)
+      .get(`/invoices?page=${pageCount}${query}&f[type]=1`)
       .then((response) => {
     
         setDataTable(response.data.data);

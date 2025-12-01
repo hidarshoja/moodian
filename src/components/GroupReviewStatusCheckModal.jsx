@@ -11,7 +11,7 @@ const GroupReviewStatusCheckModal = ({ isOpen, onClose }) => {
   const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
-    axiosClient.get("/invoices?f[status]=-80").then((response) => {
+    axiosClient.get("/invoices?f[status]=-80&f[type]=1").then((response) => {
       setInvoiceData(response.data.data);
     });
   }, []);
