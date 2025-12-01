@@ -104,7 +104,7 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] 
 
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold mt-6">تعیین تکلیف شده ها</h1>
+      <h1 className="text-white text-2xl font-bold mt-6">تعیین تکلیف شده با فروش</h1>
     <div className="overflow-x-auto nice-scrollbar rounded-2xl border border-white/10 bg-white/5 mt-6 relative">
         {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-20">

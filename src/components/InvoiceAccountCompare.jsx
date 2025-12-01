@@ -46,7 +46,7 @@ export default function InvoiceAccountCompare({
     axiosClient
       .get(`/invoices/${r.id}`)
       .then((response) => {
-        setTransactionData(response?.data?.transactions);
+        setTransactionData(response?.data?.associated_sales);
       })
       .catch((error) => {
         console.log(error);
