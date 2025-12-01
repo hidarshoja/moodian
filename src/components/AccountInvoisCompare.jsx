@@ -49,7 +49,7 @@ axiosClient.get(`/transactions/${r.id}`)
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] = <,tadis,${r.id}`)
+axiosClient.get(`/invoices?page=${pageCount2}&f[type]=1&f[sum_associated_sales] = <,tadis,${r.id}&include=sum_associated_sales`)
 .then((response) => {
       setAssignData(response?.data?.data);
         setMeta(response?.data?.meta);
