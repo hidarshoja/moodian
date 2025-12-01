@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-
+import { convertToPersianDate } from "../utils/change-date";
 function Spinner() {
   return (
     <div className="flex justify-center items-center w-full h-60">
@@ -19,7 +19,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0a22] rounded-t-2xl flex-shrink-0">
           <div className="flex items-center gap-3">
             <span className="text-white text-lg font-bold">
-              لیست تراکنشهای فاکتور{" "}
+              لیست  خرید با فروش{" "}
             </span>
           </div>
           <button
@@ -36,8 +36,8 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
             </div>
           )}
 
-          {/* Desktop Table View */}
-          <div
+         {/* Desktop Table View */}
+         <div
             className={`hidden md:block overflow-x-auto ${
               loading ? "opacity-30 pointer-events-none" : ""
             }`}
@@ -48,7 +48,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                   <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
                     {" "}
-                    سرویس دهنده{" "}
+                    نوع{" "}
                   </th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
                     تاریخ تراکنش{" "}
@@ -58,7 +58,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                   </th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
                     {" "}
-                    بانک{" "}
+                    taxid{" "}
                   </th>
                   <th className="text-center px-4 py-3 whitespace-nowrap">
                     وضعیت
@@ -69,7 +69,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                 </tr>
               </thead>
               <tbody>
-                {(!transaction || transaction.length === 0) && (
+                {(!transaction || transaction?.length === 0) && (
                   <tr>
                     <td
                       colSpan={7}
@@ -79,7 +79,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                     </td>
                   </tr>
                 )}
-                {transaction.map((r, i) => (
+                {transaction?.map((r, i) => (
                   <tr
                     key={r.id ?? i}
                     className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
@@ -88,22 +88,22 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                       {r?.id}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.provider_label}
+                      {r?.inp_label}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.j_date}
+                      {convertToPersianDate(r?.created_at)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.tracking_code}
+                      {r?.serial_number}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.bank_label}
+                      {r?.taxid}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       {r?.status_label}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {new Intl.NumberFormat("fa-IR").format(r?.amount)}
+                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
                   </tr>
                 ))}
@@ -117,12 +117,12 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
               loading ? "opacity-30 pointer-events-none" : ""
             }`}
           >
-            {(!transaction || transaction.length === 0) && (
+            {(!transaction || transaction?.length === 0) && (
               <div className="px-4 py-6 text-center text-white/60 text-sm">
                 موردی ثبت نشده است.
               </div>
             )}
-            {transaction.map((r, i) => (
+            {transaction?.map((r, i) => (
               <div
                 key={r.id ?? i}
                 className={`rounded-lg p-4 text-white ${
@@ -139,27 +139,27 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">سرویس دهنده:</span>
+                    <span className="text-xs text-white/70">نوع:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.provider_label}
+                      {r?.inp_label}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
                     <span className="text-xs text-white/70">تاریخ تراکنش:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.j_date}
+                      {convertToPersianDate(r?.created_at)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
                     <span className="text-xs text-white/70">کد پیگیری:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.tracking_code}
+                      {r?.serial_number}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">بانک:</span>
+                    <span className="text-xs text-white/70">taxid:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.bank_label}
+                      {r?.taxid}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -171,7 +171,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                   <div className="flex justify-between items-center pb-2">
                     <span className="text-xs text-white/70">مبلغ:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {new Intl.NumberFormat("fa-IR").format(r?.amount)}
+                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </span>
                   </div>
                 </div>

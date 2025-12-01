@@ -43,9 +43,9 @@ export default function AccountInvoisCompare({
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
     axiosClient
-      .get(`/transactions/${r.id}`)
+      .get(`/invoices/${r.id}`)
       .then((response) => {
-        setTransactionData(response?.data?.invoices);
+        setTransactionData(response?.data?.associated_purchases);
       })
       .catch((error) => {
         console.log(error);

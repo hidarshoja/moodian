@@ -33,9 +33,9 @@ export default function AccountInvoisAllCompare({invoiceData  , pageCount ,setPa
 
   const handleShowTransaction = (i, r) => {
     setTransactionModalOpen(true);
-axiosClient.get(`/transactions/${r.id}`)
+axiosClient.get(`/invoices/${r.id}`)
 .then((response) => {
-      setTransactionData(response?.data?.invoices);
+      setTransactionData(response?.data?.associated_sales);
       
     }).catch((error) => {
       console.log(error);

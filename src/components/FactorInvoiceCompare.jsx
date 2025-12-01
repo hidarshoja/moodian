@@ -37,7 +37,7 @@ const [selectedTransactions, setSelectedTransactions] = useState([]);
     setTransactionModalOpen(true);
     setLoading2(true);
 axiosClient.get(`/invoices/${r.id}`).then((response) => {
-      setTransactionData(response?.data?.transactions);
+      setTransactionData(response?.data?.associated_purchases);
     }).catch((error) => {
       console.log(error);
     }).finally(() => {
