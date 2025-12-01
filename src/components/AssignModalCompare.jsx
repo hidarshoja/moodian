@@ -237,18 +237,35 @@ export default function AssignModalCompare({
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       <input
                         type="text"
-                        value={
-                          inputValues[r.id] ??
-                          (activeAccountIds.includes(r.id)
-                            ? activeAccountAmountMap[r.id] || 0
-                            : r?.amount -
-                              (r?.sum_invoices_assigned_amount || 0))
-                        }
+                        value={(() => {
+                          if (
+                            inputValues[r.id] !== undefined &&
+                            !isNaN(inputValues[r.id])
+                          ) {
+                            return inputValues[r.id];
+                          }
+                          if (activeAccountIds.includes(r.id)) {
+                            return Number(activeAccountAmountMap[r.id]) || 0;
+                          }
+                          if (r.amount !== undefined && r.amount !== null) {
+                            const calculated =
+                              Number(r.amount || 0) -
+                              Number(r.sum_invoices_assigned_amount || 0);
+                            return isNaN(calculated) ? 0 : calculated;
+                          }
+                          if (r.tadis !== undefined && r.tadis !== null) {
+                            const calculated =
+                              Number(r.tadis || 0) -
+                              Number(r.sum_transactions_assigned_amount || 0);
+                            return isNaN(calculated) ? 0 : calculated;
+                          }
+                          return 0;
+                        })()}
                         onChange={(e) =>
                           handleInputChange(r.id, e.target.value)
                         }
                         disabled={!selectedTransactions.includes(r.id)}
-                        className={`w-[100px] lg:w-full px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
+                        className={`px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
                           selectedTransactions.includes(r.id)
                             ? "text-white/90 cursor-text"
                             : "text-white/40 cursor-not-allowed opacity-50"
@@ -271,12 +288,19 @@ export default function AssignModalCompare({
                       {r?.status_label}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {new Intl.NumberFormat("fa-IR").format(r?.amount)}
+                    {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                      {new Intl.NumberFormat("fa-IR").format(
-                        r?.amount - r?.sum_invoices_assigned_amount
-                      )}
+                    {r.amount
+                        ? new Intl.NumberFormat("fa-IR").format(
+                            r?.amount - (r?.sum_invoices_assigned_amount || 0)
+                          )
+                        : r.tadis
+                        ? new Intl.NumberFormat("fa-IR").format(
+                            r?.tadis -
+                              (r?.sum_transactions_assigned_amount || 0)
+                          )
+                        : 0}
                     </td>
                   </tr>
                 ))}
@@ -324,12 +348,30 @@ export default function AssignModalCompare({
                     <span className="text-xs text-white/70">مقدار:</span>
                     <input
                       type="text"
-                      value={
-                        inputValues[r.id] ??
-                        (activeAccountIds.includes(r.id)
-                          ? activeAccountAmountMap[r.id] || 0
-                          : r?.amount - (r?.sum_invoices_assigned_amount || 0))
-                      }
+                      value={(() => {
+                        if (
+                          inputValues[r.id] !== undefined &&
+                          !isNaN(inputValues[r.id])
+                        ) {
+                          return inputValues[r.id];
+                        }
+                        if (activeAccountIds.includes(r.id)) {
+                          return Number(activeAccountAmountMap[r.id]) || 0;
+                        }
+                        if (r.amount !== undefined && r.amount !== null) {
+                          const calculated =
+                            Number(r.amount || 0) -
+                            Number(r.sum_invoices_assigned_amount || 0);
+                          return isNaN(calculated) ? 0 : calculated;
+                        }
+                        if (r.tadis !== undefined && r.tadis !== null) {
+                          const calculated =
+                            Number(r.tadis || 0) -
+                            Number(r.sum_transactions_assigned_amount || 0);
+                          return isNaN(calculated) ? 0 : calculated;
+                        }
+                        return 0;
+                      })()}
                       onChange={(e) => handleInputChange(r.id, e.target.value)}
                       disabled={!selectedTransactions.includes(r.id)}
                       className={`w-32 px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
@@ -368,7 +410,7 @@ export default function AssignModalCompare({
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
                     <span className="text-xs text-white/70">مبلغ:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {new Intl.NumberFormat("fa-IR").format(r?.amount)}
+                    {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center pb-2">
@@ -376,9 +418,16 @@ export default function AssignModalCompare({
                       مبلغ باقیمانده:
                     </span>
                     <span className="text-sm font-medium text-white/90">
-                      {new Intl.NumberFormat("fa-IR").format(
-                        r?.amount - r?.sum_invoices_assigned_amount
-                      )}
+                    {r.amount
+                        ? new Intl.NumberFormat("fa-IR").format(
+                            r?.amount - (r?.sum_invoices_assigned_amount || 0)
+                          )
+                        : r.tadis
+                        ? new Intl.NumberFormat("fa-IR").format(
+                            r?.tadis -
+                              (r?.sum_transactions_assigned_amount || 0)
+                          )
+                        : 0}
                     </span>
                   </div>
                 </div>
