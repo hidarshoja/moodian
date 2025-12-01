@@ -64,7 +64,7 @@ export default function InvoiceAccountCompare({
       setLoading3(true);
       axiosClient
         .get(
-          `/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purchases] = <,tadis,${targetId}`
+          `/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purchases] = <,tadis,${targetId}&include=sum_associated_purchases`
         )
         .then((response) => {
           setAssignData(response?.data?.data);

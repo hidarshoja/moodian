@@ -339,16 +339,7 @@ export default function AssignModalCompare({
                       {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r.amount
-                        ? new Intl.NumberFormat("fa-IR").format(
-                            r?.amount - (r?.sum_invoices_assigned_amount || 0)
-                          )
-                        : r.tadis
-                        ? new Intl.NumberFormat("fa-IR").format(
-                            r?.tadis -
-                              (r?.sum_transactions_assigned_amount || 0)
-                          )
-                        : 0}
+                      {Number(r?.tadis) - Number(r?.sum_associated_purchases_amount).toLocaleString()}
                     </td>
                   </tr>
                 ))}
