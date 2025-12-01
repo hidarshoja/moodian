@@ -9,7 +9,7 @@ import axiosClient from "../axios-client";
 import Pagination from "./Pagination";
 import { MdAssignmentAdd } from "react-icons/md";
 import { FaReceipt } from "react-icons/fa";
-
+import { convertToPersianDate } from "../utils/change-date";
 
 function Spinner() {
   return (
@@ -114,28 +114,42 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purcha
         }`}
       >
         <thead>
-          <tr className="text-white/80 text-sm bg-[#181f3a]">
-          <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ تراکنش </th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">کد پیگیری </th>
-            <th className="text-right px-4 py-3 whitespace-nowrap">  بانک   </th>
+            <tr className="text-white/80 text-sm bg-[#181f3a]">
+              <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">
+                تاریخ صدور
+              </th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">
+                نام مشتری
+              </th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">
+                شماره فاکتور مودیان
+              </th>
               <th className="text-center px-4 py-3 whitespace-nowrap">وضعیت</th>
-                <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ  </th>
-                <th className="text-center px-4 py-3 whitespace-nowrap">مجموع فاکتور  </th>
-                   <th className="text-center px-4 py-3 whitespace-nowrap">دارای فاکتور</th>
-                   <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
-               style={{
-                position: "sticky",
-                left: 0,
-                backgroundColor: "#181f3a",
-                zIndex: 10,
-                minWidth: "70px",
-                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
-              }}>عملیات</th>
-          </tr>
-        </thead>
+              <th className="text-center px-4 py-3 whitespace-nowrap">مبلغ </th>
+              <th className="text-center px-4 py-3 whitespace-nowrap">
+                مجموع تراکنش ها{" "}
+              </th>
+              <th className="text-center px-4 py-3 whitespace-nowrap">
+                دارای تراکنش
+              </th>
+              <th className="text-right px-4 py-3 whitespace-nowrap"></th>
+              <th
+                className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  backgroundColor: "#181f3a",
+                  zIndex: 10,
+                  minWidth: "70px",
+                  boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+                }}
+              >
+                عملیات
+              </th>
+            </tr>
+          </thead>
         <tbody>
           {(!invoiceData || invoiceData.length === 0) && (
             <tr>
@@ -152,37 +166,43 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purcha
               key={r.id ?? i}
               className="odd:bg-white/5 even:bg-white/10 border-t border-white/5"
             >
-              <td className="p-2 text-center"></td>
-              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {r?.id}
-              </td>
-              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {r?.j_date}
-              </td>
-              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {r?.tracking_code} 
-              </td>
-              <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {r?.bank_label}
-              </td>
-               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {r?.status_label}
-              </td>
-               <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-               {Number(r?.tadis).toLocaleString()}
-              </td>
+               <td className="p-2 text-center"></td>
                 <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
-                {Number(r?.sum_associated_sales_amount).toLocaleString()}
-              </td>
-              <td className="px-4 py-3 flex items-center justify-center text-white/90 text-sm whitespace-nowrap">
-              {Number(r?.sum_associated_sales_amount) == 0 ? <IoCloseCircle className="text-red-500 w-5 h-5"/> : ""}
-                {r?.tadis  <= Number(r?.sum_associated_sales_amount) ?
-                 <IoMdCheckmarkCircle className="text-green-500 w-5 h-5"/> :(Number(r?.sum_associated_sales_amount) > 0  ? <IoMdAlert className="text-yellow-500 w-5 h-5"/> : "")
-                  }
-               
-               
-              </td>
-              <td className="p-2  text-center"></td>
+                  {r?.id}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {convertToPersianDate(r?.created_at)}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {r?.customer?.name} - {r?.customer?.last_name}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {r?.taxid}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {r?.status_label}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {Number(r?.tadis).toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-center text-white/90 text-sm whitespace-nowrap">
+                  {Number(r?.sum_associated_sales_amount).toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-white/90 text-sm flex items-center justify-center whitespace-nowrap">
+                  {Number(r?.sum_associated_sales_amount) == 0 ? (
+                    <IoCloseCircle className="text-red-500 w-5 h-5" />
+                  ) : (
+                    ""
+                  )}
+                  {r?.tadis <= Number(r?.sum_associated_sales_amount) ? (
+                    <IoMdCheckmarkCircle className="text-green-500 w-5 h-5" />
+                  ) : Number(r?.sum_associated_sales_amount) > 0 ? (
+                    <IoMdAlert className="text-yellow-500 w-5 h-5" />
+                  ) : (
+                    ""
+                  )}
+                </td>
+                <td className="p-2 text-center"></td>
                 <td 
                  className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px]"
                  style={{
