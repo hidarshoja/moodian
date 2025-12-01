@@ -26,30 +26,41 @@ export default function AssignModalCompare({
   refresh,
   setRefresh,
   selectedTransactions,
-  setSelectedTransactions
+  setSelectedTransactions,
 }) {
- // const [selectedTransactions, setSelectedTransactions] = useState([]);
+  // const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [activeAccountIds, setActiveAccountIds] = useState([]);
   const [activeAccountAmountMap, setActiveAccountAmountMap] = useState({});
   const [inputValues, setInputValues] = useState({});
 
-
-
   useEffect(() => {
     if (activeAccount && activeAccount.length > 0) {
-      const activeIds = activeAccount.map((acc) => acc.id);
-    //  setSelectedTransactions(activeIds);
+      const activeIds = activeAccount
+        .map((acc) => acc?.id)
+        .filter((id) => id !== undefined && id !== null);
+
       setActiveAccountIds(activeIds);
-      // ایجاد Map از id به invoice_transaction_pivot.amount
+
       const amountMap = {};
       const initialValues = {};
+
       activeAccount.forEach((acc) => {
-        if (acc.id && acc.invoice_transaction_pivot?.amount !== undefined) {
-          const amount = Number(acc.invoice_transaction_pivot.amount) || 0;
-          amountMap[acc.id] = amount;
-          initialValues[acc.id] = amount;
+        if (!acc?.id) {
+          return;
         }
+
+        const rawAmount =
+          acc?.invoice_transaction_pivot?.amount ?? acc?.pivot?.amount ?? null;
+
+        if (rawAmount === undefined || rawAmount === null) {
+          return;
+        }
+
+        const amount = Number(rawAmount) || 0;
+        amountMap[acc.id] = amount;
+        initialValues[acc.id] = amount;
       });
+
       setActiveAccountAmountMap(amountMap);
       setInputValues((prev) => ({ ...prev, ...initialValues }));
     }
@@ -184,7 +195,7 @@ export default function AssignModalCompare({
         });
       });
   };
-console.log(`selectedTransactions`, selectedTransactions);
+  console.log(`selectedTransactions`, selectedTransactions);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
       <div
