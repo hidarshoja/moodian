@@ -18,10 +18,10 @@ const[refresh , setRefresh] = useState(false);
 const [meta3, setMeta3] = useState({});
 const [pageCount3, setPageCount3] = useState(1);
 const [factorData, setFactorData] = useState([]);
-// فاکتور با حساب
+//خرید با فروش
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = <,tadis`)
+     axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_sales]=<,tadis&f[type]=1`)
      .then((response) => {
       setInvoiceData(response.data.data);
        setMeta3(response.data.meta);
@@ -32,11 +32,11 @@ const [factorData, setFactorData] = useState([]);
       .finally(() => setLoading(false));
   }, [refresh,pageCount3]);
 
-  //  حساب با فاکتور
+  //  فروش با خرید
  
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = <,amount`)
+     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_purchases]=<,tadis&f[type]=-1`)
      .then((response) => {
       setTransactionData2(response.data.data);
         setMeta2(response.data.meta);
@@ -48,10 +48,10 @@ const [factorData, setFactorData] = useState([]);
    
   }, [pageCount,refresh]);
   
-// تعیین تکلیف شده حساب
+// تعیین تکلیف شده خرید
    useEffect(() => {
      setLoading(true);
-     axiosClient.get(`/transactions?page=${pageCount}&f[coefficient]=1&f[sum_invoices] = >=,amount`)
+     axiosClient.get(`/invoices?page=${pageCount}&f[sum_associated_sales]=>=,tadis&f[type]=1`)
      .then((response) => {
       setTransactionDataAll(response.data.data);
         setMeta2(response.data.meta);
@@ -63,10 +63,10 @@ const [factorData, setFactorData] = useState([]);
    
   }, [pageCount,refresh]);
 
-// تعیین تکلیف شده فاکتور
+// تعیین تکلیف شده فروش
   useEffect(() => {
     setLoading(true);
-    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_transactions] = >=,tadis`)
+    axiosClient.get(`/invoices?page=${pageCount3}&f[sum_associated_purchases]=>=,tadis&f[type]=-1`)
     .then((response) => {
      setFactorData(response.data.data);
      setMeta3(response.data.meta);
