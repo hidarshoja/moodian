@@ -95,7 +95,7 @@ const [factorData, setFactorData] = useState([]);
           }`}
   onClick={() => setActiveBtn("invoiceAccount")}
   >
-    فاکتور با فاکتور
+   خرید با فروش
   </button>
   <button
      className={`btn-custom6 lg:btn-custom4 ${
@@ -103,7 +103,7 @@ const [factorData, setFactorData] = useState([]);
           }`}
   onClick={() => setActiveBtn("accountInvoice")}
   >
- خرید با فروش
+  فروش با خرید
   </button>
   <button
   className={`btn-custom6 lg:btn-custom4 ${
@@ -111,7 +111,7 @@ const [factorData, setFactorData] = useState([]);
           }`}
   onClick={() => setActiveBtn("all")}
     >
-   فروش با خرید
+     تعیین تکلیف شده خرید
   </button>
   <button
   className={`btn-custom6 lg:btn-custom4 ${
@@ -119,7 +119,7 @@ const [factorData, setFactorData] = useState([]);
           }`}
   onClick={() => setActiveBtn("all2")}
     >
-    تعیین تکلیف شده 
+    تعیین تکلیف شده فروش
   </button>
 </div>
       <div className="px-3">
