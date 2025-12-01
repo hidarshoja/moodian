@@ -103,7 +103,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                       {r?.status_label}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
+                    {new Intl.NumberFormat("fa-IR").format(r?.pivot?.amount)}
                     </td>
                   </tr>
                 ))}
@@ -171,7 +171,7 @@ export default function TransactionModalCompare({ transaction, onClose, loading 
                   <div className="flex justify-between items-center pb-2">
                     <span className="text-xs text-white/70">مبلغ:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
+                    {new Intl.NumberFormat("fa-IR").format(r?.pivot?.amount)}
                     </span>
                   </div>
                 </div>
