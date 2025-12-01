@@ -41,14 +41,13 @@ axiosClient.get(`/transactions/${r.id}`)
     })
 
   };
-
    const handleShowAssign = (r) => {
     if(r){
       setIdActive(r.id);
     }
     setAssignModalOpen(true);
    setLoading3(true);
-axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.id}`)
+axiosClient.get(`/invoices?page=${pageCount2}&f[type]=-1&f[sum_associated_purchases] = <,tadis,${r.id}`)
 .then((response) => {
       setAssignData(response?.data?.data);
         setMeta(response?.data?.meta);
@@ -82,7 +81,7 @@ axiosClient.get(`/invoices?page=${pageCount2}&f[sum_transactions] = <,tadis,${r.
 
  useEffect(() => {
   if(idActive){
-    axiosClient.get(`/transactions/${idActive}`)
+    axiosClient.get(`/invoices/${idActive}`)
     .then((response) => {
       setActiveAccount(response?.data?.invoices);
     });   

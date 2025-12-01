@@ -163,7 +163,7 @@ export default function AssignModalNewCompare({
     }));
 
     axiosClient
-      .post(`/transactions/${idActive}/assign-invoices`, { invoices })
+      .post(`/invoices/${idActive}/associated-invoices`, { invoices })
       .then((response) => {
         console.log(`response`, response);
         setRefresh(!refresh);
