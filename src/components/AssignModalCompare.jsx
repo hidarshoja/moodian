@@ -41,8 +41,9 @@ export default function AssignModalCompare({
       const initialValues = {};
       activeAccount.forEach((acc) => {
         if (acc.id && acc.invoice_transaction_pivot?.amount !== undefined) {
-          amountMap[acc.id] = acc.invoice_transaction_pivot.amount;
-          initialValues[acc.id] = acc.invoice_transaction_pivot.amount;
+          const amount = Number(acc.invoice_transaction_pivot.amount) || 0;
+          amountMap[acc.id] = amount;
+          initialValues[acc.id] = amount;
         }
       });
       setActiveAccountAmountMap(amountMap);
@@ -50,17 +51,25 @@ export default function AssignModalCompare({
     }
   }, [activeAccount]);
 
-  // مقداردهی اولیه input ها بر اساس transaction
   useEffect(() => {
     if (transaction && transaction.length > 0) {
       const initialValues = {};
       transaction.forEach((t) => {
         if (t.id) {
           if (activeAccountIds.includes(t.id)) {
-            initialValues[t.id] = activeAccountAmountMap[t.id] || 0;
+            initialValues[t.id] = Number(activeAccountAmountMap[t.id]) || 0;
           } else {
-            initialValues[t.id] =
-              t?.amount - (t?.sum_invoices_assigned_amount || 0);
+            if (t.amount !== undefined && t.amount !== null) {
+              initialValues[t.id] =
+                Number(t.amount || 0) -
+                Number(t.sum_invoices_assigned_amount || 0);
+            } else if (t.tadis !== undefined && t.tadis !== null) {
+              initialValues[t.id] =
+                Number(t.tadis || 0) -
+                Number(t.sum_transactions_assigned_amount || 0);
+            } else {
+              initialValues[t.id] = 0;
+            }
           }
         }
       });
@@ -83,11 +92,25 @@ export default function AssignModalCompare({
         // اگر checkbox untick شد، مقدار را به مقدار پیش‌فرض برگردان
         const currentTransaction = transaction?.find((t) => t.id === id);
         if (currentTransaction) {
+          let defaultValue = 0;
+          if (
+            currentTransaction.amount !== undefined &&
+            currentTransaction.amount !== null
+          ) {
+            defaultValue =
+              Number(currentTransaction.amount || 0) -
+              Number(currentTransaction.sum_invoices_assigned_amount || 0);
+          } else if (
+            currentTransaction.tadis !== undefined &&
+            currentTransaction.tadis !== null
+          ) {
+            defaultValue =
+              Number(currentTransaction.tadis || 0) -
+              Number(currentTransaction.sum_transactions_assigned_amount || 0);
+          }
           setInputValues((prevValues) => ({
             ...prevValues,
-            [id]:
-              currentTransaction?.amount -
-              (currentTransaction?.sum_invoices_assigned_amount || 0),
+            [id]: defaultValue,
           }));
         }
         return prev.filter((item) => item !== id);
@@ -95,10 +118,23 @@ export default function AssignModalCompare({
         // اگر checkbox tick شد، مقدار را از activeAccount بگیر یا مقدار پیش‌فرض
         const currentTransaction = transaction?.find((t) => t.id === id);
         if (currentTransaction) {
-          const newValue =
-            activeAccountAmountMap[id] ||
-            currentTransaction?.amount -
-              (currentTransaction?.sum_invoices_assigned_amount || 0);
+          let defaultValue = 0;
+          if (
+            currentTransaction.amount !== undefined &&
+            currentTransaction.amount !== null
+          ) {
+            defaultValue =
+              Number(currentTransaction.amount || 0) -
+              Number(currentTransaction.sum_invoices_assigned_amount || 0);
+          } else if (
+            currentTransaction.tadis !== undefined &&
+            currentTransaction.tadis !== null
+          ) {
+            defaultValue =
+              Number(currentTransaction.tadis || 0) -
+              Number(currentTransaction.sum_transactions_assigned_amount || 0);
+          }
+          const newValue = Number(activeAccountAmountMap[id]) || defaultValue;
           setInputValues((prevValues) => ({
             ...prevValues,
             [id]: newValue,
@@ -118,13 +154,13 @@ export default function AssignModalCompare({
 
   const handleShowAssign = () => {
     // ساخت آرایه از objectها با id و amount
-    const transactions = selectedTransactions.map((id) => ({
+    const invoices = selectedTransactions.map((id) => ({
       id: id,
       amount: inputValues[id] ?? 0,
     }));
 
     axiosClient
-      .post(`/invoices/${idActive}/assign-transactions`, { transactions })
+      .post(`/invoices/${idActive}/associated-invoices`, { invoices })
       .then((response) => {
         console.log(`response`, response);
         setRefresh(!refresh);
@@ -187,20 +223,20 @@ export default function AssignModalCompare({
                     مقدار
                   </th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
-                    تاریخ تراکنش{" "}
+                    تاریخ صدور{" "}
                   </th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
-                    کد پیگیری{" "}
+                    نام مشتری{" "}
                   </th>
                   <th className="text-right px-4 py-3 whitespace-nowrap">
                     {" "}
-                    بانک{" "}
+                    txid{" "}
                   </th>
                   <th className="text-center px-4 py-3 whitespace-nowrap">
                     وضعیت
                   </th>
                   <th className="text-center px-4 py-3 whitespace-nowrap">
-                    مبلغ{" "}
+                    مبلغ کل{" "}
                   </th>
                   <th className="text-center px-4 py-3 whitespace-nowrap">
                     {" "}
@@ -272,26 +308,23 @@ export default function AssignModalCompare({
                         }`}
                       />
                     </td>
-
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r.indatim
-                        ? convertToPersianDate(r?.indatim)
-                        : convertToPersianDate(r?.date)}
+                      {convertToPersianDate(r?.indatim)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.tracking_code}
+                      {r?.customer?.name} - {r?.customer?.last_name}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {r?.bank_label}
+                      {r?.taxid}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       {r?.status_label}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                    {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
+                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
-                    <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap text-center">
-                    {r.amount
+                    <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
+                      {r.amount
                         ? new Intl.NumberFormat("fa-IR").format(
                             r?.amount - (r?.sum_invoices_assigned_amount || 0)
                           )
@@ -382,23 +415,21 @@ export default function AssignModalCompare({
                     />
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">تاریخ تراکنش:</span>
+                    <span className="text-xs text-white/70">تاریخ صدور:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r.indatim
-                        ? convertToPersianDate(r?.indatim)
-                        : convertToPersianDate(r?.date)}
+                      {convertToPersianDate(r?.indatim)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">کد پیگیری:</span>
+                    <span className="text-xs text-white/70">نام مشتری:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.tracking_code}
+                      {r?.customer?.name} - {r?.customer?.last_name}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">بانک:</span>
+                    <span className="text-xs text-white/70">txid:</span>
                     <span className="text-sm font-medium text-white/90">
-                      {r?.bank_label}
+                      {r?.taxid}
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
@@ -408,9 +439,9 @@ export default function AssignModalCompare({
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                    <span className="text-xs text-white/70">مبلغ:</span>
+                    <span className="text-xs text-white/70">مبلغ کل:</span>
                     <span className="text-sm font-medium text-white/90">
-                    {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
+                      {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center pb-2">
@@ -418,7 +449,7 @@ export default function AssignModalCompare({
                       مبلغ باقیمانده:
                     </span>
                     <span className="text-sm font-medium text-white/90">
-                    {r.amount
+                      {r.amount
                         ? new Intl.NumberFormat("fa-IR").format(
                             r?.amount - (r?.sum_invoices_assigned_amount || 0)
                           )
