@@ -25,16 +25,20 @@ export default function AssignModalCompare({
   activeAccount,
   refresh,
   setRefresh,
+  selectedTransactions,
+  setSelectedTransactions
 }) {
-  const [selectedTransactions, setSelectedTransactions] = useState([]);
+ // const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [activeAccountIds, setActiveAccountIds] = useState([]);
   const [activeAccountAmountMap, setActiveAccountAmountMap] = useState({});
   const [inputValues, setInputValues] = useState({});
 
+
+
   useEffect(() => {
     if (activeAccount && activeAccount.length > 0) {
       const activeIds = activeAccount.map((acc) => acc.id);
-      setSelectedTransactions(activeIds);
+    //  setSelectedTransactions(activeIds);
       setActiveAccountIds(activeIds);
       // ایجاد Map از id به invoice_transaction_pivot.amount
       const amountMap = {};
@@ -154,7 +158,7 @@ export default function AssignModalCompare({
 
   const handleShowAssign = () => {
     // ساخت آرایه از objectها با id و amount
-    const invoices = selectedTransactions.map((id) => ({
+    const invoices = selectedTransactions?.map((id) => ({
       id: id,
       amount: inputValues[id] ?? 0,
     }));
@@ -180,7 +184,7 @@ export default function AssignModalCompare({
         });
       });
   };
-
+console.log(`selectedTransactions`, selectedTransactions);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur animate-fadeInStagger">
       <div
@@ -263,7 +267,7 @@ export default function AssignModalCompare({
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       <input
                         type="checkbox"
-                        checked={selectedTransactions.includes(r.id)}
+                        checked={selectedTransactions?.includes(r.id)}
                         onChange={() => handleCheckboxChange(r.id)}
                       />
                     </td>
@@ -300,9 +304,9 @@ export default function AssignModalCompare({
                         onChange={(e) =>
                           handleInputChange(r.id, e.target.value)
                         }
-                        disabled={!selectedTransactions.includes(r.id)}
+                        disabled={!selectedTransactions?.includes(r.id)}
                         className={`px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
-                          selectedTransactions.includes(r.id)
+                          selectedTransactions?.includes(r.id)
                             ? "text-white/90 cursor-text"
                             : "text-white/40 cursor-not-allowed opacity-50"
                         }`}
@@ -366,7 +370,7 @@ export default function AssignModalCompare({
                     <span className="text-xs text-white/70">انتخاب:</span>
                     <input
                       type="checkbox"
-                      checked={selectedTransactions.includes(r.id)}
+                      checked={selectedTransactions?.includes(r.id)}
                       onChange={() => handleCheckboxChange(r.id)}
                       className="w-5 h-5"
                     />
@@ -406,9 +410,9 @@ export default function AssignModalCompare({
                         return 0;
                       })()}
                       onChange={(e) => handleInputChange(r.id, e.target.value)}
-                      disabled={!selectedTransactions.includes(r.id)}
+                      disabled={!selectedTransactions?.includes(r.id)}
                       className={`w-32 px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
-                        selectedTransactions.includes(r.id)
+                        selectedTransactions?.includes(r.id)
                           ? "text-white/90 cursor-text"
                           : "text-white/40 cursor-not-allowed opacity-50"
                       }`}
@@ -505,4 +509,6 @@ AssignModalCompare.propTypes = {
   activeAccount: PropTypes.array,
   refresh: PropTypes.bool,
   setRefresh: PropTypes.func,
+  selectedTransactions: PropTypes.array,
+  setSelectedTransactions: PropTypes.func.isRequired,
 };
