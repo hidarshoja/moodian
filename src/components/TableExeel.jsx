@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { convertToPersianDate } from "../utils/change-date";
 import { GrDocumentExcel } from "react-icons/gr";
 import axiosClient from "../axios-client";
@@ -156,19 +157,25 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
               <th className="text-right px-4 py-3 whitespace-nowrap">آیدی</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">نوع</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">وضعیت</th>
-              <th className="text-right px-4 py-3 whitespace-nowrap">وضعیت انجام</th>
+              <th className="text-right px-4 py-3 whitespace-nowrap">
+                وضعیت انجام
+              </th>
               <th className="text-right px-4 py-3 whitespace-nowrap">از محل</th>
               <th className="text-right px-4 py-3 whitespace-nowrap">تاریخ</th>
               <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-              <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
-               style={{
-                position: "sticky",
-                left: 0,
-                backgroundColor: "#181f3a",
-                zIndex: 10,
-                minWidth: "50px",
-                boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
-              }}>دانلود</th>
+              <th
+                className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  backgroundColor: "#181f3a",
+                  zIndex: 10,
+                  minWidth: "50px",
+                  boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
+                }}
+              >
+                دانلود
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -214,14 +221,22 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                     <span className="whitespace-nowrap">
                       {r?.status_label ? r?.status_label : "-"}
                     </span>
-                  
                   </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                <div className="flex flex-col gap-2 min-w-[120px]">
-                   
+                  <div className="flex flex-col gap-2 min-w-[120px]">
                     {(() => {
                       const progressInfo = getProgressInfo(r);
+
+                      // اگر ۰ درصد بود، فقط متن "شکست خورده" با رنگ قرمز نمایش داده شود
+                      if (progressInfo.percentage === 0) {
+                        return (
+                          <span className="text-xs mt-1 block text-red-400">
+                            شکست خورده
+                          </span>
+                        );
+                      }
+
                       return (
                         <div className="w-full">
                           <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
@@ -241,21 +256,22 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                  {r?.entity_type_label }
+                  {r?.entity_type_label}
                 </td>
                 <td className="px-4 py-3 text-white/90 text-sm truncate max-w-[200px]">
                   {convertToPersianDate(r?.created_at)}
                 </td>
                 <td className="p-2  text-center"></td>
-                <td 
+                <td
                   className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[40px] md:min-w-[160px]"
-                 style={{
-                   position: "sticky",
-                   left: 0,
-                   zIndex: 10,
-                   backgroundColor: "rgb(27, 33, 60)",
-                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
-                 }}>
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 10,
+                    backgroundColor: "rgb(27, 33, 60)",
+                    boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
                   <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                     <button
                       onClick={() => handleDownload(r.id)}
@@ -297,3 +313,10 @@ export default function TableExeel({ records, loading, setRefresh, refresh }) {
     </>
   );
 }
+
+TableExeel.propTypes = {
+  records: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setRefresh: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
+};
