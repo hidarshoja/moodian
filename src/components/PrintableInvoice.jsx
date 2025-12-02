@@ -74,7 +74,7 @@ console.log(`customer`, customer);
     (sum, item) => sum + (Number(item.adis) || 0),
     0
   );
-
+  console.log(`invoiceData.inp`, invoiceData.inp);
   return (
     <div className="invoice-a4">
       <div className="invoice-header-row">
@@ -88,7 +88,7 @@ console.log(`customer`, customer);
           </div>
           <div className="invoice-header-cell">
             <span>شماره فاكتور</span>
-            <span className="text-black">{invoiceData?.irtaxid || ""}</span>
+            <span className="text-black">{invoiceData?.id || ""}</span>
           </div>
         </div>
       </div>
@@ -150,11 +150,11 @@ console.log(`customer`, customer);
           </div>
           <div className="party-cell party-cell-wide">
             <span>نشانی کامل</span>
-            <span className="text-black">{customer.address} بجنورد</span>
+            <span className="text-black">{customer?.address} </span>
           </div>
           <div className="party-cell">
             <span>کد پستی</span>
-            <span className="text-black">{customer.postal_code || ""}</span>
+            <span className="text-black">{customer?.postal_code || ""}</span>
           </div>
           <div className="party-cell">
             <span>تلفن</span>
@@ -163,25 +163,7 @@ console.log(`customer`, customer);
         </div>
       </div>
 
-      {/* اطلاعات عمومی فاکتور (نوع، الگو، روش تسویه و ... ) */}
-      <div className="meta-section">
-        <div className="meta-cell">
-          <span>نوع صورتحساب</span>
-          <span>{getIntyText(invoiceData.inty)}</span>
-        </div>
-        <div className="meta-cell">
-          <span>الگوی صورتحساب</span>
-          <span>{getInpText(invoiceData.inp)}</span>
-        </div>
-        <div className="meta-cell">
-          <span>روش تسویه</span>
-          <span>{getSetmText(invoiceData.setm)}</span>
-        </div>
-        <div className="meta-cell">
-          <span>شماره فاکتور در سامانه مشتری</span>
-          <span>{invoiceData.MyInvoiceId || ""}</span>
-        </div>
-      </div>
+     
 
       {/* جدول اقلام */}
       <table className="items-table">
@@ -191,7 +173,6 @@ console.log(`customer`, customer);
             <th>کد کالا یا خدمات</th>
             <th>شرح كالا يا خدمات</th>
             <th>تعداد / مقدار</th>
-            <th>واحد اندازه‌گيری</th>
             <th>مبلغ واحد (ريال)</th>
             <th>مبلغ كل (ريال)</th>
             <th>مبلغ تخفيف (ريال)</th>
@@ -205,14 +186,18 @@ console.log(`customer`, customer);
             const total = amount * fee;
             const discount = Number(item.prdis) || 0;
             const afterDiscount = total - discount;
+            
+            const serviceName = item.name 
+            ? item.name 
+            : item?.product?.title ?? "";
+            const serviceId = item.serviceId ? item.serviceId : item?.product?.id ?? "";
 
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{item.serviceId ?? ""}</td>
-                <td>{item.serviceName ?? ""}</td>
+                <td>{serviceId ?? ""}</td>
+                <td>{serviceName || ""}</td>
                 <td>{amount}</td>
-                <td>{item.unit || ""}</td>
                 <td>{fee.toLocaleString("fa-IR")}</td>
                 <td>{total.toLocaleString("fa-IR")}</td>
                 <td>{discount.toLocaleString("fa-IR")}</td>
@@ -221,7 +206,7 @@ console.log(`customer`, customer);
             );
           })}
           <tr>
-            <td colSpan={8} className="items-table-footer-label">
+            <td colSpan={7} className="items-table-footer-label">
               جمع كل پس از تخفيف
             </td>
             <td className="items-table-footer-value">
