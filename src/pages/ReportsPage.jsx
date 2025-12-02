@@ -146,7 +146,18 @@ export default function ReportsPage() {
   };
 
   const handleToMonthChange = (selectedDate) => {
-    setToMonth(selectedDate);
+    if (!selectedDate) {
+      setToMonth(null);
+      return;
+    }
+
+ 
+    const endOfMonth =
+      typeof selectedDate.toLastOfMonth === "function"
+        ? selectedDate.toLastOfMonth()
+        : selectedDate;
+
+    setToMonth(endOfMonth);
   };
 
   const handleClearAll = () => {
