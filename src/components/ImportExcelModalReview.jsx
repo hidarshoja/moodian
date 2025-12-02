@@ -73,6 +73,7 @@ export default function ImportExcelModalReview({ isOpen, onClose ,refresh , setR
       const formData = new FormData();
       formData.append("excel", selectedFile);
       formData.append("inp", inpData);
+      formData.append("type", -1);
       await axiosClient.post(`/invoices/import`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });

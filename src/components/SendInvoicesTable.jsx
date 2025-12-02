@@ -41,7 +41,7 @@ export default function SendInvoicesTable({
         toast: true,
         position: "top-start",
         icon: "success", // یا 'error'
-        title: "محصول با موفقیت حذف شد",
+        title: "فاکتور با موفقیت حذف شد",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
@@ -58,7 +58,7 @@ export default function SendInvoicesTable({
         toast: true,
         position: "top-start",
         icon: "error",
-        title: "خطا در حذف محصول",
+        title: "خطا در حذف فاکتور",
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
