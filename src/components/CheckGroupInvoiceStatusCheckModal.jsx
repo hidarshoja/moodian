@@ -9,7 +9,7 @@ const CheckGroupInvoiceStatusCheckModal = ({ isOpen, onClose }) => {
   const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
-    axiosClient.get("/invoices?f[status]=-80,-90,-10,0").then((response) => {
+    axiosClient.get("/invoices?f[status]=-80,-90,-10,0&f[type]=-1").then((response) => {
       setInvoiceData(response.data.data);
     });
   }, []);
