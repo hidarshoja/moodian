@@ -565,7 +565,8 @@ export default function AddLineItemModalReveiw({
                     : ""
                 }
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -582,7 +583,8 @@ export default function AddLineItemModalReveiw({
                     : ""
                 }
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+                className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -595,7 +597,8 @@ export default function AddLineItemModalReveiw({
                 type="text"
                 value={selectedProduct?.vra ?? ""}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -614,7 +617,8 @@ export default function AddLineItemModalReveiw({
                     : ""
                 }
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -643,7 +647,8 @@ export default function AddLineItemModalReveiw({
                     : "0";
                 })()}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -672,7 +677,8 @@ export default function AddLineItemModalReveiw({
                     : "0";
                 })()}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
@@ -748,7 +754,8 @@ export default function AddLineItemModalReveiw({
                   ).toLocaleString("fa-IR");
                 })()}
                 readOnly
-                className="w-full bg-gray-800/70 text-white/90 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-not-allowed"
+                 className="w-full bg-gray-900/60 text-gray-200 px-3 py-2 border border-gray-500 rounded-lg text-sm cursor-not-allowed 
+             focus:outline-none focus:ring-0 focus:border-gray-500 active:outline-none active:ring-0 active:border-gray-500"
               />
             </div>
 
