@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import ReactDOMServer from "react-dom/server";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import DatePicker from "react-multi-date-picker";
@@ -11,6 +12,7 @@ import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosClient from "../axios-client";
+import PrintableInvoice from "./PrintableInvoice";
 
 export default function CreateModalInvoices({
   isOpen2,
@@ -463,90 +465,13 @@ export default function CreateModalInvoices({
         (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
       : "انتخاب نشده";
 
-    // Get inty text
-    const getIntyText = (value) => {
-      switch (value) {
-        case "1":
-          return "نوع اول";
-        case "2":
-          return "نوع دوم";
-        case "3":
-          return "نوع سوم";
-        default:
-          return "نامشخص";
-      }
-    };
-
-    // Get inp text
-    const getInpText = (value) => {
-      switch (value) {
-        case "1":
-          return "الگوی اول (فروش)";
-        case "2":
-          return "الگوی دوم (فروش ارزی)";
-        case "3":
-          return "الگوی سوم (صورتحساب طلا، جواهر و پلاتین)";
-        case "4":
-          return "الگوی چهارم (قرارداد پیمانکاری)";
-        case "5":
-          return "الگوی پنجم (قبوض خدماتی)";
-        case "6":
-          return "الگوی ششم (بلیط هواپیما)";
-        case "7":
-          return "الگوی هفتم (صادرات)";
-        case "8":
-          return "الگوی هشتم (بارنامه)";
-        case "11":
-          return "الگوی یازدهم (بورس اوراق بهادار مبتنی بر کالا)";
-        case "13":
-          return "الگوی سیزدهم (فروش خدمات بیمهای)";
-        default:
-          return "انتخاب نشده";
-      }
-    };
-
-    // Get setm text
-    const getSetmText = (value) => {
-      switch (value) {
-        case "1":
-          return "نقدی";
-        case "2":
-          return "نسیه";
-        case "3":
-          return "نسیه/نقدی";
-        default:
-          return "نامشخص";
-      }
-    };
-
-    // Format date
-    const formatDateForPrint = (date) => {
-      if (!date) return "نامشخص";
-      try {
-        const d = date instanceof Date ? date : new Date(date);
-        if (Number.isNaN(d.getTime())) return "نامشخص";
-        return d.toLocaleDateString("fa-IR");
-      } catch {
-        return "نامشخص";
-      }
-    };
-
-    const rowsHtml = lineItems
-      .map(
-        (item, index) => `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${item.serviceId ?? ""}</td>
-            <td>${item.serviceName ?? ""}</td>
-            <td>${item.am ?? 0}</td>
-            <td>${item.fee ?? 0}</td>
-            <td>${item.exchangeRate ?? 0}</td>
-            <td>${item.currencyAmount ?? 0}</td>
-            <td>${item.prdis ?? 0}</td>
-            <td>${item.adis ?? 0}</td>
-          </tr>`
-      )
-      .join("");
+    const content = ReactDOMServer.renderToString(
+      <PrintableInvoice
+        invoiceData={invoiceData}
+        lineItems={lineItems}
+        customerName={customerName}
+      />
+    );
 
     const html = `
       <!doctype html>
@@ -556,75 +481,156 @@ export default function CreateModalInvoices({
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <title>چاپ فاکتور</title>
           <style>
-            body { font-family: Vazirmatn, Tahoma, Arial, sans-serif; padding: 24px; background: #fff; color: #111; }
-            h1 { font-size: 18px; margin-bottom: 16px; text-align: center; }
-            .invoice-info { margin-bottom: 20px; }
-            .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            .info-table td { padding: 8px; font-size: 12px; border: 1px solid #ddd; }
-            .info-table .label { background: #f5f5f5; font-weight: bold; width: 30%; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #999; padding: 8px; font-size: 12px; text-align: center; }
-            thead { background: #f0f0f0; }
-            @media print { body { padding: 0; } }
+            body {
+              font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+              padding: 24px;
+              background: #fff;
+              color: #111;
+            }
+            .invoice-a4 {
+              width: 100%;
+              max-width: 960px;
+              margin: 0 auto;
+              border: 1px solid #000;
+              padding: 16px;
+              box-sizing: border-box;
+            }
+            .invoice-header-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 8px;
+              border-bottom: 1px solid #000;
+              padding-bottom: 4px;
+            }
+            .invoice-header-title {
+              font-weight: bold;
+              font-size: 16px;
+            }
+            .invoice-header-meta {
+              display: flex;
+              gap: 4px;
+            }
+            .invoice-header-cell {
+              border: 1px solid #000;
+              padding: 2px 6px;
+              display: flex;
+              flex-direction: column;
+              font-size: 11px;
+              min-width: 110px;
+            }
+            .invoice-header-cell span:first-child {
+              border-bottom: 1px solid #000;
+              margin-bottom: 2px;
+              font-weight: bold;
+            }
+            .party-section {
+              border: 1px solid #000;
+              margin-top: 8px;
+            }
+            .party-title {
+              border-bottom: 1px solid #000;
+              padding: 2px 6px;
+              font-weight: bold;
+              font-size: 12px;
+            }
+            .party-grid {
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              border-top: 1px solid #000;
+              font-size: 11px;
+            }
+            .party-cell {
+              border-left: 1px solid #000;
+              border-top: 1px solid #000;
+              padding: 2px 4px;
+              display: flex;
+              flex-direction: column;
+            }
+            .party-cell:nth-child(4n) {
+              border-left: 0;
+            }
+            .party-cell span:first-child {
+              font-weight: bold;
+              margin-bottom: 2px;
+            }
+            .party-cell-wide {
+              grid-column: span 2;
+            }
+            .meta-section {
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              border: 1px solid #000;
+              border-top: 0;
+              margin-bottom: 8px;
+              font-size: 11px;
+            }
+            .meta-cell {
+              border-left: 1px solid #000;
+              padding: 2px 4px;
+              display: flex;
+              flex-direction: column;
+            }
+            .meta-cell:nth-child(4n) {
+              border-left: 0;
+            }
+            .meta-cell span:first-child {
+              font-weight: bold;
+              margin-bottom: 2px;
+            }
+            .items-table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 8px;
+              font-size: 11px;
+            }
+            .items-table th,
+            .items-table td {
+              border: 1px solid #000;
+              padding: 2px 4px;
+              text-align: center;
+            }
+            .items-table thead {
+              background: #f5f5f5;
+            }
+            .items-table-footer-label {
+              text-align: left;
+              font-weight: bold;
+            }
+            .items-table-footer-value {
+              font-weight: bold;
+            }
+            .footer-row {
+              display: grid;
+              grid-template-columns: 2fr 1fr 1fr;
+              margin-top: 12px;
+              font-size: 11px;
+            }
+            .footer-notes {
+              border: 1px solid #000;
+              padding: 4px 6px;
+              min-height: 60px;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+            }
+            .footer-sign {
+              border: 1px solid #000;
+              margin-right: 4px;
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              padding: 4px 6px;
+            }
+            @media print {
+              body {
+                padding: 0;
+              }
+            }
           </style>
         </head>
         <body>
-          <h1>فاکتور فروش</h1>
-          
-          <div class="invoice-info">
-            <table class="info-table">
-              <tr>
-                <td class="label">نوع:</td>
-                <td>${getIntyText(invoiceData.inty)}</td>
-                <td class="label">الگوی فروش:</td>
-                <td>${getInpText(invoiceData.inp)}</td>
-              </tr>
-              <tr>
-                <td class="label">تاریخ صدور:</td>
-                <td>${formatDateForPrint(invoiceData.indatim)}</td>
-                <td class="label">تاریخ ایجاد:</td>
-                <td>${formatDateForPrint(invoiceData.indati2m)}</td>
-              </tr>
-              <tr>
-                <td class="label">مشتری:</td>
-                <td>${customerName}</td>
-                <td class="label">کد شعبه خریدار:</td>
-                <td>${invoiceData.bbc || "نامشخص"}</td>
-              </tr>
-              <tr>
-                <td class="label">روش تسویه:</td>
-                <td>${getSetmText(invoiceData.setm)}</td>
-                <td class="label">کد شعبه فروشنده:</td>
-                <td>${invoiceData.sbc || "نامشخص"}</td>
-              </tr>
-              <tr>
-                <td class="label">ش ف در سامانه مشتری:</td>
-                <td>${invoiceData.MyInvoiceId || "نامشخص"}</td>
-                <td class="label">توضیحات:</td>
-                <td>${invoiceData.comment || "ندارد"}</td>
-              </tr>
-            </table>
-          </div>
-
-          <h2>جدول اقلام فاکتور</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>شناسه خدمت/کالا</th>
-                <th>نام خدمت/کالا</th>
-                <th>تعداد/مقدار</th>
-                <th>مبلغ واحد</th>
-                <th>نرخ برابری ارز با ریال</th>
-                <th>میزان ارز</th>
-                <th>مبلغ تخفیف</th>
-                <th>مبلغ بعد از تخفیف</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
+          ${content}
         </body>
       </html>`;
 
