@@ -282,6 +282,8 @@ export default function SendReviewTable({
     }
   };
 
+  
+
   const handleShowErrors = (row) => {
     const errors = row?.error?.error || [];
     setErrorList(errors);
