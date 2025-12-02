@@ -283,7 +283,7 @@ export default function SendInvoicesTable({
   };
 
   const handleShowErrors = (row) => {
-    const errors = row?.error?.error || [];
+    const errors =  row?.error || [];
     setErrorList(errors);
     setIsErrorModalOpen(true);
   };

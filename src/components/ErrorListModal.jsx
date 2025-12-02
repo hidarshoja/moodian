@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { GrClose } from "react-icons/gr";
-
 export default function ErrorListModal({ isOpen, onClose, errors }) {
   if (!isOpen) return null;
 
