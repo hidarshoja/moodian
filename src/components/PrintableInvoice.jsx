@@ -1,6 +1,9 @@
 import React from "react";
 
-const PrintableInvoice = ({ invoiceData, lineItems, customerName }) => {
+const PrintableInvoice = ({ invoiceData, lineItems, customer }) => {
+  const user = JSON.parse(localStorage.getItem("USER"));
+console.log(`user`, user);
+
   const getIntyText = (value) => {
     switch (value) {
       case "1":
@@ -13,7 +16,9 @@ const PrintableInvoice = ({ invoiceData, lineItems, customerName }) => {
         return "";
     }
   };
-
+console.log(`invoiceData`, invoiceData);
+console.log(`lineItems`, lineItems);
+console.log(`customer`, customer);
   const getInpText = (value) => {
     switch (value) {
       case "1":
@@ -79,11 +84,11 @@ const PrintableInvoice = ({ invoiceData, lineItems, customerName }) => {
         <div className="invoice-header-meta">
           <div className="invoice-header-cell">
             <span>تاريخ</span>
-            <span>{formatDate(invoiceData.indatim)}</span>
+            <span className="text-black">{formatDate(invoiceData?.indatim)}</span>
           </div>
           <div className="invoice-header-cell">
             <span>شماره فاكتور</span>
-            <span>{invoiceData.inno || ""}</span>
+            <span className="text-black">{invoiceData?.irtaxid || ""}</span>
           </div>
         </div>
       </div>
@@ -94,31 +99,31 @@ const PrintableInvoice = ({ invoiceData, lineItems, customerName }) => {
         <div className="party-grid">
           <div className="party-cell">
             <span>نام شخص حقيقی / حقوقی</span>
-            <span>{invoiceData.sellerName || ""}</span>
+            <span className="text-black">{user?.name} {user?.last_name }</span>
           </div>
           <div className="party-cell">
             <span>شماره اقتصادی</span>
-            <span>{invoiceData.sellerEconomicCode || ""}</span>
+            <span className="text-black">{user?.tins   }</span>
           </div>
           <div className="party-cell">
             <span>شماره ملی / شناسه ملی</span>
-            <span>{invoiceData.sellerNationalId || ""}</span>
+            <span className="text-black">{user?.national_id}</span>
           </div>
           <div className="party-cell">
-            <span>شماره ثبت / شماره شناسنامه</span>
-            <span>{invoiceData.sellerRegisterNo || ""}</span>
+            <span>وضعیت</span>
+            <span className="text-black">{user?.status_label }</span>
           </div>
           <div className="party-cell party-cell-wide">
             <span>نشانی کامل</span>
-            <span>{invoiceData.sellerAddress || ""}</span>
+            <span className="text-black">{user?.address }</span>
           </div>
           <div className="party-cell">
             <span>کد پستی</span>
-            <span>{invoiceData.sellerPostalCode || ""}</span>
+            <span className="text-black">{user?.postal_code }</span>
           </div>
           <div className="party-cell">
             <span>تلفن</span>
-            <span>{invoiceData.sellerPhone || ""}</span>
+            <span className="text-black">{user?.mobile }</span>
           </div>
         </div>
       </div>
@@ -129,31 +134,31 @@ const PrintableInvoice = ({ invoiceData, lineItems, customerName }) => {
         <div className="party-grid">
           <div className="party-cell">
             <span>نام شخص حقیقی / حقوقی</span>
-            <span>{customerName}</span>
+            <span className="text-black">{customer?.name} {customer?.last_name}</span>
           </div>
           <div className="party-cell">
             <span>شماره اقتصادی</span>
-            <span>{invoiceData.buyerEconomicCode || ""}</span>
+            <span className="text-black">{customer?.economic_code || ""}</span>
           </div>
           <div className="party-cell">
             <span>شماره ملی / شناسه ملی</span>
-            <span>{invoiceData.buyerNationalId || ""}</span>
+            <span className="text-black">{customer?.national_code || ""}</span>
           </div>
           <div className="party-cell">
-            <span>شماره ثبت / شماره شناسنامه</span>
-            <span>{invoiceData.buyerRegisterNo || ""}</span>
+            <span> کد شعبه </span>
+            <span className="text-black">{customer?.branch_code || ""}</span>
           </div>
           <div className="party-cell party-cell-wide">
             <span>نشانی کامل</span>
-            <span>{invoiceData.buyerAddress || ""}</span>
+            <span className="text-black">{customer.address} بجنورد</span>
           </div>
           <div className="party-cell">
             <span>کد پستی</span>
-            <span>{invoiceData.buyerPostalCode || ""}</span>
+            <span className="text-black">{customer.postal_code || ""}</span>
           </div>
           <div className="party-cell">
             <span>تلفن</span>
-            <span>{invoiceData.buyerPhone || ""}</span>
+            <span className="text-black">{customer?.tel || ""}</span>
           </div>
         </div>
       </div>

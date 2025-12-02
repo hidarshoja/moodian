@@ -460,16 +460,13 @@ export default function CreateModalInvoices({
 
     // Get customer name
     const selectedCustomer = customers?.find((c) => c.id == invoiceData.crn);
-    const customerName = selectedCustomer
-      ? (selectedCustomer.name || "") +
-        (selectedCustomer.last_name ? " " + selectedCustomer.last_name : "")
-      : "انتخاب نشده";
-
+  
+console.log(`selectedCustomer`, selectedCustomer);
     const content = ReactDOMServer.renderToString(
       <PrintableInvoice
         invoiceData={invoiceData}
         lineItems={lineItems}
-        customerName={customerName}
+        customer={selectedCustomer}
       />
     );
 
