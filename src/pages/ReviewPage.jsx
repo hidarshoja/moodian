@@ -151,7 +151,7 @@ export default function ReviewPage() {
             <GrDocumentExcel className="w-5 h-5" />
           </span>
         </button>
-        <button
+        {/* <button
           className="btn-custom"
            onClick={() => setCheckGroupCheckModalOpen(true)}
         >
@@ -159,7 +159,7 @@ export default function ReviewPage() {
           <span className="inline-block">
             <BsFillSendCheckFill className="w-5 h-5" />
           </span>
-        </button>
+        </button> */}
         <button
           className="btn-custom"
           onClick={() => setGroupCheckModalOpen(true)}

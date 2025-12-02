@@ -59,7 +59,7 @@ export default function SearchFilterBar({
       query += `&f[customer_id]=${selectedCustomerId}`;
     }
     if (selectedProductId) {
-      query += `&f[product_id]=${selectedProductId}`;
+      query += `&f[items.product_id]=${selectedProductId}`;
     }
     if (stemId) {
       query += `&f[setm]=${stemId}`;
@@ -111,7 +111,7 @@ export default function SearchFilterBar({
       query += `&f[customer_id]=${selectedCustomerId}`;
     }
     if (selectedProductId) {
-      query += `&f[product_id]=${selectedProductId}`;
+      query += `&f[items.product_id]=${selectedProductId}`;
     }
     if (stemId) {
       query += `&f[setm]=${stemId}`;
@@ -131,7 +131,7 @@ export default function SearchFilterBar({
     if (filterTable) {
       switch (filterTable) {
         case "کالا/خدمات":
-          groupByValue = "product_id";
+          groupByValue = "items.product_id";
           break;
         case "روش تسویه":
           groupByValue = "setm";
