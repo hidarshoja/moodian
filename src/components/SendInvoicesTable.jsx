@@ -16,6 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import { BsSendArrowUp } from "react-icons/bs";
 import ErrorListModal from "./ErrorListModal";
 import EditInvoiceModalNew2 from "./EditInvoiceModalNew2";
+import StatusCheckModal from "./StatusCheckModal";
 
 export default function SendInvoicesTable({
   records,
@@ -32,6 +33,10 @@ export default function SendInvoicesTable({
   const [isInvoice, setIsInvoice] = useState(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorList, setErrorList] = useState([]);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [statusModalLoading, setStatusModalLoading] = useState(false);
+  const [statusResult, setStatusResult] = useState(null);
+  const [statusErrorMessage, setStatusErrorMessage] = useState("");
 
   const handleDelete = async (row) => {
     try {
@@ -194,96 +199,38 @@ export default function SendInvoicesTable({
         });
         return;
       }
+
+      setIsStatusModalOpen(true);
+      setStatusModalLoading(true);
+      setStatusResult(null);
+      setStatusErrorMessage("");
+
       const response = await axiosClient.post("/invoices/check-from-moadian", {
         reference_numbers: [referenceNumber],
       });
-      
 
-      // فرمت کردن اطلاعات response برای نمایش در Swal
+      // فرمت کردن اطلاعات response برای نمایش در مدال
       const responseData = response.data?.[0];
-   
+
       if (responseData) {
-        let htmlContent = `
-          <div dir="rtl" style="text-align: right; font-family: 'IRANSans', sans-serif;">
-            <div style="margin-bottom: 15px;">
-              <strong>رفرنس نامبر:</strong> ${
-                responseData.referenceNumber || "-"
-              }<br/>
-              <strong>وضعیت:</strong> ${responseData.status || "-"}<br/>
-              <strong>نتیجه:</strong> ${
-                responseData.data?.success ? "موفق" : "ناموفق"
-              }
-            </div>
-        `;
-
-        // نمایش خطاها
-        if (responseData.data?.error && responseData.data.error.length > 0) {
-          htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fee2e2; border-radius: 5px;">
-            <strong style="color: #dc2626;">خطاها:</strong><ul style="margin: 5px 0; padding-right: 20px; color: #dc2626;">`;
-          responseData.data.error.forEach((err) => {
-            htmlContent += `<li style="margin: 5px 0;">کد: ${err.code} - ${err.message}</li>`;
-          });
-          htmlContent += `</ul></div>`;
-        }
-
-        // نمایش هشدارها
-        if (
-          responseData.data?.warning &&
-          responseData.data.warning.length > 0
-        ) {
-          htmlContent += `<div style="margin-top: 15px; padding: 10px; background-color: #fef3c7; border-radius: 5px;">
-            <strong style="color: #d97706;">هشدارها:</strong><ul style="margin: 5px 0; padding-right: 20px; color: #d97706;">`;
-          responseData.data.warning.forEach((warn) => {
-            htmlContent += `<li style="margin: 5px 0;">${warn.code || ""} - ${
-              warn.message || ""
-            }</li>`;
-          });
-          htmlContent += `</ul></div>`;
-        }
-
-        htmlContent += `</div>`;
-
-        Swal.fire({
-          icon: responseData.data?.success ? "success" : "error",
-          title: "نتیجه چک وضعیت",
-          html: htmlContent,
-          showConfirmButton: true,
-          confirmButtonText: "تأیید",
-          confirmButtonColor: "#2563eb",
-          background: "#111827",
-          color: "#e5e7eb",
-          width: "600px",
-        });
+        setStatusResult(responseData);
       } else {
-        Swal.fire({
-          icon: "info",
-          title: "درخواست چک وضعیت ارسال شد.",
-          text: "اطلاعاتی در response موجود نیست.",
-          showConfirmButton: true,
-          confirmButtonText: "تأیید",
-          confirmButtonColor: "#2563eb",
-          background: "#111827",
-          color: "#e5e7eb",
-        });
+        setStatusErrorMessage("اطلاعاتی در پاسخ سامانه موجود نیست.");
       }
+
+      setStatusModalLoading(false);
 
       if (onRefresh) onRefresh();
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "خطا در ارسال چک وضعیت",
-        toast: true,
-        position: "top-start",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: { popup: "swal2-toast" },
-      });
+      console.error("Error checking invoice status:", error);
+      setStatusModalLoading(false);
+      setStatusErrorMessage("خطا در ارسال چک وضعیت به سامانه مودیان.");
+      setIsStatusModalOpen(true);
     }
   };
 
   const handleShowErrors = (row) => {
-    const errors =  row?.error || [];
+    const errors = row?.error || [];
     setErrorList(errors);
     setIsErrorModalOpen(true);
   };
@@ -306,7 +253,7 @@ export default function SendInvoicesTable({
           <Spinner />
         </div>
       )}
-  
+
       <table
         className={`min-w-full text-white ${
           loading ? "opacity-30 pointer-events-none" : ""
@@ -315,7 +262,7 @@ export default function SendInvoicesTable({
       >
         <thead>
           <tr className="text-white/80 text-sm bg-[#181f3a]">
-          <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
+            <th className="text-right px-4 py-3 whitespace-nowrap">#</th>
             <th className="text-right px-4 py-3 whitespace-nowrap"> وضعیت </th>
             <th className="text-right px-4 py-3 whitespace-nowrap">
               شماره منحصر به فرد مالیاتی
@@ -329,16 +276,20 @@ export default function SendInvoicesTable({
             <th className="text-right px-4 py-3 whitespace-nowrap">موضوع</th>
             <th className="text-right px-4 py-3 whitespace-nowrap"></th>
             <th className="text-right px-4 py-3 whitespace-nowrap"></th>
-           
-            <th className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
-               style={{
+
+            <th
+              className="text-center px-2 py-3 whitespace-nowrap border-r border-white/10 relative"
+              style={{
                 position: "sticky",
                 left: 0,
                 backgroundColor: "#181f3a",
                 zIndex: 10,
                 minWidth: "70px",
                 boxShadow: "10px 0 20px rgba(24, 31, 58, 1)",
-              }}>عملیات</th>
+              }}
+            >
+              عملیات
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -383,15 +334,11 @@ export default function SendInvoicesTable({
               <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
                 {r.ins_label}
               </td>
-              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
-              
-              </td>
-              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]">
-              
-              </td>
-             
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]"></td>
+              <td className="px-4 py-3  text-sm  max-w-[100px] lg:max-w-[240px]"></td>
+
               <td
-                   className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px] min-h-[125px] lg:min-h-[100px] max-h-[260px]"
+                className="px-2 py-3 text-sm border-r border-white/5 relative flex items-center justify-center min-w-[60px] md:min-w-[160px] min-h-[125px] lg:min-h-[100px] max-h-[260px]"
                 style={{
                   position: "sticky",
                   left: 0,
@@ -400,7 +347,6 @@ export default function SendInvoicesTable({
                   boxShadow: "10px 0 20px rgba(0, 0, 0, 0.5)",
                 }}
               >
-             
                 <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-4 lg:gap-1 justify-items-center">
                   {r.can_update === true && (
                     <>
@@ -560,6 +506,14 @@ export default function SendInvoicesTable({
         isOpen={isErrorModalOpen}
         onClose={() => setIsErrorModalOpen(false)}
         errors={errorList}
+      />
+
+      <StatusCheckModal
+        isOpen={isStatusModalOpen}
+        onClose={() => setIsStatusModalOpen(false)}
+        loading={statusModalLoading}
+        result={statusResult}
+        errorMessage={statusErrorMessage}
       />
 
       <EditInvoiceModalNew2
