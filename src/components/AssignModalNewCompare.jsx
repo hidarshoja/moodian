@@ -13,6 +13,19 @@ function Spinner() {
   );
 }
 
+// فرمت عدد با جداکننده سه‌رقمی
+const formatNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  const num = String(value).replace(/[^0-9]/g, "");
+  return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// حذف فرمت و برگرداندن عدد خالص
+const unformatNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  return String(value).replace(/[^0-9]/g, "");
+};
+
 export default function AssignModalNewCompare({
   transaction,
   onClose,
@@ -159,9 +172,11 @@ export default function AssignModalNewCompare({
   };
 
   const handleInputChange = (id, value) => {
+    // حذف فرمت و ذخیره عدد خالص
+    const numericValue = unformatNumber(value);
     setInputValues((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: numericValue,
     }));
   };
 
@@ -185,10 +200,30 @@ export default function AssignModalNewCompare({
       })
       .catch((err) => {
         console.error("Error assigning transactions:", err);
+
+        // استخراج پیام خطا از پاسخ بک‌اند
+        let errorMessage = "عملیات با خطا مواجه شد";
+
+        if (err.response?.data) {
+          const errorData = err.response.data;
+
+          // اگر errors وجود دارد، تمام پیام‌های خطا را جمع‌آوری کن
+          if (errorData.errors && typeof errorData.errors === "object") {
+            const allErrors = Object.values(errorData.errors);
+            if (allErrors.length > 0) {
+              errorMessage = allErrors.join("\n");
+            }
+          }
+          // اگر فقط message وجود دارد
+          else if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        }
+
         Swal.fire({
           icon: "error",
           title: "خطا",
-          text: "عملیات با خطا مواجه شد",
+          text: errorMessage,
         });
       });
   };
@@ -285,31 +320,33 @@ export default function AssignModalNewCompare({
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       <input
                         type="text"
-                        value={(() => {
-                          if (
-                            inputValues[r.id] !== undefined &&
-                            !isNaN(inputValues[r.id])
-                          ) {
-                            return inputValues[r.id];
-                          }
-                          if (activeAccountIds.includes(r.id)) {
-                            return Number(activeAccountAmountMap[r.id]) || 0;
-                          }
-                          if (r.amount !== undefined && r.amount !== null) {
-                            const calculated =
-                              Number(r.tadis || 0) -
-                              Number(r.sum_associated_sales_amount || 0);
-                            return isNaN(calculated) ? 0 : calculated;
-                          }
-                          if (r.tadis !== undefined && r.tadis !== null) {
-                            const calculated =
-                              Number(r.tadis || 0) -
-                              Number(r.sum_associated_sales_amount || 0);
-                            return isNaN(calculated) ? 0 : calculated;
-                          }
-                          
-                          return 0;
-                        })()}
+                        value={formatNumber(
+                          (() => {
+                            if (
+                              inputValues[r.id] !== undefined &&
+                              !isNaN(inputValues[r.id])
+                            ) {
+                              return inputValues[r.id];
+                            }
+                            if (activeAccountIds.includes(r.id)) {
+                              return Number(activeAccountAmountMap[r.id]) || 0;
+                            }
+                            if (r.amount !== undefined && r.amount !== null) {
+                              const calculated =
+                                Number(r.tadis || 0) -
+                                Number(r.sum_associated_sales_amount || 0);
+                              return isNaN(calculated) ? 0 : calculated;
+                            }
+                            if (r.tadis !== undefined && r.tadis !== null) {
+                              const calculated =
+                                Number(r.tadis || 0) -
+                                Number(r.sum_associated_sales_amount || 0);
+                              return isNaN(calculated) ? 0 : calculated;
+                            }
+
+                            return 0;
+                          })()
+                        )}
                         onChange={(e) =>
                           handleInputChange(r.id, e.target.value)
                         }
@@ -337,7 +374,10 @@ export default function AssignModalNewCompare({
                       {new Intl.NumberFormat("fa-IR").format(r?.tadis)}
                     </td>
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
-                      {(Number(r?.tadis) - Number(r?.sum_associated_sales_amount)).toLocaleString()}
+                      {(
+                        Number(r?.tadis) -
+                        Number(r?.sum_associated_sales_amount)
+                      ).toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -385,30 +425,32 @@ export default function AssignModalNewCompare({
                     <span className="text-xs text-white/70">مقدار:</span>
                     <input
                       type="text"
-                      value={(() => {
-                        if (
-                          inputValues[r.id] !== undefined &&
-                          !isNaN(inputValues[r.id])
-                        ) {
-                          return inputValues[r.id];
-                        }
-                        if (activeAccountIds.includes(r.id)) {
-                          return Number(activeAccountAmountMap[r.id]) || 0;
-                        }
-                        if (r.amount !== undefined && r.amount !== null) {
-                          const calculated =
-                            Number(r.amount || 0) -
-                            Number(r.sum_invoices_assigned_amount || 0);
-                          return isNaN(calculated) ? 0 : calculated;
-                        }
-                        if (r.tadis !== undefined && r.tadis !== null) {
-                          const calculated =
-                            Number(r.tadis || 0) -
-                            Number(r.sum_transactions_assigned_amount || 0);
-                          return isNaN(calculated) ? 0 : calculated;
-                        }
-                        return 0;
-                      })()}
+                      value={formatNumber(
+                        (() => {
+                          if (
+                            inputValues[r.id] !== undefined &&
+                            !isNaN(inputValues[r.id])
+                          ) {
+                            return inputValues[r.id];
+                          }
+                          if (activeAccountIds.includes(r.id)) {
+                            return Number(activeAccountAmountMap[r.id]) || 0;
+                          }
+                          if (r.amount !== undefined && r.amount !== null) {
+                            const calculated =
+                              Number(r.amount || 0) -
+                              Number(r.sum_invoices_assigned_amount || 0);
+                            return isNaN(calculated) ? 0 : calculated;
+                          }
+                          if (r.tadis !== undefined && r.tadis !== null) {
+                            const calculated =
+                              Number(r.tadis || 0) -
+                              Number(r.sum_transactions_assigned_amount || 0);
+                            return isNaN(calculated) ? 0 : calculated;
+                          }
+                          return 0;
+                        })()
+                      )}
                       onChange={(e) => handleInputChange(r.id, e.target.value)}
                       disabled={!currentSelectedTransactions.includes(r.id)}
                       className={`w-32 px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
