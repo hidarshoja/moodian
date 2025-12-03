@@ -159,11 +159,14 @@ export default function AssignModal({
         if (err.response?.data) {
           const errorData = err.response.data;
 
-          // اگر errors وجود دارد و transactions در آن است
-          if (errorData.errors?.transactions) {
-            errorMessage = errorData.errors.transactions;
+          // اگر errors وجود دارد، تمام پیام‌های خطا را جمع‌آوری کن
+          if (errorData.errors && typeof errorData.errors === "object") {
+            const allErrors = Object.values(errorData.errors);
+            if (allErrors.length > 0) {
+              errorMessage = allErrors.join("\n");
+            }
           }
-          // اگر message وجود دارد
+          // اگر فقط message وجود دارد
           else if (errorData.message) {
             errorMessage = errorData.message;
           }
