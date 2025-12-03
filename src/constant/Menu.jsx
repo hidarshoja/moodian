@@ -74,17 +74,12 @@ const allNavigationItems = [
     permission: null, // Add appropriate permission if needed
   },
   {
-    name: "خریدهای داخلی",
-    icon: <CiShoppingCart className="w-5 h-5 ml-2" />,
-    href: "/shopping",
+    name: "ایمپورت و اکسپورت",
+    icon: <LuImport className="w-5 h-5 ml-2" />,
+    href: "/downloadExcel",
     permission: null, // Add appropriate permission if needed
   },
-  {
-    name: "بررسی 169",
-    icon: <MdOutlineRateReview className="w-5 h-5 ml-2" />,
-    href: "/review",
-    permission: null, // Add appropriate permission if needed
-  },
+
   {
     name: "صورتحساب بانکی",
     icon: <RiBillLine className="w-5 h-5 ml-2" />,
@@ -115,16 +110,23 @@ const allNavigationItems = [
     href: "/roles",
     permission: "role.view", // Add appropriate permission if needed
   },
-  {
-    name: "ایمپورت و اکسپورت",
-    icon: <LuImport className="w-5 h-5 ml-2" />,
-    href: "/downloadExcel",
-    permission: null, // Add appropriate permission if needed
-  },
+
   {
     name: "تطبیق فاکتور فروش و خرید",
     icon: <TbArrowsLeftRight className="w-5 h-5 ml-2" />,
     href: "/compareInvoices",
+    permission: null, // Add appropriate permission if needed
+  },
+  {
+    name: "خریدهای داخلی",
+    icon: <CiShoppingCart className="w-5 h-5 ml-2" />,
+    href: "/shopping",
+    permission: null, // Add appropriate permission if needed
+  },
+  {
+    name: "بررسی 169",
+    icon: <MdOutlineRateReview className="w-5 h-5 ml-2" />,
+    href: "/review",
     permission: null, // Add appropriate permission if needed
   },
 ];
