@@ -137,10 +137,27 @@ export default function AssignModal({
       })
       .catch((err) => {
         console.error("Error assigning transactions:", err);
+
+        // استخراج پیام خطا از پاسخ بک‌اند
+        let errorMessage = "عملیات با خطا مواجه شد";
+
+        if (err.response?.data) {
+          const errorData = err.response.data;
+
+          // اگر errors وجود دارد و transactions در آن است
+          if (errorData.errors?.transactions) {
+            errorMessage = errorData.errors.transactions;
+          }
+          // اگر message وجود دارد
+          else if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        }
+
         Swal.fire({
           icon: "error",
           title: "خطا",
-          text: "عملیات با خطا مواجه شد",
+          text: errorMessage,
         });
       });
   };
