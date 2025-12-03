@@ -13,6 +13,19 @@ function Spinner() {
   );
 }
 
+// فرمت عدد با جداکننده سه‌رقمی
+const formatNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  const num = String(value).replace(/[^0-9]/g, "");
+  return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// حذف فرمت و برگرداندن عدد خالص
+const unformatNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  return String(value).replace(/[^0-9]/g, "");
+};
+
 export default function AssignModal({
   transaction,
   onClose,
@@ -110,9 +123,11 @@ export default function AssignModal({
   };
 
   const handleInputChange = (id, value) => {
+    // حذف فرمت و ذخیره عدد خالص
+    const numericValue = unformatNumber(value);
     setInputValues((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: numericValue,
     }));
   };
 
@@ -254,13 +269,13 @@ export default function AssignModal({
                     <td className="px-4 py-3 text-white/90 text-sm whitespace-nowrap">
                       <input
                         type="text"
-                        value={
+                        value={formatNumber(
                           inputValues[r.id] ??
-                          (activeAccountIds.includes(r.id)
-                            ? activeAccountAmountMap[r.id] || 0
-                            : r?.amount -
-                              (r?.sum_invoices_assigned_amount || 0))
-                        }
+                            (activeAccountIds.includes(r.id)
+                              ? activeAccountAmountMap[r.id] || 0
+                              : r?.amount -
+                                (r?.sum_invoices_assigned_amount || 0))
+                        )}
                         onChange={(e) =>
                           handleInputChange(r.id, e.target.value)
                         }
@@ -341,12 +356,13 @@ export default function AssignModal({
                     <span className="text-xs text-white/70">مقدار:</span>
                     <input
                       type="text"
-                      value={
+                      value={formatNumber(
                         inputValues[r.id] ??
-                        (activeAccountIds.includes(r.id)
-                          ? activeAccountAmountMap[r.id] || 0
-                          : r?.amount - (r?.sum_invoices_assigned_amount || 0))
-                      }
+                          (activeAccountIds.includes(r.id)
+                            ? activeAccountAmountMap[r.id] || 0
+                            : r?.amount -
+                              (r?.sum_invoices_assigned_amount || 0))
+                      )}
                       onChange={(e) => handleInputChange(r.id, e.target.value)}
                       disabled={!selectedTransactions.includes(r.id)}
                       className={`w-32 px-2 py-1 bg-white/5 border border-white/10 rounded text-sm ${
